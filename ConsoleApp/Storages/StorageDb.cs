@@ -1,8 +1,9 @@
 ﻿using ConsoleApp.Authentication;
 using ConsoleApp.Database;
+using ConsoleApp.SaveResponses;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsoleApp.Store
+namespace ConsoleApp.Storages
 {
     internal class StorageDb : IStorage
     {
@@ -57,6 +58,16 @@ namespace ConsoleApp.Store
             }
 
             return (T)response;
+        }
+
+        public Task<T> GetToken<T>(SaveResponse saveResponse)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveToken<T>(SaveResponse saveResponse, T value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ConsoleApp.Store;
+﻿using ConsoleApp.SaveResponses;
+using ConsoleApp.Storages;
 using System.Diagnostics;
 using System.Net;
 
@@ -10,43 +11,51 @@ namespace ConsoleApp.Authentication
         private string _redirectUri;
         private IStorage _store;
 
+        private SaveOAuth2 _saveOAuth2;
+        private SaveXau _saveXau;
+        private SaveXsts _saveXsts;
+
         public AuthenticationLogic(AuthenticationManager authMgr, IStorage store)
         {
             this._authMgr = authMgr;
             this._redirectUri = authMgr.redirectUrl;
             this._store = store;
+
+            this._saveOAuth2 = new SaveOAuth2();
+            this._saveXau = new SaveXau();
+            this._saveXsts = new SaveXsts();
         }
 
         public async Task Start()
         {
             DateTime dateUtcNow = DateTime.UtcNow;
-            _authMgr.XstsToken = await _store.GetToken<XSTSResponse>();
+            _authMgr.XstsToken = await _store.GetToken<XSTSResponse>(_saveXsts);
 
             if(_authMgr.XstsToken != null && _authMgr.XstsToken.NotAfter < dateUtcNow)
             {
                 //Обновить токены
-                _authMgr.OAuth = await _store.GetToken<OAuth2TokenResponse>();
+                _authMgr.OAuth = await _store.GetToken<OAuth2TokenResponse>(_saveOAuth2);
 
                 if (_authMgr.OAuth != null)
                 {
                     if (true)//_authMgr.OAuth.Expires < dateUtcNow)
                     {
                         _authMgr.OAuth = await _authMgr.RefreshOauth2Token();
-                        await _store.SaveToken(_authMgr.OAuth);
+                        await _store.SaveToken(_saveOAuth2, _authMgr.OAuth);
                     }
 
-                    _authMgr.UserToken = await _store.GetToken<XAUResponse>();
+                    _authMgr.UserToken = await _store.GetToken<XAUResponse>(_saveXau);
                     if (_authMgr.UserToken.NotAfter < dateUtcNow)
                     {
                         _authMgr.UserToken = await _authMgr.RequestXauToken();
-                        await _store.SaveToken(_authMgr.UserToken);
+                        await _store.SaveToken(_saveXau , _authMgr.UserToken);
                     }
 
-                    _authMgr.XstsToken = await _store.GetToken<XSTSResponse>();
+                    _authMgr.XstsToken = await _store.GetToken<XSTSResponse>(_saveXsts);
                     if (_authMgr.XstsToken.NotAfter < dateUtcNow)
                     {
                         _authMgr.XstsToken = await _authMgr.RequestXstsToken();
-                        await _store.SaveToken(_authMgr.XstsToken);
+                        await _store.SaveToken(_saveXsts, _authMgr.XstsToken);
                     }
                 }
                 else
@@ -68,9 +77,9 @@ namespace ConsoleApp.Authentication
             _authMgr.UserToken = await _authMgr.RequestXauToken();
             _authMgr.XstsToken = await _authMgr.RequestXstsToken();
 
-            await _store.SaveToken(_authMgr.OAuth);
-            await _store.SaveToken(_authMgr.UserToken);
-            await _store.SaveToken(_authMgr.XstsToken);
+            await _store.SaveToken(_saveOAuth2 ,_authMgr.OAuth);
+            await _store.SaveToken(_saveXau ,_authMgr.UserToken);
+            await _store.SaveToken(_saveXsts,_authMgr.XstsToken);
         }
 
         /// <summary>
@@ -113,14 +122,14 @@ namespace ConsoleApp.Authentication
             return code;
         }
 
-        public async Task GetFromASaveToB(IStorage storageFrom, IStorage storageTo)
-        {
-            //OAuth2TokenResponse fromOAuth2Token = await storageFrom.GetToken<OAuth2TokenResponse>();
-            //await storageTo.SaveToken(fromOAuth2Token);
+        //public async Task GetFromASaveToB(IStorage storageFrom, IStorage storageTo)
+        //{
+        //    //OAuth2TokenResponse fromOAuth2Token = await storageFrom.GetToken<OAuth2TokenResponse>();
+        //    //await storageTo.SaveToken(fromOAuth2Token);
 
-            XSTSResponse fromXSTS = await storageFrom.GetToken<XSTSResponse>();            
-            await storageTo.SaveToken(fromXSTS);
-        }
+        //    XSTSResponse fromXSTS = await storageFrom.GetToken<XSTSResponse>();            
+        //    await storageTo.SaveToken(fromXSTS);
+        //}
     }
 
     public sealed class Country

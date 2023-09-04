@@ -2,7 +2,7 @@
 using ConsoleApp.API.Provider.Profile;
 using ConsoleApp.API.Provider.TittleHub;
 using ConsoleApp.Authentication;
-using ConsoleApp.Store;
+using ConsoleApp.Storages;
 
 namespace ConsoleApp
 {
