@@ -20,33 +20,33 @@ namespace ConsoleApp.Authentication
         public async Task Start()
         {
             DateTime dateUtcNow = DateTime.UtcNow;
-            _authMgr.XstsToken = await GetToken<XSTSResponse>();
+            _authMgr.XstsToken = await _store.GetToken<XSTSResponse>();
 
             if(_authMgr.XstsToken != null && _authMgr.XstsToken.NotAfter < dateUtcNow)
             {
                 //Обновить токены
-                _authMgr.OAuth = await GetToken<OAuth2TokenResponse>();
+                _authMgr.OAuth = await _store.GetToken<OAuth2TokenResponse>();
 
                 if (_authMgr.OAuth != null)
                 {
                     if (true)//_authMgr.OAuth.Expires < dateUtcNow)
                     {
                         _authMgr.OAuth = await _authMgr.RefreshOauth2Token();
-                        await SaveToken(_authMgr.OAuth);
+                        await _store.SaveToken(_authMgr.OAuth);
                     }
 
-                    _authMgr.UserToken = await GetToken<XAUResponse>();
+                    _authMgr.UserToken = await _store.GetToken<XAUResponse>();
                     if (_authMgr.UserToken.NotAfter < dateUtcNow)
                     {
                         _authMgr.UserToken = await _authMgr.RequestXauToken();
-                        await SaveToken(_authMgr.UserToken);
+                        await _store.SaveToken(_authMgr.UserToken);
                     }
 
-                    _authMgr.XstsToken = await GetToken<XSTSResponse>();
+                    _authMgr.XstsToken = await _store.GetToken<XSTSResponse>();
                     if (_authMgr.XstsToken.NotAfter < dateUtcNow)
                     {
                         _authMgr.XstsToken = await _authMgr.RequestXstsToken();
-                        await SaveToken(_authMgr.XstsToken);
+                        await _store.SaveToken(_authMgr.XstsToken);
                     }
                 }
                 else
@@ -68,9 +68,9 @@ namespace ConsoleApp.Authentication
             _authMgr.UserToken = await _authMgr.RequestXauToken();
             _authMgr.XstsToken = await _authMgr.RequestXstsToken();
 
-            await SaveToken(_authMgr.OAuth);
-            await SaveToken(_authMgr.UserToken);
-            await SaveToken(_authMgr.XstsToken);
+            await _store.SaveToken(_authMgr.OAuth);
+            await _store.SaveToken(_authMgr.UserToken);
+            await _store.SaveToken(_authMgr.XstsToken);
         }
 
         /// <summary>
@@ -111,27 +111,6 @@ namespace ConsoleApp.Authentication
             string code = uri.Query.Substring(uri.Query.IndexOf("=") + 1);
 
             return code;
-        }
-
-        /// <summary>
-        /// Загружает файл "token.json" с store
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        private async Task<T> GetToken<T>()
-        {
-            return await _store.GetToken<T>();
-        }
-
-        /// <summary>
-        /// Сохраняет файл "token.json" на store
-        /// </summary>
-        /// <param name="_auth_mgr"></param>
-        /// <returns></returns>
-        public async Task SaveToken(object value)
-        {
-            await _store.SaveToken(value);
         }
 
         public async Task GetFromASaveToB(IStorage storageFrom, IStorage storageTo)
