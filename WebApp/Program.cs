@@ -8,20 +8,45 @@ namespace WebApp
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            builder.RegisterApplicationServices();
 
+            WebApplication app = builder.Build();
+            app.ConfigureMiddleware();
+            app.RegisterEndpoints();
+
+            app.Run();
+        }
+    }
+
+    public static partial class ServiceInitializer
+    {
+        public static IServiceCollection RegisterApplicationServices(this WebApplicationBuilder builder)
+        {
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
 
-            var app = builder.Build();
+            builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            {
+                microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+                microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+            });
 
+            return builder.Services;
+        }
+    }
+
+    public static partial class MiddlewareInitializer
+    {
+        public static WebApplication ConfigureMiddleware(this WebApplication app)
+        {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -43,7 +68,15 @@ namespace WebApp
 
             app.MapRazorPages();
 
-            app.Run();
+            return app;
+        }
+    }
+
+    public static partial class EndpointMapper
+    {
+        public static WebApplication RegisterEndpoints(this WebApplication app)
+        {
+            return app;
         }
     }
 }
