@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApp
 {
@@ -24,13 +23,9 @@ namespace WebApp
     {
         public static IServiceCollection RegisterApplicationServices(this WebApplicationBuilder builder)
         {
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-
-            builder.Services.AddDbContext<WebAppContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'WebAppContext' not found.")));
+            builder.Services.AddDbContext<WebAppContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -43,6 +38,7 @@ namespace WebApp
             {
                 microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
                 microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+                microsoftOptions.SaveTokens = true;
             });
 
             return builder.Services;
