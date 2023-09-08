@@ -21,6 +21,10 @@ namespace WebApp.Pages.Movies
             if (_context.Movie != null)
             {
                 Movie = await _context.Movie.ToListAsync();
+                var a = _context.UserTokens;
+                var b = _context.Users;
+                var c = _context.UserLogins;
+                var d = _context.UserClaims;
             }
         }
     }

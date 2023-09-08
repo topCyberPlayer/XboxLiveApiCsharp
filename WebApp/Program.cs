@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
+using WebApp.Models;
 
 namespace WebApp
 {
@@ -49,6 +50,13 @@ namespace WebApp
     {
         public static WebApplication ConfigureMiddleware(this WebApplication app)
         {
+            //using(var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+            //    SeedData.Initialize(services);
+            //}
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
