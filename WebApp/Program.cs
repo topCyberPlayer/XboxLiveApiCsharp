@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WebApp.Data;
-using WebApp.Models;
 
 namespace WebApp
 {
@@ -42,6 +43,32 @@ namespace WebApp
                 microsoftOptions.SaveTokens = true;
             });
 
+            builder.Services.ConfigureApplicationCookie(options =>
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnSignedIn = async context =>
+                    {
+                        // Получение данных пользователя
+                        var identity = context.Principal.Identity as ClaimsIdentity;
+                        var sheme = context.Scheme;
+                        var items = context.Response.HttpContext.Items;
+
+                        // Получение и обработка токенов
+                        var accessToken = identity?.FindFirst("access_token")?.Value;
+                        var refreshToken = identity?.FindFirst("refresh_token")?.Value;
+
+                        // Доступ к сервисам для дополнительной обработки
+                        //var myService = context.HttpContext.RequestServices.GetService<MyService>();
+
+                        // Дополнительная логика обработки данных и токенов
+                        // ...
+
+                        await Task.CompletedTask;
+                    }
+                }
+                    // Другие события аутентификации, если они нужны.
+            );
+
             return builder.Services;
         }
     }
@@ -74,6 +101,7 @@ namespace WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
@@ -86,6 +114,27 @@ namespace WebApp
     {
         public static WebApplication RegisterEndpoints(this WebApplication app)
         {
+            app.MapGet("/test", async context =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+            });
+
+            //app.MapControllerRoute(
+            //    name: "MicrosoftCallback",
+            //    pattern: "/Account/MicrosoftCallback"
+            //        //defaults: new { controller = "YourControllerName", action = "MicrosoftCallback" }
+            //        );
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages(); // Ваша конфигурация маршрутов Razor Pages
+
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            //});
+
             return app;
         }
     }
