@@ -1,0 +1,44 @@
+﻿@page
+@model WebApp.Pages.Profiles.CurrentProfileModel
+@{
+    ViewData["Title"] = "Профиль текущего пользователя";
+}
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList[0].Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList[0].Gamertag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList[0].Gamerscore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList[0].Bio)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.ProfileUserList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gamertag)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gamerscore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bio)
+                </td>
+            </tr>    
+        }
+    </tbody>
+</table>

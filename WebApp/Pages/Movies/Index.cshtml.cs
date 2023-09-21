@@ -8,13 +8,12 @@ namespace WebApp.Pages.Movies
     public class IndexModel : PageModel
     {
         private readonly WebAppContext _context;
+        public IList<Movie> Movie { get; set; } = default!;
 
         public IndexModel(WebAppContext context)
         {
             _context = context;
         }
-
-        public IList<Movie> Movie { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
