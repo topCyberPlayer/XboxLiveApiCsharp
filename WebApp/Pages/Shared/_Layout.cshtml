@@ -19,29 +19,23 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+
+                       @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">HomeA</a>
+                        </li>  *@
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">HomeA</a>@* HomeA - только текст *@
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/AllProfileUsers">All Profiles</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy3">Privacy</a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Movies/Index">MovieName</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/People">Peoople</a>
-                        </li>
-
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Account/MicrosoftLoginModel">MsLogin</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/CurrentProfile">Current Profile :)</a>
-                        </li>
-
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

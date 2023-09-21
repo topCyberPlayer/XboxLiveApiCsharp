@@ -6,12 +6,12 @@ using WebApp.Models;
 
 namespace WebApp.Pages.Profiles
 {
-    public class CurrentProfileModel : PageModel
+    public class AllProfileUsersModel : PageModel
     {
         private readonly WebAppContext _context;
         public IList<ProfileUser> ProfileUserList { get; set; } = default!;
 
-        public CurrentProfileModel(WebAppContext context)
+        public AllProfileUsersModel(WebAppContext context)
         {
             _context = context;
         }
