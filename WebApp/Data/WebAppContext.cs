@@ -11,5 +11,6 @@ namespace WebApp.Data
         }
 
         public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<ProfileUser> ProfileUser { get; set; } = default!;
     }
 }
