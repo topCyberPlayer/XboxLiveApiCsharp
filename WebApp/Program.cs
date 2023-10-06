@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -35,40 +36,42 @@ namespace WebApp
                 .AddEntityFrameworkStores<WebAppContext>();
             
             builder.Services.AddRazorPages();
-
-            builder.Services.AddAuthentication().
-                AddMicrosoftAccount(microsoftOptions =>
+            string a = MicrosoftAccountDefaults.AuthenticationScheme;
+            builder.Services.AddAuthentication()
+                .AddCookie()
+                .AddMicrosoftAccount("Microsoft",microsoftOptions =>
                 {
                     microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
                     microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+                    microsoftOptions.CallbackPath = "/signin-microsoft";
                     microsoftOptions.SaveTokens = true;
                 });
 
-            //builder.Services.ConfigureApplicationCookie(options =>
-            //    options.Events = new CookieAuthenticationEvents
-            //    {
-            //        OnSignedIn = async context =>
-            //        {
-            //            // Получение данных пользователя
-            //            var identity = context.Principal.Identity as ClaimsIdentity;
-            //            var sheme = context.Scheme;
-            //            var items = context.Response.HttpContext.Items;
+            builder.Services.ConfigureApplicationCookie(options =>
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnSignedIn = async context =>
+                    {
+                        // Получение данных пользователя
+                        var identity = context.Principal.Identity as ClaimsIdentity;
+                        var sheme = context.Scheme;
+                        var items = context.Response.HttpContext.Items;
 
-            //            // Получение и обработка токенов
-            //            var accessToken = identity?.FindFirst("access_token")?.Value;
-            //            var refreshToken = identity?.FindFirst("refresh_token")?.Value;
+                        // Получение и обработка токенов
+                        var accessToken = identity?.FindFirst("access_token")?.Value;
+                        var refreshToken = identity?.FindFirst("refresh_token")?.Value;
 
-            //            // Доступ к сервисам для дополнительной обработки
-            //            //var myService = context.HttpContext.RequestServices.GetService<MyService>();
+                        // Доступ к сервисам для дополнительной обработки
+                        //var myService = context.HttpContext.RequestServices.GetService<MyService>();
 
-            //            // Дополнительная логика обработки данных и токенов
-            //            // ...
+                        // Дополнительная логика обработки данных и токенов
+                        // ...
 
-            //            await Task.CompletedTask;
-            //        }
-            //    }
-                    // Другие события аутентификации, если они нужны.
-            //);
+                        await Task.CompletedTask;
+                    }
+                }
+                     //Другие события аутентификации, если они нужны.
+            );
 
             return builder.Services;
         }
@@ -128,21 +131,8 @@ namespace WebApp
                 await context.Response.WriteAsync("Hello World!");
             });
 
-            //app.MapControllerRoute(
-            //    name: "MicrosoftCallback",
-            //    pattern: "/Account/MicrosoftCallback"
-            //        //defaults: new { controller = "YourControllerName", action = "MicrosoftCallback" }
-            //        );
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapRazorPages(); // Ваша конфигурация маршрутов Razor Pages
-
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            //});
+            app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
+                .RequireAuthorization();
 
             return app;
         }
