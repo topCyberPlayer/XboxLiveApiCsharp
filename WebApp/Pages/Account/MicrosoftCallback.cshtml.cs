@@ -8,6 +8,7 @@ namespace WebApp.Pages.Account
     {
         public async Task<IActionResult> OnGetAsync()
         {
+            var authenticateResult1 = await HttpContext.AuthenticateAsync();
             var authenticateResult = await HttpContext.AuthenticateAsync("Microsoft");
 
             if (authenticateResult.Succeeded)

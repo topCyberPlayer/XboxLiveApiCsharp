@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApp.Pages
@@ -12,8 +13,12 @@ namespace WebApp.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            //var authenticateResult = await HttpContext.AuthenticateAsync("Microsoft");
+            var accessToken = await HttpContext.GetTokenAsync("Microsoft", "access_token");
+
+            //SignInManager<IdentityUser> _signInManager = new SignInManager<IdentityUser>();
         }
     }
 }
