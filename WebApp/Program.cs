@@ -36,38 +36,39 @@ namespace WebApp
             
             builder.Services.AddRazorPages();
 
-            builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-            {
-                microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
-                microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
-                microsoftOptions.SaveTokens = true;
-            });
-
-            builder.Services.ConfigureApplicationCookie(options =>
-                options.Events = new CookieAuthenticationEvents
+            builder.Services.AddAuthentication().
+                AddMicrosoftAccount(microsoftOptions =>
                 {
-                    OnSignedIn = async context =>
-                    {
-                        // ѕолучение данных пользовател€
-                        var identity = context.Principal.Identity as ClaimsIdentity;
-                        var sheme = context.Scheme;
-                        var items = context.Response.HttpContext.Items;
+                    microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+                    microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+                    microsoftOptions.SaveTokens = true;
+                });
 
-                        // ѕолучение и обработка токенов
-                        var accessToken = identity?.FindFirst("access_token")?.Value;
-                        var refreshToken = identity?.FindFirst("refresh_token")?.Value;
+            //builder.Services.ConfigureApplicationCookie(options =>
+            //    options.Events = new CookieAuthenticationEvents
+            //    {
+            //        OnSignedIn = async context =>
+            //        {
+            //            // ѕолучение данных пользовател€
+            //            var identity = context.Principal.Identity as ClaimsIdentity;
+            //            var sheme = context.Scheme;
+            //            var items = context.Response.HttpContext.Items;
 
-                        // ƒоступ к сервисам дл€ дополнительной обработки
-                        //var myService = context.HttpContext.RequestServices.GetService<MyService>();
+            //            // ѕолучение и обработка токенов
+            //            var accessToken = identity?.FindFirst("access_token")?.Value;
+            //            var refreshToken = identity?.FindFirst("refresh_token")?.Value;
 
-                        // ƒополнительна€ логика обработки данных и токенов
-                        // ...
+            //            // ƒоступ к сервисам дл€ дополнительной обработки
+            //            //var myService = context.HttpContext.RequestServices.GetService<MyService>();
 
-                        await Task.CompletedTask;
-                    }
-                }
+            //            // ƒополнительна€ логика обработки данных и токенов
+            //            // ...
+
+            //            await Task.CompletedTask;
+            //        }
+            //    }
                     // ƒругие событи€ аутентификации, если они нужны.
-            );
+            //);
 
             return builder.Services;
         }
@@ -105,6 +106,14 @@ namespace WebApp
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            //app.Use(async (context, next) =>
+            //{
+            //    //context.
+            //    // Do work that can write to the Response.
+            //    await next.Invoke();
+            //    // Do logging or other work that doesn't write to the Response.
+            //});
 
             return app;
         }
