@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -39,15 +37,15 @@ namespace WebApp
             
             builder.Services.AddRazorPages();
             
-            builder.Services.AddAuthentication()
-                .AddCookie()
-                .AddMicrosoftAccount("Microsoft",microsoftOptions =>
-                {
-                    microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
-                    microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
-                    microsoftOptions.CallbackPath = "/signin-microsoft";
-                    microsoftOptions.SaveTokens = true;
-                });
+            //builder.Services.AddAuthentication()
+            //    .AddCookie()
+            //    .AddMicrosoftAccount("Microsoft",microsoftOptions =>
+            //    {
+            //        microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+            //        microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+            //        microsoftOptions.CallbackPath = "/auth/callback";
+            //        microsoftOptions.SaveTokens = true;
+            //    });
 
             //builder.Services.ConfigureApplicationCookie(options =>
             //    options.Events = new CookieAuthenticationEvents
