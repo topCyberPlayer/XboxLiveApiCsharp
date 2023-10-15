@@ -30,7 +30,7 @@ namespace WebApp.Pages.Account
                 IDictionary<string, string?> items = authenticateResult.Properties.Items;
 
                 _accessToken = authenticateResult.Properties.GetTokenValue("access_token");
-                //XAUResponse xauResponse = await RequestUserToken();
+                XAUResponse xauResponse = await RequestUserToken();
                 
                 
                 // Получите информацию о пользователе
