@@ -26,6 +26,8 @@ namespace WebApp
     {
         public static IServiceCollection RegisterApplicationServices(this WebApplicationBuilder builder)
         {
+            builder.Services.AddHttpClient();
+
             string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<WebAppContext>(options => options.UseSqlServer(connectionString));
@@ -36,7 +38,7 @@ namespace WebApp
                 .AddEntityFrameworkStores<WebAppContext>();
             
             builder.Services.AddRazorPages();
-            string a = MicrosoftAccountDefaults.AuthenticationScheme;
+            
             builder.Services.AddAuthentication()
                 .AddCookie()
                 .AddMicrosoftAccount("Microsoft",microsoftOptions =>
@@ -47,31 +49,31 @@ namespace WebApp
                     microsoftOptions.SaveTokens = true;
                 });
 
-            builder.Services.ConfigureApplicationCookie(options =>
-                options.Events = new CookieAuthenticationEvents
-                {
-                    OnSignedIn = async context =>
-                    {
-                        // Получение данных пользователя
-                        var identity = context.Principal.Identity as ClaimsIdentity;
-                        var sheme = context.Scheme;
-                        var items = context.Response.HttpContext.Items;
+            //builder.Services.ConfigureApplicationCookie(options =>
+            //    options.Events = new CookieAuthenticationEvents
+            //    {
+            //        OnSignedIn = async context =>
+            //        {
+            //            // Получение данных пользователя
+            //            var identity = context.Principal.Identity as ClaimsIdentity;
+            //            var sheme = context.Scheme;
+            //            var items = context.Response.HttpContext.Items;
 
-                        // Получение и обработка токенов
-                        var accessToken = identity?.FindFirst("access_token")?.Value;
-                        var refreshToken = identity?.FindFirst("refresh_token")?.Value;
+            //            // Получение и обработка токенов
+            //            var accessToken = identity?.FindFirst("access_token")?.Value;
+            //            var refreshToken = identity?.FindFirst("refresh_token")?.Value;
 
-                        // Доступ к сервисам для дополнительной обработки
-                        //var myService = context.HttpContext.RequestServices.GetService<MyService>();
+            //            // Доступ к сервисам для дополнительной обработки
+            //            //var myService = context.HttpContext.RequestServices.GetService<MyService>();
 
-                        // Дополнительная логика обработки данных и токенов
-                        // ...
+            //            // Дополнительная логика обработки данных и токенов
+            //            // ...
 
-                        await Task.CompletedTask;
-                    }
-                }
-                     //Другие события аутентификации, если они нужны.
-            );
+            //            await Task.CompletedTask;
+            //        }
+            //    }
+            //         //Другие события аутентификации, если они нужны.
+            //);
 
             return builder.Services;
         }
@@ -108,15 +110,17 @@ namespace WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapRazorPages();
-
-            //app.Use(async (context, next) =>
-            //{
-            //    //context.
-            //    // Do work that can write to the Response.
-            //    await next.Invoke();
-            //    // Do logging or other work that doesn't write to the Response.
-            //});
+            app.Use(async (HttpContext context, Func<Task> next) =>
+            {
+                //SignInManager<IdentityUser> signIn = new();
+                //await signIn.ExternalLoginSignInAsync("", "", true);
+                //var a = await signIn.GetExternalLoginInfoAsync();
+                //var b = await signIn.GetExternalAuthenticationSchemesAsync();
+                //context.
+                // Do work that can write to the Response.
+                await next.Invoke();
+                // Do logging or other work that doesn't write to the Response.
+            });
 
             return app;
         }
@@ -126,6 +130,8 @@ namespace WebApp
     {
         public static WebApplication RegisterEndpoints(this WebApplication app)
         {
+            app.MapRazorPages();
+
             app.MapGet("/test", async context =>
             {
                 await context.Response.WriteAsync("Hello World!");
