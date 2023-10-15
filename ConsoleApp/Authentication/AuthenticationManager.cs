@@ -13,7 +13,7 @@ namespace ConsoleApp.Authentication
         private string _clientId;
         private string _clientSecret;
 
-        public string redirectUrl = "http://localhost:8080/auth/callback";
+        public string redirectUrl = "https://localhost:8080/auth/callback";
         public HttpClient clientSession;
         public OAuth2TokenResponse? OAuth;
         public XAUResponse UserToken;

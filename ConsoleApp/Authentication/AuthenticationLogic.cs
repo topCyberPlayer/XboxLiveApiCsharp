@@ -65,6 +65,12 @@ namespace ConsoleApp.Authentication
                     await RequestTokens(authorization_code);
                 }
             }
+            else
+            {
+                string authorization_code = await GetAuthCodeFromBrowser();
+
+                await RequestTokens(authorization_code);
+            }
         }
 
         /// <summary>
