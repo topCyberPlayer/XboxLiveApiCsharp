@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.ModelsDb;
 
 public partial class ProfileUserTable
 {
+    [Key]
     public long ProfileUserId { get; set; }
 
     public string AspNetUsersId { get; set; } = null!;
