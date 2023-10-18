@@ -17,4 +17,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModelsJsonResponse\Authentication\" />
+    <Folder Include="ModelsJsonResponse\TittleHub\" />
+    <Folder Include="ModelsJsonResponse\Profile\" />
+    <Folder Include="Pages\Tittles\" />
+  </ItemGroup>
+
 </Project>

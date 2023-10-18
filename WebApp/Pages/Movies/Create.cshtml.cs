@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using WebApp.Data;
-using WebApp.Models;
+using WebApp.ModelsDb;
 
 namespace WebApp.Pages.Movies
 {
     public class CreateModel : PageModel
     {
-        private readonly WebApp.Data.WebAppContext _context;
+        private readonly WebAppDbContext _context;
 
-        public CreateModel(WebApp.Data.WebAppContext context)
+        public CreateModel(WebAppDbContext context)
         {
             _context = context;
         }
@@ -31,12 +25,12 @@ namespace WebApp.Pages.Movies
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Movie == null || Movie == null)
+          if (!ModelState.IsValid || _context.Movies == null || Movie == null)
             {
                 return Page();
             }
 
-            _context.Movie.Add(Movie);
+            _context.Movies.Add(Movie);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

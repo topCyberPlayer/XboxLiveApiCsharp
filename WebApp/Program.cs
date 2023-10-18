@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using WebApp.Data;
+using WebApp.ModelsDb;
 
 namespace WebApp
 {
@@ -28,50 +28,14 @@ namespace WebApp
 
             string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<WebAppContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<WebAppDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<WebAppContext>();
+                .AddEntityFrameworkStores<WebAppDbContext>();
             
             builder.Services.AddRazorPages();
-            
-            //builder.Services.AddAuthentication()
-            //    .AddCookie()
-            //    .AddMicrosoftAccount("Microsoft",microsoftOptions =>
-            //    {
-            //        microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
-            //        microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
-            //        microsoftOptions.CallbackPath = "/auth/callback";
-            //        microsoftOptions.SaveTokens = true;
-            //    });
-
-            //builder.Services.ConfigureApplicationCookie(options =>
-            //    options.Events = new CookieAuthenticationEvents
-            //    {
-            //        OnSignedIn = async context =>
-            //        {
-            //            // Получение данных пользователя
-            //            var identity = context.Principal.Identity as ClaimsIdentity;
-            //            var sheme = context.Scheme;
-            //            var items = context.Response.HttpContext.Items;
-
-            //            // Получение и обработка токенов
-            //            var accessToken = identity?.FindFirst("access_token")?.Value;
-            //            var refreshToken = identity?.FindFirst("refresh_token")?.Value;
-
-            //            // Доступ к сервисам для дополнительной обработки
-            //            //var myService = context.HttpContext.RequestServices.GetService<MyService>();
-
-            //            // Дополнительная логика обработки данных и токенов
-            //            // ...
-
-            //            await Task.CompletedTask;
-            //        }
-            //    }
-            //         //Другие события аутентификации, если они нужны.
-            //);
 
             return builder.Services;
         }
@@ -81,13 +45,6 @@ namespace WebApp
     {
         public static WebApplication ConfigureMiddleware(this WebApplication app)
         {
-            //using(var scope = app.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    SeedData.Initialize(services);
-            //}
-
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

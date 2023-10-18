@@ -15,10 +15,7 @@ namespace WebApp.Pages
 
         public async Task OnGet()
         {
-            //var authenticateResult = await HttpContext.AuthenticateAsync("Microsoft");
-            var accessToken = await HttpContext.GetTokenAsync("Microsoft", "access_token");
 
-            //SignInManager<IdentityUser> _signInManager = new SignInManager<IdentityUser>();
         }
     }
 }

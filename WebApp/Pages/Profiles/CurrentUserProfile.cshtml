@@ -1,4 +1,51 @@
 ﻿@page
 @model WebApp.Pages.Profiles.CurrentUserProfileModel
 @{
+    ViewData["Title"] = "Профиль авторизованного пользователя";
+}
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList.ProfileUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList.Gamertag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList.Gamerscore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.ProfileUserList.Bio)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {
+            <tr>
+                <td>
+                @Html.DisplayFor(modelItem => Model.ProfileUserList.ProfileUserId)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.ProfileUserList.Gamertag)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.ProfileUserList.Gamerscore)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.ProfileUserList.Bio)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <button type="submit" asp-page-handler="UpdateProfile" class="btn btn-outline-info" id="btnGenerateWebName">
+            Update Profile
+        </button>
+    </form>
 }
