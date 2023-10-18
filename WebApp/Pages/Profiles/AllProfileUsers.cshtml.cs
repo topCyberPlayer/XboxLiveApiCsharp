@@ -1,26 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.Models;
+using WebApp.ModelsDb;
 
 namespace WebApp.Pages.Profiles
 {
     public class AllProfileUsersModel : PageModel
     {
-        private readonly WebAppContext _context;
-        public IList<ProfileUser> ProfileUserList { get; set; } = default!;
+        private readonly WebAppDbContext _context;
+        public IList<ProfileUserTable> ProfileUserList { get; set; } = default!;
 
-        public AllProfileUsersModel(WebAppContext context)
+        public AllProfileUsersModel(WebAppDbContext context)
         {
             _context = context;
         }
 
         public async Task OnGet()
         {
-            if (_context.ProfileUser != null)
+            if (_context.ProfileUsers!= null)
             {
-                ProfileUserList = await _context.ProfileUser.ToListAsync();
+                ProfileUserList = await _context.ProfileUsers.ToListAsync();
             }
         }
     }

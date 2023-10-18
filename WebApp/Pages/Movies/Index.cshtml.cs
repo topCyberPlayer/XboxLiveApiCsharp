@@ -1,29 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.Models;
+using WebApp.ModelsDb;
 
 namespace WebApp.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly WebAppContext _context;
+        private readonly WebAppDbContext _context;
         public IList<Movie> Movie { get; set; } = default!;
 
-        public IndexModel(WebAppContext context)
+        public IndexModel(WebAppDbContext context)
         {
             _context = context;
         }
 
         public async Task OnGetAsync()
         {
-            if (_context.Movie != null)
+            if (_context.Movies != null)
             {
-                Movie = await _context.Movie.ToListAsync();
-                var a = _context.UserTokens;
-                var b = _context.Users;
-                var c = _context.UserLogins;
-                var d = _context.UserClaims;
+                Movie = await _context.Movies.ToListAsync();
             }
         }
     }

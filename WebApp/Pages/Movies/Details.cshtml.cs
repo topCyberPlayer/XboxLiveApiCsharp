@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.Models;
+using WebApp.ModelsDb;
 
 namespace WebApp.Pages.Movies
 {
     public class DetailsModel : PageModel
     {
-        private readonly WebApp.Data.WebAppContext _context;
+        private readonly WebAppDbContext _context;
 
-        public DetailsModel(WebApp.Data.WebAppContext context)
+        public DetailsModel(WebAppDbContext context)
         {
             _context = context;
         }
@@ -23,12 +18,12 @@ namespace WebApp.Pages.Movies
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id == null || _context.Movies == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
