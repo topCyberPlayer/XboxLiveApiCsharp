@@ -4,7 +4,7 @@ using System.Web;
 
 namespace ConsoleApp.API.Provider.TittleHub
 {
-    internal class TittleHubProvider : BaseProvider
+    internal class TittleHubLow : BaseProvider
     {
         private string TitleHubSettings_SCOPES
         {
@@ -26,7 +26,7 @@ namespace ConsoleApp.API.Provider.TittleHub
         }
         private const string TITLEHUB_URL = "https://titlehub.xboxlive.com";
 
-        public TittleHubProvider(AuthenticationManager authMgr) : base(authMgr) { }
+        public TittleHubLow(AuthenticationLow authMgr) : base(authMgr) { }
 
         public async Task<TitleHubResponse> GetTitleHistory(string xuid, int maxItems = 5)
         {
@@ -44,7 +44,7 @@ namespace ConsoleApp.API.Provider.TittleHub
             _authMgr.clientSession.DefaultRequestHeaders.Add("Authorization", _authMgr.XstsToken.AuthorizationHeaderValue);
 
             HttpResponseMessage response = await _authMgr.clientSession.GetAsync(uriBuilder.ToString());
-            //string tmpResult = await response.Content.ReadAsStringAsync();
+            string tmpResult = await response.Content.ReadAsStringAsync();
             TitleHubResponse profileUser = await _authMgr.ConvertTo<TitleHubResponse>(response);
 
             return profileUser;

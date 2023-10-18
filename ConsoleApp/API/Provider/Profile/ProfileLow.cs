@@ -4,7 +4,7 @@ using System.Web;
 
 namespace ConsoleApp.API.Provider.Profile
 {
-    internal class ProfileProvider : BaseProvider
+    internal class ProfileLow : BaseProvider
     {
         private string DEF_SCOPES
         {
@@ -36,7 +36,7 @@ namespace ConsoleApp.API.Provider.Profile
         }
         private const string PROFILE_URL = "https://profile.xboxlive.com";
 
-        public ProfileProvider(AuthenticationManager authMgr) : base(authMgr)
+        public ProfileLow(AuthenticationLow authMgr) : base(authMgr)
         {
         }
 
@@ -67,7 +67,7 @@ namespace ConsoleApp.API.Provider.Profile
             _authMgr.clientSession.DefaultRequestHeaders.Add("Authorization", _authMgr.XstsToken.AuthorizationHeaderValue);
 
             HttpResponseMessage response = await _authMgr.clientSession.GetAsync(uriBuilder.ToString());
-            //string tmpResult = await response.Content.ReadAsStringAsync();
+            string tmpResult = await response.Content.ReadAsStringAsync();
             ProfileResponse profileUser = await _authMgr.ConvertTo<ProfileResponse>(response);
 
             return profileUser;

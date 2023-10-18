@@ -1,24 +1,20 @@
 ﻿using ConsoleApp.SaveResponses;
 using ConsoleApp.Storages;
-using System.Diagnostics;
-using System.Net;
 
 namespace ConsoleApp.Authentication
 {
-    internal class AuthenticationLogic
+    internal class AuthenticationHigh
     {
-        private AuthenticationManager _authMgr;
-        private string _redirectUri;
+        private AuthenticationLow _authMgr;
         private IStorage _store;
 
         private SaveOAuth2 _saveOAuth2;
         private SaveXau _saveXau;
         private SaveXsts _saveXsts;
 
-        public AuthenticationLogic(AuthenticationManager authMgr, IStorage store)
+        public AuthenticationHigh(AuthenticationLow authMgr, IStorage store)
         {
             this._authMgr = authMgr;
-            this._redirectUri = authMgr.redirectUrl;
             this._store = store;
 
             this._saveOAuth2 = new SaveOAuth2();
@@ -60,7 +56,7 @@ namespace ConsoleApp.Authentication
                 }
                 else
                 {
-                    string authorization_code = await GetAuthCodeFromBrowser();
+                    string authorization_code = await _authMgr.GetAuthCodeFromBrowser();
 
                     await RequestTokens(authorization_code);
                 }
@@ -81,55 +77,6 @@ namespace ConsoleApp.Authentication
             await _store.SaveToken(_saveXau ,_authMgr.UserToken);
             await _store.SaveToken(_saveXsts,_authMgr.XstsToken);
         }
-
-        /// <summary>
-        /// Авторизация через браузер. Результат работы - authorization_code, который получаем из браузера и подставляем в Request_tokens
-        /// </summary>
-        /// <param name="_auth_mgr"></param>
-        /// <returns></returns>
-        private async ValueTask<string> GetAuthCodeFromBrowser()
-        {
-            string auth_url = _authMgr.GenerateAuthorizationUrl();
-
-            using (HttpListener http = new HttpListener())
-            {
-                http.Prefixes.Add(_redirectUri + "/");
-                http.Start();
-
-                Process.Start(new ProcessStartInfo(auth_url) { UseShellExecute = true });
-
-                string authorization_code = await HandleOAuth2Redirect(http);
-
-                return authorization_code;
-            }
-        }
-
-        /// <summary>
-        /// Возвращает authorization_code, который получаем из браузера
-        /// </summary>
-        /// <param name="http"></param>
-        /// <returns></returns>
-        private async ValueTask<string> HandleOAuth2Redirect(HttpListener http)
-        {
-            var context = await http.GetContextAsync();
-
-            Uri uri = context.Request.Url;
-
-            context.Response.OutputStream.Close();
-
-            string code = uri.Query.Substring(uri.Query.IndexOf("=") + 1);
-
-            return code;
-        }
-
-        //public async Task GetFromASaveToB(IStorage storageFrom, IStorage storageTo)
-        //{
-        //    //OAuth2TokenResponse fromOAuth2Token = await storageFrom.GetToken<OAuth2TokenResponse>();
-        //    //await storageTo.SaveToken(fromOAuth2Token);
-
-        //    XSTSResponse fromXSTS = await storageFrom.GetToken<XSTSResponse>();            
-        //    await storageTo.SaveToken(fromXSTS);
-        //}
     }
 
     public sealed class Country

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -7,7 +9,7 @@ using System.Web;
 
 namespace ConsoleApp.Authentication
 {
-    internal class AuthenticationManager
+    internal class AuthenticationLow
     {
         private string[] DEFAULT_SCOPES = { "Xboxlive.signin", "Xboxlive.offline_access" };
         private string _clientId;
@@ -21,7 +23,7 @@ namespace ConsoleApp.Authentication
 
         private string DEF_SCOPES { get { return string.Join(" ", DEFAULT_SCOPES); } }
 
-        public AuthenticationManager(HttpClient session)
+        public AuthenticationLow(HttpClient session)
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<Program>()
@@ -93,7 +95,7 @@ namespace ConsoleApp.Authentication
             data.Add("client_secret", this._clientSecret);
 
             HttpResponseMessage response = await clientSession.PostAsync(baseAddress, new FormUrlEncodedContent(data));
-
+            string tmpResult = await response.Content.ReadAsStringAsync();
             OAuth2TokenResponse result = await ConvertTo<OAuth2TokenResponse>(response);
 
             return result;
@@ -126,12 +128,8 @@ namespace ConsoleApp.Authentication
             clientSession.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            //_client_session.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("x-xbl-contract-version", "1");
-            //_client_session.DefaultRequestHeaders.Add("Content-Type", "application/json");
-            //var content = new StringContent(jsonData);
-
             HttpResponseMessage response = await clientSession.PostAsync(base_address, content);
-
+            string tmpResult = await response.Content.ReadAsStringAsync();
             XAUResponse result = await ConvertTo<XAUResponse>(response);
 
             return result;
@@ -163,7 +161,7 @@ namespace ConsoleApp.Authentication
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await clientSession.PostAsync(base_address, content);
-
+            string tmpResult = await response.Content.ReadAsStringAsync();
             XSTSResponse result = await ConvertTo<XSTSResponse>(response);
 
             return result;
@@ -190,6 +188,46 @@ namespace ConsoleApp.Authentication
             //}
 
             return result;
+        }
+
+        /// <summary>
+        /// Авторизация через браузер. Результат работы - authorization_code, который получаем из браузера и подставляем в Request_tokens
+        /// </summary>
+        /// <param name="_auth_mgr"></param>
+        /// <returns></returns>
+        public async ValueTask<string> GetAuthCodeFromBrowser()
+        {
+            string auth_url = GenerateAuthorizationUrl();
+
+            using (HttpListener http = new HttpListener())
+            {
+                http.Prefixes.Add(redirectUrl + "/");
+                http.Start();
+
+                Process.Start(new ProcessStartInfo(auth_url) { UseShellExecute = true });
+
+                string authorization_code = await HandleOAuth2Redirect(http);
+
+                return authorization_code;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает authorization_code, который получаем из браузера
+        /// </summary>
+        /// <param name="http"></param>
+        /// <returns></returns>
+        private async ValueTask<string> HandleOAuth2Redirect(HttpListener http)
+        {
+            var context = await http.GetContextAsync();
+
+            Uri uri = context.Request.Url;
+
+            context.Response.OutputStream.Close();
+
+            string code = uri.Query.Substring(uri.Query.IndexOf("=") + 1);
+
+            return code;
         }
     }
 }
