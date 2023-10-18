@@ -10,7 +10,7 @@ namespace ConsoleApp.API.Provider.Achievements
     internal class AchievementsProvider : BaseProvider
     {
 
-        public AchievementsProvider(AuthenticationManager authMgr) : base(authMgr)
+        public AchievementsProvider(AuthenticationLow authMgr) : base(authMgr)
         {
         }
     }

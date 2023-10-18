@@ -7,19 +7,19 @@ namespace ConsoleApp.API
 {
     internal class XboxLiveClient
     {
-        private AuthenticationManager _auth_mgr;
+        private AuthenticationLow _auth_mgr;
 
-        public ProfileProvider profileProvider;
+        public ProfileLow profileProvider;
         public AchievementsProvider achievementsProvider;
-        public TittleHubProvider tittleHubProvider;
+        public TittleHubLow tittleHubProvider;
 
-        public XboxLiveClient(AuthenticationManager auth_mgr)
+        public XboxLiveClient(AuthenticationLow auth_mgr)
         {
             _auth_mgr = auth_mgr;
 
-            profileProvider = new ProfileProvider(auth_mgr);
+            profileProvider = new ProfileLow(auth_mgr);
             achievementsProvider = new AchievementsProvider(auth_mgr);
-            tittleHubProvider = new TittleHubProvider(auth_mgr);
+            tittleHubProvider = new TittleHubLow(auth_mgr);
         }
 
         public string Xuid

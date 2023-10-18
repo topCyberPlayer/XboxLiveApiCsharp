@@ -12,13 +12,13 @@ namespace ConsoleApp
         {
             using (HttpClient session = new HttpClient())
             {
-                AuthenticationManager authMgr = new AuthenticationManager(session);
+                AuthenticationLow authLow = new AuthenticationLow(session);
 
-                AuthenticationLogic authLogic = new AuthenticationLogic(authMgr, new StorageLocal());
+                AuthenticationHigh authHigh = new AuthenticationHigh(authLow, new StorageLocal());
                 
-                XboxLiveClient xblClient = new XboxLiveClient(authMgr);
+                XboxLiveClient xblClient = new XboxLiveClient(authLow);
 
-                await authLogic.Start();
+                await authHigh.Start();
 
                 TitleHubResponse titleHub = await xblClient.tittleHubProvider.GetTitleHistory(xblClient.Xuid);
                 //await authLogic.SaveToken(titleHub);

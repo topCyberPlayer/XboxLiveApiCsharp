@@ -9,9 +9,9 @@ namespace ConsoleApp.API.Provider
 {
     internal class BaseProvider
     {
-        private protected AuthenticationManager _authMgr;
+        private protected AuthenticationLow _authMgr;
 
-        public BaseProvider(AuthenticationManager authMgr)
+        public BaseProvider(AuthenticationLow authMgr)
         {
             this._authMgr = authMgr;
         }
