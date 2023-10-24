@@ -63,7 +63,7 @@ namespace ConsoleApp.Authentication
             }
             else
             {
-                string authorization_code = await GetAuthCodeFromBrowser();
+                string authorization_code = await _authMgr.GetAuthCodeFromBrowser();
 
                 await RequestTokens(authorization_code);
             }
