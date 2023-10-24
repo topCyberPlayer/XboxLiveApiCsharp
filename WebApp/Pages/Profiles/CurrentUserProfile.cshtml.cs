@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ModelsJsonResponse.Authentication;
-using WebApp.ModelsDb;
+using WebApp.Data;
+using WebApp.Data.Profile;
+using WebApp.Services.Authentication;
 
 namespace WebApp.Pages.Profiles
 {
@@ -13,7 +14,7 @@ namespace WebApp.Pages.Profiles
         private readonly IHttpClientFactory _httpClientFactory;
         public string ReturnUrl { get; set; }
         private readonly WebAppDbContext _context;
-        public ProfileUserTable ProfileUserList { get; set; } = default!;
+        public ProfileUserModelDb ProfileUserList { get; set; } = default!;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 

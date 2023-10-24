@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApp.ModelsDb;
+namespace WebApp.Data;
 
 public partial class TokenXstTable
 {

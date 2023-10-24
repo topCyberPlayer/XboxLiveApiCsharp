@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WebApp.ModelsDb;
+using WebApp.Data;
 
 namespace WebApp.Pages.Movies
 {

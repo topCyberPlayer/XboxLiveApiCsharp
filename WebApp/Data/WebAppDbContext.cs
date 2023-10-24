@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Data.Profile;
 
-namespace WebApp.ModelsDb;
+namespace WebApp.Data;
 
 public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbContext
 {
@@ -18,7 +19,7 @@ public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbCont
 
     public virtual DbSet<Movie> Movies { get; set; }
 
-    public virtual DbSet<ProfileUserTable> ProfileUsers { get; set; }
+    public virtual DbSet<ProfileUserModelDb> ProfileUsers { get; set; }
 
     public virtual DbSet<TokenOauth2Table> TokenOauth2s { get; set; }
 
@@ -37,7 +38,7 @@ public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbCont
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
         });
 
-        modelBuilder.Entity<ProfileUserTable>(entity =>
+        modelBuilder.Entity<ProfileUserModelDb>(entity =>
         {
             entity.Property(e => e.ProfileUserId).ValueGeneratedNever();
             entity.Property(e => e.AspNetUsersId).HasMaxLength(450);

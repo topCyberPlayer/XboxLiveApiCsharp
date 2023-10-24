@@ -1,10 +1,10 @@
-﻿using ModelsJsonResponse.Authentication;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Web;
+using WebApp.Services.Authentication;
 
-namespace ModelsJsonResponse.Profile
+namespace WebApp.Services.ProfileUser
 {
-    internal class ProfileLow : BaseLow
+    internal class ProfileUserProviderJson : BaseLow
     {
         private string DEF_SCOPES
         {
@@ -36,7 +36,7 @@ namespace ModelsJsonResponse.Profile
         }
         private const string PROFILE_URL = "https://profile.xboxlive.com";
 
-        public ProfileLow(AuthenticationLow authMgr) : base(authMgr)
+        public ProfileUserProviderJson(AuthenticationLow authMgr) : base(authMgr)
         {
         }
 

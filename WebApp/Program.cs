@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using WebApp.ModelsDb;
+using WebApp.Data;
+using WebApp.Data.Profile;
+using WebApp.Services.Authentication;
 
 namespace WebApp
 {
@@ -36,6 +38,9 @@ namespace WebApp
                 .AddEntityFrameworkStores<WebAppDbContext>();
             
             builder.Services.AddRazorPages();
+
+            builder.Services.AddScoped<ProfileUserProviderDb>();
+            builder.Services.AddScoped<AuthenticationHigh>();
 
             return builder.Services;
         }

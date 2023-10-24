@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 
-namespace ModelsJsonResponse.Authentication
+namespace WebApp.Services.Authentication
 {
     internal class AuthenticationLow
     {

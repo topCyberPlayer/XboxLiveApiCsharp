@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace ModelsJsonResponse.Authentication
+namespace WebApp.Services.Authentication
 {
     public class TokenOauth2Response
     {

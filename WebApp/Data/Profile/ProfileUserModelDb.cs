@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.ModelsDb;
+namespace WebApp.Data.Profile;
 
-public partial class ProfileUserTable
+public partial class ProfileUserModelDb
 {
     [Key]
     public long ProfileUserId { get; set; }

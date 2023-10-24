@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ModelsJsonResponse\Authentication\" />
-    <Folder Include="ModelsJsonResponse\TittleHub\" />
-    <Folder Include="ModelsJsonResponse\Profile\" />
+    <Folder Include="Services\TittleHub\" />
     <Folder Include="Pages\Tittles\" />
   </ItemGroup>
 

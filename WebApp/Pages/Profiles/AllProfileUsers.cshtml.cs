@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WebApp.ModelsDb;
+using WebApp.Data;
+using WebApp.Data.Profile;
 
 namespace WebApp.Pages.Profiles
 {
     public class AllProfileUsersModel : PageModel
     {
         private readonly WebAppDbContext _context;
-        public IList<ProfileUserTable> ProfileUserList { get; set; } = default!;
+        public IList<ProfileUserModelDb> ProfileUserList { get; set; } = default!;
 
         public AllProfileUsersModel(WebAppDbContext context)
         {

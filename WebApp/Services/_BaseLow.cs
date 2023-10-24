@@ -1,6 +1,6 @@
-﻿using ModelsJsonResponse.Authentication;
+﻿using WebApp.Services.Authentication;
 
-namespace ModelsJsonResponse
+namespace WebApp.Services
 {
     internal class BaseLow
     {

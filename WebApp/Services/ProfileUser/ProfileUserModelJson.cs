@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace ModelsJsonResponse.Profile
+namespace WebApp.Services.ProfileUser
 {
     public class ProfileResponse
     {
