@@ -4,7 +4,7 @@ using WebApp.Services.Authentication;
 
 namespace WebApp.Services.ProfileUser
 {
-    internal class ProfileUserProviderJson : BaseLow
+    public class ProfileUserProviderJson : BaseLow
     {
         private string DEF_SCOPES
         {
@@ -36,25 +36,25 @@ namespace WebApp.Services.ProfileUser
         }
         private const string PROFILE_URL = "https://profile.xboxlive.com";
 
-        public ProfileUserProviderJson(AuthenticationLow authMgr) : base(authMgr)
+        public ProfileUserProviderJson(AuthenticationProviderJson authMgr) : base(authMgr)
         {
         }
 
-        public async Task<ProfileResponse> GetProfileByXuid(string xuid)
+        public async Task<ProfileUserModelJsonResponse> GetProfileByXuid(string xuid)
         {
             string baseAddress = PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
 
             return await GetProfileBase(baseAddress);
         }
 
-        public async Task<ProfileResponse> GetProfileByGamertag(string gamertag)
+        public async Task<ProfileUserModelJsonResponse> GetProfileByGamertag(string gamertag)
         {
             string baseAddress = PROFILE_URL + $"/users/gt({gamertag})/profile/settings";
 
             return await GetProfileBase(baseAddress);
         }
 
-        private async Task<ProfileResponse> GetProfileBase(string baseAddress)
+        private async Task<ProfileUserModelJsonResponse> GetProfileBase(string baseAddress)
         {
             UriBuilder uriBuilder = new UriBuilder(baseAddress);
 
@@ -70,7 +70,7 @@ namespace WebApp.Services.ProfileUser
 
                 HttpResponseMessage response = await clientSession.GetAsync(uriBuilder.ToString());
                 string tmpResult = await response.Content.ReadAsStringAsync();
-                ProfileResponse profileUser = await _authMgr.ConvertTo<ProfileResponse>(response);
+                ProfileUserModelJsonResponse profileUser = await _authMgr.ConvertTo<ProfileUserModelJsonResponse>(response);
 
                 return profileUser;
             }             

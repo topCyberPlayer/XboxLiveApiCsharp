@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.Data.Profile;
+namespace WebApp.Services.ProfileUser;
 
 public partial class ProfileUserModelDb
 {

@@ -4,37 +4,47 @@ using System.Text.Json.Serialization;
 
 namespace WebApp.Services.ProfileUser
 {
-    public class ProfileResponse
+    public class ProfileUserModelJsonResponse
     {
         [JsonPropertyName("profileUsers")]
-        public List<ProfileUser> ProfileUsers { get; set; }
+        public List<ProfileUserModelJson> ProfileUserJsons { get; set; }
     }
 
-    public class ProfileUser
+    public class ProfileUserModelJson
     {
         [JsonPropertyName("id")]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string ProfileId { get; set; }
 
         [JsonPropertyName("hostId")]
         public string HostId { get; set; }
 
-        [JsonPropertyName("settings")]
-        public List<Setting> Settings { get; set; }
+        //[JsonPropertyName("settings")]
+        //public List<Setting> Settings { get; set; }
+
+        public ProfileUserDisplayClaim DisplayClaims { get; set; }
 
         [JsonPropertyName("isSponsoredUser")]
         public bool IsSponsoredUser { get; set; }
+
+        public string Gamertag { get { return (string)DisplayClaims.Settings[0][ProfileSettings.GAMERTAG]; } }
+        public int Gamerscore { get { return (int)DisplayClaims.Settings[0][ProfileSettings.GAMERSCORE]; } }
+        public string Bio { get { return (string)DisplayClaims.Settings[0][ProfileSettings.BIOGRAPHY]; } }
     }
 
-    public class Setting
+    public class ProfileUserDisplayClaim
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        [JsonPropertyName("value")]
-        public string Value { get; set; }
+        [JsonPropertyName("settings")]
+        public List<Dictionary<string, object>> Settings { get; set; }
     }
+
+    //public class Setting
+    //{
+    //    [JsonPropertyName("id")]
+    //    public string Id { get; set; }
+
+    //    [JsonPropertyName("value")]
+    //    public string Value { get; set; }
+    //}
 
     static class ProfileSettings
     {

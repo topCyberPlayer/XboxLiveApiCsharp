@@ -7,7 +7,7 @@ using System.Web;
 
 namespace WebApp.Services.Authentication
 {
-    internal class AuthenticationLow
+    public class AuthenticationProviderJson
     {
         private string[] DEFAULT_SCOPES = { "Xboxlive.signin", "Xboxlive.offline_access" };
         private string _clientId;
@@ -21,11 +21,11 @@ namespace WebApp.Services.Authentication
 
         private string DEF_SCOPES { get { return string.Join(" ", DEFAULT_SCOPES); } }
 
-        public AuthenticationLow(IHttpClientFactory httpClientFactory)
+        public AuthenticationProviderJson(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             this._httpClientFactory = httpClientFactory;
-            this._clientId = "";//configuration["Authentication:Microsoft:ClientId"];
-            this._clientSecret = "";//configuration["Authentication:Microsoft:ClientSecret"];
+            this._clientId = configuration["Authentication:Microsoft:ClientId"];
+            this._clientSecret = configuration["Authentication:Microsoft:ClientSecret"];
         }
 
         public string GenerateAuthorizationUrl()
@@ -64,7 +64,7 @@ namespace WebApp.Services.Authentication
         /// 1.1. Refresh OAuth2 token
         /// </summary>
         /// <returns></returns>
-        public async Task<TokenOauth2Response> RefreshOauth2Token(string refreshToken)
+        public async Task<TokenOauth2Response?> RefreshOauth2Token(string refreshToken)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {

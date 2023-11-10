@@ -2,11 +2,11 @@
 
 namespace WebApp.Services
 {
-    internal class BaseLow
+    public class BaseLow
     {
-        private protected AuthenticationLow _authMgr;
+        private protected AuthenticationProviderJson _authMgr;
 
-        public BaseLow(AuthenticationLow authMgr)
+        public BaseLow(AuthenticationProviderJson authMgr)
         {
             this._authMgr = authMgr;
         }

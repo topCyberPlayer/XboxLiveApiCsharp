@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data.Profile;
+using WebApp.Services.Authentication;
+using WebApp.Services.ProfileUser;
 
 namespace WebApp.Data;
 
@@ -21,9 +22,9 @@ public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbCont
 
     public virtual DbSet<ProfileUserModelDb> ProfileUsers { get; set; }
 
-    public virtual DbSet<TokenOauth2Table> TokenOauth2s { get; set; }
+    public virtual DbSet<TokenOauth2ModelDb> TokenOauth2s { get; set; }
 
-    public virtual DbSet<TokenXstTable> TokenXsts { get; set; }
+    public virtual DbSet<TokenXstsModelDb> TokenXsts { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -47,7 +48,7 @@ public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbCont
             entity.Property(e => e.Gamertag).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<TokenOauth2Table>(entity =>
+        modelBuilder.Entity<TokenOauth2ModelDb>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK_OAuth2TokenResponses");
 
@@ -58,7 +59,7 @@ public partial class WebAppDbContext :  IdentityDbContext<IdentityUser> //DbCont
             entity.Property(e => e.TokenType).HasMaxLength(450);
         });
 
-        modelBuilder.Entity<TokenXstTable>(entity =>
+        modelBuilder.Entity<TokenXstsModelDb>(entity =>
         {
             entity.HasKey(e => e.Xuid).HasName("PK_XSTSResponses");
         });

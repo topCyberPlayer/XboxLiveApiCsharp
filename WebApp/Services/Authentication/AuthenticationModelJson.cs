@@ -25,6 +25,7 @@ namespace WebApp.Services.Authentication
         [JsonPropertyName("authentication_token")]
         public string? AuthenticationToken { get; set; }
 
+        //2 параметра ниже заполняются здесь в коде.
         [JsonPropertyName("issued")]        
         public DateTime? Issued { get; set; }
 

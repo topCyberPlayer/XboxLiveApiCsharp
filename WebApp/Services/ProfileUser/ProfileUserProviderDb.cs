@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebApp.Data;
 using WebApp.Pages.Profiles;
 
-namespace WebApp.Data.Profile
+namespace WebApp.Services.ProfileUser
 {
     public class ProfileUserProviderDb
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
-using WebApp.Data.Profile;
+using WebApp.Services.ProfileUser;
 
 namespace WebApp.Pages.Profiles
 {

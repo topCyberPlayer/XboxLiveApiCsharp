@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebApp.Services.Authentication;
 
-namespace WebApp.Data;
-
-public partial class TokenOauth2Table
+public partial class TokenOauth2ModelDb
 {
     public string UserId { get; set; } = null!;
 
@@ -24,4 +21,17 @@ public partial class TokenOauth2Table
     public DateTime? Expires { get; set; }
 
     public DateTime? Issued { get; set; }
+}
+
+public partial class TokenXstsModelDb
+{
+    public string Xuid { get; set; } = null!;
+
+    public string AspNetUserId { get; set; } = null!;
+
+    public DateTime IssueInstant { get; set; }
+
+    public DateTime NotAfter { get; set; }
+
+    public string Token { get; set; } = null!;
 }
