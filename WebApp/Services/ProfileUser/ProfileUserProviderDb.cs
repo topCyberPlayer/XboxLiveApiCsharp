@@ -13,14 +13,13 @@ namespace WebApp.Services.ProfileUser
             _context = context;
         }
 
-        public async Task<List<UserProfilesViewModel>> GetUserProfiles()
+        public async Task<IEnumerable<ProfileUserModelDb>> GetUserProfiles()
         {
             var userProfiles = await _context.ProfileUsers
-                .Select(x => new UserProfilesViewModel
+                .Select(x => new ProfileUserModelDb
                 {
-                    GamerTag = x.Gamertag,
-                    Gamerscore = x.Gamerscore,
-                    LastDateTimeUpdate = x.DateTimeUpdate
+                    Gamertag = x.Gamertag,
+                    Gamerscore = x.Gamerscore
                 })
                 .ToListAsync();
 

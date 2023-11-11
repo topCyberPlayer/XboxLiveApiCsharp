@@ -8,7 +8,8 @@ namespace WebApp.Pages
     public class IndexModel : PageModel
     {
         private readonly ProfileUserProviderDb _profileUserProviderDb;
-        public IEnumerable<UserProfilesViewModel> UserProfiles { get; private set; }
+        //public IEnumerable<UserProfilesViewModel> ProfileUsers { get; private set; }
+        public IEnumerable<ProfileUserModelDb> ProfileUsers { get; private set; }
 
         public IndexModel(ProfileUserProviderDb profileUserProviderDb)
         {
@@ -17,7 +18,7 @@ namespace WebApp.Pages
 
         public async Task OnGet()
         {
-            UserProfiles = await _profileUserProviderDb.GetUserProfiles();
+            ProfileUsers = await _profileUserProviderDb.GetUserProfiles();
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace WebApp.Services.Authentication;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Services.Authentication;
 
 public partial class TokenOauth2ModelDb
 {
+    [Key]
     public string UserId { get; set; } = null!;
 
-    public string AspNetUserId { get; set; } = null!;
+    public string? AspNetUserId { get; set; }
 
     public string? TokenType { get; set; }
 
@@ -25,13 +28,14 @@ public partial class TokenOauth2ModelDb
 
 public partial class TokenXstsModelDb
 {
+    [Key]
     public string Xuid { get; set; } = null!;
 
-    public string AspNetUserId { get; set; } = null!;
+    public string? AspNetUserId { get; set; }
 
     public DateTime IssueInstant { get; set; }
 
     public DateTime NotAfter { get; set; }
 
-    public string Token { get; set; } = null!;
+    public string? Token { get; set; }
 }
