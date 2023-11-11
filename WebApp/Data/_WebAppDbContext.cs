@@ -5,7 +5,7 @@ using WebApp.Services.ProfileUser;
 
 namespace WebApp.Data;
 
-public partial class WebAppDbContext :  IdentityDbContext
+public class WebAppDbContext :  IdentityDbContext
 {
     public WebAppDbContext(DbContextOptions<WebAppDbContext> options) : base(options)   { }
 

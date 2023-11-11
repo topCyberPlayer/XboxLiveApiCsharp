@@ -33,6 +33,8 @@ public partial class TokenXstsModelDb
 
     public string? AspNetUserId { get; set; }
 
+    public string? Abc { get; set; }
+
     public DateTime IssueInstant { get; set; }
 
     public DateTime NotAfter { get; set; }
