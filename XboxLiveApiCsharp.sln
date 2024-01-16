@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XboxLiveApiConsole", "XboxLiveApiConsole\XboxLiveApiConsole.csproj", "{D04A5974-620C-4F36-94A9-124752EB3E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox live service", "Xbox live service\Xbox live service.csproj", "{774EE0D6-C36D-4C7C-A64B-002D0F7042FA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{774EE0D6-C36D-4C7C-A64B-002D0F7042FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{774EE0D6-C36D-4C7C-A64B-002D0F7042FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{774EE0D6-C36D-4C7C-A64B-002D0F7042FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{774EE0D6-C36D-4C7C-A64B-002D0F7042FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
