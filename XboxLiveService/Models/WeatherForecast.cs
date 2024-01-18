@@ -1,4 +1,4 @@
-namespace XboxLiveService
+namespace XboxLiveService.Models
 {
     public class WeatherForecast
     {
