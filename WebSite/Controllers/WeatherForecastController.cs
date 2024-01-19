@@ -5,19 +5,19 @@ namespace WebSite.Controllers
 {
     public class WeatherForecastController : Controller
     {
-        Uri baseAddress = new Uri("http://localhost:5256/api");
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _client;
-        public WeatherForecastController()
+        public WeatherForecastController(IConfiguration configuration, HttpClient httpClient)
         {
-            _client = new HttpClient();
-            _client.BaseAddress = baseAddress;
+            _configuration = configuration;
+            _client = httpClient;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             List<WeatherForecastViewModel>? weatherList = new List<WeatherForecastViewModel>();
-            HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + "/Weatherforecast/Get");
+            HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"] + "/Weatherforecast/Get");
 
             if (response.IsSuccessStatusCode)
             {
