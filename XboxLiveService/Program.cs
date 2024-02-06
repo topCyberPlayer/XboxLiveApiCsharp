@@ -1,3 +1,4 @@
+using XboxLiveService.Services;
 
 namespace XboxLiveService
 {
@@ -13,6 +14,7 @@ namespace XboxLiveService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<AuthenticationProvider>();
 
             var app = builder.Build();
 
@@ -29,6 +31,7 @@ namespace XboxLiveService
 
 
             app.MapControllers();
+            
 
             app.Run();
         }
