@@ -6,18 +6,19 @@ using XboxLiveService.Models;
 
 namespace XboxLiveService.Services
 {
-    public class AuthenticationProvider
+    public class AuthenticationLowerLvl
     {
         private string _clientId;
         private string _clientSecret;
         private string _redirectUri;
+        private HttpClient _httpClient;
         private string _defaultScopes { get { return string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access"); } }
 
         public OAuthTokenModel OAuthToken;
         public XauTokenModel XauToken;
         public XstsTokenModel XstsToken;
 
-        public AuthenticationProvider(IConfiguration configuration)
+        public AuthenticationLowerLvl(IConfiguration configuration, HttpClient httpClient)
         {
             _clientId = configuration["Authentication:Microsoft:ClientId"];
             _clientSecret = configuration["Authentication:Microsoft:ClientSecret"];
@@ -87,12 +88,11 @@ namespace XboxLiveService.Services
 
             string jsonData = JsonSerializer.Serialize(data);
 
-            clientSession.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
+            _httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await clientSession.PostAsync(base_address, content);
-            string tmpResult = await response.Content.ReadAsStringAsync();
-            XAUResponse result = await ConvertTo<XAUResponse>(response);
+            HttpResponseMessage response = await _httpClient.PostAsync(base_address, content);
+            XauTokenModel result = await ConvertTo<XauTokenModel>(response);
 
             return result;
         }
@@ -119,11 +119,10 @@ namespace XboxLiveService.Services
 
             string jsonData = JsonSerializer.Serialize(data);
 
-            clientSession.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
+            _httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await clientSession.PostAsync(base_address, content);
-            string tmpResult = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync(base_address, content);
             XstsTokenModel result = await ConvertTo<XstsTokenModel>(response);
 
             return result;
@@ -159,9 +158,27 @@ namespace XboxLiveService.Services
             data.Add("client_id", _clientId);
             data.Add("client_secret", _clientSecret);
 
-            HttpResponseMessage response = await clientSession.PostAsync(baseAddress, new FormUrlEncodedContent(data));
-            string tmpResult = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _httpClient.PostAsync(baseAddress, new FormUrlEncodedContent(data));
             OAuthTokenModel result = await ConvertTo<OAuthTokenModel>(response);
+
+            return result;
+        }
+
+        private async Task<T> ConvertTo<T>(HttpResponseMessage httpResponse)
+        {
+            T? result = default;
+
+            string tmpResult = await httpResponse.Content.ReadAsStringAsync();
+
+            if (httpResponse.IsSuccessStatusCode)
+                result = await httpResponse.Content.ReadFromJsonAsync<T>();
+
+            if (typeof(T) == typeof(OAuthTokenModel))
+            {
+                OAuthTokenModel? a = result as OAuthTokenModel;
+                a.Issued = DateTime.UtcNow;
+                a.Expires = DateTime.UtcNow.AddSeconds(a.ExpiresIn);
+            }
 
             return result;
         }

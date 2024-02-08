@@ -7,17 +7,17 @@ namespace XboxLiveService.Controllers
     [Route("api/[controller]/[action]")]
     public class AuthenticationController : ControllerBase
     {
-        private AuthenticationProvider _authPrvdr;
+        private AuthenticationLowerLvl _authLowerLvl;
 
-        public AuthenticationController(AuthenticationProvider authPrvdr)
+        public AuthenticationController(AuthenticationLowerLvl authLowerLvl)
         {
-            _authPrvdr = authPrvdr;
+            _authLowerLvl = authLowerLvl;
         }
 
         [HttpGet]
-        public string Get()
+        public string GetAuthorizationUrl()
         {
-            return _authPrvdr.GenerateAuthorizationUrl();
+            return _authLowerLvl.GenerateAuthorizationUrl();
         }
     }
 }
