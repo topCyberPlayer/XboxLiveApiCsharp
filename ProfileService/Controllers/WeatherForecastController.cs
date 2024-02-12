@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ProfileService.Models;
 
 namespace ProfileService.Controllers
 {

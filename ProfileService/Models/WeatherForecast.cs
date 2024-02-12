@@ -1,4 +1,4 @@
-namespace ProfileService
+namespace ProfileService.Models
 {
     public class WeatherForecast
     {
