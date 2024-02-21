@@ -1,11 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
+using WebApp.Services;
 
 namespace WebApp.Pages.Auth
 {
     public class CallBackModel : PageModel
     {
-        public IActionResult OnGet(string code)
+        private readonly AuthenticationService _authServ;
+
+        public CallBackModel(AuthenticationService authServ)
+        {
+            _authServ = authServ;
+        }
+
+        public void OnGet(string code)
         {
             var error = HttpContext.Request.Query["error"];
             var errorDescription = HttpContext.Request.Query["error_description"];
@@ -14,7 +22,7 @@ namespace WebApp.Pages.Auth
             if (code == null)
             {
                 // Обработка ошибки - код не был получен
-                return RedirectToAction("ExternalLoginFailure");
+                //return RedirectToAction("ExternalLoginFailure");
             }
 
             try
@@ -24,15 +32,20 @@ namespace WebApp.Pages.Auth
                 // Или выполнить другие действия, связанные с успешным входом пользователя
 
                 // Ваш код для обработки успешного входа пользователя
-
+                if (User.Identity.IsAuthenticated)
+                {
+                    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    _authServ.ZeroStart(userId, code);
+                }
+                
                 // После обработки успешного входа, перенаправляем пользователя на страницу, например, домашнюю
-                return RedirectToAction("Index", "Home");
+                //return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
                 // Обработка ошибки
                 // Логирование, отправка уведомлений, перенаправление на страницу ошибки и т.д.
-                return RedirectToAction("Error", "Home");
+                //return RedirectToAction("Error", "Home");
             }
         }
     }

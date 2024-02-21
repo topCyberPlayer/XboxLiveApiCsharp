@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApp.Data;
-using WebApp.Services.Authentication;
-using WebApp.Services.ProfileUser;
+using WebApp.Services;
 
 namespace WebApp
 {
@@ -27,23 +26,24 @@ namespace WebApp
         public static IServiceCollection RegisterApplicationServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddHttpClient();
+            builder.Services.AddScoped<AuthenticationServiceXbl>();
+            builder.Services.AddScoped<AuthenticationServiceDb>();
+            builder.Services.AddScoped<AuthenticationService>();
 
-            string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<WebAppDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<WebSiteContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<WebAppDbContext>();
+                .AddEntityFrameworkStores<WebSiteContext>();
             
             builder.Services.AddRazorPages();
             
-            builder.Services.AddScoped<AuthenticationProviderJson>();
-            builder.Services.AddScoped<AuthenticationProviderDb>();
-            builder.Services.AddScoped<ProfileUserProviderDb>();
-            builder.Services.AddScoped<ProfileUserLogic>();
-            builder.Services.AddScoped<ProfileUserProviderJson>();
+            
+            //builder.Services.AddScoped<AuthenticationServiceDb>();
 
             return builder.Services;
         }

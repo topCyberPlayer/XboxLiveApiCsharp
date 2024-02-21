@@ -32,9 +32,12 @@
                         @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/AllProfileUsers">All Profiles</a>
                         </li> *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/XblLogin">Xbl Login</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Auth/XblLogin">Xbl Login</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy3">Privacy</a>
                         </li>

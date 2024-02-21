@@ -7,21 +7,21 @@
 
 <div class="table-responsive">
     <table class="table table-striped recipe">
-        <thead>
+        @* <thead>
             <tr>
                 <th>Gamertag</th>
                 <th>Gamerscore</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var profileUser in Model.ProfileUsers)
+            @foreach (var profileUser in Model.Prof)
             {
                 <tr>
                     <td class="align-middle">@profileUser.Gamertag</td>
                     <td class="align-middle">@profileUser.Gamerscore</td>
-                    @* <td class="align-middle"><a asp-page="Recipes/View" asp-route-id="@profile.GamerTag" class="btn btn-primary">View</a></td> *@
+                    @* <td class="align-middle"><a asp-page="Recipes/View" asp-route-id="@profile.GamerTag" class="btn btn-primary">View</a></td>
                 </tr>
             }
-        </tbody>
+        </tbody> *@
     </table>
 </div>

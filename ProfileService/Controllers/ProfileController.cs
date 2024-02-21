@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DomainModel.Profiles;
+using Microsoft.AspNetCore.Mvc;
 using ProfileService.Models;
 using ProfileService.Services;
 
@@ -6,26 +7,27 @@ namespace ProfileService.Controllers
 {
     public class ProfileController : ControllerBase
     {
-        private ProfileLowLvl _profile;
+        private ProfileXblService _profileService;
 
-        public ProfileController(ProfileLowLvl profile)
+        public ProfileController(ProfileXblService profileService)
         {
-            _profile = profile;
+            _profileService = profileService;
         }
 
-        public async Task<ActionResult<ProfileResponse>> GetProfileByXuid(string xuid)
+        public async Task<ActionResult<ProfileXblModel>> GetProfileByXuid(string xuid)
         {
-            ActionResult<ProfileResponse> profile = await _profile.GetProfileByXuid(xuid);
+            //ActionResult<ProfileXblModel> profile = await _profileService.GetProfileByXuid(xuid);
 
-            //return profile;// == null ? NotFound() : Ok(profile);
-            return BadRequest(profile);
+            //return profile == null ? NotFound() : Ok(profile);
+            return Ok();
         }
 
-        public async Task<ProfileResponse> GetProfileByGamertag(string gamertag)
+        public async Task<ActionResult<ProfileXblModel>> GetProfileByGamertag(string gamertag)
         {
-            string baseAddress = _profile.PROFILE_URL + $"/users/gt({gamertag})/profile/settings";
+            //ActionResult<ProfileXblModel> profile = await _profileService.GetProfileByGamertag(gamertag);
 
-            return await _profile.GetProfileBase(baseAddress);
+            //return profile == null ? NotFound() : Ok(profile);
+            return Ok();
         }
     }
 }

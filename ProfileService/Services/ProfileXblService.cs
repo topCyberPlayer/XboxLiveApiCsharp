@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using ProfileService.Models;
-using System.Collections.Specialized;
-using System.Text.Json;
+﻿using System.Collections.Specialized;
 using System.Web;
+using DomainModel.Profiles;
 
 namespace ProfileService.Services
 {
-    public class ProfileLowLvl
+    public class ProfileXblService
     {
         private string DEF_SCOPES
         {
@@ -39,10 +35,12 @@ namespace ProfileService.Services
             }
         }
         public const string PROFILE_URL = "https://profile.xboxlive.com";
+        private string _AUTH_URL;
         private HttpClient _httpClient;
 
-        public ProfileLowLvl(HttpClient httpClient)
+        public ProfileXblService(IConfiguration configuration, HttpClient httpClient)
         {
+            _AUTH_URL = configuration["ConnectionStrings:AuthenticationApp"];
             _httpClient = httpClient;
         }
 
@@ -50,9 +48,7 @@ namespace ProfileService.Services
         {
             string baseAddress = PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
 
-            var a = await GetProfileBase(baseAddress);
-
-            return a;
+            return await GetProfileBase(baseAddress);
         }
 
         public async Task<HttpResponseMessage> GetProfileByGamertag(string gamertag)
@@ -71,16 +67,25 @@ namespace ProfileService.Services
             uriBuilder.Query = query.ToString();
 
             _httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
-            _httpClient.DefaultRequestHeaders.Add("Authorization", _authMgr.XstsToken.AuthorizationHeaderValue);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", await GetAuthorizationHeaderValue());
 
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.ToString());
 
             return response;
         }
 
-        private void GetAuthorizationHeaderValue()
+        private async Task<string> GetAuthorizationHeaderValue()
         {
-
+            HttpResponseMessage response = await _httpClient.GetAsync(_AUTH_URL+ "/api/authentication/getAuthorizationHeaderValue");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         private async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
