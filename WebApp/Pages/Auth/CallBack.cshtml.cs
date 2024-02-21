@@ -13,7 +13,14 @@ namespace WebApp.Pages.Auth
             _authServ = authServ;
         }
 
-        public void OnGet(string code)
+        //private AuthenticationServiceDb _authServiceDb;
+
+        //public CallBackModel(AuthenticationServiceDb authServiceDb)
+        //{
+        //    _authServiceDb = authServiceDb;
+        //}
+
+        public async Task OnGet(string code)
         {
             var error = HttpContext.Request.Query["error"];
             var errorDescription = HttpContext.Request.Query["error_description"];
@@ -35,7 +42,8 @@ namespace WebApp.Pages.Auth
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    _authServ.ZeroStart(userId, code);
+                    await _authServ.ZeroStart(userId, code);
+                    //_authServiceDb.SaveToDb(userId, new Models.TokenXstsModelXbl());
                 }
                 
                 // После обработки успешного входа, перенаправляем пользователя на страницу, например, домашнюю

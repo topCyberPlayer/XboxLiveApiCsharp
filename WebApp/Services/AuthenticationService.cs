@@ -24,7 +24,7 @@
             _authServXbl.XauToken = await _authServXbl.RequestXauToken();
             _authServXbl.XstsToken = await _authServXbl.RequestXstsToken();
 
-            await _authServDb.SaveToDb(userName, _authServXbl.XstsToken);
+            _authServDb.SaveToDb(userName, _authServXbl.XstsToken);
         }
     }
 }

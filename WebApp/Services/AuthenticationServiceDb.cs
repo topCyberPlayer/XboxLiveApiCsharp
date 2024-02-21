@@ -13,14 +13,16 @@ namespace WebApp.Services
             _dbContext = dbContext;
         }
 
-        public async Task SaveToDb(string userId, TokenXstsModelXbl tokenXbl)
+        public void SaveToDb(string userId, TokenXstsModelXbl tokenXbl)
         {
-            TokenXstsModelDb entityToUpdate = await _dbContext.TokenXsts.FirstOrDefaultAsync(x => x.AspNetUserId == userId);
+            TokenXstsModelDb entityToUpdate =  _dbContext.TokenXsts.FirstOrDefault(x => x.AspNetUserId == userId);
+            //todo Выяснить почему FirstOrDefaultAsync ничего не возвращает
 
             if (entityToUpdate == null)
             {
-                _dbContext.TokenXsts.Add(new TokenXstsModelDb
+                TokenXstsModelDb token = new TokenXstsModelDb
                 {
+                    AspNetUserId = userId,
                     IssueInstant = tokenXbl.IssueInstant,
                     NotAfter = tokenXbl.NotAfter,
                     Token = tokenXbl.Token,
@@ -31,11 +33,14 @@ namespace WebApp.Services
                     AgeGroup = tokenXbl.AgeGroup,
                     Privileges = tokenXbl.Privileges,
                     UserPrivileges = tokenXbl.UserPrivileges,
-                });
+                };
+
+                _dbContext.TokenXsts.Add(token);
+
+                _dbContext.SaveChanges();
             }
             else 
             {
-                entityToUpdate.AspNetUserId = userId;
                 entityToUpdate.IssueInstant = tokenXbl.IssueInstant;
                 entityToUpdate.NotAfter = tokenXbl.NotAfter;
                 entityToUpdate.Token = tokenXbl.Token;
@@ -48,18 +53,18 @@ namespace WebApp.Services
                 entityToUpdate.UserPrivileges = tokenXbl.UserPrivileges;
             }
 
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
-        internal async Task GetAuthorizationHeaderValue(string userId)
+        internal void GetAuthorizationHeaderValue(string userId)
         {
-            var result = await _dbContext.TokenXsts.
+            var result = _dbContext.TokenXsts.
                 Where(x => x.AspNetUserId == userId).
                 Select(x => new
                 {
                     x.Userhash,
                     x.Token
-                }).FirstOrDefaultAsync();
+                }).FirstOrDefault();
 
             //return result;
         }
