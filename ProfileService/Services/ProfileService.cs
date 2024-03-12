@@ -1,29 +1,44 @@
-﻿namespace ProfileService.Services
+﻿using ProfileService.Profiles;
+
+namespace ProfileService.Services
 {
     public class ProfileService
     {
-        public ProfileService()
+        private ProfileServiceDb _profileServiceDb;
+        private ProfileServiceXbl _profileServiceXbl;
+
+        public ProfileService(ProfileServiceDb profileServiceDb, ProfileServiceXbl profileServiceXbl)
         {
-            
+            _profileServiceDb = profileServiceDb;
         }
 
-        public void GetProfileByGamertag(string gamertag)
+        public async Task GetProfileByGamertag(string gamertag)
         {
             if (gamertag == null)
-            {
                 throw new ArgumentNullException();
-            }
 
+            ProfileModelDb profileDb = _profileServiceDb.GetProfileByGamertag(gamertag);//Ищем в БД
 
-            if (gamertag.Length == 0)//Ищем в БД
+            if (profileDb == null)
             {
+                HttpResponseMessage authHeaderResponse = await _profileServiceXbl.GetAuthorizationHeaderValue();
 
-            }
-            else//загружаем из XblService
-            {
+                if (authHeaderResponse.IsSuccessStatusCode)
+                {
+                    string content = await authHeaderResponse.Content.ReadAsStringAsync();
+                    //загружаем из XblService
+                    HttpResponseMessage profileResponse = await _profileServiceXbl.GetProfileByGamertag(gamertag);
+
+                    if (profileResponse.IsSuccessStatusCode)
+                    {
+                        //Сохраняем в БД
+                        //_profileServiceDb.Save(profileDb);
+                        //return profileResponse.Content
+                        //return new ResponseObject { }
+                    }
 
 
-                //Сохраняем в БД
+                }                
             }
         }
     }

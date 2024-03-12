@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using ProfileService.Data;
+using ProfileService.Services;
+
 namespace ProfileService
 {
     public class Program
@@ -8,7 +12,9 @@ namespace ProfileService
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            string? connectionString = builder.Configuration.GetConnectionString("DbContext");
+            builder.Services.AddDbContext<ProfileContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddHttpClient<ProfileServiceXbl>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

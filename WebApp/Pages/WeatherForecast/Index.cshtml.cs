@@ -15,14 +15,21 @@ namespace WebApp.Pages.WeatherForecast
         }
         public async Task<IActionResult> OnGet()
         {
-            HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"] + "/Weatherforecast/Get");
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                WeatherForecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecastViewModel>>();
-            }
+                HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"]);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    WeatherForecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecastViewModel>>();
+                }
 
-            return Page();
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

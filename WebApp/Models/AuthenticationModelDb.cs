@@ -5,6 +5,7 @@ namespace WebApp.Models;
 public partial class TokenXstsModelDb
 {
     [Key]
+    [Required]
     public string? AspNetUserId { get; set; }
     public DateTime IssueInstant { get; set; }
     public DateTime NotAfter { get; set; }

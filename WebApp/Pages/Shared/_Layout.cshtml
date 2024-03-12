@@ -27,11 +27,8 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/WeatherForecast/Index">Weather Forecast</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/CurrentUserProfile">Current User Profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile/Profile">My Profile</a>
                         </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profiles/AllProfileUsers">All Profiles</a>
-                        </li> *@
                         @if (User.Identity.IsAuthenticated == true)
                         {
                             <li class="nav-item">
@@ -40,11 +37,7 @@
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy3">Privacy</a>
-                        </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Account/MicrosoftLoginModel">MsLogin</a>
-                        </li> *@
-                        
+                        </li>                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

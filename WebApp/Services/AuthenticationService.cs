@@ -5,19 +5,18 @@
         private AuthenticationServiceXbl _authServXbl;
         private AuthenticationServiceDb _authServDb;
 
-        //public AuthenticationService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
-        //{
-        //    _authServXbl = new AuthenticationServiceXbl(configuration, httpClientFactory);
-        //    //_authServDb = new AuthenticationServiceDb();
-        //}
-
         public AuthenticationService(AuthenticationServiceXbl authServXbl, AuthenticationServiceDb authServDb)
         {
             _authServXbl = authServXbl;
             _authServDb = authServDb;
         }
 
-        // Need authorization_code
+        /// <summary>
+        /// Need authorizationCode
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="authorizationCode"></param>
+        /// <returns></returns>
         public async Task ZeroStart(string userName, string authorizationCode)
         {
             _authServXbl.OAuthToken = await _authServXbl.RequestOauth2Token(authorizationCode);

@@ -1,10 +1,10 @@
-﻿using System.Collections.Specialized;
+﻿using ProfileService.Profiles;
+using System.Collections.Specialized;
 using System.Web;
-using DomainModel.Profiles;
 
 namespace ProfileService.Services
 {
-    public class ProfileXblService
+    public class ProfileServiceXbl
     {
         private string DEF_SCOPES
         {
@@ -34,26 +34,27 @@ namespace ProfileService.Services
                     ProfileSettings.WATERMARKS);
             }
         }
-        public const string PROFILE_URL = "https://profile.xboxlive.com";
+        private const string _PROFILE_URL = "https://profile.xboxlive.com";
         private string _AUTH_URL;
-        private HttpClient _httpClient;
+        private readonly HttpClient _client;
 
-        public ProfileXblService(IConfiguration configuration, HttpClient httpClient)
+        public ProfileServiceXbl(IConfiguration configuration, HttpClient client)
         {
             _AUTH_URL = configuration["ConnectionStrings:AuthenticationApp"];
-            _httpClient = httpClient;
+            _client = client;
+            //_client.BaseAddress = new Uri(_AUTH_URL);
         }
 
         public async Task<HttpResponseMessage> GetProfileByXuid(string xuid)
         {
-            string baseAddress = PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
+            string baseAddress = _PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
 
             return await GetProfileBase(baseAddress);
         }
 
         public async Task<HttpResponseMessage> GetProfileByGamertag(string gamertag)
         {
-            string baseAddress = PROFILE_URL + $"/users/gt({gamertag})/profile/settings";
+            string baseAddress = _PROFILE_URL + $"/users/gt({gamertag})/profile/settings";
 
             return await GetProfileBase(baseAddress);
         }
@@ -66,26 +67,19 @@ namespace ProfileService.Services
             query["settings"] = DEF_SCOPES;
             uriBuilder.Query = query.ToString();
 
-            _httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
-            _httpClient.DefaultRequestHeaders.Add("Authorization", await GetAuthorizationHeaderValue());
+            _client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
+            //_client.DefaultRequestHeaders.Add("Authorization", );
 
-            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.ToString());
+            HttpResponseMessage response = await _client.GetAsync(uriBuilder.ToString());
 
             return response;
         }
 
-        private async Task<string> GetAuthorizationHeaderValue()
+        public async Task<HttpResponseMessage> GetAuthorizationHeaderValue()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_AUTH_URL+ "/api/authentication/getAuthorizationHeaderValue");
-            
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                return string.Empty;
-            }
+            HttpResponseMessage response = await _client.GetAsync(_AUTH_URL);
+
+            return response;
         }
 
         private async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)

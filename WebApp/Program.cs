@@ -11,7 +11,11 @@ namespace WebApp
         public static void Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-            builder.RegisterApplicationServices();
+            
+            string? connectionString = builder.Configuration.GetConnectionString("WebAppContext")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            
+            builder.Services.RegisterApplicationServices(connectionString);
 
             WebApplication app = builder.Build();
             app.ConfigureMiddleware();
@@ -23,29 +27,20 @@ namespace WebApp
 
     public static partial class ServiceInitializer
     {
-        public static IServiceCollection RegisterApplicationServices(this WebApplicationBuilder builder)
+        public static IServiceCollection RegisterApplicationServices(this IServiceCollection services, string connectionString)
         {
-            builder.Services.AddHttpClient();
-            builder.Services.AddScoped<AuthenticationServiceXbl>();
-            builder.Services.AddScoped<AuthenticationServiceDb>();
-            builder.Services.AddScoped<AuthenticationService>();
+            services.AddScoped<AuthenticationServiceXbl>();
+            services.AddScoped<AuthenticationServiceDb>();
+            services.AddScoped<AuthenticationService>();
 
-            string? connectionString = builder.Configuration.GetConnectionString("WebAppContext") 
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-            builder.Services.AddDbContext<WebSiteContext>(options => options.UseSqlServer(connectionString));
-
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddHttpClient();
+            services.AddDbContext<WebSiteContext>(options => options.UseSqlServer(connectionString));
+            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<WebSiteContext>();
-            
-            builder.Services.AddRazorPages();
-            
-            
-            //builder.Services.AddScoped<AuthenticationServiceDb>();
+            services.AddRazorPages();
 
-            return builder.Services;
+            return services;
         }
     }
 
@@ -57,6 +52,7 @@ namespace WebApp
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -64,26 +60,12 @@ namespace WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.Use(async (HttpContext context, Func<Task> next) =>
-            {
-                //SignInManager<IdentityUser> signIn = new();
-                //await signIn.ExternalLoginSignInAsync("", "", true);
-                //var a = await signIn.GetExternalLoginInfoAsync();
-                //var b = await signIn.GetExternalAuthenticationSchemesAsync();
-                //context.
-                // Do work that can write to the Response.
-                await next.Invoke();
-                // Do logging or other work that doesn't write to the Response.
-            });
 
             return app;
         }

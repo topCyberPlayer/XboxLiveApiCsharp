@@ -36,8 +36,6 @@ namespace WebApp.Services
                 };
 
                 _dbContext.TokenXsts.Add(token);
-
-                _dbContext.SaveChanges();
             }
             else 
             {
@@ -56,17 +54,14 @@ namespace WebApp.Services
             _dbContext.SaveChanges();
         }
 
-        internal void GetAuthorizationHeaderValue(string userId)
+        internal string GetAuthorizationHeaderValue(string userId)
         {
-            var result = _dbContext.TokenXsts.
-                Where(x => x.AspNetUserId == userId).
-                Select(x => new
-                {
-                    x.Userhash,
-                    x.Token
-                }).FirstOrDefault();
+            string result = _dbContext.TokenXsts
+                .Where(x => x.AspNetUserId == userId)
+                .Select(x => $"XBL3.0 x={x.Userhash};{x.Token}")
+                .FirstOrDefault();
 
-            //return result;
+            return result;
         }
     }
 }
