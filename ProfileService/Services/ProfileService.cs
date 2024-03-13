@@ -2,12 +2,12 @@
 
 namespace ProfileService.Services
 {
-    public class ProfileService
+    public class ProfileServiceR
     {
         private ProfileServiceDb _profileServiceDb;
         private ProfileServiceXbl _profileServiceXbl;
 
-        public ProfileService(ProfileServiceDb profileServiceDb, ProfileServiceXbl profileServiceXbl)
+        public ProfileServiceR(ProfileServiceDb profileServiceDb, ProfileServiceXbl profileServiceXbl)
         {
             _profileServiceDb = profileServiceDb;
         }
