@@ -16,12 +16,12 @@ namespace WebApp.Pages.Profile
 
         public async Task<IActionResult> OnGet()
         {
-            HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"]);
+            //HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"]);
 
-            if (response.IsSuccessStatusCode)
-            {
-                //WeatherForecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecastViewModel>>();
-            }
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    //WeatherForecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecastViewModel>>();
+            //}
 
             return Page();
         }

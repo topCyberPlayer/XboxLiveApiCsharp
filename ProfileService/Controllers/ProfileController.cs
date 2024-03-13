@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProfileService.Services;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace ProfileService.Controllers
@@ -8,29 +9,41 @@ namespace ProfileService.Controllers
     [Route("api/[controller]/[action]")]
     public class ProfileController : ControllerBase
     {
-        private ProfileServiceR _profileService;
+        private ProfileServiceXbl _profileService;
 
         private readonly List<string> _fruit = new List<string> { "Pear", "Lemon", "Peach" };
 
-        public ProfileController(ProfileServiceR profileService)
+        public ProfileController(ProfileServiceXbl profileService)
         {
             _profileService = profileService;
         }
 
-        //public async Task<ActionResult<ProfileXblModel>> GetProfileByXuid(string xuid)
-        //{
-        //    //ActionResult<ProfileXblModel> profile = await _profileService.GetProfileByXuid(xuid);
-
-        //    //return profile == null ? NotFound() : Ok(profile);
-        //    return Ok();
-        //}
+        [HttpPost]
+        public async Task<ActionResult<string>> GetProfileByGamertag(InputModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                HttpResponseMessage response = await _profileService.GetProfileByGamertag(model.Gamertag, model.AuthorizationCode);
+                
+                if (response.IsSuccessStatusCode) 
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    return responseData;
+                }
+                else 
+                {
+                    return BadRequest($"Ошибка при получении информации из Xbox Live. Причина: {response.ReasonPhrase}");
+                }
+            }
+            return BadRequest();
+        }
 
         [HttpGet]
         //[HttpGet(Name = "GetWeather")] - Это Conventional routing (маршрутизация на основе соглашений)
-        public ActionResult<string> GetProfileByGamertag(int id)
+        public ActionResult<string> GetProfileBy(int id)
         {
-            //Query string values: http://localhost:5245/api/Profile/GetProfileByGamertag?id=2
-            
+            //Query string values: http://localhost:5245/api/Profile/GetProfileBy?id=2
+
             //ActionResult<ProfileModelXbl> profile = await _profileService.GetProfileByGamertag(gamertag);
 
             if (id >= 0 && id < _fruit.Count)
@@ -64,5 +77,14 @@ namespace ProfileService.Controllers
 
             return NotFound();
         }
+    }
+
+    public class InputModel
+    {
+        [Required]
+        public string? Gamertag { get; set; }
+
+        [Required]
+        public string? AuthorizationCode { get; set; }
     }
 }

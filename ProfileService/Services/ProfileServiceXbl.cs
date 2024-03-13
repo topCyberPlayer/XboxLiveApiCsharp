@@ -45,21 +45,21 @@ namespace ProfileService.Services
             //_client.BaseAddress = new Uri(_AUTH_URL);
         }
 
-        public async Task<HttpResponseMessage> GetProfileByXuid(string xuid)
+        public async Task<HttpResponseMessage> GetProfileByXuid(string xuid, string authorizationCode)
         {
             string baseAddress = _PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
 
-            return await GetProfileBase(baseAddress);
+            return await GetProfileBase(baseAddress, authorizationCode);
         }
 
-        public async Task<HttpResponseMessage> GetProfileByGamertag(string gamertag)
+        public async Task<HttpResponseMessage> GetProfileByGamertag(string gamertag, string authorizationCode)
         {
             string baseAddress = _PROFILE_URL + $"/users/gt({gamertag})/profile/settings";
 
-            return await GetProfileBase(baseAddress);
+            return await GetProfileBase(baseAddress, authorizationCode);
         }
 
-        private async Task<HttpResponseMessage> GetProfileBase(string baseAddress)
+        private async Task<HttpResponseMessage> GetProfileBase(string baseAddress, string authorizationCode)
         {
             UriBuilder uriBuilder = new UriBuilder(baseAddress);
 
@@ -68,16 +68,9 @@ namespace ProfileService.Services
             uriBuilder.Query = query.ToString();
 
             _client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
-            //_client.DefaultRequestHeaders.Add("Authorization", );
+            _client.DefaultRequestHeaders.Add("Authorization", authorizationCode);
 
             HttpResponseMessage response = await _client.GetAsync(uriBuilder.ToString());
-
-            return response;
-        }
-
-        public async Task<HttpResponseMessage> GetAuthorizationHeaderValue()
-        {
-            HttpResponseMessage response = await _client.GetAsync(_AUTH_URL);
 
             return response;
         }

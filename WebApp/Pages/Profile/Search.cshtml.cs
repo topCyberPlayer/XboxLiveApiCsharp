@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using WebApp.Services;
 
 namespace WebApp.Pages.Profile
 {
@@ -12,15 +14,30 @@ namespace WebApp.Pages.Profile
         [Display(Name ="Search T")]
         public string SearchTerm { get; set; }
 
+        private AuthenticationService _authService;
+
+
+        public SearchModel(AuthenticationService authenticationService)
+        {
+            _authService = authenticationService;
+        }
+
         public void OnGet()
         {
         }
 
-        public void OnPost()
+        public async Task OnPost()
         {
             if (ModelState.IsValid)
             {
-                //Results = _productService.Search(SearchTerm, StringComparison.Ordinal);
+                string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                HttpResponseMessage response = await _authService.GetProfile(SearchTerm, userId);
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                }
             }
 
         }

@@ -21,24 +21,15 @@ namespace ProfileService.Services
 
             if (profileDb == null)
             {
-                HttpResponseMessage authHeaderResponse = await _profileServiceXbl.GetAuthorizationHeaderValue();
+                //HttpResponseMessage profileResponse = await _profileServiceXbl.GetProfileByGamertag(gamertag);
 
-                if (authHeaderResponse.IsSuccessStatusCode)
-                {
-                    string content = await authHeaderResponse.Content.ReadAsStringAsync();
-                    //загружаем из XblService
-                    HttpResponseMessage profileResponse = await _profileServiceXbl.GetProfileByGamertag(gamertag);
-
-                    if (profileResponse.IsSuccessStatusCode)
-                    {
-                        //Сохраняем в БД
-                        //_profileServiceDb.Save(profileDb);
-                        //return profileResponse.Content
-                        //return new ResponseObject { }
-                    }
-
-
-                }                
+                //if (profileResponse.IsSuccessStatusCode)
+                //{
+                //    //Сохраняем в БД
+                //    //_profileServiceDb.Save(profileDb);
+                //    //return profileResponse.Content
+                //    //return new ResponseObject { }
+                //}
             }
         }
     }

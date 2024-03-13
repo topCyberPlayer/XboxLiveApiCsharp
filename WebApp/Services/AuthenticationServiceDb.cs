@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
+﻿using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Services
@@ -56,7 +55,7 @@ namespace WebApp.Services
 
         internal string GetAuthorizationHeaderValue(string userId)
         {
-            string result = _dbContext.TokenXsts
+            string? result = _dbContext.TokenXsts
                 .Where(x => x.AspNetUserId == userId)
                 .Select(x => $"XBL3.0 x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
