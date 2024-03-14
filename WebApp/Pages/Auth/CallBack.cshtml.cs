@@ -42,7 +42,7 @@ namespace WebApp.Pages.Auth
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    await _authServ.ZeroStart(userId, code);
+                    await _authServ.RequestTokens(userId, code);
                     //_authServiceDb.SaveToDb(userId, new Models.TokenXstsModelXbl());
                 }
                 

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using WebApp.Models;
 
 namespace WebApp.Services
 {
@@ -9,7 +10,11 @@ namespace WebApp.Services
         private readonly HttpClient _client;
         private AuthenticationServiceXbl _authServXbl;
         private AuthenticationServiceDb _authServDb;
-        
+
+        private TokenOAuthModelXbl _tokenOAuth;
+        private TokenXauModelXbl _tokenXau;
+        private TokenXstsModelXbl _tokenXsts;
+
 
         public AuthenticationService(IConfiguration configuration,
             HttpClient client, 
@@ -28,18 +33,35 @@ namespace WebApp.Services
         /// <param name="userId"></param>
         /// <param name="authorizationCode"></param>
         /// <returns></returns>
-        public async Task ZeroStart(string userId, string authorizationCode)
+        public async Task RequestTokens(string userId, string authorizationCode)
         {
-            _authServXbl.OAuthToken = await _authServXbl.RequestOauth2Token(authorizationCode);
-            _authServXbl.XauToken = await _authServXbl.RequestXauToken();
-            _authServXbl.XstsToken = await _authServXbl.RequestXstsToken();
+            HttpResponseMessage responseOAuth = await _authServXbl.RequestOauth2Token(authorizationCode);
 
-            _authServDb.SaveToDb(userId, _authServXbl.XstsToken);
+            if (responseOAuth.IsSuccessStatusCode)
+            {
+                _tokenOAuth = await _authServXbl.ProcessRespone<TokenOAuthModelXbl>(responseOAuth);
+                                
+                HttpResponseMessage responseXau = await _authServXbl.RequestXauToken(_tokenOAuth);
+
+                if (responseXau.IsSuccessStatusCode)
+                {
+                    _tokenXau = await _authServXbl.ProcessRespone<TokenXauModelXbl>(responseXau);
+
+                    HttpResponseMessage responseXsts = await _authServXbl.RequestXstsToken(_tokenXau);
+
+                    if (responseXsts.IsSuccessStatusCode)
+                    {
+                        _tokenXsts = await _authServXbl.ProcessRespone<TokenXstsModelXbl>(responseXsts);
+
+                        _authServDb.SaveToDb(userId, _tokenXsts);
+                    }
+                }
+            }
         }
 
-        public async Task RefreshTokens(string userId)
+        public async Task RefreshTokens(string userId, TokenOAuthModelXbl tokenOAuth)
         {
-            _authServXbl.OAuthToken = await _authServXbl.RefreshOauth2Token();
+            _authServXbl.OAuthToken = await _authServXbl.RefreshOauth2Token(tokenOAuth);
             _authServXbl.XauToken = await _authServXbl.RequestXauToken();
             _authServXbl.XstsToken = await _authServXbl.RequestXstsToken();
 

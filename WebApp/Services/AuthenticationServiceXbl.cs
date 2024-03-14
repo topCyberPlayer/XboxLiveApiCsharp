@@ -14,10 +14,6 @@ namespace WebApp.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private string _defaultScopes { get { return string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access"); } }
 
-        public TokenOAuthModelXbl OAuthToken;
-        public TokenXauModelXbl XauToken;
-        public TokenXstsModelXbl XstsToken;
-
         public AuthenticationServiceXbl(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _clientId = configuration["Authentication:Microsoft:ClientId"];
@@ -52,7 +48,7 @@ namespace WebApp.Services
         /// </summary>
         /// <param name="authorizationCode"></param>
         /// <returns></returns>
-        public async Task<TokenOAuthModelXbl> RequestOauth2Token(string authorizationCode)
+        public async Task<HttpResponseMessage> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -71,20 +67,21 @@ namespace WebApp.Services
         /// <param name="relying_party"></param>
         /// <param name="use_compact_ticket"></param>
         /// <returns></returns>
-        public async Task<TokenXauModelXbl> RequestXauToken(string relying_party = "http://auth.xboxlive.com")
+        public async Task<HttpResponseMessage> RequestXauToken(TokenOAuthModelXbl tokenOAuth)
         {
+            const string relyingParty = "http://auth.xboxlive.com";
             HttpClient httpClient = _httpClientFactory.CreateClient();
             const string base_address = "https://user.auth.xboxlive.com/user/authenticate";
 
             var data = new
             {
-                RelyingParty = relying_party,
+                RelyingParty = relyingParty,
                 TokenType = "JWT",
                 Properties = new
                 {
                     AuthMethod = "RPS",
                     SiteName = "user.auth.xboxlive.com",
-                    RpsTicket = $"d={OAuthToken.AccessToken}",
+                    RpsTicket = $"d={tokenOAuth.AccessToken}",
                 }
             };
 
@@ -94,9 +91,9 @@ namespace WebApp.Services
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             
             HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
-            TokenXauModelXbl result = await ProcessRespone<TokenXauModelXbl>(response);
+            //TokenXauModelXbl result = await ProcessRespone<TokenXauModelXbl>(response);
 
-            return result;
+            return response;
         }
 
         /// <summary>
@@ -104,18 +101,19 @@ namespace WebApp.Services
         /// </summary>
         /// <param name="relying_party"></param>
         /// <returns></returns>
-        public async Task<TokenXstsModelXbl> RequestXstsToken(string relying_party = "http://xboxlive.com")
+        public async Task<HttpResponseMessage> RequestXstsToken(TokenXauModelXbl tokenXau)
         {
+            const string relyingParty = "http://xboxlive.com";
             HttpClient httpClient = _httpClientFactory.CreateClient();
             const string base_address = "https://xsts.auth.xboxlive.com/xsts/authorize";
 
             var data = new
             {
-                RelyingParty = relying_party,
+                RelyingParty = relyingParty,
                 TokenType = "JWT",
                 Properties = new
                 {
-                    UserTokens = new List<string>() { XauToken.Token },
+                    UserTokens = new List<string>() { tokenXau.Token },
                     SandboxId = "RETAIL"
                 }
             };
@@ -126,9 +124,9 @@ namespace WebApp.Services
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
-            TokenXstsModelXbl result = await ProcessRespone<TokenXstsModelXbl>(response);
+            //TokenXstsModelXbl result = await ProcessRespone<TokenXstsModelXbl>(response);
 
-            return result;
+            return response;
         }
 
         #endregion
@@ -137,13 +135,13 @@ namespace WebApp.Services
         /// Refresh OAuth2 token
         /// </summary>
         /// <returns></returns>
-        public async Task<TokenOAuthModelXbl> RefreshOauth2Token()
+        public async Task<HttpResponseMessage> RefreshOauth2Token(TokenOAuthModelXbl tokenOAuth)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
                 {"scope", _defaultScopes},
-                {"refresh_token", OAuthToken.RefreshToken}
+                {"refresh_token", tokenOAuth.RefreshToken}
             };
 
             return await RequestRefreshOauthToken(data);
@@ -154,7 +152,7 @@ namespace WebApp.Services
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private async Task<TokenOAuthModelXbl> RequestRefreshOauthToken(Dictionary<string, string> data)
+        private async Task<HttpResponseMessage> RequestRefreshOauthToken(Dictionary<string, string> data)
         {
             HttpClient httpClient = _httpClientFactory.CreateClient();
             const string baseAddress = "https://login.live.com/oauth20_token.srf";
@@ -163,19 +161,18 @@ namespace WebApp.Services
             data.Add("client_secret", _clientSecret);
 
             HttpResponseMessage response = await httpClient.PostAsync(baseAddress, new FormUrlEncodedContent(data));
-            TokenOAuthModelXbl result = await ProcessRespone<TokenOAuthModelXbl>(response);
+            //TokenOAuthModelXbl result = await ProcessRespone<TokenOAuthModelXbl>(response);
 
-            return result;
+            return response;
         }
 
-        private async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
+        public async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
         {
             T? result = default;
 
-            string tmpResult = await httpResponse.Content.ReadAsStringAsync();
-
             if (httpResponse.IsSuccessStatusCode)
             {
+                string tmpResult = await httpResponse.Content.ReadAsStringAsync();
                 result = await httpResponse.Content.ReadFromJsonAsync<T>();
             }
 
