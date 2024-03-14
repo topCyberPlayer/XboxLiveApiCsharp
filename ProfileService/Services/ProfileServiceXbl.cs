@@ -75,31 +75,16 @@ namespace ProfileService.Services
             return response;
         }
 
-        private async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
+        public async Task<string> ProcessRespone(HttpResponseMessage httpResponse)
         {
-            T? result = default;
+            string? result = default;
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                string responseData = await httpResponse.Content.ReadAsStringAsync();
-                result = await httpResponse.Content.ReadFromJsonAsync<T>();
-                //return Ok(JsonSerializer.Deserialize<T>(responseData));
-                return result;
+                result = await httpResponse.Content.ReadAsStringAsync();
             }
 
             return result;
-            //else
-            //{
-            //    //return //StatusCode((int)response.StatusCode, "Ошибка при выполнении запроса к XboxLive");
-            //}
-
-            
-            //string tmpResult = await httpResponse.Content.ReadAsStringAsync();
-            
-            //if (httpResponse.IsSuccessStatusCode)
-            //    result = await httpResponse.Content.ReadFromJsonAsync<T>();
-
-            //return result;
         }
     }
 }

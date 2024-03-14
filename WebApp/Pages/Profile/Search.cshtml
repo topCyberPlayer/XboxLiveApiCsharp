@@ -5,9 +5,14 @@
 }
 
 <form method="post">
-    <label asp-for="SearchTerm"></label>
-    <input asp-for="SearchTerm" />
-    <span asp-validation-for="SearchTerm"></span>
-
+    @* <div class="form-group">
+        <label asp-for="SearchTerm"></label>
+        <input class="form-control" asp-for="SearchTerm" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button> *@
+    
+    <label asp-for="SearchTerm"></label>@*Выводит текст "Search T"*@
+    <input asp-for="SearchTerm" /> @*Отображает место поиска*@
+    <span asp-validation-for="SearchTerm"></span> @*Если валидация модели не проходит, то отображает уведомление: почему не прошла*@
     <button asp-page-handler="" type="submit">Search</button>
 </form>

@@ -13,11 +13,13 @@ namespace ProfileService.Services
 
         public ProfileModelDb GetProfileByGamertag(string gamertag)
         {
-            ProfileModelDb result = _dbContext.Profiles
+            ProfileModelDb? result = _dbContext.Profiles
                 .Where(x => x.Gamertag == gamertag)
                 .FirstOrDefault();
 
             return result;
         }
+
+        
     }
 }

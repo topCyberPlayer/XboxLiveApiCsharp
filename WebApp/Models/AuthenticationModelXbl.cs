@@ -24,12 +24,6 @@ namespace WebApp.Models
 
         [JsonPropertyName("authentication_token")]
         public string? AuthenticationToken { get; set; }
-
-        //[JsonPropertyName("issued")]
-        //public DateTime? Issued { get; set; }
-
-        //[JsonPropertyName("expires")]
-        //public DateTime? Expires { get; set; }
     }
 
     public class TokenBaseModel
@@ -48,6 +42,8 @@ namespace WebApp.Models
     {
         [JsonPropertyName("DisplayClaims")]
         public XAUDisplayClaims DisplayClaims { get; set; }
+
+        public string Uhs { get { return DisplayClaims.Xui[0]["uhs"]; } }
     }
 
     public class TokenXstsModelXbl : TokenBaseModel

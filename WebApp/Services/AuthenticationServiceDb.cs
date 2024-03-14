@@ -62,5 +62,15 @@ namespace WebApp.Services
 
             return result;
         }
+
+        public DateTime IsDateExpired(string userId)
+        {
+            DateTime result = _dbContext.TokenXsts
+                .Where(x => x.AspNetUserId == userId)
+                .Select(x => x.NotAfter)
+                .FirstOrDefault();
+
+            return result;
+        }
     }
 }

@@ -94,7 +94,7 @@ namespace WebApp.Services
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             
             HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
-            TokenXauModelXbl result = await ConvertTo<TokenXauModelXbl>(response);
+            TokenXauModelXbl result = await ProcessRespone<TokenXauModelXbl>(response);
 
             return result;
         }
@@ -126,7 +126,7 @@ namespace WebApp.Services
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
-            TokenXstsModelXbl result = await ConvertTo<TokenXstsModelXbl>(response);
+            TokenXstsModelXbl result = await ProcessRespone<TokenXstsModelXbl>(response);
 
             return result;
         }
@@ -163,12 +163,12 @@ namespace WebApp.Services
             data.Add("client_secret", _clientSecret);
 
             HttpResponseMessage response = await httpClient.PostAsync(baseAddress, new FormUrlEncodedContent(data));
-            TokenOAuthModelXbl result = await ConvertTo<TokenOAuthModelXbl>(response);
+            TokenOAuthModelXbl result = await ProcessRespone<TokenOAuthModelXbl>(response);
 
             return result;
         }
 
-        private async Task<T> ConvertTo<T>(HttpResponseMessage httpResponse)
+        private async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
         {
             T? result = default;
 

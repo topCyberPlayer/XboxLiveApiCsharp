@@ -5,18 +5,20 @@ namespace WebApp.Pages.Profile
 {
     public class ProfileModel : PageModel
     {
-        private readonly IConfiguration _configuration;
-        private readonly HttpClient _client;
+        private readonly string _weatherForecastUrl;
+        private readonly IHttpClientFactory _httpClientFactory;
         //public IEnumerable<WeatherForecastViewModel>? WeatherForecasts { get; set; }
-        public ProfileModel(IConfiguration configuration, HttpClient httpClient)
+        public ProfileModel(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
-            _client = httpClient;
+            _weatherForecastUrl = configuration["ConnectionStrings:WeatherForecast"];
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IActionResult> OnGet()
         {
-            //HttpResponseMessage response = await _client.GetAsync(_configuration["ConnectionStrings:WeatherForecast"]);
+            HttpClient httpClient = _httpClientFactory.CreateClient();
+
+            HttpResponseMessage response = await httpClient.GetAsync(_weatherForecastUrl+"/api/Weatherforecast/Get");
 
             //if (response.IsSuccessStatusCode)
             //{
