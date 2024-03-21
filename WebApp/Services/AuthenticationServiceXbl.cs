@@ -135,13 +135,13 @@ namespace WebApp.Services
         /// Refresh OAuth2 token
         /// </summary>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> RefreshOauth2Token(TokenOAuthModelXbl tokenOAuth)
+        public async Task<HttpResponseMessage> RefreshOauth2Token(string refreshToken)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
                 {"scope", _defaultScopes},
-                {"refresh_token", tokenOAuth.RefreshToken}
+                {"refresh_token", refreshToken}
             };
 
             return await RequestRefreshOauthToken(data);

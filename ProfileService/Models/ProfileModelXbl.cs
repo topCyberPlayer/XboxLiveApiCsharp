@@ -10,7 +10,7 @@ namespace ProfileService.Profiles
 
     public class ProfileUser
     {
-        [JsonPropertyName("profileId")]
+        [JsonPropertyName("id")]
         public string ProfileId { get; set; }
 
         [JsonPropertyName("hostId")]
@@ -21,6 +21,10 @@ namespace ProfileService.Profiles
 
         [JsonPropertyName("isSponsoredUser")]
         public bool IsSponsoredUser { get; set; }
+
+        public string Gamertag { get { return Settings[0].Id == ProfileSettings.GAMERTAG ? Settings[0].Value : "NOTHING??"; } }
+
+        public int Gamerscore { get { return Settings[0].Id == ProfileSettings.GAMERSCORE ? int.Parse(Settings[0].Value) : -1; } }
     }
 
     public class Setting

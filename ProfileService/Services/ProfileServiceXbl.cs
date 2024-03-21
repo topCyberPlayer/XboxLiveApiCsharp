@@ -75,13 +75,13 @@ namespace ProfileService.Services
             return response;
         }
 
-        public async Task<string> ProcessRespone(HttpResponseMessage httpResponse)
+        public async Task<T> ProcessRespone<T>(HttpResponseMessage httpResponse)
         {
-            string? result = default;
+            T result = default;
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                result = await httpResponse.Content.ReadAsStringAsync();
+                result = await httpResponse.Content.ReadFromJsonAsync<T>();
             }
 
             return result;

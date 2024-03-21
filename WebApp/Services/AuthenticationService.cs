@@ -1,6 +1,6 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using System.Net.Http.Headers;
 using WebApp.Models;
+using WebApp.Pages.Profile;
 
 namespace WebApp.Services
 {
@@ -37,10 +37,28 @@ namespace WebApp.Services
         {
             HttpResponseMessage responseOAuth = await _authServXbl.RequestOauth2Token(authorizationCode);
 
+            await ProcessTokens(responseOAuth, userId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tokenOAuth"></param>
+        /// <returns></returns>
+        public async Task RefreshTokens(string userId, string tokenOAuth)
+        {
+            HttpResponseMessage responseOAuth = await _authServXbl.RefreshOauth2Token(tokenOAuth);
+
+            await ProcessTokens(responseOAuth, userId);
+        }
+
+        private async Task ProcessTokens(HttpResponseMessage responseOAuth, string userId)
+        {
             if (responseOAuth.IsSuccessStatusCode)
             {
                 _tokenOAuth = await _authServXbl.ProcessRespone<TokenOAuthModelXbl>(responseOAuth);
-                                
+
                 HttpResponseMessage responseXau = await _authServXbl.RequestXauToken(_tokenOAuth);
 
                 if (responseXau.IsSuccessStatusCode)
@@ -59,30 +77,44 @@ namespace WebApp.Services
             }
         }
 
-        public async Task RefreshTokens(string userId, TokenOAuthModelXbl tokenOAuth)
+        public async Task<(ProfileViewModel, HttpResponseMessage)> GetProfileByGamertag(string gamertag, string userId)
         {
-            _authServXbl.OAuthToken = await _authServXbl.RefreshOauth2Token(tokenOAuth);
-            _authServXbl.XauToken = await _authServXbl.RequestXauToken();
-            _authServXbl.XstsToken = await _authServXbl.RequestXstsToken();
-
-            _authServDb.SaveToDb(userId, _authServXbl.XstsToken);
-        }
-
-        public async Task<HttpResponseMessage> GetProfile(string gamertag, string userId)
-        {
-            if(IsDateExperid(userId))
+            if (IsDateExperid(userId))
             {
-                await RefreshTokens(userId);
+                string refreshToken = _authServDb.GetRefreshToken(userId);
+
+                await RefreshTokens(userId, refreshToken);
             }
 
             string authorizationCode = _authServDb.GetAuthorizationHeaderValue(userId);
-            var gameData = new { Gamertag = gamertag, AuthorizationCode = authorizationCode };
-            string? json = JsonSerializer.Serialize(gameData);
-            StringContent? content = new StringContent(json, Encoding.UTF8, "application/json");
-            string requestUri = _apiProfileServiceUrl + "/api/Profile/GetProfileByGamertag";
-            HttpResponseMessage response = await _client.PostAsync(requestUri, content);
 
-            return response;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationCode);
+
+            ProfileViewModel? result = default;
+            string requestUri = _apiProfileServiceUrl + $"/api/Profile/GetProfileByGamertag?gamertag={gamertag}";
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                result = await response.Content.ReadFromJsonAsync<ProfileViewModel>();
+
+            }
+            return new(result, response);
+        }
+
+        public async Task<(ProfileViewModel, HttpResponseMessage)> GetProfileByGamertagTest(string gamertag)
+        {
+            ProfileViewModel? result = default;
+            string requestUri = _apiProfileServiceUrl + $"/api/Profile/GetProfileByGamertagTest?gamertag={gamertag}";
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+
+            if(response.IsSuccessStatusCode)
+            {
+                result = await response.Content.ReadFromJsonAsync<ProfileViewModel>();
+                
+            }
+            return new(result, response);
+
         }
 
         /// <summary>

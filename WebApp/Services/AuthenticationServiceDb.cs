@@ -57,7 +57,7 @@ namespace WebApp.Services
         {
             string? result = _dbContext.TokenXsts
                 .Where(x => x.AspNetUserId == userId)
-                .Select(x => $"XBL3.0 x={x.Userhash};{x.Token}")
+                .Select(x => $"x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
 
             return result;
@@ -71,6 +71,16 @@ namespace WebApp.Services
                 .FirstOrDefault();
 
             return result;
+        }
+
+        internal string GetRefreshToken(string userId)
+        {
+            string result = _dbContext.TokenOAuth
+                .Where(x => x.AspNetUserId == userId)
+                .Select(x => x.RefreshToken)
+                .FirstOrDefault();
+
+            return result;                
         }
     }
 }

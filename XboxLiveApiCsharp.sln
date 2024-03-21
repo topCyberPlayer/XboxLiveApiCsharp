@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TittleHubService", "TittleH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.Test", "WebApp.Test\WebApp.Test.csproj", "{D217A9CE-DC8E-4A4C-8FEF-B14DEC2368F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModel", "DomainModel\DomainModel.csproj", "{8AFEBCAC-E437-4CA7-A4CF-A4F68E316CB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{D217A9CE-DC8E-4A4C-8FEF-B14DEC2368F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D217A9CE-DC8E-4A4C-8FEF-B14DEC2368F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D217A9CE-DC8E-4A4C-8FEF-B14DEC2368F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AFEBCAC-E437-4CA7-A4CF-A4F68E316CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AFEBCAC-E437-4CA7-A4CF-A4F68E316CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AFEBCAC-E437-4CA7-A4CF-A4F68E316CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AFEBCAC-E437-4CA7-A4CF-A4F68E316CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

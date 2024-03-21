@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProfileService.Profiles;
 using ProfileService.Services;
 using System.ComponentModel.DataAnnotations;
+using DomainModel.Profiles;
 
 
 namespace ProfileService.Controllers
@@ -9,42 +11,42 @@ namespace ProfileService.Controllers
     [Route("api/[controller]/[action]")]
     public class ProfileController : ControllerBase
     {
-        private ProfileServiceXbl _profileService;
+        private ProfileServiceR service;
 
         private readonly List<string> _fruit = new List<string> { "Pear", "Lemon", "Peach" };
 
-        public ProfileController(ProfileServiceXbl profileService)
+        public ProfileController(ProfileServiceR profileService)
         {
-            _profileService = profileService;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<string>> GetProfileByGamertag(InputModel model)
-        {
-            if(ModelState.IsValid)
-            {
-                HttpResponseMessage response = await _profileService.GetProfileByGamertag(model.Gamertag, model.AuthorizationCode);
-                
-                if (response.IsSuccessStatusCode) 
-                {
-                    string responseData = await response.Content.ReadAsStringAsync();
-                    return responseData;
-                }
-                else 
-                {
-                    return BadRequest($"Ошибка при получении информации из Xbox Live. Причина: {response.ReasonPhrase}");
-                }
-            }
-            return BadRequest();
+            service = profileService;
         }
 
         [HttpGet]
-        //[HttpGet(Name = "GetWeather")] - Это Conventional routing (маршрутизация на основе соглашений)
+        public async Task<ActionResult<ProfileModelDTO>> GetProfileByGamertag(string gamertag)
+        {
+            string authorizationHeader = Request.Headers.Authorization;
+
+            if (string.IsNullOrEmpty(authorizationHeader))
+            {
+                return BadRequest("Authorization headers are required.");
+            }
+
+            ProfileModelDTO profile = await service.GetProfileByGamertag(gamertag, authorizationHeader);
+
+            return profile != null ? Ok(profile) : NotFound();
+        }
+
+        [HttpGet]
+        public ActionResult<ProfileModelDb> GetProfileByGamertagTest(string gamertag)
+        {
+            ProfileModelDb profile = service.GetProfileByGamertagTest(gamertag);
+
+            return profile != null ? Ok(profile) : NotFound();
+        }
+
+        [HttpGet]
         public ActionResult<string> GetProfileBy(int id)
         {
             //Query string values: http://localhost:5245/api/Profile/GetProfileBy?id=2
-
-            //ActionResult<ProfileModelXbl> profile = await _profileService.GetProfileByGamertag(gamertag);
 
             if (id >= 0 && id < _fruit.Count)
             {

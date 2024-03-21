@@ -19,7 +19,5 @@ namespace ProfileService.Services
 
             return result;
         }
-
-        
     }
 }

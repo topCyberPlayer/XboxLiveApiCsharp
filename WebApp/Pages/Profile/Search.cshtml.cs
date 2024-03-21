@@ -8,38 +8,48 @@ namespace WebApp.Pages.Profile
 {
     public class SearchModel : PageModel
     {
-        [BindProperty]
-        [Required]
-        [MinLength(3)]
-        [Display(Name ="Search T")]
-        public string SearchTerm { get; set; }
-
-        private AuthenticationService _authService;
-
+        private readonly AuthenticationService _authService;
 
         public SearchModel(AuthenticationService authenticationService)
         {
             _authService = authenticationService;
         }
 
+        [BindProperty]
+        public BindingModel Input { get; set; }
+        public ProfileViewModel Results { get; set; }
+
         public void OnGet()
         {
         }
 
-        public async Task OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
                 string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                HttpResponseMessage response = await _authService.GetProfile(SearchTerm, userId);
+                var results = await _authService.GetProfileByGamertag(Input.SearchTerm, userId);
 
-                if (response.IsSuccessStatusCode)
+                //return results.Item1 is not null ? Results = results.Item1 : NotFound(results.Item2.Content);
+                if (results.Item1 is not null)
                 {
-
+                    Results = results.Item1;
+                    return Page();
                 }
+                
             }
+            return RedirectToPage();
 
+        }
+
+        public class BindingModel
+        {
+            [BindProperty]
+            [Required]
+            [MinLength(3)]
+            [Display(Name = "Search T")]
+            public string SearchTerm { get; set; }
         }
     }
 }

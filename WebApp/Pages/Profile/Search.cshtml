@@ -4,15 +4,43 @@
     ViewData["Title"] = "Search";
 }
 
-<form method="post">
+@* <form method="post">
     @* <div class="form-group">
         <label asp-for="SearchTerm"></label>
         <input class="form-control" asp-for="SearchTerm" />
     </div>
-    <button type="submit" class="btn btn-primary">Search</button> *@
+    <button type="submit" class="btn btn-primary">Search</button>
     
-    <label asp-for="SearchTerm"></label>@*Выводит текст "Search T"*@
-    <input asp-for="SearchTerm" /> @*Отображает место поиска*@
-    <span asp-validation-for="SearchTerm"></span> @*Если валидация модели не проходит, то отображает уведомление: почему не прошла*@
-    <button asp-page-handler="" type="submit">Search</button>
-</form>
+    <label asp-for="Input.SearchTerm"></label>@*Выводит текст "Search T"
+    <input asp-for="Input.SearchTerm" /> @*Отображает место поиска
+    <span asp-validation-for="Input.SearchTerm"></span> @*Если валидация модели не проходит, то отображает уведомление: почему не прошла
+    <button asp-page-handler="" type="submit">Поиск</button>
+</form> *@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search</title>
+</head>
+<body>
+    <p>Enter a Search Term (e.g. "i"):</p>
+
+    <form method="post">
+        Search term:
+        <input asp-for="Input.SearchTerm" />
+        <input type="submit" />
+    </form>
+
+    @if (Model.Results != null)
+    {
+        @:Results:
+        <ul>
+            <li>@Model.Results.Gamertag</li>
+            <li>@Model.Results.Gamerscore</li>
+            <li>@Model.Results.Bio</li>
+        </ul>
+    }
+</body>
+</html>
