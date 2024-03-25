@@ -1,30 +1,28 @@
 ﻿using System.Net.Http.Headers;
 using WebApp.Models;
-using WebApp.Pages.Profile;
 
 namespace WebApp.Services
 {
     public class AuthenticationService
     {
-        private readonly string _apiProfileServiceUrl;
-        private readonly HttpClient _client;
-        private AuthenticationServiceXbl _authServXbl;
-        private AuthenticationServiceDb _authServDb;
+        internal AuthenticationServiceXbl _authServXbl;
+        internal AuthenticationServiceDb _authServDb;
 
-        private TokenOAuthModelXbl _tokenOAuth;
-        private TokenXauModelXbl _tokenXau;
-        private TokenXstsModelXbl _tokenXsts;
+        internal string _xServiceUrl;
+        internal HttpClient _httpClient;
 
+        internal TokenOAuthModelXbl _tokenOAuth;
+        internal TokenXauModelXbl _tokenXau;
+        internal TokenXstsModelXbl _tokenXsts;
 
         public AuthenticationService(IConfiguration configuration,
-            HttpClient client, 
+            HttpClient httpClient2, 
             AuthenticationServiceXbl authServXbl, 
             AuthenticationServiceDb authServDb)
         {
-            _apiProfileServiceUrl = configuration["ConnectionStrings:ProfileServiceUrl"];
-            _client = client;
             _authServXbl = authServXbl;
             _authServDb = authServDb;
+            _httpClient = httpClient2;
         }
 
         /// <summary>
@@ -46,14 +44,14 @@ namespace WebApp.Services
         /// <param name="userId"></param>
         /// <param name="tokenOAuth"></param>
         /// <returns></returns>
-        public async Task RefreshTokens(string userId, string tokenOAuth)
+        internal async Task RefreshTokens(string userId, string tokenOAuth)
         {
             HttpResponseMessage responseOAuth = await _authServXbl.RefreshOauth2Token(tokenOAuth);
 
             await ProcessTokens(responseOAuth, userId);
         }
 
-        private async Task ProcessTokens(HttpResponseMessage responseOAuth, string userId)
+        internal async Task ProcessTokens(HttpResponseMessage responseOAuth, string userId)
         {
             if (responseOAuth.IsSuccessStatusCode)
             {
@@ -77,8 +75,24 @@ namespace WebApp.Services
             }
         }
 
-        public async Task<(ProfileViewModel, HttpResponseMessage)> GetProfileByGamertag(string gamertag, string userId)
+        /// <summary>
+        /// True - дата истекла, False - не истекла
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        internal bool IsDateExperid(string userId)
         {
+            DateTime? dateNow = DateTime.UtcNow;
+
+            DateTime? dateDb = _authServDb.IsDateExpired(userId);
+
+            return dateNow>dateDb ? true : false;
+        }
+
+        public virtual async Task<T> GetBaseMethod<T>(string userId, string requestUri)
+        {
+            T result = default(T);
+
             if (IsDateExperid(userId))
             {
                 string refreshToken = _authServDb.GetRefreshToken(userId);
@@ -88,47 +102,16 @@ namespace WebApp.Services
 
             string authorizationCode = _authServDb.GetAuthorizationHeaderValue(userId);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationCode);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationCode);
 
-            ProfileViewModel? result = default;
-            string requestUri = _apiProfileServiceUrl + $"/api/Profile/GetProfileByGamertag?gamertag={gamertag}";
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
 
             if (response.IsSuccessStatusCode)
             {
-                result = await response.Content.ReadFromJsonAsync<ProfileViewModel>();
-
+                result = await response.Content.ReadFromJsonAsync<T>();
             }
-            return new(result, response);
-        }
 
-        public async Task<(ProfileViewModel, HttpResponseMessage)> GetProfileByGamertagTest(string gamertag)
-        {
-            ProfileViewModel? result = default;
-            string requestUri = _apiProfileServiceUrl + $"/api/Profile/GetProfileByGamertagTest?gamertag={gamertag}";
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
-
-            if(response.IsSuccessStatusCode)
-            {
-                result = await response.Content.ReadFromJsonAsync<ProfileViewModel>();
-                
-            }
-            return new(result, response);
-
-        }
-
-        /// <summary>
-        /// True - дата истекла, False - не истекла
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        private bool IsDateExperid(string userId)
-        {
-            DateTime? dateNow = DateTime.UtcNow;
-
-            DateTime? dateDb = _authServDb.IsDateExpired(userId);
-
-            return dateNow>dateDb ? true : false;
+            return result;
         }
     }
 }

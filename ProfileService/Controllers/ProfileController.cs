@@ -32,7 +32,7 @@ namespace ProfileService.Controllers
 
             ProfileModelDTO profile = await service.GetProfileByGamertag(gamertag, authorizationHeader);
 
-            return profile != null ? Ok(profile) : NotFound();
+            return profile != null ? Ok(profile) : NotFound("Gamertag не найден");
         }
 
         [HttpGet]

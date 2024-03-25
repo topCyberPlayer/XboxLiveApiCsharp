@@ -2,17 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using WebApp.Pages.Profile;
 using WebApp.Services;
 
-namespace WebApp.Pages.Profile
+namespace WebApp.Pages.TitleHub
 {
     public class SearchModel : PageModel
     {
-        private readonly ProfileService _profileService;
+        private readonly TittleHubService _tittleHubService;
 
-        public SearchModel(ProfileService profileService)
+        public SearchModel(TittleHubService tittleHubService)
         {
-            _profileService = profileService;
+            _tittleHubService = tittleHubService;
         }
 
         [BindProperty]
@@ -29,11 +30,12 @@ namespace WebApp.Pages.Profile
             {
                 string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                ProfileViewModel results = await _profileService.GetProfileByGamertag(Input.SearchTerm, userId);
+                var results = await _tittleHubService.GetTitleHistory(Input.SearchTerm, userId);
 
                 //return results.Item1 is not null ? Results = results.Item1 : NotFound(results.Item2.Content);
                 Results = results;
                 return Page();
+
             }
             return RedirectToPage();
 
@@ -44,7 +46,7 @@ namespace WebApp.Pages.Profile
             [BindProperty]
             [Required]
             [MinLength(3)]
-            [Display(Name = "Search T")]
+            [Display(Name = "Search a Game")]
             public string SearchTerm { get; set; }
         }
     }
