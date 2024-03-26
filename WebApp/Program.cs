@@ -32,6 +32,8 @@ namespace WebApp
             services.AddScoped<AuthenticationServiceXbl>();
             services.AddScoped<AuthenticationServiceDb>();
             services.AddScoped<AuthenticationService>();
+            services.AddScoped<GamerService>();
+            services.AddScoped<GameService>();
 
             services.AddHttpClient();
             services.AddDbContext<WebSiteContext>(options => options.UseSqlServer(connectionString));

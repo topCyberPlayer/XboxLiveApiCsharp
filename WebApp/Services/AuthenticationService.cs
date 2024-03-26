@@ -15,10 +15,7 @@ namespace WebApp.Services
         internal TokenXauModelXbl _tokenXau;
         internal TokenXstsModelXbl _tokenXsts;
 
-        public AuthenticationService(IConfiguration configuration,
-            HttpClient httpClient2, 
-            AuthenticationServiceXbl authServXbl, 
-            AuthenticationServiceDb authServDb)
+        public AuthenticationService(HttpClient httpClient2, AuthenticationServiceXbl authServXbl, AuthenticationServiceDb authServDb)
         {
             _authServXbl = authServXbl;
             _authServDb = authServDb;

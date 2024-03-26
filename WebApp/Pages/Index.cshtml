@@ -3,10 +3,68 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<h1>@ViewData["Title"]</h1>
+@* <h1>@ViewData["Title"]</h1> *@
 
-<ul>
-    @* <li><a asp-area="" asp-page="/Profile" asp-route-name="big-widget">Big widget</a></li>
-    <li><a asp-area="" asp-page="/Products" asp-route-name="super-fancy-widget">Super facncy widget</a></li> *@
+@*<ul>
+     <li><a asp-area="" asp-page="/Profile" asp-route-name="big-widget">Big widget</a></li>
+    <li><a asp-area="" asp-page="/Products" asp-route-name="super-fancy-widget">Super facncy widget</a></li> 
     <li><a asp-area="" asp-page="/Profile/Search">Search a Gamertag</a></li>
-</ul>
+    </ul>*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search</title>
+</head>
+<body>
+    @* <p>Enter a Search Gamertag:</p> *@
+
+    <form method="post">
+        Введите Gamertag:
+        <input asp-for="Input.SearchTerm" />
+        <input type="submit" />
+    </form>
+
+    @if (Model.Output != null)
+    {
+        @:Results:
+        <ul>
+            <li>@Model.Output.Gamertag</li>
+            <li>@Model.Output.Gamerscore</li>
+            <li>@Model.Output.Bio</li>
+        </ul>
+    }
+</body>
+
+<div class="table-responsive">
+    <p>Все профили из БД</p>
+    <table class="table table-striped recipe">
+        <thead>
+            <tr>
+                <th>Gamertag</th>
+                <th>Gamerscore</th>
+                <th>Bio</th>
+                <th>Спонсируемый?</th>
+                <th>Статус</th>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var profile in Model.Outputs)
+            {
+                <tr>
+                    <td class="align-middle">@profile.Gamertag</td>
+                    <td class="align-middle">@profile.Gamerscore</td>
+                    <td class="align-middle">@profile.Bio</td>
+                    <td class="align-middle">@profile.IsSponsoredUser</td>
+                    <td class="align-middle">@profile.AccountTier</td>
+                    <td class="align-middle">@profile.Id</td>
+                    <td class="align-middle"><a asp-page="TitleHub/View" asp-route-id="@profile.Id" class="btn btn-primary">View Games</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</html>

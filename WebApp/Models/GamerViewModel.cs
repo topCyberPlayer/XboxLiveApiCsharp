@@ -1,6 +1,6 @@
-﻿namespace WebApp.Pages.Profile
+﻿namespace WebApp.Models
 {
-    public class ProfileViewModel
+    public class GamerViewModel
     {
         public string? Id { get; set; }
         public string? HostId { get; set; }
