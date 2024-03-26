@@ -1,4 +1,5 @@
-﻿using WebApp.Data;
+﻿using NuGet.Common;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Services
@@ -12,14 +13,76 @@ namespace WebApp.Services
             _dbContext = dbContext;
         }
 
-        public void SaveToDb(string userId, TokenXstsModelXbl tokenXbl)
+        public void SaveToDb(string userId, TokenOAuthModelXbl tokenXbl)
         {
-            TokenXstsModelDb entityToUpdate =  _dbContext.TokenXsts.FirstOrDefault(x => x.AspNetUserId == userId);
-            //todo Выяснить почему FirstOrDefaultAsync ничего не возвращает
+            TokenOAuthModelDb entityToUpdate = _dbContext.TokenOAuth.FirstOrDefault(x => x.AspNetUserId == userId);
 
             if (entityToUpdate == null)
             {
-                TokenXstsModelDb token = new TokenXstsModelDb
+                entityToUpdate = new TokenOAuthModelDb()
+                {
+                    AspNetUserId = userId,
+                    AccessToken = tokenXbl.AccessToken,
+                    AuthenticationToken = tokenXbl.AuthenticationToken,
+                    ExpiresIn = tokenXbl.ExpiresIn,
+                    RefreshToken = tokenXbl.RefreshToken,
+                    TokenType = tokenXbl.TokenType,
+                    UserId = tokenXbl.UserId,
+                    Scope = tokenXbl.Scope
+                };
+
+                _dbContext.TokenOAuth.Add(entityToUpdate);
+            }
+            else
+            {
+                entityToUpdate.AccessToken = tokenXbl.AccessToken;
+                entityToUpdate.AuthenticationToken = tokenXbl.AuthenticationToken;
+                entityToUpdate.ExpiresIn = tokenXbl.ExpiresIn;
+                entityToUpdate.RefreshToken = tokenXbl.RefreshToken;
+                entityToUpdate.TokenType = tokenXbl.TokenType;
+                entityToUpdate.UserId = tokenXbl.UserId;
+                entityToUpdate.Scope = tokenXbl.Scope;
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void SaveToDb(string userId, TokenXauModelXbl tokenXbl)
+        {
+            TokenXauModelDb entityToUpdate = _dbContext.TokenXau.FirstOrDefault(x => x.AspNetUserId == userId);
+
+            if (entityToUpdate == null)
+            {
+                entityToUpdate = new TokenXauModelDb()
+                {
+                    AspNetUserId = userId,
+                    IssueInstant = tokenXbl.IssueInstant,
+                    NotAfter = tokenXbl.NotAfter,
+                    Token = tokenXbl.Token,
+                    Uhs = tokenXbl.Uhs
+                };
+
+                _dbContext.TokenXau.Add(entityToUpdate);
+            }
+
+            else
+            {
+                entityToUpdate.IssueInstant = tokenXbl.IssueInstant;
+                entityToUpdate.NotAfter = tokenXbl.NotAfter;
+                entityToUpdate.Token = tokenXbl.Token;
+                entityToUpdate.Uhs = tokenXbl.Uhs;
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void SaveToDb(string userId, TokenXstsModelXbl tokenXbl)
+        {
+            TokenXstsModelDb entityToUpdate =  _dbContext.TokenXsts.FirstOrDefault(x => x.AspNetUserId == userId);
+
+            if (entityToUpdate == null)
+            {
+                entityToUpdate = new TokenXstsModelDb
                 {
                     AspNetUserId = userId,
                     IssueInstant = tokenXbl.IssueInstant,
@@ -34,7 +97,7 @@ namespace WebApp.Services
                     UserPrivileges = tokenXbl.UserPrivileges,
                 };
 
-                _dbContext.TokenXsts.Add(token);
+                _dbContext.TokenXsts.Add(entityToUpdate);
             }
             else 
             {
@@ -63,7 +126,7 @@ namespace WebApp.Services
             return result;
         }
 
-        public DateTime IsDateExpired(string userId)
+        public DateTime GetDateExpired(string userId)
         {
             DateTime result = _dbContext.TokenXsts
                 .Where(x => x.AspNetUserId == userId)

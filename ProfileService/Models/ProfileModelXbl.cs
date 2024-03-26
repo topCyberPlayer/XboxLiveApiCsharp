@@ -22,9 +22,9 @@ namespace ProfileService.Profiles
         [JsonPropertyName("isSponsoredUser")]
         public bool IsSponsoredUser { get; set; }
 
-        public string Gamertag { get { return Settings[0].Id == ProfileSettings.GAMERTAG ? Settings[0].Value : "NOTHING??"; } }
+        public string Gamertag { get { return Settings.FirstOrDefault(s => s.Id == ProfileSettings.GAMERTAG).Value; } }
 
-        public int Gamerscore { get { return Settings[0].Id == ProfileSettings.GAMERSCORE ? int.Parse(Settings[0].Value) : -1; } }
+        public int Gamerscore { get { return int.Parse(Settings.FirstOrDefault(s => s.Id == ProfileSettings.GAMERSCORE).Value); } }
     }
 
     public class Setting

@@ -57,11 +57,15 @@ namespace WebApp.Services
             {
                 _tokenOAuth = await _authServXbl.ProcessRespone<TokenOAuthModelXbl>(responseOAuth);
 
+                _authServDb.SaveToDb(userId, _tokenOAuth);
+
                 HttpResponseMessage responseXau = await _authServXbl.RequestXauToken(_tokenOAuth);
 
                 if (responseXau.IsSuccessStatusCode)
                 {
                     _tokenXau = await _authServXbl.ProcessRespone<TokenXauModelXbl>(responseXau);
+
+                    _authServDb.SaveToDb(userId, _tokenXau);
 
                     HttpResponseMessage responseXsts = await _authServXbl.RequestXstsToken(_tokenXau);
 
@@ -84,7 +88,7 @@ namespace WebApp.Services
         {
             DateTime? dateNow = DateTime.UtcNow;
 
-            DateTime? dateDb = _authServDb.IsDateExpired(userId);
+            DateTime? dateDb = _authServDb.GetDateExpired(userId);
 
             return dateNow>dateDb ? true : false;
         }
