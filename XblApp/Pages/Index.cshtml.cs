@@ -1,20 +1,22 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using ServiceLayer.GamerServices;
 
 namespace XblApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly GamerService _gamerService;
+        public List<GamerDto> Outputs { get; private set; }
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(GamerService gamerService)
         {
-            _logger = logger;
+            _gamerService = gamerService;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-
+            Outputs = await _gamerService.GetAllGamers().ToListAsync();
         }
     }
 }

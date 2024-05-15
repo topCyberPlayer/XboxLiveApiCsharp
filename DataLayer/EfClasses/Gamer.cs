@@ -6,13 +6,17 @@ namespace DataLayer.EfClasses
     {
         [Key]
         public int GamerId { get; set; }
+        
         [Required]
         public string Gamertag { get; set; }
-        public string? AccountTier { get; set; }
+
+        [Required]
+        public int Gamerscore { get; set; }
+
         public string? Bio { get; set; }
 
+        public string? Location { get; set; }
 
-        //relationships
         public ICollection<GamerGame> GameLinks { get; set; }
     }
 }

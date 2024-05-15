@@ -14,5 +14,11 @@ namespace DataLayer.EfClasses
 
         [Required]
         public string GameName { get; set; }
+
+        [Required]
+        public int TotalAchievements { get; set; }
+
+        [Required]
+        public int TotalGamerscore { get; set;}
     }
 }

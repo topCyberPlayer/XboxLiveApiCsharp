@@ -8,7 +8,7 @@ namespace XblApp.Pages.Gamer
     {
         private readonly GamerService _gamerService;
 
-        public GamerListDto Output { get; set; }
+        public GamerDto? Output { get; set; }
 
         public IndexModel(GamerService gamerService)
         {
@@ -17,7 +17,7 @@ namespace XblApp.Pages.Gamer
 
         public IActionResult OnGet(string gamertag)
         {
-            Output = _gamerService.FindByGamertag(gamertag);
+            Output = _gamerService.FindByGamertag(gamertag).FirstOrDefault();
             return Page();
         }
     }

@@ -4,7 +4,30 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+    <div class="table-responsive">
+        <p>All Gamers</p>
+        <table class="table table-striped recipe">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Gamertag</th>
+                    <th>Gamerscore</th>
+                    <th>GamesCount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in Model.Outputs)
+                {
+                    <tr>
+                        <td class="align-middle">@profile.GamerId</td>
+                        <td class="align-middle">@profile.Gamertag</td>
+                        <td class="align-middle">@profile.Gamerscore</td>
+                        <td class="align-middle">@profile.GamesCount</td>
+                        <td class="align-middle"><a asp-page="TitleHub/View" asp-route-id="@profile.GamerId" class="btn btn-primary">View Games</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
