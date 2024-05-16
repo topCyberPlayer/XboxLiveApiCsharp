@@ -5,9 +5,9 @@ namespace ServiceLayer.GamerServices
 {
     public class GamerService
     {
-        private EfCoreContext _dbContext;
+        private XblAppDbContext _dbContext;
 
-        public GamerService(EfCoreContext dbContext)
+        public GamerService(XblAppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

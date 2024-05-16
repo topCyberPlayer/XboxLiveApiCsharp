@@ -2,9 +2,9 @@
 {
     public class GamerGame
     {
-        public string GamerId { get; set; }
+        public int GamerId { get; set; }
 
-        public string GameId { get; set; }
+        public int GameId { get; set; }
 
         public Gamer Gamer { get; set; }
 
@@ -13,6 +13,5 @@
         public int CurrentAchievements { get; set; }
 
         public int CurrentGamerscore { get; set; }
-
     }
 }
