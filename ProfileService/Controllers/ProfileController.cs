@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProfileService.Models;
 using ProfileService.Profiles;
 using ProfileService.Services;
 using System.ComponentModel.DataAnnotations;
-using DomainModel.Profiles;
 
 
 namespace ProfileService.Controllers

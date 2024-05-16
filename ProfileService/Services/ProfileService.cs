@@ -1,4 +1,4 @@
-﻿using DomainModel.Profiles;
+﻿using ProfileService.Models;
 using ProfileService.Profiles;
 
 namespace ProfileService.Services
