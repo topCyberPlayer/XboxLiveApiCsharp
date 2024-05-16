@@ -1,5 +1,4 @@
-﻿using NuGet.Common;
-using WebApp.Data;
+﻿using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Services
