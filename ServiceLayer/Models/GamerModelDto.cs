@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.GamerServices
+namespace ServiceLayer.Models
 {
-    public class GamerDto
+    public class GamerModelDto
     {
-        public int GamerId { get; set; }
+        public long GamerId { get; set; }
 
         public string Gamertag { get; set; }
 

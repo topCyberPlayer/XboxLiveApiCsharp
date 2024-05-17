@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.EfClasses
+namespace DataLayer.Models
 {
-    public class Gamer
+    public class GamerModelDb
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int GamerId { get; set; }
+        public long GamerId { get; set; }
         
         [Required]
         public string Gamertag { get; set; }
@@ -19,6 +19,6 @@ namespace DataLayer.EfClasses
 
         public string? Location { get; set; }
 
-        public ICollection<GamerGame> GameLinks { get; set; }
+        public ICollection<GamerGameModelDb> GameLinks { get; set; }
     }
 }

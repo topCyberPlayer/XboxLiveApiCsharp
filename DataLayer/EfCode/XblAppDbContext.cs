@@ -1,4 +1,4 @@
-﻿using DataLayer.EfClasses;
+﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -14,13 +14,13 @@ namespace DataLayer.EfCode
             Configuration = configuration;
         }
 
-        public DbSet<Gamer> Gamers { get; set; }
+        public DbSet<GamerModelDb> Gamers { get; set; }
 
-        public DbSet<Game> Games { get; set; }
+        public DbSet<GameModelDb> Games { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GamerGame>()
+            modelBuilder.Entity<GamerGameModelDb>()
                 .HasKey(x => new {x.GamerId, x.GameId});
         }
     }

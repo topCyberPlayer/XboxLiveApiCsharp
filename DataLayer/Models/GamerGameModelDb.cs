@@ -1,14 +1,14 @@
-﻿namespace DataLayer.EfClasses
+﻿namespace DataLayer.Models
 {
-    public class GamerGame
+    public class GamerGameModelDb
     {
         public int GamerId { get; set; }
 
         public int GameId { get; set; }
 
-        public Gamer Gamer { get; set; }
+        public GamerModelDb Gamer { get; set; }
 
-        public Game Game { get; set; }
+        public GameModelDb Game { get; set; }
 
         public int CurrentAchievements { get; set; }
 

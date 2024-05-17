@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.EfClasses
+namespace DataLayer.Models
 {
-    public class Game
+    public class GameModelDb
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

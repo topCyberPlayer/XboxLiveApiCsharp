@@ -42,7 +42,7 @@ namespace XblApp
     {
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services, string dbProvider)
         {         
-            services.AddScoped<GamerService>();            
+            services.AddScoped<GamerServiceDb>();            
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddRazorPages();
 
