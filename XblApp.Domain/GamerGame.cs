@@ -1,14 +1,14 @@
 ﻿namespace DataLayer.Models
 {
-    public class GamerGameModelDb
+    public class GamerGame
     {
         public int GamerId { get; set; }
 
         public int GameId { get; set; }
 
-        public GamerModelDb Gamer { get; set; }
+        public Gamer Gamer { get; set; }
 
-        public GameModelDb Game { get; set; }
+        public Game Game { get; set; }
 
         public int CurrentAchievements { get; set; }
 

@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
-    public class GameModelDb
+    public class Game
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GameId { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         public string GameName { get; set; }
 
         [Required]

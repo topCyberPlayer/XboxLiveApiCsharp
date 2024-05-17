@@ -1,8 +1,7 @@
-﻿using DataLayer.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace DataLayer.EfCode
+namespace XblApp.Persistence
 {
     public class XblAppDbContext : DbContext //IdentityDbContext
     {
