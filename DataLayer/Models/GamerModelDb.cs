@@ -3,14 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models
 {
+    [Table("Gamers")]
     public class GamerModelDb
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long GamerId { get; set; }
+        public int GamerId { get; set; }
         
         [Required]
-        public string Gamertag { get; set; }
+        public string? Gamertag { get; set; }
 
         [Required]
         public int Gamerscore { get; set; }
@@ -19,6 +20,6 @@ namespace DataLayer.Models
 
         public string? Location { get; set; }
 
-        public ICollection<GamerGameModelDb> GameLinks { get; set; }
+        public ICollection<GamerGameModelDb> GameLinks { get; set; }// = new List<GamerGameModelDb>();
     }
 }

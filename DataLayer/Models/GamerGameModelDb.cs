@@ -1,5 +1,8 @@
-﻿namespace DataLayer.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DataLayer.Models
 {
+    [Table("GamerGame")]
     public class GamerGameModelDb
     {
         public int GamerId { get; set; }

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace DataLayer.EfCode
+namespace DataLayer.Context
 {
-    public class XblAppDbContext : DbContext //IdentityDbContext
+    public abstract class XblAppDbContext : DbContext //IdentityDbContext
     {
         //public XblAppDbContext(DbContextOptions<XblAppDbContext> options) : base(options) { }
 

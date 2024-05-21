@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace DataLayer.EfCode
+namespace DataLayer.Context
 {
     public class MsSqlDbContext : XblAppDbContext
     {

@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServiceLayer.Models
+﻿namespace ServiceLayer.Models
 {
     public class GamerModelDto
     {
-        public long GamerId { get; set; }
+        public int GamerId { get; set; }
 
-        public string Gamertag { get; set; }
+        public string? Gamertag { get; set; }
 
         public int Gamerscore { get; set; }
 
-        public int GamesCount { get; set; }
+        public int CurrentGames { get; set; }
+
+        public int CurrentAchievements { get; set; }
     }
 }

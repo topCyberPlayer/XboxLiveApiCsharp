@@ -1,4 +1,5 @@
-using DataLayer.EfCode;
+using DataLayer.Context;
+using DataLayer.Logic;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.GamerServices;
 
@@ -41,8 +42,11 @@ namespace XblApp
     public static partial class ServiceInitializer
     {
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services, string dbProvider)
-        {         
-            services.AddScoped<GamerServiceDb>();            
+        {
+            services.AddScoped<IStorage, LogicDb>();
+            services.AddScoped<GamerService>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            //.AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddRazorPages();
 
@@ -59,8 +63,7 @@ namespace XblApp
             return services;
 
             //services.AddDbContext<XblAppDbContext>(options => options.UseSqlServer(connectionString));
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            
         }
     }
 }

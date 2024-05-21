@@ -13,7 +13,8 @@
                     <th>Id</th>
                     <th>Gamertag</th>
                     <th>Gamerscore</th>
-                    <th>GamesCount</th>
+                    <th>Current Games count</th>
+                    <th>Current Achievements count</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,7 +24,8 @@
                         <td class="align-middle">@profile.GamerId</td>
                         <td class="align-middle">@profile.Gamertag</td>
                         <td class="align-middle">@profile.Gamerscore</td>
-                        <td class="align-middle">@profile.GamesCount</td>
+                        <td class="align-middle">@profile.CurrentGames</td>
+                        <td class="align-middle">@profile.CurrentAchievements</td>
                         <td class="align-middle"><a asp-page="TitleHub/View" asp-route-id="@profile.GamerId" class="btn btn-primary">View Games</a></td>
                     </tr>
                 }
