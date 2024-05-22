@@ -8,14 +8,18 @@ namespace DataLayer.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int GamerId { get; set; }
+        public long GamerId { get; set; }
         
         [Required]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(12)]
         public string? Gamertag { get; set; }
 
         [Required]
         public int Gamerscore { get; set; }
 
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(70)]
         public string? Bio { get; set; }
 
         public string? Location { get; set; }

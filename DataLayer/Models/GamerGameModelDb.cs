@@ -5,9 +5,9 @@ namespace DataLayer.Models
     [Table("GamerGame")]
     public class GamerGameModelDb
     {
-        public int GamerId { get; set; }
+        public long GamerId { get; set; }
 
-        public int GameId { get; set; }
+        public long GameId { get; set; }
 
         public GamerModelDb Gamer { get; set; }
 

@@ -18,10 +18,10 @@ namespace DataLayer.Migrations.MsSql
                 schema: "NewShemaName",
                 columns: table => new
                 {
-                    GamerId = table.Column<int>(type: "int", nullable: false),
-                    Gamertag = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GamerId = table.Column<long>(type: "bigint", nullable: false),
+                    Gamertag = table.Column<string>(type: "VARCHAR(12)", maxLength: 12, nullable: false),
                     Gamerscore = table.Column<int>(type: "int", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Bio = table.Column<string>(type: "VARCHAR(70)", maxLength: 70, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -34,8 +34,8 @@ namespace DataLayer.Migrations.MsSql
                 schema: "NewShemaName",
                 columns: table => new
                 {
-                    GameId = table.Column<int>(type: "int", nullable: false),
-                    GameName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
+                    GameName = table.Column<string>(type: "VARCHAR(50)", maxLength: 50, nullable: false),
                     TotalAchievements = table.Column<int>(type: "int", nullable: false),
                     TotalGamerscore = table.Column<int>(type: "int", nullable: false)
                 },
@@ -49,8 +49,8 @@ namespace DataLayer.Migrations.MsSql
                 schema: "NewShemaName",
                 columns: table => new
                 {
-                    GamerId = table.Column<int>(type: "int", nullable: false),
-                    GameId = table.Column<int>(type: "int", nullable: false),
+                    GamerId = table.Column<long>(type: "bigint", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
                     CurrentAchievements = table.Column<int>(type: "int", nullable: false),
                     CurrentGamerscore = table.Column<int>(type: "int", nullable: false)
                 },

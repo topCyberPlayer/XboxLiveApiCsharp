@@ -23,7 +23,9 @@ namespace DataLayer.Logic
                 {
                     GamerId = g.GamerId,
                     Gamertag = g.Gamertag,
-                    Gamerscore = g.Gamerscore
+                    Gamerscore = g.Gamerscore,
+                    CurrentAchievements = g.GameLinks.Sum(a => a.CurrentAchievements),
+                    CurrentGames = g.GameLinks.Select(a => a.Game).Count()
                 }).
                 FirstOrDefault();
 

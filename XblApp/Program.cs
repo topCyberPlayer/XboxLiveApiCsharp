@@ -45,8 +45,7 @@ namespace XblApp
         {
             services.AddScoped<IStorage, LogicDb>();
             services.AddScoped<GamerService>();
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            //.AddEntityFrameworkStores<ApplicationDbContext>();
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddRazorPages();
 
@@ -63,7 +62,8 @@ namespace XblApp
             return services;
 
             //services.AddDbContext<XblAppDbContext>(options => options.UseSqlServer(connectionString));
-            
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            //.AddEntityFrameworkStores<ApplicationDbContext>();
         }
     }
 }

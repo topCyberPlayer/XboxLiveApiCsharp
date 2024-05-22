@@ -11,7 +11,7 @@ namespace DataLayer.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(Configuration.GetConnectionString(""));
+            optionsBuilder.UseNpgsql(Configuration.GetConnectionString("PostgresSqlConnection"));
         }
     }
 }

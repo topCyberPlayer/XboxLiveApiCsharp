@@ -80,8 +80,8 @@ namespace DataLayer.Logic
         public LogicTmp()
         {
             // Создание словарей для быстрого доступа к геймерам и играм по их ID
-            Dictionary<int, GamerModelDb> gamerDict = _gamers.ToDictionary(g => g.GamerId);
-            Dictionary<int, GameModelDb> gameDict = _games.ToDictionary(g => g.GameId);
+            Dictionary<long, GamerModelDb> gamerDict = _gamers.ToDictionary(g => g.GamerId);
+            Dictionary<long, GameModelDb> gameDict = _games.ToDictionary(g => g.GameId);
             
             // Установление связей между геймерами и играми
             foreach (GamerGameModelDb link in _gamerGameLinks)
