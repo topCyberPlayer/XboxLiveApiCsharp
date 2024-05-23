@@ -1,10 +1,10 @@
-﻿namespace DataLayer.Models
+﻿namespace XblApp.Domain.Entities
 {
     public class GamerGame
     {
-        public int GamerId { get; set; }
+        public long GamerId { get; set; }
 
-        public int GameId { get; set; }
+        public long GameId { get; set; }
 
         public Gamer Gamer { get; set; }
 

@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Models
+namespace XblApp.Domain.Entities
 {
     public class Game
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int GameId { get; set; }
+        public long GameId { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         public string GameName { get; set; }
@@ -16,6 +16,6 @@ namespace DataLayer.Models
         public int TotalAchievements { get; set; }
 
         [Required]
-        public int TotalGamerscore { get; set;}
+        public int TotalGamerscore { get; set; }
     }
 }

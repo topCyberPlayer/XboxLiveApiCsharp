@@ -1,24 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ServiceLayer.GamerServices;
-using ServiceLayer.Models;
+using XblApp.Application;
+using XblApp.Application.UseCases;
 
 namespace XblApp.Pages.Gamer
 {
     public class IndexModel : PageModel
     {
-        private readonly GamerServiceDb _gamerService;
+        private readonly GamerProfileUseCase _getGamerProfileUseCase;
 
-        public GamerModelDto? Output { get; set; }
+        public GamerDTO? Output { get; set; }
 
-        public IndexModel(GamerServiceDb gamerService)
+        public IndexModel(GamerProfileUseCase getGamerProfileUseCase)
         {
-            _gamerService = gamerService;
+            _getGamerProfileUseCase = getGamerProfileUseCase;
         }
 
-        public IActionResult OnGet(string gamertag)
+        public async Task<IActionResult> GetGamerProfile(string gamertag)
         {
-            Output = _gamerService.FindByGamertag(gamertag).FirstOrDefault();
+            GamerDTO? gamer = await _getGamerProfileUseCase.GetGamerProfileAsync(gamertag);
+            Output = gamer;
             return Page();
         }
     }

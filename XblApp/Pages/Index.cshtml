@@ -13,17 +13,19 @@
                     <th>Id</th>
                     <th>Gamertag</th>
                     <th>Gamerscore</th>
-                    <th>GamesCount</th>
+                    <th>Games count</th>
+                    <th>Achievements count</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var profile in Model.Outputs)
+                @foreach (var profile in Model.Output)
                 {
                     <tr>
                         <td class="align-middle">@profile.GamerId</td>
                         <td class="align-middle">@profile.Gamertag</td>
                         <td class="align-middle">@profile.Gamerscore</td>
-                        <td class="align-middle">@profile.GamesCount</td>
+                        <td class="align-middle">@profile.CurrentGamesCount</td>
+                        <td class="align-middle">@profile.CurrentAchievementsCount</td>
                         <td class="align-middle"><a asp-page="TitleHub/View" asp-route-id="@profile.GamerId" class="btn btn-primary">View Games</a></td>
                     </tr>
                 }

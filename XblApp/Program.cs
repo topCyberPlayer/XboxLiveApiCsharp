@@ -1,6 +1,9 @@
-using DataLayer.EfCode;
 using Microsoft.EntityFrameworkCore;
-using ServiceLayer.GamerServices;
+using XblApp.Application.UseCases;
+using XblApp.Domain.Interfaces;
+using XblApp.Infrastructure.Data;
+using XblApp.Infrastructure.Data.Repositories;
+using XblApp.Infrastructure.Services;
 
 namespace XblApp
 {
@@ -30,7 +33,7 @@ namespace XblApp
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.MapRazorPages();
 
@@ -41,10 +44,15 @@ namespace XblApp
     public static partial class ServiceInitializer
     {
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services, string dbProvider)
-        {         
-            services.AddScoped<GamerServiceDb>();            
+        {
+            services.AddScoped<IXboxLiveService, XboxLiveService>();
+            services.AddScoped<IGamerRepository, GamerRepository>();
+            services.AddScoped<GamerProfileUseCase>();
+
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddHttpClient();
             services.AddRazorPages();
+
 
             switch (dbProvider)
             {
