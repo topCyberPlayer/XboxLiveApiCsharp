@@ -21,6 +21,7 @@ namespace XblApp.Infrastructure.Data.Seeding
                     var arePendingMigrations = context.Database.GetPendingMigrations().Any();
                     await context.Database.MigrateAsync();
                     await context.SeedDatabaseIfNoGamersAsync(env.WebRootPath);
+                    await context.SeedDatabaseIfNoGamesAsync(env.WebRootPath);
                 }
                 catch (Exception)
                 {

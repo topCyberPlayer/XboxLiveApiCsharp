@@ -14,7 +14,7 @@
             {
                 var gamers = GamerJsonLoader.LoadGamers(Path.Combine(dataDirectory, SeedFileSubDirectory), SeedDataSearchName).ToList();
                 await context.Gamers.AddRangeAsync(gamers);
-                await context.SaveChangesAsync();
+                numGamers = await context.SaveChangesAsync();
             }
             return numGamers;
         }
@@ -23,12 +23,12 @@
         {
             const string SeedDataSearchName = "Games.json";
 
-            var numGames = context.Gamers.Count();
+            var numGames = context.Games.Count();
             if (numGames == 0)
             {
                 var games = GameJsonLoader.LoadGames(Path.Combine(dataDirectory, SeedFileSubDirectory), SeedDataSearchName).ToList();
                 await context.Games.AddRangeAsync(games);
-                await context.SaveChangesAsync();
+                numGames = await context.SaveChangesAsync();
             }
             return numGames;
         }

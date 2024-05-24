@@ -194,7 +194,7 @@ namespace XblApp.Infrastructure.Services.Models
         public string PublisherName { get; set; }
 
         [JsonPropertyName("releaseDate")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
         [JsonPropertyName("shortDescription")]
         public string ShortDescription { get; set; }
