@@ -7,8 +7,15 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.Domain.Interfaces
 {
-    public interface IXboxLiveService
+    public interface IXboxLiveGamerService
     {
         public Task<Gamer> GetGamerProfileAsync(string gamertag);
+
+        public Task<Gamer> GetGamerProfileAsync(long xuid);
+    }
+
+    public interface IXboxLiveGameService
+    {
+
     }
 }

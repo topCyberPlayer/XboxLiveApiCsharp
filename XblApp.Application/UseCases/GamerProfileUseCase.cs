@@ -5,12 +5,12 @@ namespace XblApp.Application.UseCases
     public class GamerProfileUseCase
     {
         private readonly IGamerRepository _gamerRepository;
-        private readonly IXboxLiveService _xboxLiveService;
+        private readonly IXboxLiveGamerService _xblGamerSrv;
 
-        public GamerProfileUseCase(IGamerRepository gamerRepository, IXboxLiveService xboxLiveService)
+        public GamerProfileUseCase(IGamerRepository gamerRepository, IXboxLiveGamerService xboxLiveGamerService)
         {
             _gamerRepository = gamerRepository;
-            _xboxLiveService = xboxLiveService;
+            _xblGamerSrv = xboxLiveGamerService;
         }
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
@@ -18,7 +18,7 @@ namespace XblApp.Application.UseCases
             var gamer = _gamerRepository.GetGamerProfile(gamertag);
             if (gamer == null)
             {
-                gamer = await _xboxLiveService.GetGamerProfileAsync(gamertag);
+                gamer = await _xblGamerSrv.GetGamerProfileAsync(gamertag);
                 _gamerRepository.SaveGamer(gamer);
             }
 

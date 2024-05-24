@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XblApp.Infrastructure.Services.Models
+namespace XblApp.Infrastructure.XboxLiveServices.Models
 {
     public class GameJson
     {

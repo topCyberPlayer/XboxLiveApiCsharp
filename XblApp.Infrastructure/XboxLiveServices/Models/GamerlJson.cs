@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XblApp.Infrastructure.Data.Seeding
+namespace XblApp.Infrastructure.XboxLiveServices.Models
 {
     public class GamerlJson
     {
