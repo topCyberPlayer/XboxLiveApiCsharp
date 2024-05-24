@@ -17,5 +17,7 @@ namespace XblApp.Domain.Entities
 
         [Required]
         public int TotalGamerscore { get; set; }
+
+        public ICollection<GamerGame> GamerLinks { get; set; }
     }
 }

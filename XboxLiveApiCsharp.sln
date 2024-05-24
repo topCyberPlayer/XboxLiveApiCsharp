@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TittleHubService", "TittleH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{30B1A359-F831-44B1-B15F-0933EA7B804E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.Test", "XblApp.Test\XblApp.Test.csproj", "{1574600E-395B-4D33-B1A6-8BEE0FD4D855}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{30B1A359-F831-44B1-B15F-0933EA7B804E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B1A359-F831-44B1-B15F-0933EA7B804E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B1A359-F831-44B1-B15F-0933EA7B804E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1574600E-395B-4D33-B1A6-8BEE0FD4D855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1574600E-395B-4D33-B1A6-8BEE0FD4D855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1574600E-395B-4D33-B1A6-8BEE0FD4D855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1574600E-395B-4D33-B1A6-8BEE0FD4D855}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

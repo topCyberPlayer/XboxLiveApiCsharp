@@ -4,18 +4,19 @@ using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.Data;
 using XblApp.Infrastructure.Data.Repositories;
 using XblApp.Infrastructure.Services;
+using XblApp.Infrastructure.Data.Seeding;
 
 namespace XblApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.RegisterApplicationServices();
             WebApplication? app = builder.Build();
 
-            app.ConfigureMiddleware();
+            await app.ConfigureMiddleware();
             app.RegisterEndpoints();
 
             app.Run();
@@ -57,7 +58,7 @@ namespace XblApp
 
     public static partial class MiddlewareInitializer
     {
-        public static WebApplication ConfigureMiddleware(this WebApplication app)
+        public static async Task<WebApplication> ConfigureMiddleware(this WebApplication app)
         {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -75,7 +76,7 @@ namespace XblApp
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.SetupDatabaseAsync();
+            await app.SetupDatabaseAsync();
 
             //app.UseAuthorization();
 

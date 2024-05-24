@@ -1,40 +1,50 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProfileService.Profiles
+namespace XblApp.Infrastructure.Data.Seeding
 {
-    public class ProfileModelXbl
+    public class GamerlJson
     {
         [JsonPropertyName("profileUsers")]
         public IEnumerable<ProfileUser> ProfileUsers { get; set; }
     }
 
-        public class ProfileUser
-        {
-            [JsonPropertyName("id")]
-            public string ProfileId { get; set; }
+    public class ProfileUser
+    {
+        [JsonPropertyName("id")]
+        public string ProfileId { get; set; }
 
-            [JsonPropertyName("hostId")]
-            public string HostId { get; set; }
+        [JsonPropertyName("hostId")]
+        public string HostId { get; set; }
 
-            [JsonPropertyName("settings")]
-            public List<Setting> Settings { get; set; }
+        [JsonPropertyName("settings")]
+        public List<Setting>? Settings { get; set; }
 
-            [JsonPropertyName("isSponsoredUser")]
-            public bool IsSponsoredUser { get; set; }
+        [JsonPropertyName("isSponsoredUser")]
+        public bool IsSponsoredUser { get; set; }
 
-            public string Gamertag { get { return Settings.FirstOrDefault(s => s.Id == ProfileSettings.GAMERTAG).Value; } }
+        public string? Gamertag { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.GAMERTAG)?.Value; } }
 
-            public int Gamerscore { get { return int.Parse(Settings.FirstOrDefault(s => s.Id == ProfileSettings.GAMERSCORE).Value); } }
-        }
+        public int Gamerscore { get { return int.Parse(Settings?.FirstOrDefault(s => s?.Id == ProfileSettings.GAMERSCORE)?.Value); } }
 
-        public class Setting
-        {
-            [JsonPropertyName("id")]
-            public string Id { get; set; }
+        public string? Location { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.LOCATION)?.Value; } }
 
-            [JsonPropertyName("value")]
-            public string Value { get; set; }
-        }
+        public string? Bio { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.BIOGRAPHY)?.Value; } }
+
+        public int TenureLevel { get { return int.Parse(Settings?.FirstOrDefault(s => s.Id == ProfileSettings.TENURE_LEVEL)?.Value); } }
+
+        public string? XboxOneRep { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.XBOX_ONE_REP)?.Value; } }
+
+        public string? RealName { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.REAL_NAME)?.Value; } }
+    }
+
+    public class Setting
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("value")]
+        public string Value { get; set; }
+    }
 
     public static class ProfileSettings
     {
