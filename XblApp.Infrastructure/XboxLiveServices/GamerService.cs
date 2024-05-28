@@ -1,14 +1,12 @@
 ﻿using System.Collections.Specialized;
-using System.Text.Json;
 using System.Web;
-using XblApp.Application;
-using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
+using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.XboxLiveServices
 {
-    public class GamerService : IXboxLiveGamerService
+    public class GamerService : BaseService, IXboxLiveGamerService
     {
         private static string DefScopes
         {
@@ -38,7 +36,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
                     ProfileSettings.WATERMARKS);
             }
         }
-        private const string _PROFILE_URL = "https://profile.xboxlive.com";
+        private const string ProfileUrl = "https://profile.xboxlive.com";
 
         private readonly HttpClient _httpClient;
 
@@ -47,34 +45,21 @@ namespace XblApp.Infrastructure.XboxLiveServices
             _httpClient = httpClient;
         }
 
-        public async Task<Gamer> GetGamerProfileAsync(string gamertag)
+        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationCode)
         {
-            var response = await _httpClient.GetAsync($"https://api.xboxlive.com/gamertag/{gamertag}");
-            response.EnsureSuccessStatusCode();
+            string baseAddress = ProfileUrl + $"/users/gamertag({gamertag})/profile/settings";
 
-            var content = await response.Content.ReadAsStringAsync();
-            var gamerDto = JsonSerializer.Deserialize<GamerDTO>(content);
-
-            return new Gamer
-            {
-                GamerId = gamerDto.GamerId,
-                Gamertag = gamerDto.Gamertag,
-                Gamerscore = gamerDto.Gamerscore,
-                Bio = gamerDto.Bio,
-                Location = gamerDto.Location
-            };
+            return await GetProfileBase(baseAddress, authorizationCode);
         }
 
-        public async Task<Gamer> GetGamerProfileAsync(long xuid)
+        public async Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationCode)
         {
-            string baseAddress = _PROFILE_URL + $"/users/xuid({xuid})/profile/settings";
+            string baseAddress = ProfileUrl + $"/users/xuid({xuid})/profile/settings";
 
-            var result = await GetProfileBase(baseAddress, authorizationCode);
-
-            return null;
+            return await GetProfileBase(baseAddress, authorizationCode);
         }
 
-        private async Task<HttpResponseMessage> GetProfileBase(string baseAddress, string authorizationCode)
+        private async Task<GamerDTO> GetProfileBase(string baseAddress, string authorizationCode)
         {
             UriBuilder uriBuilder = new UriBuilder(baseAddress);
 
@@ -87,7 +72,12 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.ToString());
 
-            return response;
+            GamerJson result = await DeserializeJson<GamerJson>(response);
+
+            return new GamerDTO
+            {
+
+            };
         }
     }
 }

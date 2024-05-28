@@ -15,8 +15,10 @@ namespace XblApp.Infrastructure.Data
         }
 
         public DbSet<Gamer> Gamers { get; set; }
-
         public DbSet<Game> Games { get; set; }
+        public DbSet<TokenOAuth> OAuthTokens { get; set; }
+        public DbSet<TokenXau> XauTokens { get; set; }
+        public DbSet<TokenXsts> XstsTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

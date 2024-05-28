@@ -1,4 +1,4 @@
-﻿namespace XblApp.Application
+﻿namespace XblApp.Shared.DTOs
 {
     public class GamerDTO
     {

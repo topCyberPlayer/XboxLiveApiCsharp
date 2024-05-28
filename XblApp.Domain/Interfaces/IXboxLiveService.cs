@@ -1,21 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XblApp.Domain.Entities;
+﻿using XblApp.Shared.DTOs;
 
 namespace XblApp.Domain.Interfaces
 {
-    public interface IXboxLiveGamerService
+    public interface IBaseService
     {
-        public Task<Gamer> GetGamerProfileAsync(string gamertag);
-
-        public Task<Gamer> GetGamerProfileAsync(long xuid);
+        public Task<T> DeserializeJson<T>(HttpResponseMessage httpResponse);
     }
 
-    public interface IXboxLiveGameService
+    public interface IXboxLiveGamerService : IBaseService
+    {
+        public Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationCode);
+        public Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationCode);
+    }
+
+    public interface IXboxLiveGameService : IBaseService 
     {
 
+    }
+
+    public interface IAuthenticationService : IBaseService
+    {
+        public Task<TokenOAuthDTO> RequestOauth2Token(string authorizationCode);
+        public Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth);//TokenOAuthModelXbl tokenOAuth);
+        public Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau);//TokenXauModelXbl tokenXau);
+        public Task<TokenOAuthDTO> RefreshOauth2Token(string refreshToken);
+        public string GenerateAuthorizationUrl();
+        
     }
 }

@@ -1,24 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Application;
 using XblApp.Application.UseCases;
+using XblApp.Shared.DTOs;
 
 namespace XblApp.Pages.Gamer
 {
     public class IndexModel : PageModel
     {
-        private readonly GamerProfileUseCase _getGamerProfileUseCase;
+        private readonly GamerProfileUseCase _gamerProfileUseCase;
 
         public GamerDTO? Output { get; set; }
 
-        public IndexModel(GamerProfileUseCase getGamerProfileUseCase)
+        public IndexModel(GamerProfileUseCase gamerProfileUseCase)
         {
-            _getGamerProfileUseCase = getGamerProfileUseCase;
+            _gamerProfileUseCase = gamerProfileUseCase;
         }
 
         public async Task<IActionResult> GetGamerProfile(string gamertag)
         {
-            GamerDTO? gamer = await _getGamerProfileUseCase.GetGamerProfileAsync(gamertag);
+            GamerDTO? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
             Output = gamer;
             return Page();
         }

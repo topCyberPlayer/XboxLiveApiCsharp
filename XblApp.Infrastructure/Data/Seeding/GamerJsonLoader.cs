@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using XblApp.Domain.Entities;
+using XblApp.Infrastructure.XboxLiveServices.Models;
 
 namespace XblApp.Infrastructure.Data.Seeding
 {
@@ -9,7 +10,7 @@ namespace XblApp.Infrastructure.Data.Seeding
         public static IEnumerable<Gamer> LoadGamers(string fileDir, string fileSearchString)
         {
             var filePath = GetJsonFilePath(fileDir, fileSearchString);
-            var jsonDecoded = JsonSerializer.Deserialize<GamerlJson>(File.ReadAllText(filePath));
+            var jsonDecoded = JsonSerializer.Deserialize<GamerJson>(File.ReadAllText(filePath));
 
             return jsonDecoded.ProfileUsers.Select(x => CreateGamers(x));
         }

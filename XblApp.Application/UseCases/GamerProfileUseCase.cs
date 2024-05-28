@@ -1,25 +1,34 @@
-﻿using XblApp.Domain.Interfaces;
+﻿using XblApp.Domain.Entities;
+using XblApp.Domain.Interfaces;
+using XblApp.Shared.DTOs;
 
 namespace XblApp.Application.UseCases
 {
     public class GamerProfileUseCase
     {
+        private readonly IAuthenticationRepository _authRepository;
+        private readonly IXboxLiveGamerService _gamerService;
         private readonly IGamerRepository _gamerRepository;
-        private readonly IXboxLiveGamerService _xblGamerSrv;
+        
 
-        public GamerProfileUseCase(IGamerRepository gamerRepository, IXboxLiveGamerService xboxLiveGamerService)
+        public GamerProfileUseCase(
+            IAuthenticationRepository authRepository, 
+            IGamerRepository gamerRepository, 
+            IXboxLiveGamerService gamerService)
         {
             _gamerRepository = gamerRepository;
-            _xblGamerSrv = xboxLiveGamerService;
+            _gamerService = gamerService;
+            _authRepository = authRepository;
         }
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
         {
-            var gamer = _gamerRepository.GetGamerProfile(gamertag);
+            Gamer gamer = _gamerRepository.GetGamerProfile(gamertag);
             if (gamer == null)
             {
-                gamer = await _xblGamerSrv.GetGamerProfileAsync(gamertag);
-                _gamerRepository.SaveGamer(gamer);
+                string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
+                GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
+                _gamerRepository.SaveGamer(response);
             }
 
             return new GamerDTO
@@ -34,7 +43,7 @@ namespace XblApp.Application.UseCases
 
         public async Task<List<GamerDTO>> GetAllGamerProfilesAsync()
         {
-            var gamers = await _gamerRepository.GetAllGamerProfilesAsync();
+            List<Gamer> gamers = await _gamerRepository.GetAllGamerProfilesAsync();
 
             return gamers.Select(g => new GamerDTO()
             {

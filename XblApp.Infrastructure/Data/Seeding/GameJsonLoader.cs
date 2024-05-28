@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using XblApp.Domain.Entities;
-using XblApp.Infrastructure.Services.Models;
+using XblApp.Infrastructure.XboxLiveServices.Models;
 
 namespace XblApp.Infrastructure.Data.Seeding
 {

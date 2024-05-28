@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
+using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
@@ -20,7 +21,6 @@ namespace XblApp.Infrastructure.Data.Repositories
                 .Include(a => a.GameLinks)
                     .ThenInclude(b => b.Game)
                 .ToListAsync();
-                
 
             return gamerQuery;
         }
@@ -37,8 +37,17 @@ namespace XblApp.Infrastructure.Data.Repositories
             return result;
         }
 
-        public void SaveGamer(Gamer gamer)
+        public void SaveGamer(GamerDTO gamerDto)
         {
+            Gamer gamer = new()
+            {
+                GamerId = gamerDto.GamerId,
+                Gamertag = gamerDto?.Gamertag,
+                Gamerscore = gamerDto.Gamerscore,
+                Location = gamerDto?.Location,
+                Bio = gamerDto?.Bio
+            };
+
             _context.Gamers.Add(gamer);
             _context.SaveChanges();
         }

@@ -3,8 +3,8 @@ using XblApp.Application.UseCases;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.Data;
 using XblApp.Infrastructure.Data.Repositories;
-using XblApp.Infrastructure.Services;
 using XblApp.Infrastructure.Data.Seeding;
+using XblApp.Infrastructure.XboxLiveServices;
 
 namespace XblApp
 {
@@ -30,12 +30,13 @@ namespace XblApp
             string? dbProvider = 
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
-            builder.Services.AddScoped<IXboxLiveService, XboxLiveService>();
+            builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpClient();
             builder.Services.AddRazorPages();
+            builder.Services.AddHttpContextAccessor();
 
 
             switch (dbProvider)
