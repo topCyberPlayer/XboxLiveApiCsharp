@@ -8,12 +8,20 @@ namespace XblApp.Pages.Gamer
     public class IndexModel : PageModel
     {
         private readonly GamerProfileUseCase _gamerProfileUseCase;
-
+        //public string Username { get; set; }
+        [BindProperty(SupportsGet = true)]
         public GamerDTO? Output { get; set; }
 
         public IndexModel(GamerProfileUseCase gamerProfileUseCase)
         {
             _gamerProfileUseCase = gamerProfileUseCase;
+        }
+
+        public async Task<IActionResult> OnGet(string gamertag)
+        {
+            GamerDTO? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
+            Output = gamer;
+            return Page();
         }
 
         public async Task<IActionResult> GetGamerProfile(string gamertag)

@@ -1,0 +1,16 @@
+﻿@page "/gamer/{gamertag}/games"
+@model XblApp.Pages.Gamer.GamesModel
+@{
+    ViewData["Title"] = "Games for ";
+}
+@* <h2>@Model.Gamertag's Games</h2> *@
+
+<ul>
+    @foreach (var game in Model.Output)
+    {
+        <li>@game.GameId</li>
+        <li>@game.GameName</li>
+        <li>@game.TotalGamerscore</li>
+        <li>@game.TotalAchievements</li>
+    }
+</ul>

@@ -24,12 +24,12 @@ namespace XblApp.Application.UseCases
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
         {
             Gamer gamer = _gamerRepository.GetGamerProfile(gamertag);
-            if (gamer == null)
-            {
-                string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
-                GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
-                _gamerRepository.SaveGamer(response);
-            }
+            //if (gamer == null)
+            //{
+            //    string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
+            //    GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
+            //    _gamerRepository.SaveGamer(response);
+            //}
 
             return new GamerDTO
             {
@@ -37,7 +37,9 @@ namespace XblApp.Application.UseCases
                 Gamertag = gamer.Gamertag,
                 Gamerscore = gamer.Gamerscore,
                 Bio = gamer.Bio,
-                Location = gamer.Location
+                Location = gamer.Location,
+                CurrentGamesCount = gamer.GameLinks.Select(x => x.Game).Count(),
+                CurrentAchievementsCount = gamer.GameLinks.Sum(x => x.CurrentAchievements)
             };
         }
 
@@ -54,6 +56,19 @@ namespace XblApp.Application.UseCases
                  CurrentAchievementsCount = g.GameLinks.Sum(a => a.CurrentAchievements)
              })
             .ToList();
+        }
+
+        public async Task<List<GameDTO>> GetGamesForGamerAsync(string gamertag)
+        {
+            List<Game> games = await _gamerRepository.GetGamesForGamerAsync(gamertag);
+
+            return games.Select(g => new GameDTO()
+            {
+                GameId = g.GameId,
+                GameName = g.GameName,
+                TotalAchievements = g.TotalAchievements,
+                TotalGamerscore = g.TotalGamerscore,
+            }).ToList();
         }
     }
 }

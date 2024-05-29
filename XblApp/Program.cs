@@ -30,6 +30,7 @@ namespace XblApp
             string? dbProvider = 
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
+            builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<GamerProfileUseCase>();

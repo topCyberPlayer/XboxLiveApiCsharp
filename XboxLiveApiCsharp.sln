@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Test", "XblApp.Test\XblApp.Test.csproj", "{1574600E-395B-4D33-B1A6-8BEE0FD4D855}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.Shared", "XblApp.Shared\XblApp.Shared.csproj", "{360ADD36-82BC-465C-99C7-595F01CFB734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Shared", "XblApp.Shared\XblApp.Shared.csproj", "{360ADD36-82BC-465C-99C7-595F01CFB734}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

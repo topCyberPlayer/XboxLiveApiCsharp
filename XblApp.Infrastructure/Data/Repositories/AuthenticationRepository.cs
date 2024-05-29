@@ -150,10 +150,5 @@ namespace XblApp.Infrastructure.Data.Repositories
 
             return result;
         }
-
-        public string GetAuthorizationCode()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

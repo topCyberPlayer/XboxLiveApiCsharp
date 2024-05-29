@@ -6,6 +6,7 @@ namespace XblApp.Domain.Interfaces
     public interface IGamerRepository
     {
         public Task<List<Gamer>> GetAllGamerProfilesAsync();
+        Task<List<Game>> GetGamesForGamerAsync(string gamertag);
         public Gamer GetGamerProfile(long id);
         public Gamer GetGamerProfile(string gamertag);
         public void SaveGamer(GamerDTO gamer);
