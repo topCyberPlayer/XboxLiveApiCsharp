@@ -1,0 +1,33 @@
+﻿@page
+@model XblApp.Pages.Game.IndexModel
+@{
+    ViewData["Title"] = "Games";
+}
+<h1>@ViewData["Title"]</h1>
+
+<body>
+    <div class="table-responsive">
+        <p>All Games</p>
+        <table class="table table-striped recipe">
+            <thead>
+                <tr>
+                    <th>Game</th>
+                    <th>Gamers</th>
+                    <th>Achievements</th>
+                    <th>Gamerscore</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in Model.Output)
+                {
+                    <tr>
+                        <td class="align-middle">@profile.GameName</td>
+                        <td class="align-middle">@profile.TotalGamers</td>
+                        <td class="align-middle">@profile.TotalAchievements</td>
+                        <td class="align-middle">@profile.TotalGamerscore</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

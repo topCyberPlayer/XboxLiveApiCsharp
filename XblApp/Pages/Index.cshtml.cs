@@ -19,6 +19,9 @@ namespace XblApp.Pages
         {
             Output = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
             return Page();
+
+            //return RedirectToPage("Auth/XblLogin");            
+            //return RedirectToPage("Gamer/Index", new { gamertag = "Riotgran" });
         }
 
     }

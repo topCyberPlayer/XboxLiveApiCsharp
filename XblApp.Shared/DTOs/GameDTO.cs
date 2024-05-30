@@ -6,7 +6,6 @@
         public string? GameName { get; set; }
         public int TotalAchievements { get; set; }
         public int TotalGamerscore { get; set; }
-        public int CurrentAchievements { get; set; }
-        public int CurrentGamerscore { get; set; }
+        public int TotalGamers { get; set; }
     }
 }

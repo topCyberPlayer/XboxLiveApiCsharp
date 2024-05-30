@@ -9,7 +9,7 @@ using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.XboxLiveServices
 {
-    internal class AuthenticationService : BaseService, IAuthenticationService
+    public class AuthenticationService : BaseService, IAuthenticationService
     {
         private readonly string? _clientId;
         private readonly string? _clientSecret;
@@ -22,6 +22,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
             _clientId = configuration["Authentication:Microsoft:ClientId"];
             _clientSecret = configuration["Authentication:Microsoft:ClientSecret"];
             _redirectUri = configuration["ConnectionStrings:RedirectUrl"];
+            _httpClientFactory = httpClientFactory;
         }
 
         public string GenerateAuthorizationUrl()
@@ -66,8 +67,13 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             return new TokenOAuthDTO
             {
+                UserId = resultJson.UserId,
+                TokenType = resultJson.TokenType,
+                ExpiresIn = resultJson.ExpiresIn,
+                Scope = resultJson.Scope,
                 AccessToken = resultJson.AccessToken,
                 RefreshToken = resultJson.RefreshToken,
+                AuthenticationToken = resultJson.AuthenticationToken
             };
         }
 

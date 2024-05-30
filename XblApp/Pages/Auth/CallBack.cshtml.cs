@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
 using XblApp.Application.UseCases;
 
 namespace XblApp.Pages.Auth
@@ -23,7 +22,8 @@ namespace XblApp.Pages.Auth
             if (code == null)
             {
                 // Обработка ошибки - код не был получен
-                return RedirectToAction("ExternalLoginFailure");
+                return NotFound("Код не найден");
+                //return RedirectToAction("ExternalLoginFailure");
             }
 
             try
@@ -33,13 +33,13 @@ namespace XblApp.Pages.Auth
                     await _authServ.RequestTokens(code);
                 }
                 
-                return RedirectToAction("Index", "Home");
+                return RedirectToPage("Index", "Home");
             }
             catch (Exception ex)
             {
                 // Обработка ошибки
                 // Логирование, отправка уведомлений, перенаправление на страницу ошибки и т.д.
-                return RedirectToAction("Error", "Home");
+                return RedirectToPage("Error", "Home");
             }
         }
     }

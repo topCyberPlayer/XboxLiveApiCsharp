@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
@@ -18,9 +18,12 @@ namespace XblApp.Infrastructure.Data.Repositories
             _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public void Save(TokenOAuth token)
+        public async Task SaveAsync(TokenOAuth token)
         {
-            TokenOAuth entityToUpdate = _context.OAuthTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
+            if(token == null || _userId == null)
+                return;
+
+            TokenOAuth entityToUpdate = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
             if (entityToUpdate == null)
             {
@@ -36,7 +39,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                     Scope = token.Scope
                 };
 
-                _context.OAuthTokens.Add(entityToUpdate);
+                await _context.OAuthTokens.AddAsync(entityToUpdate);
             }
             else
             {
@@ -49,12 +52,15 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate.Scope = token.Scope;
             }
 
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
-        public void Save(TokenXau token)
+        public async Task SaveAsync(TokenXau token)
         {
-            TokenXau entityToUpdate = _context.XauTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
+            if (token == null || _userId == null)
+                return;
+
+            TokenXau entityToUpdate = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
             if (entityToUpdate == null)
             {
@@ -67,7 +73,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                     Uhs = token.Uhs
                 };
 
-                _context.XauTokens.Add(entityToUpdate);
+                await _context.XauTokens.AddAsync(entityToUpdate);
             }
 
             else
@@ -78,12 +84,15 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate.Uhs = token.Uhs;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Save(TokenXsts token)
+        public async Task SaveAsync(TokenXsts token)
         {
-            TokenXsts entityToUpdate = _context.XstsTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
+            if (token == null || _userId == null)
+                return;
+
+            TokenXsts entityToUpdate = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
             if (entityToUpdate == null)
             {
@@ -102,7 +111,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                     UserPrivileges = token.UserPrivileges,
                 };
 
-                _context.XstsTokens.Add(entityToUpdate);
+                await _context.XstsTokens.AddAsync(entityToUpdate);
             }
             else
             {
@@ -118,7 +127,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate.UserPrivileges = token.UserPrivileges;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public string GetAuthorizationHeaderValue()

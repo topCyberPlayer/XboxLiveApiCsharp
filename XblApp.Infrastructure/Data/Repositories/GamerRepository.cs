@@ -13,7 +13,7 @@ namespace XblApp.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<Gamer> GetGamerProfile(long id)
+        public async Task<Gamer> GetGamerProfileAsync(long id)
         {
             Gamer? result = await _context.Gamers
                 .AsNoTracking()
@@ -23,7 +23,7 @@ namespace XblApp.Infrastructure.Data.Repositories
             return result;
         }
 
-        public async Task<Gamer> GetGamerProfile(string gamertag)
+        public async Task<Gamer> GetGamerProfileAsync(string gamertag)
         {
             Gamer? result = await _context.Gamers
                 .AsNoTracking()
@@ -52,19 +52,10 @@ namespace XblApp.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync(g => g.Gamertag == gamertag);
         }
 
-        public void SaveGamer(Gamer gamer)
+        public async Task SaveGamerAsync(Gamer gamer)
         {
-            //Gamer gamer = new()
-            //{
-            //    GamerId = gamerDto.GamerId,
-            //    Gamertag = gamerDto?.Gamertag,
-            //    Gamerscore = gamerDto.Gamerscore,
-            //    Location = gamerDto?.Location,
-            //    Bio = gamerDto?.Bio
-            //};
-
             _context.Gamers.Add(gamer);
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
         }
     }
 }

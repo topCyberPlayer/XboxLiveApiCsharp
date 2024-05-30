@@ -1,5 +1,7 @@
 ﻿using XblApp.Domain.Interfaces;
 using XblApp.Shared.DTOs;
+using Microsoft.AspNetCore.Http;
+using XblApp.Domain.Entities;
 
 namespace XblApp.Application.UseCases
 {
@@ -10,11 +12,16 @@ namespace XblApp.Application.UseCases
         private TokenOAuthDTO _tokenOAuth;
         private TokenXauDTO _tokenXau;
         private TokenXstsDTO _tokenXsts;
+        private readonly string? _userId;
 
-        public AuthenticationUseCase(IAuthenticationService authServXbl, IAuthenticationRepository authServDb)
+        public AuthenticationUseCase(
+            IAuthenticationService authServXbl, 
+            IAuthenticationRepository authServDb,
+            IHttpContextAccessor httpContextAccessor)
         {
             _authService = authServXbl;
             _authRepository = authServDb;
+            _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
 
         /// <summary>
@@ -41,35 +48,55 @@ namespace XblApp.Application.UseCases
             await ProcessTokens(responseOAuth);
         }
 
-        private async Task ProcessTokens(TokenOAuthDTO responseOAuth)
+        private async Task ProcessTokens(TokenOAuthDTO tokenOAuthDTO)
         {
-            //_authRepository.Save(responseOAuth);
-            //TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(responseOAuth);
+            if (tokenOAuthDTO != null)
+            {
+                await _authRepository.SaveAsync(new TokenOAuth
+                {
+                    UserId = tokenOAuthDTO.UserId,
+                    TokenType = tokenOAuthDTO.TokenType,
+                    ExpiresIn = tokenOAuthDTO.ExpiresIn,
+                    Scope = tokenOAuthDTO.Scope,
+                    AccessToken = tokenOAuthDTO.AccessToken,
+                    RefreshToken = tokenOAuthDTO.RefreshToken,
+                    AuthenticationToken = tokenOAuthDTO.AuthenticationToken,
+                    AspNetUserId = _userId,
+                });
+            }
+            
+            TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(tokenOAuthDTO);
 
-            //if (responseOAuth.IsSuccessStatusCode)
-            //{
-            //    _tokenOAuth = await _authService.DeserializeJson<TokenOAuthDTO>(responseOAuth);
+            if (tokenXauDTO != null)
+            {
+                await _authRepository.SaveAsync(new TokenXau
+                {
+                    Uhs = tokenXauDTO.Uhs,
+                    IssueInstant = tokenXauDTO.IssueInstant,
+                    NotAfter = tokenXauDTO.NotAfter,
+                    Token = tokenXauDTO.Token,
+                    AspNetUserId = _userId
+                });
 
-            //    _authRepository.Save(_tokenOAuth);
+                TokenXstsDTO responseXsts = await _authService.RequestXstsToken(tokenXauDTO);
 
-            //    HttpResponseMessage responseXau = await _authService.RequestXauToken(_tokenOAuth.AccessToken);
-
-            //    if (responseXau.IsSuccessStatusCode)
-            //    {
-            //        _tokenXau = await _authService.DeserializeJson<TokenXauDTO>(responseXau);
-
-            //        _authRepository.Save(_tokenXau);
-
-            //        HttpResponseMessage responseXsts = await _authService.RequestXstsToken(_tokenXau.Token);
-
-            //        if (responseXsts.IsSuccessStatusCode)
-            //        {
-            //            _tokenXsts = await _authService.DeserializeJson<TokenXstsDTO>(responseXsts);
-
-            //            _authRepository.Save(_tokenXsts);
-            //        }
-            //    }
-            //}
+                if (responseXsts != null)
+                {
+                    await _authRepository.SaveAsync(new TokenXsts
+                    {
+                        Xuid = responseXsts.Xuid,
+                        Userhash = responseXsts.Userhash,
+                        Gamertag = responseXsts.Gamertag,
+                        AgeGroup= responseXsts.AgeGroup,
+                        Privileges = responseXsts.Privileges,
+                        UserPrivileges = responseXsts.UserPrivileges,
+                        IssueInstant = responseXsts.IssueInstant,
+                        NotAfter = responseXsts.NotAfter,
+                        Token = responseXsts.Token,
+                        AspNetUserId = _userId
+                    });
+                }
+            }
         }
 
         /// <summary>

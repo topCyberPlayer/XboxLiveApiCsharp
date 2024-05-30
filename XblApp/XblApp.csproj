@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Game\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
     <ProjectReference Include="..\XblApp.Infrastructure\XblApp.Infrastructure.csproj" />
   </ItemGroup>

@@ -8,7 +8,7 @@ using XblApp.Infrastructure.Data.Seeding;
 using XblApp.Infrastructure.XboxLiveServices;
 
 namespace XblApp
-{
+{   
     public class Program
     {
         public static async Task Main(string[] args)
@@ -32,9 +32,17 @@ namespace XblApp
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-            builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
+            builder.Services.AddScoped<IGameRepository, GameRepository>();
+
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
+            //builder.Services.AddScoped<IXboxLiveGameService, GameService>();
+
+            builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
+            builder.Services.AddScoped<GameUseCase>();
+
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<XblAppDbContext>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -82,7 +90,7 @@ namespace XblApp
             app.UseRouting();
             await app.SetupDatabaseAsync();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             return app;
         }

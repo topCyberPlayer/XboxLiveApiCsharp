@@ -23,7 +23,7 @@ namespace XblApp.Application.UseCases
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
         {
-            Gamer gamer = await _gamerRepository.GetGamerProfile(gamertag);
+            Gamer gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
             //if (gamer == null)
             //{
             //    string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
@@ -66,7 +66,7 @@ namespace XblApp.Application.UseCases
             {
                 GamerId = gamer.GamerId,
                 Gamertag = gamer.Gamertag,
-                Games = gamer.GameLinks.Select(gg => new GameDTO
+                Games = gamer.GameLinks.Select(gg => new AbcDTO
                 {
                     GameId = gg.Game.GameId,
                     GameName = gg.Game.GameName,
