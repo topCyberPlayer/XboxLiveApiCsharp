@@ -18,7 +18,7 @@ namespace XblApp.Infrastructure.Data.Repositories
             _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public void Save(TokenOAuthDTO tokenXbl)
+        public void Save(TokenOAuth token)
         {
             TokenOAuth entityToUpdate = _context.OAuthTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
 
@@ -27,32 +27,32 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate = new TokenOAuth()
                 {
                     AspNetUserId = _userId,
-                    AccessToken = tokenXbl.AccessToken,
-                    AuthenticationToken = tokenXbl.AuthenticationToken,
-                    ExpiresIn = tokenXbl.ExpiresIn,
-                    RefreshToken = tokenXbl.RefreshToken,
-                    TokenType = tokenXbl.TokenType,
-                    UserId = tokenXbl.UserId,
-                    Scope = tokenXbl.Scope
+                    AccessToken = token.AccessToken,
+                    AuthenticationToken = token.AuthenticationToken,
+                    ExpiresIn = token.ExpiresIn,
+                    RefreshToken = token.RefreshToken,
+                    TokenType = token.TokenType,
+                    UserId = token.UserId,
+                    Scope = token.Scope
                 };
 
                 _context.OAuthTokens.Add(entityToUpdate);
             }
             else
             {
-                entityToUpdate.AccessToken = tokenXbl.AccessToken;
-                entityToUpdate.AuthenticationToken = tokenXbl.AuthenticationToken;
-                entityToUpdate.ExpiresIn = tokenXbl.ExpiresIn;
-                entityToUpdate.RefreshToken = tokenXbl.RefreshToken;
-                entityToUpdate.TokenType = tokenXbl.TokenType;
-                entityToUpdate.UserId = tokenXbl.UserId;
-                entityToUpdate.Scope = tokenXbl.Scope;
+                entityToUpdate.AccessToken = token.AccessToken;
+                entityToUpdate.AuthenticationToken = token.AuthenticationToken;
+                entityToUpdate.ExpiresIn = token.ExpiresIn;
+                entityToUpdate.RefreshToken = token.RefreshToken;
+                entityToUpdate.TokenType = token.TokenType;
+                entityToUpdate.UserId = token.UserId;
+                entityToUpdate.Scope = token.Scope;
             }
 
             _context.SaveChanges();
         }
 
-        public void Save(TokenXauDTO tokenXbl)
+        public void Save(TokenXau token)
         {
             TokenXau entityToUpdate = _context.XauTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
 
@@ -61,10 +61,10 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate = new TokenXau()
                 {
                     AspNetUserId = _userId,
-                    IssueInstant = tokenXbl.IssueInstant,
-                    NotAfter = tokenXbl.NotAfter,
-                    Token = tokenXbl.Token,
-                    Uhs = tokenXbl.Uhs
+                    IssueInstant = token.IssueInstant,
+                    NotAfter = token.NotAfter,
+                    Token = token.Token,
+                    Uhs = token.Uhs
                 };
 
                 _context.XauTokens.Add(entityToUpdate);
@@ -72,16 +72,16 @@ namespace XblApp.Infrastructure.Data.Repositories
 
             else
             {
-                entityToUpdate.IssueInstant = tokenXbl.IssueInstant;
-                entityToUpdate.NotAfter = tokenXbl.NotAfter;
-                entityToUpdate.Token = tokenXbl.Token;
-                entityToUpdate.Uhs = tokenXbl.Uhs;
+                entityToUpdate.IssueInstant = token.IssueInstant;
+                entityToUpdate.NotAfter = token.NotAfter;
+                entityToUpdate.Token = token.Token;
+                entityToUpdate.Uhs = token.Uhs;
             }
 
             _context.SaveChanges();
         }
 
-        public void Save(TokenXstsDTO tokenXbl)
+        public void Save(TokenXsts token)
         {
             TokenXsts entityToUpdate = _context.XstsTokens.FirstOrDefault(x => x.AspNetUserId == _userId);
 
@@ -90,32 +90,32 @@ namespace XblApp.Infrastructure.Data.Repositories
                 entityToUpdate = new TokenXsts
                 {
                     AspNetUserId = _userId,
-                    IssueInstant = tokenXbl.IssueInstant,
-                    NotAfter = tokenXbl.NotAfter,
-                    Token = tokenXbl.Token,
+                    IssueInstant = token.IssueInstant,
+                    NotAfter = token.NotAfter,
+                    Token = token.Token,
 
-                    Xuid = tokenXbl.Xuid,
-                    Userhash = tokenXbl.Userhash,
-                    Gamertag = tokenXbl.Gamertag,
-                    AgeGroup = tokenXbl.AgeGroup,
-                    Privileges = tokenXbl.Privileges,
-                    UserPrivileges = tokenXbl.UserPrivileges,
+                    Xuid = token.Xuid,
+                    Userhash = token.Userhash,
+                    Gamertag = token.Gamertag,
+                    AgeGroup = token.AgeGroup,
+                    Privileges = token.Privileges,
+                    UserPrivileges = token.UserPrivileges,
                 };
 
                 _context.XstsTokens.Add(entityToUpdate);
             }
             else
             {
-                entityToUpdate.IssueInstant = tokenXbl.IssueInstant;
-                entityToUpdate.NotAfter = tokenXbl.NotAfter;
-                entityToUpdate.Token = tokenXbl.Token;
+                entityToUpdate.IssueInstant = token.IssueInstant;
+                entityToUpdate.NotAfter = token.NotAfter;
+                entityToUpdate.Token = token.Token;
 
-                entityToUpdate.Xuid = tokenXbl.Xuid;
-                entityToUpdate.Userhash = tokenXbl.Userhash;
-                entityToUpdate.Gamertag = tokenXbl.Gamertag;
-                entityToUpdate.AgeGroup = tokenXbl.AgeGroup;
-                entityToUpdate.Privileges = tokenXbl.Privileges;
-                entityToUpdate.UserPrivileges = tokenXbl.UserPrivileges;
+                entityToUpdate.Xuid = token.Xuid;
+                entityToUpdate.Userhash = token.Userhash;
+                entityToUpdate.Gamertag = token.Gamertag;
+                entityToUpdate.AgeGroup = token.AgeGroup;
+                entityToUpdate.Privileges = token.Privileges;
+                entityToUpdate.UserPrivileges = token.UserPrivileges;
             }
 
             _context.SaveChanges();

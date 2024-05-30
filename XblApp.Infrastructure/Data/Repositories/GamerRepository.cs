@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
@@ -12,6 +11,26 @@ namespace XblApp.Infrastructure.Data.Repositories
         public GamerRepository(XblAppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Gamer> GetGamerProfile(long id)
+        {
+            Gamer? result = await _context.Gamers
+                .AsNoTracking()
+                .Include(a => a.GameLinks)
+                    .ThenInclude(b => b.Game)
+                .FirstAsync(x => x.GamerId == id);
+            return result;
+        }
+
+        public async Task<Gamer> GetGamerProfile(string gamertag)
+        {
+            Gamer? result = await _context.Gamers
+                .AsNoTracking()
+                .Include(a => a.GameLinks)
+                    .ThenInclude(b => b.Game)
+                .FirstOrDefaultAsync(x => x.Gamertag == gamertag);
+            return result;
         }
 
         public async Task<List<Gamer>> GetAllGamerProfilesAsync()
@@ -25,48 +44,24 @@ namespace XblApp.Infrastructure.Data.Repositories
             return gamerQuery;
         }
 
-        public async Task<List<Game>> GetGamesForGamerAsync(string gamertag)
+        public async Task<Gamer?> GetGamesForGamerAsync(string gamertag)
         {
-            List<Game> games = await _context.Gamers
-                .Where(g => g.Gamertag == gamertag)
-                .SelectMany(g => g.GameLinks)
-                .Include(gg => gg.Game)
-                .Select(gg => gg.Game)
-                .ToListAsync();
-
-            return games;
+            return await _context.Gamers
+                .Include(g => g.GameLinks)
+                .ThenInclude(gg => gg.Game)
+                .FirstOrDefaultAsync(g => g.Gamertag == gamertag);
         }
 
-        public Gamer GetGamerProfile(long id)
+        public void SaveGamer(Gamer gamer)
         {
-            Gamer? result = _context.Gamers
-                .AsNoTracking()
-                .Include(a => a.GameLinks)
-                    .ThenInclude(b => b.Game)
-                .First(x => x.GamerId == id);
-            return result;
-        }
-
-        public Gamer GetGamerProfile(string gamertag)
-        {
-            Gamer? result = _context.Gamers
-                .AsNoTracking()
-                .Include(a => a.GameLinks)
-                    .ThenInclude(b => b.Game)
-                .FirstOrDefault(x => x.Gamertag == gamertag);
-            return result;
-        }
-
-        public void SaveGamer(GamerDTO gamerDto)
-        {
-            Gamer gamer = new()
-            {
-                GamerId = gamerDto.GamerId,
-                Gamertag = gamerDto?.Gamertag,
-                Gamerscore = gamerDto.Gamerscore,
-                Location = gamerDto?.Location,
-                Bio = gamerDto?.Bio
-            };
+            //Gamer gamer = new()
+            //{
+            //    GamerId = gamerDto.GamerId,
+            //    Gamertag = gamerDto?.Gamertag,
+            //    Gamerscore = gamerDto.Gamerscore,
+            //    Location = gamerDto?.Location,
+            //    Bio = gamerDto?.Bio
+            //};
 
             _context.Gamers.Add(gamer);
             _context.SaveChanges();

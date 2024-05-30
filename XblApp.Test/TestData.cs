@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Configuration;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XblApp.Test
 {
@@ -23,7 +19,16 @@ namespace XblApp.Test
             {"ConnectionStrings:MsSqlConnection", "Server=(localdb)\\mssqllocaldb;Database=XblApp;Trusted_Connection=True;MultipleActiveResultSets=true"},
             {"Nested:Key2", "NestedValue2"}
         };
-        
+
+        internal readonly IConfiguration _config;
+
+        public TestData()
+        {
+            // test against this configuration
+            _config = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+        }
 
         public static string GetTestDataDir(string alternateTestDir = null, Assembly callingAssembly = null)
         {

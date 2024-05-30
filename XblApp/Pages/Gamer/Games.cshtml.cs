@@ -8,7 +8,7 @@ namespace XblApp.Pages.Gamer
     public class GamesModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public List<GameDTO> Output { get; set; }
+        public GamerGameDTO Output { get; set; }
 
         private readonly GamerProfileUseCase _gamerProfileUseCase;        
 

@@ -43,8 +43,8 @@ namespace XblApp.Application.UseCases
 
         private async Task ProcessTokens(TokenOAuthDTO responseOAuth)
         {
-            _authRepository.Save(responseOAuth);
-            TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(responseOAuth);
+            //_authRepository.Save(responseOAuth);
+            //TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(responseOAuth);
 
             //if (responseOAuth.IsSuccessStatusCode)
             //{

@@ -23,7 +23,7 @@ namespace XblApp.Application.UseCases
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
         {
-            Gamer gamer = _gamerRepository.GetGamerProfile(gamertag);
+            Gamer gamer = await _gamerRepository.GetGamerProfile(gamertag);
             //if (gamer == null)
             //{
             //    string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
@@ -58,17 +58,24 @@ namespace XblApp.Application.UseCases
             .ToList();
         }
 
-        public async Task<List<GameDTO>> GetGamesForGamerAsync(string gamertag)
+        public async Task<GamerGameDTO> GetGamesForGamerAsync(string gamertag)
         {
-            List<Game> games = await _gamerRepository.GetGamesForGamerAsync(gamertag);
+            Gamer gamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
-            return games.Select(g => new GameDTO()
+            return new GamerGameDTO
             {
-                GameId = g.GameId,
-                GameName = g.GameName,
-                TotalAchievements = g.TotalAchievements,
-                TotalGamerscore = g.TotalGamerscore,
-            }).ToList();
+                GamerId = gamer.GamerId,
+                Gamertag = gamer.Gamertag,
+                Games = gamer.GameLinks.Select(gg => new GameDTO
+                {
+                    GameId = gg.Game.GameId,
+                    GameName = gg.Game.GameName,
+                    TotalAchievements = gg.Game.TotalAchievements,
+                    TotalGamerscore = gg.Game.TotalGamerscore,
+                    CurrentAchievements = gg.CurrentAchievements,
+                    CurrentGamerscore = gg.CurrentGamerscore
+                }).ToList()
+            };
         }
     }
 }
