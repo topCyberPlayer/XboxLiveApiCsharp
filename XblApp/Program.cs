@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using XblApp.Application.UseCases;
 using XblApp.Domain.Interfaces;
@@ -34,6 +35,8 @@ namespace XblApp
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<GamerProfileUseCase>();
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<XblAppDbContext>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddHttpClient();
             builder.Services.AddRazorPages();
@@ -53,8 +56,7 @@ namespace XblApp
             return builder;
 
             //builder.Services.AddDbContext<XblAppDbContext>(options => options.UseSqlServer(connectionString));
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
         }
     }
 

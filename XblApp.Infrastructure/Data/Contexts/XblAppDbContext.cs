@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using XblApp.Domain.Entities;
 
 namespace XblApp.Infrastructure.Data
 {
-    public class XblAppDbContext : DbContext //IdentityDbContext
+    public class XblAppDbContext : IdentityDbContext//DbContext //
     {
         //public XblAppDbContext(DbContextOptions<XblAppDbContext> options) : base(options) { }
 
@@ -24,6 +25,8 @@ namespace XblApp.Infrastructure.Data
         {
             modelBuilder.Entity<GamerGame>()
                 .HasKey(x => new {x.GamerId, x.GameId});
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
