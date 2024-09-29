@@ -24,12 +24,6 @@ namespace XblApp.Application.UseCases
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
         {
             Gamer gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
-            //if (gamer == null)
-            //{
-            //    string authorizationCode = _authRepository.GetAuthorizationHeaderValue();
-            //    GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
-            //    _gamerRepository.SaveGamer(response);
-            //}
 
             return new GamerDTO
             {
@@ -76,6 +70,26 @@ namespace XblApp.Application.UseCases
                     CurrentGamerscore = gg.CurrentGamerscore
                 }).ToList()
             };
+        }
+
+        public async Task<GamerDTO?> UpdateProfileAsync(string gamertag)
+        {
+            string authorizationCode = _authRepository.GetAuthorizationHeaderValue();//todo вызвать другой метод
+
+            GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
+
+            Gamer saveGamer = new Gamer()
+            {
+                GamerId = response.GamerId,
+                Gamertag = response.Gamertag,
+                Gamerscore = response.Gamerscore,
+                Bio = response.Bio,
+                Location = response.Location
+            };
+
+             await _gamerRepository.SaveGamerAsync(saveGamer);
+
+            return response;
         }
     }
 }

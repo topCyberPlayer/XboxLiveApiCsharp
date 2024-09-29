@@ -8,13 +8,11 @@ namespace XblApp.Infrastructure.Data.Repositories
     public class AuthenticationRepository : IAuthenticationRepository
     {
         private readonly XblAppDbContext _context;
-        //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string? _userId;
 
         public AuthenticationRepository(XblAppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            //_httpContextAccessor = httpContextAccessor;
             _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
 

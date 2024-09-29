@@ -20,6 +20,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                 .Include(a => a.GameLinks)
                     .ThenInclude(b => b.Game)
                 .FirstAsync(x => x.GamerId == id);
+
             return result;
         }
 
@@ -30,6 +31,7 @@ namespace XblApp.Infrastructure.Data.Repositories
                 .Include(a => a.GameLinks)
                     .ThenInclude(b => b.Game)
                 .FirstOrDefaultAsync(x => x.Gamertag == gamertag);
+
             return result;
         }
 
@@ -46,10 +48,12 @@ namespace XblApp.Infrastructure.Data.Repositories
 
         public async Task<Gamer?> GetGamesForGamerAsync(string gamertag)
         {
-            return await _context.Gamers
+            Gamer? result = await _context.Gamers
                 .Include(g => g.GameLinks)
                 .ThenInclude(gg => gg.Game)
                 .FirstOrDefaultAsync(g => g.Gamertag == gamertag);
+
+            return result;
         }
 
         public async Task SaveGamerAsync(Gamer gamer)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Web;
+using System.Net.Http.Headers;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
 using XblApp.Shared.DTOs;
@@ -36,25 +37,24 @@ namespace XblApp.Infrastructure.XboxLiveServices
                     ProfileSettings.WATERMARKS);
             }
         }
-        private const string ProfileUrl = "https://profile.xboxlive.com";
 
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _factory;
 
-        public GamerService(HttpClient httpClient)
+        public GamerService(IHttpClientFactory factory)
         {
-            _httpClient = httpClient;
+            _factory = factory;
         }
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationCode)
         {
-            string baseAddress = ProfileUrl + $"/users/gamertag({gamertag})/profile/settings";
+            string baseAddress = $"/users/gamertag({gamertag})/profile/settings";
 
             return await GetProfileBase(baseAddress, authorizationCode);
         }
 
         public async Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationCode)
         {
-            string baseAddress = ProfileUrl + $"/users/xuid({xuid})/profile/settings";
+            string baseAddress = $"/users/xuid({xuid})/profile/settings";
 
             return await GetProfileBase(baseAddress, authorizationCode);
         }
@@ -67,16 +67,20 @@ namespace XblApp.Infrastructure.XboxLiveServices
             query["settings"] = DefScopes;
             uriBuilder.Query = query.ToString();
 
-            _httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
-            _httpClient.DefaultRequestHeaders.Add("Authorization", authorizationCode);
+            HttpClient client = _factory.CreateClient();
 
-            HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.ToString());
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationCode);
+            //client.DefaultRequestHeaders.Add("Authorization", authorizationCode);
+
+            HttpResponseMessage response = await client.GetAsync(uriBuilder.ToString());
 
             GamerJson result = await DeserializeJson<GamerJson>(response);
 
             return new GamerDTO
             {
-
+                GamerId = long.Parse(result.ProfileUsers.FirstOrDefault().ProfileId),
+                Gamertag = result.ProfileUsers.FirstOrDefault().Gamertag,
+                Gamerscore = result.ProfileUsers.FirstOrDefault().Gamerscore,
             };
         }
     }

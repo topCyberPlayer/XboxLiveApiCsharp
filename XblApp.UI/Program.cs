@@ -31,6 +31,12 @@ namespace XblApp
             string? dbProvider = 
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
+            builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>(client =>
+            {
+                client.BaseAddress = new Uri("https://profile.xboxlive.com");
+                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
+            });
+
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
@@ -46,7 +52,9 @@ namespace XblApp
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<XblAppDbContext>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddHttpClient();
+
+            
+
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
