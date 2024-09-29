@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XboxLiveApiConsole", "XboxLiveApiConsole\XboxLiveApiConsole.csproj", "{D04A5974-620C-4F36-94A9-124752EB3E2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{F9B9EC0F-35BB-495F-8B91-957B8B57935C}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1DomainLayer", "1DomainLayer", "{EF35CC19-C71E-4341-A29B-AB4F320FEFD1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Domain", "XblApp.Domain\XblApp.Domain.csproj", "{88B53746-194E-4324-A080-96AE0C870025}"
@@ -31,6 +35,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04A5974-620C-4F36-94A9-124752EB3E2A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88B53746-194E-4324-A080-96AE0C870025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88B53746-194E-4324-A080-96AE0C870025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88B53746-194E-4324-A080-96AE0C870025}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,6 +68,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{D04A5974-620C-4F36-94A9-124752EB3E2A} = {F9B9EC0F-35BB-495F-8B91-957B8B57935C}
 		{88B53746-194E-4324-A080-96AE0C870025} = {EF35CC19-C71E-4341-A29B-AB4F320FEFD1}
 		{EBDA786F-A925-44AD-A654-BE0F1F2517C4} = {126EC8D9-DEED-44BA-8171-D06DFCF925A5}
 		{79A0669A-21E5-4C88-AEA5-6E52D47219C7} = {5C5CBEE3-AD91-4D8C-9140-0C729D1F06BF}
