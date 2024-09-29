@@ -18,11 +18,9 @@ namespace XblApp.Pages.Auth
             var error = HttpContext.Request.Query["error"];
             var errorDescription = HttpContext.Request.Query["error_description"];
 
-            // Проверяем, был ли получен код
             if (code == null)
             {
-                // Обработка ошибки - код не был получен
-                return NotFound("Код не найден");
+                return NotFound("er");
                 //return RedirectToAction("ExternalLoginFailure");
             }
 
@@ -37,8 +35,6 @@ namespace XblApp.Pages.Auth
             }
             catch (Exception ex)
             {
-                // Обработка ошибки
-                // Логирование, отправка уведомлений, перенаправление на страницу ошибки и т.д.
                 return RedirectToPage("Error", "Home");
             }
         }
