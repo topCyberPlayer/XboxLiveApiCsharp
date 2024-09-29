@@ -31,7 +31,7 @@ namespace XblApp
             string? dbProvider = 
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
-            builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>(client =>
+            builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>("gamerService", (HttpClient client) =>
             {
                 client.BaseAddress = new Uri("https://profile.xboxlive.com");
                 client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");

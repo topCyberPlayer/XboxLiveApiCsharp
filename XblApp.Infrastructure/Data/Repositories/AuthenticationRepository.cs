@@ -132,7 +132,7 @@ namespace XblApp.Infrastructure.Data.Repositories
         {
             string? result = _context.XstsTokens
                 .Where(x => x.AspNetUserId == _userId)
-                .Select(x => $"x={x.Userhash};{x.Token}")
+                .Select(x => $"XBL3.0 x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
 
             return result;

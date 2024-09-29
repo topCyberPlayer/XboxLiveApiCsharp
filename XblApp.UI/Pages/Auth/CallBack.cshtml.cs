@@ -32,7 +32,7 @@ namespace XblApp.Pages.Auth
             }
             catch (Exception ex)
             {
-                return RedirectToPage(/"Error");
+                return RedirectToPage("/Error");
             }
         }
     }

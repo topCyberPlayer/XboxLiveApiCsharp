@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Web;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Headers;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
@@ -45,34 +44,34 @@ namespace XblApp.Infrastructure.XboxLiveServices
             _factory = factory;
         }
 
-        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationCode)
+        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
         {
-            string baseAddress = $"/users/gamertag({gamertag})/profile/settings";
+            string relativeUrl = $"/users/gamertag({gamertag})/profile/settings";
 
-            return await GetProfileBase(baseAddress, authorizationCode);
+            return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        public async Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationCode)
+        public async Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
         {
-            string baseAddress = $"/users/xuid({xuid})/profile/settings";
+            string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
-            return await GetProfileBase(baseAddress, authorizationCode);
+            return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        private async Task<GamerDTO> GetProfileBase(string baseAddress, string authorizationCode)
+        private async Task<GamerDTO> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
         {
-            UriBuilder uriBuilder = new UriBuilder(baseAddress);
+            string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
 
-            NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["settings"] = DefScopes;
-            uriBuilder.Query = query.ToString();
+            HttpClient client = _factory.CreateClient("gamerService");
 
-            HttpClient client = _factory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationCode);
-            //client.DefaultRequestHeaders.Add("Authorization", authorizationCode);
+            HttpResponseMessage response = await client.GetAsync(uri);
 
-            HttpResponseMessage response = await client.GetAsync(uriBuilder.ToString());
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Error retrieving profile: {response.ReasonPhrase}");
+            }
 
             GamerJson result = await DeserializeJson<GamerJson>(response);
 

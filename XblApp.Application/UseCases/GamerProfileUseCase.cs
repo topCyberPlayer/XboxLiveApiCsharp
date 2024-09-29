@@ -74,9 +74,9 @@ namespace XblApp.Application.UseCases
 
         public async Task<GamerDTO?> UpdateProfileAsync(string gamertag)
         {
-            string authorizationCode = _authRepository.GetAuthorizationHeaderValue();//todo вызвать другой метод
+            string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();//todo вызвать другой метод
 
-            GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationCode);
+            GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
 
             Gamer saveGamer = new Gamer()
             {
