@@ -26,16 +26,13 @@ namespace XblApp.Pages.Auth
 
             try
             {
-                if (User.Identity.IsAuthenticated)
-                {
-                    await _authServ.RequestTokens(code);
-                }
-                
-                return RedirectToPage("Index", "Home");
+                await _authServ.RequestTokens(code);
+
+                return RedirectToPage("/Index");
             }
             catch (Exception ex)
             {
-                return RedirectToPage("Error", "Home");
+                return RedirectToPage(/"Error");
             }
         }
     }

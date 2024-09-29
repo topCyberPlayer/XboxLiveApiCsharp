@@ -14,6 +14,11 @@ namespace XblApp.Application.UseCases
         private TokenXstsDTO _tokenXsts;
         private readonly string? _userId;
 
+        public AuthenticationUseCase()
+        {
+            
+        }
+
         public AuthenticationUseCase(
             IAuthenticationService authServXbl, 
             IAuthenticationRepository authServDb,
@@ -48,6 +53,12 @@ namespace XblApp.Application.UseCases
             await ProcessTokens(responseOAuth);
         }
 
+
+        /// <summary>
+        /// Вызывается из 
+        /// </summary>
+        /// <param name="tokenOAuthDTO"></param>
+        /// <returns></returns>
         private async Task ProcessTokens(TokenOAuthDTO tokenOAuthDTO)
         {
             if (tokenOAuthDTO != null)
@@ -63,38 +74,38 @@ namespace XblApp.Application.UseCases
                     AuthenticationToken = tokenOAuthDTO.AuthenticationToken,
                     AspNetUserId = _userId,
                 });
-            }
-            
-            TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(tokenOAuthDTO);
 
-            if (tokenXauDTO != null)
-            {
-                await _authRepository.SaveAsync(new TokenXau
+                TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(tokenOAuthDTO);
+
+                if (tokenXauDTO != null)
                 {
-                    Uhs = tokenXauDTO.Uhs,
-                    IssueInstant = tokenXauDTO.IssueInstant,
-                    NotAfter = tokenXauDTO.NotAfter,
-                    Token = tokenXauDTO.Token,
-                    AspNetUserId = _userId
-                });
-
-                TokenXstsDTO responseXsts = await _authService.RequestXstsToken(tokenXauDTO);
-
-                if (responseXsts != null)
-                {
-                    await _authRepository.SaveAsync(new TokenXsts
+                    await _authRepository.SaveAsync(new TokenXau
                     {
-                        Xuid = responseXsts.Xuid,
-                        Userhash = responseXsts.Userhash,
-                        Gamertag = responseXsts.Gamertag,
-                        AgeGroup= responseXsts.AgeGroup,
-                        Privileges = responseXsts.Privileges,
-                        UserPrivileges = responseXsts.UserPrivileges,
-                        IssueInstant = responseXsts.IssueInstant,
-                        NotAfter = responseXsts.NotAfter,
-                        Token = responseXsts.Token,
+                        Uhs = tokenXauDTO.Uhs,
+                        IssueInstant = tokenXauDTO.IssueInstant,
+                        NotAfter = tokenXauDTO.NotAfter,
+                        Token = tokenXauDTO.Token,
                         AspNetUserId = _userId
                     });
+
+                    TokenXstsDTO responseXsts = await _authService.RequestXstsToken(tokenXauDTO);
+
+                    if (responseXsts != null)
+                    {
+                        await _authRepository.SaveAsync(new TokenXsts
+                        {
+                            Xuid = responseXsts.Xuid,
+                            Userhash = responseXsts.Userhash,
+                            Gamertag = responseXsts.Gamertag,
+                            AgeGroup = responseXsts.AgeGroup,
+                            Privileges = responseXsts.Privileges,
+                            UserPrivileges = responseXsts.UserPrivileges,
+                            IssueInstant = responseXsts.IssueInstant,
+                            NotAfter = responseXsts.NotAfter,
+                            Token = responseXsts.Token,
+                            AspNetUserId = _userId
+                        });
+                    }
                 }
             }
         }

@@ -14,7 +14,10 @@ namespace XblApp.Pages.Auth
         }
         public ActionResult OnGet()
         {
-            return Redirect(_authServXbl.GenerateAuthorizationUrl());
+            string authorizationUrl = _authServXbl.GenerateAuthorizationUrl();
+
+            //return RedirectToPage("/Privacy");
+            return Redirect(authorizationUrl);
         }
     }
 }
