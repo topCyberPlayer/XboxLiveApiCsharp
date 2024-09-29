@@ -1,36 +1,27 @@
-﻿@page "{gamertag}"
+﻿@page "/gamer/{gamertag}"
 @model XblApp.Pages.Gamer.IndexModel
 @{
     ViewData["Title"] = "YUIO";
 }
 
-@* <h2>@Model.Output.Gamertag</h2> *@
-<head>
-    <a class="btn btn-info"
-       asp-page="Index">@Model.Output.Gamertag</a>
-    <a class="btn btn-info"
-       asp-page="/Gamer/Games"
-       asp-route-gamertag="@Model.Output.Gamertag">
-       Games</a>
-    <a class="btn btn-info"
-       asp-page="/Gamer/Achievements"
-       asp-route-gamertag="@Model.Output.Gamertag">
-       Achievements</a>
-    
-</head>
+<!-- Подключаем вкладки для игрока -->
+@await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
+
+<h2>@Model.Output.Gamertag</h2>
+
 <body>
     <td>
         <div>
-            Gamertag @Model.Output.Gamertag
+            Gamertag: @Model.Output.Gamertag
         </div>
         <div>
-            Gamerscore @Model.Output.Gamerscore
+            Gamerscore: @Model.Output.Gamerscore
         </div>
         <div>
-            Games @Model.Output.CurrentGamesCount
+            Games: @Model.Output.CurrentGamesCount
         </div>
         <div>
-            Achievements @Model.Output.CurrentAchievementsCount
+            Achievements: @Model.Output.CurrentAchievementsCount
         </div>
     </td>
 </body>

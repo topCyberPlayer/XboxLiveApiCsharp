@@ -1,9 +1,16 @@
 ﻿@page "/gamer/{gamertag}/games"
+
 @model XblApp.Pages.Gamer.GamesModel
 @{
     ViewData["Title"] = $"Games for {Model.Output.Gamertag}";
 }
+
+<!-- Подключаем вкладки для игрока -->
+@await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
+
 <h2>@ViewData["Title"]</h2>
+
+
 
 <body>
     <div class="table-responsive">
