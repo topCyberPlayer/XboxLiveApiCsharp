@@ -63,10 +63,10 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             HttpResponseMessage response = await client.GetAsync(uri);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Error retrieving profile: {response.ReasonPhrase}");
-            }
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    throw new Exception($"Error retrieving profile: {response.ReasonPhrase}");
+            //}
 
             GamerJson result = await DeserializeJson<GamerJson>(response);
 

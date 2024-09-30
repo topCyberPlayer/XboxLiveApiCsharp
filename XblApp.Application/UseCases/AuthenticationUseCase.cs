@@ -25,8 +25,6 @@ namespace XblApp.Application.UseCases
             await ProcessTokens(responseOAuth);
         }
 
-            
-
         public string GenerateAuthorizationUrl()
         {
             string result = _authService.GenerateAuthorizationUrl();
