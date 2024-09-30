@@ -59,7 +59,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             HttpClient client = factory.CreateClient("gamerService");
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
 
             HttpResponseMessage response = await client.GetAsync(uri);
 
