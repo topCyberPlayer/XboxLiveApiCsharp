@@ -95,17 +95,36 @@ namespace XblApp.Infrastructure.Data.Repositories
 
         public async Task SaveGamerAsync(GamerDTO gamerDTO)
         {
-            Gamer gamer = new Gamer()
-            {
-                GamerId = gamerDTO.GamerId,
-                Gamertag = gamerDTO.Gamertag,
-                Gamerscore = gamerDTO.Gamerscore,
-                Bio = gamerDTO.Bio,
-                Location = gamerDTO.Location,
-            };
+            // Ищем геймера в базе данных по его идентификатору
+            Gamer? existingGamer = await _context.Gamers.FindAsync(gamerDTO.GamerId);
 
-            _context.Gamers.Add(gamer);
+            if (existingGamer != null)
+            {
+                // Если геймер уже существует, обновляем его данные
+                existingGamer.Gamertag = gamerDTO.Gamertag;
+                existingGamer.Gamerscore = gamerDTO.Gamerscore;
+                existingGamer.Bio = gamerDTO.Bio;
+                existingGamer.Location = gamerDTO.Location;
+
+                _context.Gamers.Update(existingGamer);
+            }
+            else
+            {
+                // Если геймера нет в базе данных, добавляем нового
+                Gamer newGamer = new Gamer()
+                {
+                    GamerId = gamerDTO.GamerId,
+                    Gamertag = gamerDTO.Gamertag,
+                    Gamerscore = gamerDTO.Gamerscore,
+                    Bio = gamerDTO.Bio,
+                    Location = gamerDTO.Location,
+                };
+
+                _context.Gamers.Add(newGamer);
+            }
+
             await _context.SaveChangesAsync();
         }
+
     }
 }
