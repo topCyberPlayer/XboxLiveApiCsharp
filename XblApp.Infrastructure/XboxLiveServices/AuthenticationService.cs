@@ -14,15 +14,14 @@ namespace XblApp.Infrastructure.XboxLiveServices
         private readonly string? _clientId;
         private readonly string? _clientSecret;
         private readonly string? _redirectUri;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private string _defaultScopes { get { return string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access"); } }
+        
+        private string DefaultScopes => string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
 
-        public AuthenticationService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public AuthenticationService(IConfiguration configuration, IHttpClientFactory factory) : base(factory)
         {
             _clientId = configuration["Authentication:Microsoft:ClientId"];
             _clientSecret = configuration["Authentication:Microsoft:ClientSecret"];
             _redirectUri = configuration["ConnectionStrings:RedirectUrl"];
-            _httpClientFactory = httpClientFactory;
         }
 
         public string GenerateAuthorizationUrl()
@@ -35,7 +34,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
             query["client_id"] = _clientId;
             query["response_type"] = "code";
             query["approval_prompt"] = "auto";
-            query["scope"] = _defaultScopes;
+            query["scope"] = DefaultScopes;
             query["redirect_uri"] = _redirectUri;
             uriBuilder.Query = query.ToString();
 
@@ -57,7 +56,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
             {
                 {"grant_type", "authorization_code"},
                 {"code", authorizationCode},
-                {"scope", _defaultScopes},
+                {"scope", DefaultScopes},
                 {"redirect_uri", _redirectUri}
             };
 
@@ -86,7 +85,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         public async Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth)
         {
             const string relyingParty = "http://auth.xboxlive.com";
-            HttpClient httpClient = _httpClientFactory.CreateClient();
+            HttpClient httpClient = factory.CreateClient();
             const string base_address = "https://user.auth.xboxlive.com/user/authenticate";
 
             var data = new
@@ -127,7 +126,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         public async Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau)
         {
             const string relyingParty = "http://xboxlive.com";
-            HttpClient httpClient = _httpClientFactory.CreateClient();
+            HttpClient httpClient = factory.CreateClient();
             const string base_address = "https://xsts.auth.xboxlive.com/xsts/authorize";
 
             var data = new
@@ -170,13 +169,13 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// Refresh OAuth2 token
         /// </summary>
         /// <returns></returns>
-        public async Task<TokenOAuthDTO> RefreshOauth2Token(string refreshToken)
+        public async Task<TokenOAuthDTO> RefreshOauth2Token(TokenOAuthDTO expiredTokenOAuthDTO)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
-                {"scope", _defaultScopes},
-                {"refresh_token", refreshToken}
+                {"scope", DefaultScopes},
+                {"refresh_token", expiredTokenOAuthDTO.RefreshToken}
             };
 
             HttpResponseMessage response = await RequestRefreshOauthToken(data);
@@ -202,7 +201,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// <returns></returns>
         private async Task<HttpResponseMessage> RequestRefreshOauthToken(Dictionary<string, string> data)
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient();
+            HttpClient httpClient = factory.CreateClient();
             const string baseAddress = "https://login.live.com/oauth20_token.srf";
 
             data.Add("client_id", _clientId);

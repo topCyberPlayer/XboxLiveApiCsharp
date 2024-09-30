@@ -1,36 +1,20 @@
 ﻿using XblApp.Domain.Interfaces;
 using XblApp.Shared.DTOs;
-using Microsoft.AspNetCore.Http;
-using XblApp.Domain.Entities;
 
 namespace XblApp.Application.UseCases
 {
-    public class AuthenticationUseCase
+    public class AuthenticationUseCase : BaseUseCase
     {
-        private readonly IAuthenticationService _authService;
-        private readonly IAuthenticationRepository _authRepository;
         private TokenOAuthDTO _tokenOAuth;
         private TokenXauDTO _tokenXau;
         private TokenXstsDTO _tokenXsts;
-        private readonly string? _userId;
-
-        public AuthenticationUseCase()
-        {
-            
-        }
 
         public AuthenticationUseCase(
-            IAuthenticationService authServXbl, 
-            IAuthenticationRepository authServDb,
-            IHttpContextAccessor httpContextAccessor)
-        {
-            _authService = authServXbl;
-            _authRepository = authServDb;
-            _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        }
+            IAuthenticationRepository authRepository,
+            IAuthenticationService authService) : base(authService, authRepository) { }
 
         /// <summary>
-        /// Need authorizationCode
+        /// Использовать когда OAuthToken вообще нет.
         /// </summary>
         /// <param name="authorizationCode"></param>
         /// <returns></returns>
@@ -41,88 +25,7 @@ namespace XblApp.Application.UseCases
             await ProcessTokens(responseOAuth);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokenOAuth"></param>
-        /// <returns></returns>
-        public async Task RefreshTokens(string tokenOAuth)
-        {
-            TokenOAuthDTO responseOAuth = await _authService.RefreshOauth2Token(tokenOAuth);
-
-            await ProcessTokens(responseOAuth);
-        }
-
-
-        /// <summary>
-        /// Вызывается из 
-        /// </summary>
-        /// <param name="tokenOAuthDTO"></param>
-        /// <returns></returns>
-        private async Task ProcessTokens(TokenOAuthDTO tokenOAuthDTO)
-        {
-            if (tokenOAuthDTO != null)
-            {
-                await _authRepository.SaveAsync(new TokenOAuth
-                {
-                    UserId = tokenOAuthDTO.UserId,
-                    TokenType = tokenOAuthDTO.TokenType,
-                    ExpiresIn = tokenOAuthDTO.ExpiresIn,
-                    Scope = tokenOAuthDTO.Scope,
-                    AccessToken = tokenOAuthDTO.AccessToken,
-                    RefreshToken = tokenOAuthDTO.RefreshToken,
-                    AuthenticationToken = tokenOAuthDTO.AuthenticationToken,
-                    AspNetUserId = _userId,
-                });
-
-                TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(tokenOAuthDTO);
-
-                if (tokenXauDTO != null)
-                {
-                    await _authRepository.SaveAsync(new TokenXau
-                    {
-                        Uhs = tokenXauDTO.Uhs,
-                        IssueInstant = tokenXauDTO.IssueInstant,
-                        NotAfter = tokenXauDTO.NotAfter,
-                        Token = tokenXauDTO.Token,
-                        AspNetUserId = _userId
-                    });
-
-                    TokenXstsDTO responseXsts = await _authService.RequestXstsToken(tokenXauDTO);
-
-                    if (responseXsts != null)
-                    {
-                        await _authRepository.SaveAsync(new TokenXsts
-                        {
-                            Xuid = responseXsts.Xuid,
-                            Userhash = responseXsts.Userhash,
-                            Gamertag = responseXsts.Gamertag,
-                            AgeGroup = responseXsts.AgeGroup,
-                            Privileges = responseXsts.Privileges,
-                            UserPrivileges = responseXsts.UserPrivileges,
-                            IssueInstant = responseXsts.IssueInstant,
-                            NotAfter = responseXsts.NotAfter,
-                            Token = responseXsts.Token,
-                            AspNetUserId = _userId
-                        });
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// True - дата истекла, False - не истекла
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public bool IsDateExperid()
-        {
-            DateTime? dateNow = DateTime.UtcNow;
-
-            DateTime? dateDb = _authRepository.GetDateExpired();
-
-            return dateNow > dateDb ? true : false;
-        }
+            
 
         public string GenerateAuthorizationUrl()
         {

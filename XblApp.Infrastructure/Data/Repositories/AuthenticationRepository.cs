@@ -2,130 +2,145 @@
 using Microsoft.EntityFrameworkCore;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
+using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
-    public class AuthenticationRepository : IAuthenticationRepository
+    public class AuthenticationRepository : BaseService, IAuthenticationRepository
     {
-        private readonly XblAppDbContext _context;
-        private readonly string? _userId;
-
-        public AuthenticationRepository(XblAppDbContext context, IHttpContextAccessor httpContextAccessor)
+        internal readonly string? _userId;
+        public AuthenticationRepository(XblAppDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
         {
-            _context = context;
             _userId = httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
 
-        public async Task SaveAsync(TokenOAuth token)
+        public async Task SaveAsync(TokenOAuthDTO tokenDTO)
         {
-            if(token == null || _userId == null)
+            if(tokenDTO == null || _userId == null)
                 return;
 
-            TokenOAuth entityToUpdate = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
+            TokenOAuth token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
-            if (entityToUpdate == null)
+            if (token == null)
             {
-                entityToUpdate = new TokenOAuth()
+                token = new TokenOAuth()
                 {
                     AspNetUserId = _userId,
-                    AccessToken = token.AccessToken,
-                    AuthenticationToken = token.AuthenticationToken,
-                    ExpiresIn = token.ExpiresIn,
-                    RefreshToken = token.RefreshToken,
-                    TokenType = token.TokenType,
-                    UserId = token.UserId,
-                    Scope = token.Scope
+                    AccessToken = tokenDTO.AccessToken,
+                    AuthenticationToken = tokenDTO.AuthenticationToken,
+                    ExpiresIn = tokenDTO.ExpiresIn,
+                    RefreshToken = tokenDTO.RefreshToken,
+                    TokenType = tokenDTO.TokenType,
+                    UserId = tokenDTO.UserId,
+                    Scope = tokenDTO.Scope
                 };
 
-                await _context.OAuthTokens.AddAsync(entityToUpdate);
+                await _context.OAuthTokens.AddAsync(token);
             }
             else
             {
-                entityToUpdate.AccessToken = token.AccessToken;
-                entityToUpdate.AuthenticationToken = token.AuthenticationToken;
-                entityToUpdate.ExpiresIn = token.ExpiresIn;
-                entityToUpdate.RefreshToken = token.RefreshToken;
-                entityToUpdate.TokenType = token.TokenType;
-                entityToUpdate.UserId = token.UserId;
-                entityToUpdate.Scope = token.Scope;
+                token.AccessToken = tokenDTO.AccessToken;
+                token.AuthenticationToken = tokenDTO.AuthenticationToken;
+                token.ExpiresIn = tokenDTO.ExpiresIn;
+                token.RefreshToken = tokenDTO.RefreshToken;
+                token.TokenType = tokenDTO.TokenType;
+                token.UserId = tokenDTO.UserId;
+                token.Scope = tokenDTO.Scope;
             }
 
            await _context.SaveChangesAsync();
         }
 
-        public async Task SaveAsync(TokenXau token)
+        public async Task SaveAsync(TokenXauDTO tokenDTO)
         {
-            if (token == null || _userId == null)
+            if (tokenDTO == null || _userId == null)
                 return;
 
-            TokenXau entityToUpdate = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
+            TokenXau token = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
-            if (entityToUpdate == null)
+            if (token == null)
             {
-                entityToUpdate = new TokenXau()
+                token = new TokenXau()
                 {
                     AspNetUserId = _userId,
-                    IssueInstant = token.IssueInstant,
-                    NotAfter = token.NotAfter,
-                    Token = token.Token,
-                    Uhs = token.Uhs
+                    IssueInstant = tokenDTO.IssueInstant,
+                    NotAfter = tokenDTO.NotAfter,
+                    Token = tokenDTO.Token,
+                    Uhs = tokenDTO.Uhs
                 };
 
-                await _context.XauTokens.AddAsync(entityToUpdate);
+                await _context.XauTokens.AddAsync(token);
             }
 
             else
             {
-                entityToUpdate.IssueInstant = token.IssueInstant;
-                entityToUpdate.NotAfter = token.NotAfter;
-                entityToUpdate.Token = token.Token;
-                entityToUpdate.Uhs = token.Uhs;
+                token.IssueInstant = tokenDTO.IssueInstant;
+                token.NotAfter = tokenDTO.NotAfter;
+                token.Token = tokenDTO.Token;
+                token.Uhs = tokenDTO.Uhs;
             }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SaveAsync(TokenXsts token)
+        public async Task SaveAsync(TokenXstsDTO tokenDTO)
         {
-            if (token == null || _userId == null)
+            if (tokenDTO == null || _userId == null)
                 return;
 
-            TokenXsts entityToUpdate = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
+            TokenXsts token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _userId);
 
-            if (entityToUpdate == null)
+            if (token == null)
             {
-                entityToUpdate = new TokenXsts
+                token = new TokenXsts
                 {
                     AspNetUserId = _userId,
-                    IssueInstant = token.IssueInstant,
-                    NotAfter = token.NotAfter,
-                    Token = token.Token,
+                    IssueInstant = tokenDTO.IssueInstant,
+                    NotAfter = tokenDTO.NotAfter,
+                    Token = tokenDTO.Token,
 
-                    Xuid = token.Xuid,
-                    Userhash = token.Userhash,
-                    Gamertag = token.Gamertag,
-                    AgeGroup = token.AgeGroup,
-                    Privileges = token.Privileges,
-                    UserPrivileges = token.UserPrivileges,
+                    Xuid = tokenDTO.Xuid,
+                    Userhash = tokenDTO.Userhash,
+                    Gamertag = tokenDTO.Gamertag,
+                    AgeGroup = tokenDTO.AgeGroup,
+                    Privileges = tokenDTO.Privileges,
+                    UserPrivileges = tokenDTO.UserPrivileges,
                 };
 
-                await _context.XstsTokens.AddAsync(entityToUpdate);
+                await _context.XstsTokens.AddAsync(token);
             }
             else
             {
-                entityToUpdate.IssueInstant = token.IssueInstant;
-                entityToUpdate.NotAfter = token.NotAfter;
-                entityToUpdate.Token = token.Token;
+                token.IssueInstant = tokenDTO.IssueInstant;
+                token.NotAfter = tokenDTO.NotAfter;
+                token.Token = tokenDTO.Token;
 
-                entityToUpdate.Xuid = token.Xuid;
-                entityToUpdate.Userhash = token.Userhash;
-                entityToUpdate.Gamertag = token.Gamertag;
-                entityToUpdate.AgeGroup = token.AgeGroup;
-                entityToUpdate.Privileges = token.Privileges;
-                entityToUpdate.UserPrivileges = token.UserPrivileges;
+                token.Xuid = tokenDTO.Xuid;
+                token.Userhash = tokenDTO.Userhash;
+                token.Gamertag = tokenDTO.Gamertag;
+                token.AgeGroup = tokenDTO.AgeGroup;
+                token.Privileges = tokenDTO.Privileges;
+                token.UserPrivileges = tokenDTO.UserPrivileges;
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<TokenOAuthDTO> GetTokenOAuth()
+        {
+            TokenOAuth? token = await _context.OAuthTokens.Where(x => x.AspNetUserId == _userId).FirstOrDefaultAsync();
+
+            TokenOAuthDTO tokenOAuthDTO = new TokenOAuthDTO()
+            {
+                AccessToken = token.AccessToken,
+                AuthenticationToken = token.AuthenticationToken,
+                ExpiresIn = token.ExpiresIn,
+                RefreshToken = token.RefreshToken,
+                Scope = token.Scope,
+                TokenType = token.TokenType
+            };
+
+            return tokenOAuthDTO;
         }
 
         public string GetAuthorizationHeaderValue()
@@ -138,7 +153,7 @@ namespace XblApp.Infrastructure.Data.Repositories
             return result;
         }
 
-        public DateTime GetDateExpired()
+        public DateTime GetDateXstsTokenExpired()
         {
             DateTime result = _context.XstsTokens
                 .Where(x => x.AspNetUserId == _userId)
@@ -148,11 +163,11 @@ namespace XblApp.Infrastructure.Data.Repositories
             return result;
         }
 
-        public string GetRefreshToken()
+        public DateTime GetDateXauTokenExpired()
         {
-            string result = _context.OAuthTokens
+            DateTime result = _context.XauTokens
                 .Where(x => x.AspNetUserId == _userId)
-                .Select(x => x.RefreshToken)
+                .Select(x => x.NotAfter)
                 .FirstOrDefault();
 
             return result;

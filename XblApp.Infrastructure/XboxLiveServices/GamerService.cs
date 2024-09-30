@@ -37,16 +37,11 @@ namespace XblApp.Infrastructure.XboxLiveServices
             }
         }
 
-        private readonly IHttpClientFactory _factory;
-
-        public GamerService(IHttpClientFactory factory)
-        {
-            _factory = factory;
-        }
+        public GamerService(IHttpClientFactory factory) : base(factory) { }
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
         {
-            string relativeUrl = $"/users/gamertag({gamertag})/profile/settings";
+            string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
             return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
@@ -62,9 +57,9 @@ namespace XblApp.Infrastructure.XboxLiveServices
         {
             string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
 
-            HttpClient client = _factory.CreateClient("gamerService");
+            HttpClient client = factory.CreateClient("gamerService");
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
 
             HttpResponseMessage response = await client.GetAsync(uri);
 
@@ -80,6 +75,9 @@ namespace XblApp.Infrastructure.XboxLiveServices
                 GamerId = long.Parse(result.ProfileUsers.FirstOrDefault().ProfileId),
                 Gamertag = result.ProfileUsers.FirstOrDefault().Gamertag,
                 Gamerscore = result.ProfileUsers.FirstOrDefault().Gamerscore,
+                Bio = result.ProfileUsers.FirstOrDefault().Bio,
+                Location = result.ProfileUsers.FirstOrDefault().Location,
+                
             };
         }
     }

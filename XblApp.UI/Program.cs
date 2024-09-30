@@ -37,6 +37,12 @@ namespace XblApp
                 client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
             });
 
+            //builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("", (HttpClient client) =>
+            //{
+            //    client.BaseAddress = new Uri("https://user.auth.xboxlive.com/user/authenticate");
+            //    client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
+            //});
+
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();

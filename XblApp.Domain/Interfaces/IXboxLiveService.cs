@@ -21,9 +21,15 @@ namespace XblApp.Domain.Interfaces
     public interface IAuthenticationService : IBaseService
     {
         public Task<TokenOAuthDTO> RequestOauth2Token(string authorizationCode);
-        public Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth);//TokenOAuthModelXbl tokenOAuth);
-        public Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau);//TokenXauModelXbl tokenXau);
-        public Task<TokenOAuthDTO> RefreshOauth2Token(string refreshToken);
+        public Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth);
+        public Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau);
+
+        /// <summary>
+        /// Возвращает новый (обновляет) Oauth2Token
+        /// </summary>
+        /// <param name="expiredTokenOAuthDTO"></param>
+        /// <returns></returns>
+        public Task<TokenOAuthDTO> RefreshOauth2Token(TokenOAuthDTO expiredTokenOAuthDTO);
         public string GenerateAuthorizationUrl();
         
     }

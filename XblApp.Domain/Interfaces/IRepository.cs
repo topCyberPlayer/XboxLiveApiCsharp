@@ -1,29 +1,30 @@
-﻿using XblApp.Domain.Entities;
+﻿using XblApp.Shared.DTOs;
 
 namespace XblApp.Domain.Interfaces
 {
     public interface IGameRepository
     {
-        public Task<Game> GetGameAsync(string gameName);
-        public Task<List<Game>> GetAllGamesAsync();
+        public Task<GameDTO> GetGameAsync(string gameName);
+        public Task<List<GameDTO>> GetAllGamesAsync();
     }
 
     public interface IGamerRepository
     {
-        public Task<Gamer> GetGamerProfileAsync(long id);
-        public Task<Gamer> GetGamerProfileAsync(string gamertag);
-        public Task<List<Gamer>> GetAllGamerProfilesAsync();
-        public Task<Gamer> GetGamesForGamerAsync(string gamertag);
-        public Task SaveGamerAsync(Gamer gamer);
+        public Task<GamerDTO> GetGamerProfileAsync(long id);
+        public Task<GamerDTO> GetGamerProfileAsync(string gamertag);
+        public Task<List<GamerDTO>> GetAllGamerProfilesAsync();
+        public Task<GamerGameDTO> GetGamesForGamerAsync(string gamertag);
+        public Task SaveGamerAsync(GamerDTO gamer);
     }
 
     public interface IAuthenticationRepository
     {
-        public Task SaveAsync(TokenOAuth tokenXbl);
-        public Task SaveAsync(TokenXau tokenXbl);
-        public Task SaveAsync(TokenXsts tokenXbl);
-        public string GetRefreshToken();
-        public DateTime GetDateExpired();
+        public Task SaveAsync(TokenOAuthDTO tokenXbl);
+        public Task SaveAsync(TokenXauDTO tokenXbl);
+        public Task SaveAsync(TokenXstsDTO tokenXbl);
+        public Task<TokenOAuthDTO> GetTokenOAuth();
+        public DateTime GetDateXstsTokenExpired();
+        public DateTime GetDateXauTokenExpired();
         public string GetAuthorizationHeaderValue();
     }
 }
