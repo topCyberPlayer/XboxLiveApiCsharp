@@ -31,17 +31,30 @@ namespace XblApp
             string? dbProvider = 
             builder.Configuration.GetConnectionString("DatabaseProvider");
 
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceAuthToken", (HttpClient client) =>
+            {
+                client.BaseAddress = new Uri("https://login.live.com/oauth20_token.srf");
+            });
+
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceUserToken", (HttpClient client) =>
+            {
+                client.BaseAddress = new Uri("https://user.auth.xboxlive.com/user/authenticate");
+                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
+            });
+
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceXstsToken", (HttpClient client) =>
+            {
+                client.BaseAddress = new Uri("https://xsts.auth.xboxlive.com/xsts/authorize");
+                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
+            });
+
+
+
             builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>("gamerService", (HttpClient client) =>
             {
                 client.BaseAddress = new Uri("https://profile.xboxlive.com");
                 client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
             });
-
-            //builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("", (HttpClient client) =>
-            //{
-            //    client.BaseAddress = new Uri("https://user.auth.xboxlive.com/user/authenticate");
-            //    client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
-            //});
 
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();

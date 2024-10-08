@@ -15,7 +15,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         private readonly string? _clientSecret;
         private readonly string? _redirectUri;
         
-        private string DefaultScopes => string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
+        private static string DefaultScopes => string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
 
         public AuthenticationService(IConfiguration configuration, IHttpClientFactory factory) : base(factory)
         {
@@ -62,6 +62,11 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             HttpResponseMessage response = await RequestRefreshOauthToken(data);
 
+            if (!response.IsSuccessStatusCode)
+            {
+
+            }
+
             TokenOAuthJson resultJson = await DeserializeJson<TokenOAuthJson>(response);
 
             return new TokenOAuthDTO
@@ -84,13 +89,11 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// <returns></returns>
         public async Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth)
         {
-            const string relyingParty = "http://auth.xboxlive.com";
-            HttpClient httpClient = factory.CreateClient();
-            const string base_address = "https://user.auth.xboxlive.com/user/authenticate";
+            HttpClient httpClient = factory.CreateClient("authServiceUserToken");
 
             var data = new
             {
-                RelyingParty = relyingParty,
+                RelyingParty = "http://auth.xboxlive.com",
                 TokenType = "JWT",
                 Properties = new
                 {
@@ -101,11 +104,14 @@ namespace XblApp.Infrastructure.XboxLiveServices
             };
 
             string jsonData = JsonSerializer.Serialize(data);
+            StringContent content = new(jsonData, Encoding.UTF8, "application/json");
 
-            httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
-            StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, content);
 
-            HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
+            if (!response.IsSuccessStatusCode)
+            {
+
+            }
 
             TokenXauJson result = await DeserializeJson<TokenXauJson>(response);
 
@@ -125,13 +131,11 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// <returns></returns>
         public async Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau)
         {
-            const string relyingParty = "http://xboxlive.com";
-            HttpClient httpClient = factory.CreateClient();
-            const string base_address = "https://xsts.auth.xboxlive.com/xsts/authorize";
+            HttpClient httpClient = factory.CreateClient("authServiceXstsToken");
 
             var data = new
             {
-                RelyingParty = relyingParty,
+                RelyingParty = "http://xboxlive.com",
                 TokenType = "JWT",
                 Properties = new
                 {
@@ -141,11 +145,14 @@ namespace XblApp.Infrastructure.XboxLiveServices
             };
 
             string jsonData = JsonSerializer.Serialize(data);
-
-            httpClient.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await httpClient.PostAsync(base_address, content);
+            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+
+            }
 
             TokenXstsJson result = await DeserializeJson<TokenXstsJson>(response);
 
@@ -201,14 +208,12 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// <returns></returns>
         private async Task<HttpResponseMessage> RequestRefreshOauthToken(Dictionary<string, string> data)
         {
-            HttpClient httpClient = factory.CreateClient();
-            const string baseAddress = "https://login.live.com/oauth20_token.srf";
+            HttpClient httpClient = factory.CreateClient("authServiceAuthToken");
 
             data.Add("client_id", _clientId);
             data.Add("client_secret", _clientSecret);
 
-            HttpResponseMessage response = await httpClient.PostAsync(baseAddress, new FormUrlEncodedContent(data));
-            //TokenOAuthModelXbl result = await ProcessRespone<TokenOAuthModelXbl>(response);
+            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, new FormUrlEncodedContent(data));
 
             return response;
         }
