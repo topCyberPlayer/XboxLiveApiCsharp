@@ -8,14 +8,22 @@ namespace XblApp.Application.UseCases
         private readonly IXboxLiveGamerService _gamerService;
         private readonly IGamerRepository _gamerRepository;
 
+        private readonly IXboxLiveGameService _gameService;
+        private readonly IGameRepository _gameRepository;
+
         public GamerProfileUseCase(
-            IAuthenticationRepository authRepository, 
-            IGamerRepository gamerRepository, 
+            IAuthenticationService authService,
+            IAuthenticationRepository authRepository,
             IXboxLiveGamerService gamerService,
-            IAuthenticationService authService) : base(authService, authRepository)
+            IGamerRepository gamerRepository,
+            IXboxLiveGameService gameService,
+            IGameRepository gameRepository) : base(authService, authRepository)
         {
             _gamerRepository = gamerRepository;
             _gamerService = gamerService;
+
+            _gameService = gameService;
+            _gameRepository = gameRepository;
         }
 
         public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
@@ -23,17 +31,6 @@ namespace XblApp.Application.UseCases
             GamerDTO gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
 
             return gamer;
-
-            //return new GamerDTO
-            //{
-            //    GamerId = gamer.GamerId,
-            //    Gamertag = gamer.Gamertag,
-            //    Gamerscore = gamer.Gamerscore,
-            //    Bio = gamer.Bio,
-            //    Location = gamer.Location,
-            //    CurrentGamesCount = gamer.GameLinks.Select(x => x.Game).Count(),
-            //    CurrentAchievementsCount = gamer.GameLinks.Sum(x => x.CurrentAchievements)
-            //};
         }
 
         public async Task<List<GamerDTO>> GetAllGamerProfilesAsync()
@@ -63,11 +60,13 @@ namespace XblApp.Application.UseCases
 
             string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();
 
-            GamerDTO response = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
+            GamerDTO gamerResponse = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
+            await _gamerRepository.SaveGamerAsync(gamerResponse);
 
-            await _gamerRepository.SaveGamerAsync(response);
+            GameDTO gameResponse = await _gameService.GetTitleHistoryAsync(gamertag, authorizationHeaderValue);
+            await _gameRepository.SaveGamesAsync(gameResponse);
 
-            return response;
+            return gamerResponse;
         }
 
         public bool IsDateXstsTokenExperid()

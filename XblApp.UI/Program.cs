@@ -48,12 +48,17 @@ namespace XblApp
                 client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
             });
 
-
-
             builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>("gamerService", (HttpClient client) =>
             {
                 client.BaseAddress = new Uri("https://profile.xboxlive.com");
                 client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
+            });
+
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("gameService", (HttpClient client) =>
+            {
+                client.BaseAddress = new Uri("https://xsts.auth.xboxlive.com/xsts/authorize");
+                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "2");
+                client.DefaultRequestHeaders.Add("Accept-Language", "en-US");
             });
 
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();

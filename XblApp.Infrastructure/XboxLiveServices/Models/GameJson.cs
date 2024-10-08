@@ -259,4 +259,18 @@ namespace XblApp.Infrastructure.XboxLiveServices.Models
         [JsonPropertyName("canHide")]
         public bool CanHide { get; set; }
     }
+
+    public static class TitleHubSettings
+    {
+        public const string ACHIEVEMENT = "achievement";
+        public const string ALTERNATE_TITLE_ID = "alternateTitleId";
+        public const string CONTENT_BOARD = "contentBoard";
+        public const string SERVICE_CONFIG_ID = "scid";
+        public const string STATS = "stats";
+        public const string GAME_PASS = "gamepass";
+        public const string IMAGE = "image";
+        public const string DETAIL = "detail";
+        public const string FRIENDS_WHO_PLAYED = "friendswhoplayed";
+        public const string PRODUCT_ID = "productId";
+    }
 }
