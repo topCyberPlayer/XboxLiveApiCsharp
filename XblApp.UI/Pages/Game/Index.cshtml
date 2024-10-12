@@ -1,4 +1,5 @@
 ﻿@page
+@using XblApp.Shared.DTOs
 @model XblApp.Pages.Game.IndexModel
 @{
     ViewData["Title"] = "Games";
@@ -18,15 +19,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var profile in Model.Output)
+                @* @foreach (TitleDTO profile in Model.Output)
                 {
                     <tr>
-                        <td class="align-middle">@profile.GameName</td>
+                        <td class="align-middle">@profile.Titles.</td>
                         <td class="align-middle">@profile.TotalGamers</td>
                         <td class="align-middle">@profile.TotalAchievements</td>
                         <td class="align-middle">@profile.TotalGamerscore</td>
                     </tr>
-                }
+                } *@
             </tbody>
         </table>
     </div>

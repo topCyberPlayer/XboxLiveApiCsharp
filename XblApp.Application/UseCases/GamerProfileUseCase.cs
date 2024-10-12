@@ -63,7 +63,13 @@ namespace XblApp.Application.UseCases
             GamerDTO gamerResponse = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
             await _gamerRepository.SaveGamerAsync(gamerResponse);
 
-            GameDTO gameResponse = await _gameService.GetTitleHistoryAsync(gamertag, authorizationHeaderValue);
+            //Получаю список игр и ИД игрока, которому они принадлежат
+             GameDTO gameResponse = await _gameService.GetTitleHistoryAsync(gamertag, authorizationHeaderValue);
+            
+            /* Надо сохранить в таблицу: 
+             *      GamerGamer
+             *      Games
+             */
             await _gameRepository.SaveGamesAsync(gameResponse);
 
             return gamerResponse;

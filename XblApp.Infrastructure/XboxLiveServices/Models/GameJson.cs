@@ -8,7 +8,7 @@ namespace XblApp.Infrastructure.XboxLiveServices.Models
         public string Xuid { get; set; }
 
         [JsonPropertyName("titles")]
-        public List<Title> Titles { get; set; }
+        public ICollection<Title> Titles { get; set; }
     }
 
     public class Title

@@ -7,7 +7,7 @@ namespace XblApp.Pages.Game
 {
     public class IndexModel : PageModel
     {
-        public List<GameDTO> Output { get; set; }
+        public List<TitleDTO> Output { get; set; }
 
         private readonly GameUseCase _gameUseCase;
 

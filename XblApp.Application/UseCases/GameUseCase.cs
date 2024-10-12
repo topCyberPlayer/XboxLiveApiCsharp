@@ -16,9 +16,9 @@ namespace XblApp.Application.UseCases
             _gameRepository = gameRepository;   
         }
 
-        public async Task<List<GameDTO>> GetAllGamesAsync()
+        public async Task<List<TitleDTO>> GetAllGamesAsync()
         {
-            List<GameDTO> games = await _gameRepository.GetAllGamesAsync();
+            List<TitleDTO> games = await _gameRepository.GetAllGamesAsync();
 
             return games;
             //return games.Select(g => new GameDTO

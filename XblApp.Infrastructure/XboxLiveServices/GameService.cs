@@ -61,13 +61,13 @@ namespace XblApp.Infrastructure.XboxLiveServices
         {
             return new GameDTO
             {
-                Xuid = long.Parse(result.Xuid),
+                GamerId = long.Parse(result.Xuid),
                 Titles = result.Titles.Select(t => new TitleDTO
                 {
-                    TitleId = t.TitleId,
+                    TitleId = long.Parse(t.TitleId),
                     ProductId = t.ProductId,
                     ProductIds = t.ProductIds,
-                    Name = t.Name,
+                    GameName = t.Name,
                     Type = t.Type,
                     DisplayImage = t.DisplayImage,
                     IsBundle = t.IsBundle,

@@ -76,17 +76,20 @@ namespace XblApp.Infrastructure.Data.Repositories
 
             GamerGameDTO gamerGameDTO = new GamerGameDTO()
             {
-                GamerId = gamer.GamerId,
-                Gamertag = gamer.Gamertag,
-                Games = gamer.GameLinks.Select(gg => new AbcDTO
+                GamerA = new GamerDTO()
                 {
-                    GameId = gg.Game.GameId,
+                    GamerId = gamer.GamerId,
+                    Gamertag = gamer.Gamertag,
+                },                
+                Games = gamer.GameLinks.Select(gg => new TitleDTO
+                {
+                    TitleId = gg.Game.GameId,
                     GameName = gg.Game.GameName,
-                    TotalAchievements = gg.Game.TotalAchievements,
-                    TotalGamerscore = gg.Game.TotalGamerscore,
-
-                    CurrentAchievements = gg.CurrentAchievements,
-                    CurrentGamerscore = gg.CurrentGamerscore
+                    Achievement = new AchievementDTO()
+                    {
+                        CurrentAchievements = gg.CurrentAchievements,
+                        CurrentGamerscore = gg.CurrentGamerscore
+                    }
                 }).ToList()
             };
 

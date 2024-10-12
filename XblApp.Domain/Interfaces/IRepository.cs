@@ -4,8 +4,9 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IGameRepository
     {
-        public Task<GameDTO> GetGameAsync(string gameName);
-        public Task<List<GameDTO>> GetAllGamesAsync();
+        public Task<TitleDTO> GetGameAsync(string gameName);
+        public Task<List<TitleDTO>> GetAllGamesAsync();
+        public Task SaveGamesAsync(GameDTO game);
     }
 
     public interface IGamerRepository
