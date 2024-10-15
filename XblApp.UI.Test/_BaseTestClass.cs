@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace XblApp.Test
 {
-    public class TestData
+    public class BaseTestClass
     {
         //The equivalent JSON would be:
         //{
@@ -22,7 +22,7 @@ namespace XblApp.Test
 
         internal readonly IConfiguration _config;
 
-        public TestData()
+        public BaseTestClass()
         {
             // test against this configuration
             _config = new ConfigurationBuilder()

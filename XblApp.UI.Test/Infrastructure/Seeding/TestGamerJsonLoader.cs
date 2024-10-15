@@ -1,16 +1,16 @@
-using System.Reflection;
 using XblApp.Infrastructure.Data.Seeding;
+using XblApp.Test;
 
-namespace XblApp.Test
+namespace XblApp.UI.Test.Infrastructure.Seeding
 {
-    public class TestGamerJsonLoader : TestData
+    public class TestGamerJsonLoader : BaseTestClass
     {
         [Fact]
         public void TestGamerLoadOk()
         {
             //SETUP
             const string searchFile = "Gamers.json";
-            var testDataDir = TestData.GetTestDataDir();
+            var testDataDir = GetTestDataDir();
 
             //ATTEMPT
             var gamers = GamerJsonLoader.LoadGamers(testDataDir, searchFile);
@@ -19,6 +19,6 @@ namespace XblApp.Test
             Assert.Equal(2, gamers.Count());
         }
 
-        
+
     }
 }

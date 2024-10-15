@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Infrastructure.Data;
 using XblApp.Shared.DTOs;
+using XblApp.Test;
 
-namespace XblApp.Test
+namespace XblApp.UI.Test.Infrastructure
 {
-    public class TestGamerRepository : TestData
+    public class GamerRepositoryTest : BaseTestClass
     {
         [Fact]
         public async Task TestGetGamesForGamerAsync()

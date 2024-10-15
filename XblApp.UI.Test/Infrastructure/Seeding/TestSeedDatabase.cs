@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using XblApp.Infrastructure.Data;
+﻿using XblApp.Infrastructure.Data;
 using XblApp.Infrastructure.Data.Seeding;
+using XblApp.Test;
 
-namespace XblApp.Test
+namespace XblApp.UI.Test.Infrastructure.Seeding
 {
-    public class TestSeedDatabase : TestData
+    public class TestSeedDatabase : BaseTestClass
     {
         [Fact]
         public async Task TestSeedDatabaseIfNoGamersAsyncEmptyDatabase()
