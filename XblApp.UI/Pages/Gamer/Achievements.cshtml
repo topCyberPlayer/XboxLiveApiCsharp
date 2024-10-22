@@ -1,0 +1,12 @@
+﻿@page "/gamer/{gamertag}/achievements"
+@model XblApp.Pages.Gamer.AchievementsModel
+@{
+    ViewData["Title"] = $"Achievements for {Model.Output.Gamertag}";
+}
+
+<!-- Подключаем вкладки для игрока -->
+@await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
+
+<h2>@ViewData["Title"]</h2>
+
+

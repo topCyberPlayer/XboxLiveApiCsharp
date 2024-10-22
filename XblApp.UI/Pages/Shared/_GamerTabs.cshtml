@@ -1,0 +1,23 @@
+﻿<nav>
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+            <a class="btn btn-info"
+               asp-page="/Gamer/Index"
+               asp-route-gamertag="@Model">
+               @Model
+           </a>
+
+            <a class="btn btn-info"
+               asp-page="/Gamer/Games"
+               asp-route-gamertag="@Model">
+               Games
+           </a>
+
+            <a class="btn btn-info"
+               asp-page="/Gamer/Achievements"
+               asp-route-gamertag="@Model">
+               Achievements
+           </a>
+        </li>
+    </ul>
+</nav>

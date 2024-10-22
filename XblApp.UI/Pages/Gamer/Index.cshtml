@@ -1,0 +1,31 @@
+﻿@page "/gamer/{gamertag}"
+@model XblApp.Pages.Gamer.IndexModel
+@{
+    ViewData["Title"] = "YUIO";
+}
+
+<!-- Подключаем вкладки для игрока -->
+@await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
+
+<h2 class="d-inline">@Model.Output.Gamertag</h2>
+<form method="post" asp-page-handler="UpdateProfile" class="d-inline">
+    <input type="hidden" name="gamertag" value="@Model.Output.Gamertag" />
+    <button type="submit" class="btn btn-primary ms-2">Update Profile</button>
+</form>
+
+<body>
+    <td>
+        <div>
+            Gamertag: @Model.Output.Gamertag
+        </div>
+        <div>
+            Gamerscore: @Model.Output.Gamerscore
+        </div>
+        <div>
+            Games: @Model.Output.CurrentGamesCount
+        </div>
+        <div>
+            Achievements: @Model.Output.CurrentAchievementsCount
+        </div>
+    </td>
+</body>

@@ -22,50 +22,29 @@ namespace ConsoleApp.Authentication
             this._saveXsts = new SaveXsts();
         }
 
-        public async Task Start()
+        public async Task ReadTokens()
         {
             DateTime dateUtcNow = DateTime.UtcNow;
+
             _authMgr.XstsToken = await _store.GetToken<XSTSResponse>(_saveXsts);
 
-            if(_authMgr.XstsToken != null && _authMgr.XstsToken.NotAfter < dateUtcNow)
+            if (_authMgr.XstsToken != null && _authMgr.XstsToken.NotAfter > dateUtcNow)
+                return;
+            else 
             {
-                //Обновить токены
-                _authMgr.OAuth = await _store.GetToken<OAuth2TokenResponse>(_saveOAuth2);
-
-                if (_authMgr.OAuth != null)
-                {
-                    if (true)//_authMgr.OAuth.Expires < dateUtcNow)
-                    {
-                        _authMgr.OAuth = await _authMgr.RefreshOauth2Token();
-                        await _store.SaveToken(_saveOAuth2, _authMgr.OAuth);
-                    }
-
-                    _authMgr.UserToken = await _store.GetToken<XAUResponse>(_saveXau);
-                    if (_authMgr.UserToken.NotAfter < dateUtcNow)
-                    {
-                        _authMgr.UserToken = await _authMgr.RequestXauToken();
-                        await _store.SaveToken(_saveXau , _authMgr.UserToken);
-                    }
-
-                    _authMgr.XstsToken = await _store.GetToken<XSTSResponse>(_saveXsts);
-                    if (_authMgr.XstsToken.NotAfter < dateUtcNow)
-                    {
-                        _authMgr.XstsToken = await _authMgr.RequestXstsToken();
-                        await _store.SaveToken(_saveXsts, _authMgr.XstsToken);
-                    }
-                }
-                else
+                if (_authMgr.XstsToken == null)
                 {
                     string authorization_code = await _authMgr.GetAuthCodeFromBrowser();
 
                     await RequestTokens(authorization_code);
                 }
-            }
-            else
-            {
-                string authorization_code = await _authMgr.GetAuthCodeFromBrowser();
-
-                await RequestTokens(authorization_code);
+                else
+                {
+                    if (_authMgr.XstsToken.NotAfter < dateUtcNow)
+                    {
+                        await RefreshTokens();
+                    }
+                }
             }
         }
 
@@ -76,12 +55,25 @@ namespace ConsoleApp.Authentication
         private async Task RequestTokens(string authorization_code)
         {
             _authMgr.OAuth = await _authMgr.RequestOauth2Token(authorization_code);
-            _authMgr.UserToken = await _authMgr.RequestXauToken();
-            _authMgr.XstsToken = await _authMgr.RequestXstsToken();
+            await _store.SaveToken(_saveOAuth2, _authMgr.OAuth);
 
-            await _store.SaveToken(_saveOAuth2 ,_authMgr.OAuth);
-            await _store.SaveToken(_saveXau ,_authMgr.UserToken);
+            _authMgr.UserToken = await _authMgr.RequestXauToken();
+            await _store.SaveToken(_saveXau, _authMgr.UserToken);
+
+            _authMgr.XstsToken = await _authMgr.RequestXstsToken();
             await _store.SaveToken(_saveXsts,_authMgr.XstsToken);
+        }
+
+        private async Task RefreshTokens()
+        {
+            _authMgr.OAuth = await _authMgr.RefreshOauth2Token();
+            await _store.SaveToken(_saveOAuth2, _authMgr.OAuth);
+
+            _authMgr.UserToken = await _authMgr.RequestXauToken();
+            await _store.SaveToken(_saveXau, _authMgr.UserToken);
+
+            _authMgr.XstsToken = await _authMgr.RequestXstsToken();
+            await _store.SaveToken(_saveXsts, _authMgr.XstsToken);
         }
     }
 

@@ -18,7 +18,7 @@ namespace ConsoleApp
                 
                 XboxLiveClient xblClient = new XboxLiveClient(authLow);
 
-                await authHigh.Start();
+                await authHigh.ReadTokens();
 
                 TitleHubResponse titleHub = await xblClient.tittleHubProvider.GetTitleHistory(xblClient.Xuid);
                 //await authLogic.SaveToken(titleHub);
