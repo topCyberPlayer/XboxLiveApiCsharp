@@ -10,7 +10,7 @@ namespace XblApp.UI.Test.Infrastructure.Seeding
         {
             //SETUP
             const string searchFile = "Gamers.json";
-            var testDataDir = GetTestDataDir();
+            var testDataDir = GetPathToDir();
 
             //ATTEMPT
             var gamers = GamerJsonLoader.LoadGamers(testDataDir, searchFile);

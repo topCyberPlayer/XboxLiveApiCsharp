@@ -7,15 +7,14 @@ namespace XblApp.UI.Test.Infrastructure.Seeding
     public class TestSeedDatabase : BaseTestClass
     {
         [Fact]
-        public async Task TestSeedDatabaseIfNoGamersAsyncEmptyDatabase()
+        public async Task SeedDatabaseIfNoGamersAsyncEmptyDatabase_Test()
         {
             //SETUP
             using (var context = new MsSqlDbContext(_config))
             {
                 //context.Database.EnsureClean();
 
-                var callingAssemblyPath = GetCallingAssemblyTopLevelDir();
-                var wwwrootDir = Path.GetFullPath(Path.Combine(callingAssemblyPath, "..\\XblApp\\wwwroot"));
+                var wwwrootDir = GetPathToDir("..\\XblApp\\wwwroot");
 
                 //ATTEMPT
                 await context.SeedDatabaseIfNoGamersAsync(wwwrootDir);
@@ -26,15 +25,14 @@ namespace XblApp.UI.Test.Infrastructure.Seeding
         }
 
         [Fact]
-        public async Task TestSeedDatabaseIfNoGamesAsyncEmptyDatabase()
+        public async Task SeedDatabaseIfNoGamesAsyncEmptyDatabase_Test()
         {
             //SETUP
             using (var context = new MsSqlDbContext(_config))
             {
                 //context.Database.EnsureClean();
 
-                var callingAssemblyPath = GetCallingAssemblyTopLevelDir();
-                var wwwrootDir = Path.GetFullPath(Path.Combine(callingAssemblyPath, "..\\XblApp\\wwwroot"));
+                var wwwrootDir = GetPathToDir("..\\XblApp\\wwwroot");
 
                 //ATTEMPT
                 await context.SeedDatabaseIfNoGamesAsync(wwwrootDir);

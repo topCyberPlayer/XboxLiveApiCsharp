@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using System.Text.Json;
+using XblApp.Infrastructure.XboxLiveServices.Models;
 
 namespace XblApp.Test
 {
@@ -30,21 +32,69 @@ namespace XblApp.Test
                 .Build();
         }
 
-        public static string GetTestDataDir(string alternateTestDir = null, Assembly callingAssembly = null)
+        /// <summary>
+        /// Возвращает путь к папке 'nameFolder'(по умолчанию TestData)
+        /// </summary>
+        /// <param name="nameFolder"></param>
+        /// <param name="callingAssembly"></param>
+        /// <returns></returns>
+        internal string GetPathToDir(string nameFolder = "TestData", Assembly callingAssembly = null)
         {
-            alternateTestDir = alternateTestDir ?? "TestData";
-            return Path.Combine(Path.GetFullPath(GetCallingAssemblyTopLevelDir(callingAssembly ?? Assembly.GetCallingAssembly()) + Path.DirectorySeparatorChar + alternateTestDir));
+            string? pathToProject = GetCallingAssemblyTopLevelDir(callingAssembly ?? Assembly.GetCallingAssembly());
+            string pathTpFolder = Path.GetFullPath(pathToProject + Path.DirectorySeparatorChar + nameFolder);
+
+            return pathTpFolder;
         }
 
-        public static string GetCallingAssemblyTopLevelDir(Assembly callingAssembly = null)
+        /// <summary>
+        /// Возвращает путь к 
+        /// </summary>
+        /// <param name="pathToDir"></param>
+        /// <param name="nameFile"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        internal string GetJsonFilePath(string pathToDir, string nameFile)
+        {
+            var fileList = Directory.GetFiles(pathToDir, nameFile);
+
+            if (fileList.Length == 0)
+                throw new FileNotFoundException(
+                    $"Could not find a file with the search name of {nameFile} in directory {pathToDir}");
+
+            //If there are many then we take the most recent
+            return fileList.ToList().OrderBy(x => x).Last();
+        }
+
+        internal string GetJsonFilePath(string nameFile)
+        {
+            string? pathToDir = GetPathToDir();
+
+            var fileList = Directory.GetFiles(pathToDir, nameFile);
+
+            if (fileList.Length == 0)
+                throw new FileNotFoundException(
+                    $"Could not find a file with the search name of {nameFile} in directory {pathToDir}");
+
+            //If there are many then we take the most recent
+            return fileList.ToList().OrderBy(x => x).Last();
+        }
+
+        internal T GetXJson<T>(string nameFile)
+        {
+            var filePath = GetJsonFilePath(nameFile);
+            T? jsonDecoded = JsonSerializer.Deserialize<T>(File.ReadAllText(filePath));
+
+            return jsonDecoded;
+        }
+
+        private string GetCallingAssemblyTopLevelDir(Assembly callingAssembly)
         {
             string text = $"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}";
-            string location = (callingAssembly ?? Assembly.GetCallingAssembly()).Location;
+            string location = (callingAssembly).Location;
             int num = location.IndexOf(text, StringComparison.OrdinalIgnoreCase);
+            
             if (num <= 0)
-            {
                 throw new Exception("Did not find '" + text + "' in the assembly. Do you need to provide the callingAssembly parameter?");
-            }
 
             return location.Substring(0, num);
         }

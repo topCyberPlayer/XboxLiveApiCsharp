@@ -6,7 +6,7 @@ using XblApp.Shared.DTOs;
 
 namespace XblApp.Infrastructure.XboxLiveServices
 {
-    internal class GameService : BaseService, IXboxLiveGameService
+    public class GameService : BaseService, IXboxLiveGameService
     {
         private string TitleHubSettings_SCOPES => string.Join(",",
                     TitleHubSettings.ACHIEVEMENT,
@@ -73,9 +73,11 @@ namespace XblApp.Infrastructure.XboxLiveServices
                     IsBundle = t.IsBundle,
                     Achievement = new AchievementDTO
                     {
-                        
-                        //AchievementId = t.Achievement?.AchievementId,
-                        //Name = t.Achievement?.Name,
+                        CurrentAchievements = t.Achievement.CurrentAchievements,
+                        CurrentGamerscore = t.Achievement.CurrentGamerscore,
+                        TotalAchievements = t.Achievement.TotalAchievements,
+                        TotalGamerscore = t.Achievement.TotalGamerscore,
+                        ProgressPercentage = t.Achievement.ProgressPercentage,
                     },
                     Stats = new StatsDTO
                     {
