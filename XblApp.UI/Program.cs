@@ -67,7 +67,7 @@ namespace XblApp
 
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
-            //builder.Services.AddScoped<IXboxLiveGameService, GameService>();
+            builder.Services.AddScoped<IXboxLiveGameService, GameService>();
 
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
