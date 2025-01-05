@@ -28,9 +28,6 @@ namespace XblApp
     {
         public static WebApplicationBuilder RegisterApplicationServices(this WebApplicationBuilder builder)
         {
-            string? dbProvider = 
-            builder.Configuration.GetConnectionString("DatabaseProvider");
-
             builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceAuthToken", (HttpClient client) =>
             {
                 client.BaseAddress = new Uri("https://login.live.com/oauth20_token.srf");
@@ -82,6 +79,7 @@ namespace XblApp
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
+            string? dbProvider = builder.Configuration.GetConnectionString("DatabaseProvider");
 
             switch (dbProvider)
             {
@@ -94,9 +92,6 @@ namespace XblApp
             }
 
             return builder;
-
-            //builder.Services.AddDbContext<XblAppDbContext>(options => options.UseSqlServer(connectionString));
-
         }
     }
 
@@ -120,7 +115,7 @@ namespace XblApp
             app.UseStaticFiles();
 
             app.UseRouting();
-            await app.SetupDatabaseAsync();
+            //await app.SetupDatabaseAsync();
 
             app.UseAuthorization();
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace XblApp.Infrastructure.Data.Seeding
 {
@@ -20,6 +17,7 @@ namespace XblApp.Infrastructure.Data.Seeding
                 {
                     var arePendingMigrations = context.Database.GetPendingMigrations().Any();
                     await context.Database.MigrateAsync();
+
                     await context.SeedDatabaseIfNoGamersAsync(env.WebRootPath);
                     await context.SeedDatabaseIfNoGamesAsync(env.WebRootPath);
                 }
