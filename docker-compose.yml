@@ -5,12 +5,13 @@ services:
       context: .
       dockerfile: XblApp.UI\Dockerfile
     ports:
-    - "5000:8080"
+    - "5000:80"
     container_name: xbox-web-container
     depends_on:
     - sqlserver
     environment:
     - ASPNETCORE_ENVIRONMENT=Development
+    - ASPNETCORE_URLS=http://+:80
     networks:
     - productnetwork
     #restart: on-failure 

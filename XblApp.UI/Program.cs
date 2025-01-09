@@ -119,6 +119,12 @@ namespace XblApp
 
             app.UseAuthorization();
 
+            using(var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+                context.Database.Migrate();
+            }
+
             return app;
         }
     }
