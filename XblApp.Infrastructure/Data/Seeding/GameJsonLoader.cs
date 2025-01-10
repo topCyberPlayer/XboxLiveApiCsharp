@@ -16,9 +16,8 @@ namespace XblApp.Infrastructure.Data.Seeding
 
         private static IEnumerable<Game> CreateGame(GameJson gameJson)
         {
-            //Я запращиваю сперва профиль игрока, затем его игры, значит игрок будет всегда существовать в БД.
-            var gamerJsonId = long.Parse(gameJson.Xuid);
-            //Gamer? gamer = context.Gamers.FirstOrDefault(x => x.GamerId == gamerJsonId);
+            long gamerJsonId = long.Parse(gameJson.Xuid);
+            
             List<Game> games = new List<Game>();
 
             foreach (Title? title in gameJson.Titles)
@@ -29,28 +28,16 @@ namespace XblApp.Infrastructure.Data.Seeding
                     GameName = title.Name,
                     TotalGamerscore = title.Achievement.TotalGamerscore,
                     TotalAchievements = title.Achievement.TotalAchievements,
+                    GamerLinks = new List<GamerGame>()
+                    {
+                        new GamerGame()
+                        {
+                            GamerId = gamerJsonId,
+                            CurrentAchievements = title.Achievement.CurrentAchievements,
+                            CurrentGamerscore = title.Achievement.CurrentGamerscore,
+                        }
+                    }
                 };
-
-                //GamerGame gamerGame = new GamerGame()
-                //{
-                //    //GameId = long.Parse(title.TitleId),
-                //    GamerId = gamerJsonId,
-                //    CurrentAchievements = title.Achievement.CurrentAchievements,
-                //    CurrentGamerscore = title.Achievement.CurrentGamerscore,
-                //    Game = game
-                //};
-
-
-                game.GamerLinks = new List<GamerGame>();
-
-                game.GamerLinks.Add(new GamerGame
-                {
-                    GameId = long.Parse(title.TitleId),
-                    GamerId = gamerJsonId,
-                    CurrentAchievements = title.Achievement.CurrentAchievements,
-                    CurrentGamerscore = title.Achievement.CurrentGamerscore,
-                    //Game = game
-                });
 
                 games.Add(game);
             }

@@ -9,8 +9,8 @@ namespace XblApp.Infrastructure.Data.Seeding
     {
         public static IEnumerable<Gamer> LoadGamers(string fileDir, string fileSearchString)
         {
-            var filePath = GetJsonFilePath(fileDir, fileSearchString);
-            var jsonDecoded = JsonSerializer.Deserialize<GamerJson>(File.ReadAllText(filePath));
+            string filePath = GetJsonFilePath(fileDir, fileSearchString);
+            GamerJson jsonDecoded = JsonSerializer.Deserialize<GamerJson>(File.ReadAllText(filePath));
 
             return jsonDecoded.ProfileUsers.Select(x => CreateGamers(x));
         }

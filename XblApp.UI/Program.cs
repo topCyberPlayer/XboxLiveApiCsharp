@@ -61,21 +61,16 @@ namespace XblApp
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
-
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IXboxLiveGameService, GameService>();
-
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services
+                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<XblAppDbContext>();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            
-
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
@@ -115,15 +110,15 @@ namespace XblApp
             app.UseStaticFiles();
 
             app.UseRouting();
-            //await app.SetupDatabaseAsync();
+            await app.SetupDatabaseAsync();
 
             app.UseAuthorization();
 
-            using(var scope = app.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
-                context.Database.Migrate();
-            }
+            //using(var scope = app.Services.CreateScope())
+            //{
+            //    var context = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+            //    context.Database.Migrate();
+            //}
 
             return app;
         }
@@ -134,6 +129,38 @@ namespace XblApp
         public static WebApplication RegisterEndpoints(this WebApplication app)
         {
             app.MapRazorPages();
+
+            return app;
+        }
+    }
+
+    public static class DatabaseStartupHelpers
+    {
+        public static async Task<WebApplication> SetupDatabaseAsync(this WebApplication app)
+        {
+            // Initialize the database with seed data
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = scope.ServiceProvider.GetRequiredService<XblAppDbContext>();
+
+                try
+                {
+                    bool arePendingMigrations = context.Database.GetPendingMigrations().Any();
+
+                    if (arePendingMigrations)
+                        await context.Database.MigrateAsync();
+
+                    await context.SeedDatabaseIfNoGamersAsync();
+                    await context.SeedDatabaseIfNoGamesAsync();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+            }
 
             return app;
         }
