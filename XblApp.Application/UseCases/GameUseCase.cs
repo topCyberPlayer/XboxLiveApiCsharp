@@ -16,19 +16,11 @@ namespace XblApp.Application.UseCases
             _gameRepository = gameRepository;   
         }
 
-        public async Task<List<TitleDTO>> GetAllGamesAsync()
+        public async Task<List<GameDTO>> GetAllGamesAsync()
         {
-            List<TitleDTO> games = await _gameRepository.GetAllGamesAsync();
+            List<GameDTO> games = await _gameRepository.GetAllGamesAsync();
 
             return games;
-            //return games.Select(g => new GameDTO
-            //{
-            //    GameId = g.GameId,
-            //    GameName = g.GameName,
-            //    TotalAchievements = g.TotalAchievements,
-            //    TotalGamerscore = g.TotalGamerscore,
-            //    TotalGamers = g.GamerLinks.Select(a => a.Gamer).Count(),
-            //}).ToList();
         }
     }
 }

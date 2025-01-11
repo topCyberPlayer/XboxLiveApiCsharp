@@ -22,71 +22,71 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
         public GameService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<GameDTO> GetTitleHistoryAsync(string gamertag, string authorizationHeaderValue, int maxItems)
-        {
-            string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory";
+        //public async Task<GameForGamerDTO> GetTitleHistoryAsync(string gamertag, string authorizationHeaderValue, int maxItems)
+        //{
+        //    string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory";
 
-            return await GetTitleHistoryBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
-        }
+        //    return await GetTitleHistoryBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
+        //}
 
-        public async Task<GameDTO> GetTitleHistoryAsync(long xuid, string authorizationHeaderValue, int maxItems)
-        {
-            string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory";
+        //public async Task<GameForGamerDTO> GetTitleHistoryAsync(long xuid, string authorizationHeaderValue, int maxItems)
+        //{
+        //    string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory";
 
-            return await GetTitleHistoryBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
-        }
+        //    return await GetTitleHistoryBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
+        //}
 
-        private async Task<GameDTO> GetTitleHistoryBaseAsync(string relativeUrl, string authorizationHeaderValue, int maxItems)
-        {
-            HttpClient client = factory.CreateClient("gameService");
+        //private async Task<GameForGamerDTO> GetTitleHistoryBaseAsync(string relativeUrl, string authorizationHeaderValue, int maxItems)
+        //{
+        //    HttpClient client = factory.CreateClient("gameService");
 
-            IDictionary<string, string> queryParams = new Dictionary<string, string>
-            {
-                { "decoration", TitleHubSettings_SCOPES },
-                { "maxItems", maxItems.ToString() },
-            };
+        //    IDictionary<string, string> queryParams = new Dictionary<string, string>
+        //    {
+        //        { "decoration", TitleHubSettings_SCOPES },
+        //        { "maxItems", maxItems.ToString() },
+        //    };
 
-            string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
+        //    string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
+        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
 
-            HttpResponseMessage response = await client.GetAsync(uri);
+        //    HttpResponseMessage response = await client.GetAsync(uri);
 
-            GameJson result = await DeserializeJson<GameJson>(response);
+        //    GameJson result = await DeserializeJson<GameJson>(response);
 
-            return MapToGameDTO(result);
-        }
+        //    return MapToGameDTO(result);
+        //}
 
-        public static GameDTO MapToGameDTO(GameJson result)
-        {
-            return new GameDTO
-            {
-                GamerId = long.Parse(result.Xuid),
-                Titles = result.Titles.Select(t => new TitleDTO
-                {
-                    TitleId = long.Parse(t.TitleId),
-                    ProductId = t.ProductId,
-                    ProductIds = t.ProductIds,
-                    GameName = t.Name,
-                    Type = t.Type,
-                    DisplayImage = t.DisplayImage,
-                    IsBundle = t.IsBundle,
-                    Achievement = new AchievementDTO
-                    {
-                        CurrentAchievements = t.Achievement.CurrentAchievements,
-                        CurrentGamerscore = t.Achievement.CurrentGamerscore,
-                        TotalAchievements = t.Achievement.TotalAchievements,
-                        TotalGamerscore = t.Achievement.TotalGamerscore,
-                        ProgressPercentage = t.Achievement.ProgressPercentage,
-                    },
-                    Stats = new StatsDTO
-                    {
-                        
-                    }
-                    // Map other necessary properties
-                }).ToList()
-            };
-        }
+        //public static GameForGamerDTO MapToGameDTO(GameJson result)
+        //{
+        //    return new GameForGamerDTO
+        //    {
+        //        GamerId = long.Parse(result.Xuid),
+        //        Titles = result.Titles.Select(t => new TitleDTO
+        //        {
+        //            TitleId = long.Parse(t.TitleId),
+        //            ProductId = t.ProductId,
+        //            ProductIds = t.ProductIds,
+        //            GameName = t.Name,
+        //            Type = t.Type,
+        //            DisplayImage = t.DisplayImage,
+        //            IsBundle = t.IsBundle,
+        //            Achievement = new AchievementDTO
+        //            {
+        //                CurrentAchievements = t.Achievement.CurrentAchievements,
+        //                CurrentGamerscore = t.Achievement.CurrentGamerscore,
+        //                TotalAchievements = t.Achievement.TotalAchievements,
+        //                TotalGamerscore = t.Achievement.TotalGamerscore,
+        //                ProgressPercentage = t.Achievement.ProgressPercentage,
+        //            },
+        //            Stats = new StatsDTO
+        //            {
+
+        //            }
+        //            // Map other necessary properties
+        //        }).ToList()
+        //    };
+        //}
 
     }
 }

@@ -21,8 +21,8 @@ namespace XblApp.Infrastructure.Data.Repositories
                 Gamerscore = gamer.Gamerscore,
                 Bio = gamer.Bio,
                 Location = gamer.Location,
-                CurrentGamesCount = gamer.GameLinks.Select(x => x.Game).Count(),
-                CurrentAchievementsCount = gamer.GameLinks.Sum(x => x.CurrentAchievements)
+                Games = gamer.GameLinks.Select(x => x.Game).Count(),
+                Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
             };
 
             return gamerDTO;
@@ -69,31 +69,25 @@ namespace XblApp.Infrastructure.Data.Repositories
 
         public async Task<GamerGameDTO> GetGamesForGamerAsync(string gamertag)
         {
-            Gamer? gamer = await _context.Gamers
-                .Include(g => g.GameLinks)
-                .ThenInclude(gg => gg.Game)
-                .FirstOrDefaultAsync(g => g.Gamertag == gamertag);
-
-            GamerGameDTO gamerGameDTO = new GamerGameDTO()
-            {
-                GamerA = new GamerDTO()
+            var gamerGameDto = _context.Gamers
+                .Where(g => g.Gamertag == gamertag) // Фильтруем игрока по Gamertag
+                .Select(g => new GamerGameDTO
                 {
-                    GamerId = gamer.GamerId,
-                    Gamertag = gamer.Gamertag,
-                },                
-                Games = gamer.GameLinks.Select(gg => new TitleDTO
-                {
-                    TitleId = gg.Game.GameId,
-                    GameName = gg.Game.GameName,
-                    Achievement = new AchievementDTO()
+                    GamerId = g.GamerId, // Id игрока
+                    Gamertag = g.Gamertag,
+                    Games = g.GameLinks.Select(link => new GameInnerDTO
                     {
-                        CurrentAchievements = gg.CurrentAchievements,
-                        CurrentGamerscore = gg.CurrentGamerscore
-                    }
-                }).ToList()
-            };
+                        GameId = link.Game.GameId, // Id игры
+                        GameName = link.Game.GameName, // Название игры
+                        TotalAchievements = link.Game.TotalAchievements, // Общее количество достижений
+                        TotalGamerscore = link.Game.TotalGamerscore, // Общий геймерскор
+                        CurrentAchievements = link.CurrentAchievements, // Текущие достижения игрока в этой игре
+                        CurrentGamerscore = link.CurrentGamerscore // Текущий геймерскор игрока в этой игре
+                    }).ToList() // Преобразуем к списку
+                })
+                .FirstOrDefault(); // Получаем первого игрока или null, если такого нет
 
-            return gamerGameDTO;
+            return gamerGameDto;
         }
 
         public async Task SaveGamerAsync(GamerDTO gamerDTO)
@@ -128,6 +122,5 @@ namespace XblApp.Infrastructure.Data.Repositories
 
             await _context.SaveChangesAsync();
         }
-
     }
 }

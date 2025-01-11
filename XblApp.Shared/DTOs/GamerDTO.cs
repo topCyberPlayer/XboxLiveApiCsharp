@@ -7,7 +7,15 @@
         public int Gamerscore { get; set; }
         public string? Bio { get; set; }
         public string? Location { get; set; }
-        public int CurrentGamesCount { get; set; }
-        public int CurrentAchievementsCount { get; set; }
+        
+        /// <summary>
+        /// Сумма всех достижений в каждой игре
+        /// </summary>
+        public int Achievements { get; set; }
+        
+        /// <summary>
+        /// Сумма всех игр
+        /// </summary>
+        public int Games { get; set; }
     }
 }

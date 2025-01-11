@@ -15,8 +15,8 @@ namespace XblApp.Domain.Interfaces
 
     public interface IXboxLiveGameService : IBaseService 
     {
-        public Task<GameDTO> GetTitleHistoryAsync(string gamertag, string authorizationHeaderValue, int maxItems = 5);
-        public Task<GameDTO> GetTitleHistoryAsync(long xuid, string authorizationHeaderValue, int maxItems = 5);
+        //public Task<GameForGamerDTO> GetTitleHistoryAsync(string gamertag, string authorizationHeaderValue, int maxItems = 5);
+        //public Task<GameForGamerDTO> GetTitleHistoryAsync(long xuid, string authorizationHeaderValue, int maxItems = 5);
     }
 
     public interface IAuthenticationService : IBaseService

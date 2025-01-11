@@ -3,11 +3,11 @@
 
 @model XblApp.Pages.Gamer.GamesModel
 @{
-    ViewData["Title"] = $"Games for {Model.Output.GamerA.Gamertag}";
+    ViewData["Title"] = $"Games for {Model.Output.Gamertag}";
 }
 
 <!-- Подключаем вкладки для игрока -->
-@await Html.PartialAsync("_GamerTabs", Model.Output.GamerA.Gamertag)
+@await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
 
 <h2>@ViewData["Title"]</h2>
 
@@ -24,12 +24,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (TitleDTO game in Model.Output.Games)
+                @foreach (GameInnerDTO game in Model.Output.Games)
                 {
                     <tr>
                         <td class="align-middle">@game.GameName</td>
-                        <td class="align-middle">@game.Achievement.CurrentAchievements of @game.Achievement.TotalAchievements</td>
-                        <td class="align-middle">@game.Achievement.CurrentGamerscore of @game.Achievement.TotalGamerscore</td>
+                        <td class="align-middle">@game.CurrentAchievements of @game.TotalAchievements</td>
+                        <td class="align-middle">@game.CurrentGamerscore of @game.TotalGamerscore</td>
                     </tr>
                 }
             </tbody>
