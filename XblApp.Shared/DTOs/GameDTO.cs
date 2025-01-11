@@ -15,6 +15,6 @@ namespace XblApp.Shared.DTOs
         /// <summary>
         /// Кол-во игроков играющие в данную игру
         /// </summary>
-        public List<GamerDTO> Gamers { get; set; } = new();
+        public int Gamers { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace XblApp.Infrastructure.Data.Repositories
             
         }
 
-        private GamerDTO CastToGamerDTO(Gamer gamer)
+        private static GamerDTO CastToGamerDTO(Gamer gamer)
         {
             GamerDTO gamerDTO = new GamerDTO()
             {

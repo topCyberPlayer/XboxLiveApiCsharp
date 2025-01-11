@@ -13,14 +13,15 @@ namespace XblApp.Infrastructure.Data.Repositories
         }
 
         //Из БД
-        private GameDTO CastGameToGameDTO(Game game)
+        private static GameDTO CastGameToGameDTO(Game game)
         {
             GameDTO title = new GameDTO()
             {
                 GameId = game.GameId,
                 GameName = game.GameName,
                 TotalAchievements = game.TotalAchievements,
-                TotalGamerscore = game.TotalGamerscore
+                TotalGamerscore = game.TotalGamerscore,
+                Gamers = game.GamerLinks.Count()
             };
 
             return title;
@@ -32,10 +33,9 @@ namespace XblApp.Infrastructure.Data.Repositories
         /// <returns></returns>
         public async Task<List<GameDTO>> GetAllGamesAsync()
         {
-            List<Game> gameColl = await _context.Games
+            var gameColl = _context.Games
                 .AsNoTracking()
-                .Include(g => g.GamerLinks)
-                .ToListAsync();
+                .Include(g => g.GamerLinks);
 
             List<GameDTO> gameCollDTO = gameColl.Select(game => CastGameToGameDTO(game)).ToList();
 
@@ -63,16 +63,6 @@ namespace XblApp.Infrastructure.Data.Repositories
         //    //    await SaveGameAsync(title, gamerId);
         //    //}
         //}
-
-        Task<GameDTO> IGameRepository.GetGameAsync(string gameName)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<GameDTO>> IGameRepository.GetAllGamesAsync()
-        {
-            throw new NotImplementedException();
-        }
 
         //private async Task SaveGameAsync(GameForGamerDTO titleDTO, long gamerId)
         //{

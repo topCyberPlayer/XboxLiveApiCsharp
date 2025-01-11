@@ -7,22 +7,23 @@ namespace XblApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly GamerProfileUseCase _getGamerProfileUseCase;
-        public List<GamerDTO> Output { get; private set; }
+        public List<GamerDTO> GamerOutput { get; private set; }
+        public List<GameDTO> GameOutput { get; private set; }
 
-        public IndexModel(GamerProfileUseCase getGamerProfileUseCase)
+        private readonly GamerProfileUseCase _getGamerProfileUseCase;
+        private readonly GameUseCase _getGameUseCase;
+
+        public IndexModel(GamerProfileUseCase getGamerProfileUseCase, GameUseCase gameUseCase)
         {
             _getGamerProfileUseCase = getGamerProfileUseCase;
+            _getGameUseCase = gameUseCase;
         }
 
         public async Task<IActionResult> OnGet()
         {
-            Output = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
+            GamerOutput = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
+            GameOutput = await _getGameUseCase.GetAllGamesAsync();
             return Page();
-
-            //return RedirectToPage("Auth/XblLogin");            
-            //return RedirectToPage("Gamer/Index", new { gamertag = "Riotgran" });
         }
-
     }
 }

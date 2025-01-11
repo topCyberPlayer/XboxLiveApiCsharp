@@ -7,11 +7,33 @@ namespace XblApp.Pages.Gamer
     public class AchievementsModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public GamerAchievementDTO Output { get; set; }
+        public GamerGameAchievementDTO Output { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string gamertag)
         {
-            Output = new GamerAchievementDTO { GamerId = 111, Gamertag = gamertag };//todo исправить
+            Output = new GamerGameAchievementDTO 
+            { 
+                GamerId = 111, 
+                Gamertag = gamertag,
+                GameAchievements = new List<GameAchievementDTO2>
+                {
+                    new GameAchievementDTO2()
+                    {
+                        GameId = 1,
+                        GameName = "sadsad",
+                        Achievements = new List<GamerAchievementInnerDTO>()
+                        {
+                            new GamerAchievementInnerDTO()
+                            {
+                                Score = 10,
+                                Name = "Boom",
+                                Description = "Desc",
+                                IsUnlocked = true,
+                            }
+                        }
+                    }
+                }
+            };
             return Page();
         }
     }
