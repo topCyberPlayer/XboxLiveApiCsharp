@@ -18,6 +18,10 @@ namespace XblApp.Domain.Entities
         [Required]
         public int TotalGamerscore { get; set; }
 
-        public ICollection<GamerGame> GamerLinks { get; set; }
+        // Коллекция достижений для этой игры
+        public ICollection<Achievement> Achievements { get; set; } = new List<Achievement>();
+
+        // Игроки, играющие в эту игру (связь через промежуточную таблицу)
+        public ICollection<GamerGame> GamerLinks { get; set; } = new List<GamerGame>();
     }
 }

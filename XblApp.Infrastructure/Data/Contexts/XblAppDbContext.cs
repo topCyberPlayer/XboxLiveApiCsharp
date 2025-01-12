@@ -25,6 +25,8 @@ namespace XblApp.Infrastructure.Data
         {
             modelBuilder.Entity<GamerGame>()
                 .HasKey(x => new {x.GamerId, x.GameId});
+            modelBuilder.Entity<GamerAchievement>()
+                .HasKey(x => new {x.GamerId, x.AchievementId});
 
             base.OnModelCreating(modelBuilder);
         }

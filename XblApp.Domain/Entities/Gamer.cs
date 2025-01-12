@@ -10,7 +10,7 @@ namespace XblApp.Domain.Entities
         public long GamerId { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        public string? Gamertag { get; set; }
+        public string Gamertag { get; set; }
 
         [Required]
         public int Gamerscore { get; set; }
@@ -19,6 +19,10 @@ namespace XblApp.Domain.Entities
 
         public string? Location { get; set; }
 
-        public ICollection<GamerGame> GameLinks { get; set; }
+        // Игры, в которые играет пользователь
+        public ICollection<GamerGame> GameLinks { get; set; } = new List<GamerGame>();
+
+        // Связь с достижениями через промежуточную таблицу
+        public ICollection<GamerAchievement> AchievementLinks { get; set; } = new List<GamerAchievement>();
     }
 }
