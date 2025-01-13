@@ -4,94 +4,77 @@ namespace XblApp.Infrastructure.Data.Seeding
 {
     public static class SeedingLogic
     {
-        public static async Task<int> SeedDatabaseIfNoGamersAsync(this XblAppDbContext context)
+        public static async Task SeedDatabase(this XblAppDbContext context)
         {
-            //const string SeedDataSearchName = "Gamers.json";
-
-            var numGamers = context.Gamers.Count();
-            if (numGamers == 0)
-            {
-                //List<Gamer> gamers = GamerJsonLoader.LoadGamers(Path.Combine(dataDirectory, SeedFileSubDirectory), SeedDataSearchName).ToList();
-                List<Gamer> gamers = new List<Gamer>()
-                {
-                    new Gamer()
-                    {
-                        Gamertag = "Player 1",
-                        Gamerscore = 23540,
-                        GamerId = 1,
-                        Location = "Moscow"
-                    },
-                    new Gamer()
-                    {
-                        Gamertag = "Player 2",
-                        Gamerscore = 8200,
-                        GamerId = 2,
-                        Location = "Berlin"
-                    }
-                };
-                await context.Gamers.AddRangeAsync(gamers);
-                numGamers = await context.SaveChangesAsync();
-            }
-            return numGamers;
-        }
-
-        public static async Task<int> SeedDatabaseIfNoGamesAsync(this XblAppDbContext context)
-        {
-            var numGames = context.Games.Count();
-            if (numGames == 0)
-            {
-                List<Game> games = new List<Game>()
+            List<Game> games = new List<Game>()
                 {
                     new Game()
                     {
-                        GameName = "Game 1",
-                        TotalAchievements = 50,
-                        TotalGamerscore = 1000,
                         GameId = 1,
-                        GamerLinks = new List<GamerGame>()
+                        GameName = "Stray",
+                        Achievements = new List<Achievement>()
                         {
-                            new GamerGame()
+                            new Achievement()
                             {
-                                GamerId = 1,
-                                CurrentAchievements = 32,
-                                CurrentGamerscore = 760,
-                            }
-                        }
-                    },
-                    new Game()
-                    {
-                        GameName = "Game 2 Arcade",
-                        TotalAchievements = 10,
-                        TotalGamerscore = 200,
-                        GameId = 2,
-                        GamerLinks = new List<GamerGame>()
-                        {
-                            new GamerGame()
-                            {
-                                GamerId = 1,
-                                CurrentAchievements = 8,
-                                CurrentGamerscore = 180,
+                                AchievementId = 1,
+                                Name = "Неудачный прыжок",
+                                Description = "Упадите внутрь города",
+                                Gamerscore = 10,
+                                IsSecret = false
                             },
-                            new GamerGame()
+                            new Achievement()
                             {
-                                GamerId = 2,
-                                CurrentAchievements = 4,
-                                CurrentGamerscore = 60,
+                                AchievementId = 2,
+                                Name = "Не один",
+                                Description = "Познакомиться с B-12",
+                                Gamerscore = 40,
+                                IsSecret = false
+                            },
+                            new Achievement()
+                            {
+                                AchievementId = 3,
+                                Name = "Язык проглотил",
+                                Description = "Попросите B-12 перевести, что говорит робот",
+                                Gamerscore = 20,
+                                IsSecret = false
                             }
                         }
                     },
                     new Game()
                     {
-                        GameName = "Game 3",
-                        TotalAchievements = 60,
-                        TotalGamerscore = 1250,
-                        GameId = 3
+                        GameId = 3,
+                        GameName = "Gears of War",
+                        Achievements = new List<Achievement>()
+                        {
+                            new Achievement()
+                            {
+                                AchievementId = 11,
+                                Name = "Prison Breakout",
+                                Description = "Complete tutorial on any skill level",
+                                Gamerscore = 10,
+                                IsSecret = false
+                            },
+                            new Achievement()
+                            {
+                                AchievementId = 21,
+                                Name = "Complete Act 1 on Casual",
+                                Description = "Complete Act 1 on Casual Difficulty",
+                                Gamerscore = 10,
+                                IsSecret = false
+                            }
+                        }
                     },
                 };
-                await context.Games.AddRangeAsync(games);
-                numGames = await context.SaveChangesAsync();
-            }
-            return numGames;
+            await context.Games.AddRangeAsync(games);
+
+            List<Gamer> gamers = new List<Gamer>()
+                {
+                    new Gamer() { GamerId = 1, Gamertag = "Player 1", Gamerscore = 23540 },
+                    new Gamer() { GamerId = 2, Gamertag = "Player 2", Gamerscore = 8200 }
+                };
+            await context.Gamers.AddRangeAsync(gamers);
+
+            await context.SaveChangesAsync();
         }
     }
 }

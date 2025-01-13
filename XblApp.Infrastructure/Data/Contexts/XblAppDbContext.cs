@@ -5,10 +5,8 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.Infrastructure.Data
 {
-    public class XblAppDbContext : IdentityDbContext//DbContext //
+    public class XblAppDbContext : IdentityDbContext
     {
-        //public XblAppDbContext(DbContextOptions<XblAppDbContext> options) : base(options) { }
-
         protected readonly IConfiguration Configuration;
         public XblAppDbContext(IConfiguration configuration)
         {
@@ -17,6 +15,7 @@ namespace XblApp.Infrastructure.Data
 
         public DbSet<Gamer> Gamers { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
         public DbSet<TokenOAuth> OAuthTokens { get; set; }
         public DbSet<TokenXau> XauTokens { get; set; }
         public DbSet<TokenXsts> XstsTokens { get; set; }

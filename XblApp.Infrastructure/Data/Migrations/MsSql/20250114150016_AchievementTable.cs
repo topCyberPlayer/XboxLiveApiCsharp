@@ -12,22 +12,22 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Achievement",
+                name: "Achievements",
                 schema: "nba",
                 columns: table => new
                 {
                     AchievementId = table.Column<long>(type: "bigint", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gamerscore = table.Column<int>(type: "int", nullable: false),
-                    IsSecret = table.Column<bool>(type: "bit", nullable: false),
-                    GameId = table.Column<long>(type: "bigint", nullable: false)
+                    IsSecret = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Achievement", x => x.AchievementId);
+                    table.PrimaryKey("PK_Achievements", x => x.AchievementId);
                     table.ForeignKey(
-                        name: "FK_Achievement_Games_GameId",
+                        name: "FK_Achievements_Games_GameId",
                         column: x => x.GameId,
                         principalSchema: "nba",
                         principalTable: "Games",
@@ -48,10 +48,10 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                 {
                     table.PrimaryKey("PK_GamerAchievement", x => new { x.GamerId, x.AchievementId });
                     table.ForeignKey(
-                        name: "FK_GamerAchievement_Achievement_AchievementId",
+                        name: "FK_GamerAchievement_Achievements_AchievementId",
                         column: x => x.AchievementId,
                         principalSchema: "nba",
-                        principalTable: "Achievement",
+                        principalTable: "Achievements",
                         principalColumn: "AchievementId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -64,9 +64,9 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Achievement_GameId",
+                name: "IX_Achievements_GameId",
                 schema: "nba",
-                table: "Achievement",
+                table: "Achievements",
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
@@ -84,7 +84,7 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                 schema: "nba");
 
             migrationBuilder.DropTable(
-                name: "Achievement",
+                name: "Achievements",
                 schema: "nba");
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using XblApp.Infrastructure.Data.Contexts;
 
 namespace XblApp.Infrastructure.Data
 {
@@ -13,6 +14,7 @@ namespace XblApp.Infrastructure.Data
         {
             optionsBuilder.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
             optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.AddInterceptors(new TotalAchievementsInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

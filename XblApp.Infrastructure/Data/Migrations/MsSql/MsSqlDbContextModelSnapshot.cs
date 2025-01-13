@@ -247,7 +247,7 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Achievement", "nba");
+                    b.ToTable("Achievements", "nba");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>

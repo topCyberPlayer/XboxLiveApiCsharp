@@ -114,12 +114,6 @@ namespace XblApp
 
             app.UseAuthorization();
 
-            //using(var scope = app.Services.CreateScope())
-            //{
-            //    var context = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
-            //    context.Database.Migrate();
-            //}
-
             return app;
         }
     }
@@ -138,7 +132,6 @@ namespace XblApp
     {
         public static async Task<WebApplication> SetupDatabaseAsync(this WebApplication app)
         {
-            // Initialize the database with seed data
             using (IServiceScope scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -151,8 +144,7 @@ namespace XblApp
                     if (arePendingMigrations)
                         await context.Database.MigrateAsync();
 
-                    await context.SeedDatabaseIfNoGamersAsync();
-                    await context.SeedDatabaseIfNoGamesAsync();
+                    await context.SeedDatabase();
                 }
                 catch (Exception)
                 {

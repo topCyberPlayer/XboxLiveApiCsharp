@@ -12,7 +12,7 @@ using XblApp.Infrastructure.Data;
 namespace XblApp.Infrastructure.Data.Migrations.MsSql
 {
     [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20250112115300_AchievementTable")]
+    [Migration("20250114150016_AchievementTable")]
     partial class AchievementTable
     {
         /// <inheritdoc />
@@ -250,7 +250,7 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Achievement", "nba");
+                    b.ToTable("Achievements", "nba");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
