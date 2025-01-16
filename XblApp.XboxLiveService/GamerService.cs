@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
+using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
-using XblApp.Shared.DTOs;
 
-namespace XblApp.Infrastructure.XboxLiveServices
+namespace XblApp.XboxLiveService
 {
     public class GamerService : BaseService, IXboxLiveGamerService
     {
@@ -39,21 +38,21 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
         public GamerService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
+        public async Task<Gamer> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
             return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        public async Task<GamerDTO> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
+        public async Task<Gamer> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
             return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        private async Task<GamerDTO> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
+        private async Task<Gamer> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
         {
             string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
 
@@ -70,7 +69,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             GamerJson result = await DeserializeJson<GamerJson>(response);
 
-            return new GamerDTO
+            return new Gamer
             {
                 GamerId = long.Parse(result.ProfileUsers.FirstOrDefault().ProfileId),
                 Gamertag = result.ProfileUsers.FirstOrDefault().Gamertag,

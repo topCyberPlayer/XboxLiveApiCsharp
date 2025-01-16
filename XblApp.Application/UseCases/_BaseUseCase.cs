@@ -1,5 +1,5 @@
-﻿using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
+﻿using XblApp.Domain.Entities;
+using XblApp.Domain.Interfaces;
 
 namespace XblApp.Application.UseCases
 {
@@ -19,9 +19,9 @@ namespace XblApp.Application.UseCases
         /// </summary>
         /// <param name="tokenOAuth"></param>
         /// <returns></returns>
-        public async Task RefreshTokens(TokenOAuthDTO expiredTokenOAuth)
+        public async Task RefreshTokens(TokenOAuth expiredTokenOAuth)
         {
-            TokenOAuthDTO freshTokeneOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth);
+            TokenOAuth freshTokeneOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth);
 
             await ProcessTokens(freshTokeneOAuth);
         }
@@ -31,19 +31,19 @@ namespace XblApp.Application.UseCases
         /// </summary>
         /// <param name="tokenOAuthDTO"></param>
         /// <returns></returns>
-        internal async Task ProcessTokens(TokenOAuthDTO tokenOAuthDTO)
+        internal async Task ProcessTokens(TokenOAuth tokenOAuthDTO)
         {
             if (tokenOAuthDTO != null)
             {
                 await _authRepository.SaveAsync(tokenOAuthDTO);
 
-                TokenXauDTO tokenXauDTO = await _authService.RequestXauToken(tokenOAuthDTO);
+                TokenXau tokenXau = await _authService.RequestXauToken(tokenOAuthDTO);
 
-                if (tokenXauDTO != null)
+                if (tokenXau != null)
                 {
-                    await _authRepository.SaveAsync(tokenXauDTO);
+                    await _authRepository.SaveAsync(tokenXau);
 
-                    TokenXstsDTO responseXsts = await _authService.RequestXstsToken(tokenXauDTO);
+                    TokenXsts responseXsts = await _authService.RequestXstsToken(tokenXau);
 
                     if (responseXsts != null)
                     {

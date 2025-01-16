@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XblApp.Shared.DTOs
+namespace XblApp.DTO
 {
     public class GamerGameAchievementDTO
     {

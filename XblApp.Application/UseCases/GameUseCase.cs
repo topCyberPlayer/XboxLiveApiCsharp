@@ -1,6 +1,5 @@
 ﻿using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
 
 namespace XblApp.Application.UseCases
 {
@@ -16,9 +15,9 @@ namespace XblApp.Application.UseCases
             _gameRepository = gameRepository;   
         }
 
-        public async Task<List<GameDTO>> GetAllGamesAsync()
+        public async Task<List<Game>> GetAllGamesAsync()
         {
-            List<GameDTO> games = await _gameRepository.GetAllGamesAsync();
+            List<Game> games = await _gameRepository.GetAllGamesAsync();
 
             return games;
         }

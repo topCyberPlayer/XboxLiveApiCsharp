@@ -1,5 +1,5 @@
-﻿using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
+﻿using XblApp.Domain.Entities;
+using XblApp.Domain.Interfaces;
 
 namespace XblApp.Application.UseCases
 {
@@ -26,45 +26,44 @@ namespace XblApp.Application.UseCases
             _gameRepository = gameRepository;
         }
 
-        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
+        public async Task<Gamer> GetGamerProfileAsync(string gamertag)
         {
-            GamerDTO gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
+            Gamer gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
 
             return gamer;
         }
 
-        public async Task<List<GamerDTO>> GetAllGamerProfilesAsync()
+        public async Task<List<Gamer>> GetAllGamerProfilesAsync()
         {
-            List<GamerDTO> gamers = await _gamerRepository.GetAllGamerProfilesAsync();
+            List<Gamer> gamers = await _gamerRepository.GetAllGamerProfilesAsync();
 
             return gamers;
         }
 
-        public async Task<GamerGameDTO> GetGamesForGamerAsync(string gamertag)
+        public async Task<GamerGame> GetGamesForGamerAsync(string gamertag)
         {
-            GamerGameDTO gamesForGamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
+            GamerGame gamesForGamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
             return gamesForGamer;
         }
 
-        public async Task<GamerDTO?> UpdateProfileAsync(string gamertag)
+        public async Task<Gamer?> UpdateProfileAsync(string gamertag)
         {
             if (IsDateXstsTokenExperid())
             {
                 //Если дата XstsToken истекла, то запрашиваю из БД OAuthToken и обновляю его
-
-                TokenOAuthDTO experidTokenOAuth = await _authRepository.GetTokenOAuth();
+                TokenOAuth experidTokenOAuth = await _authRepository.GetTokenOAuth();
 
                 await RefreshTokens(experidTokenOAuth);
             }
 
             string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();
 
-            GamerDTO gamerResponse = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
+            Gamer gamerResponse = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
             await _gamerRepository.SaveGamerAsync(gamerResponse);
 
             //Получаю список игр и ИД игрока, которому они принадлежат
-            GamerGameDTO gameResponse = null;// await _gameService.GetTitleHistoryAsync(gamertag, authorizationHeaderValue);
+            GamerGame gameResponse = await _gameService.GetGamesForGamerProfileAsync(gamertag, authorizationHeaderValue);
             //await _gameRepository.SaveGamesAsync(gameResponse);/* Надо сохранить в таблицу: GamerGamer, Games */
 
             return gamerResponse;

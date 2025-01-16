@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.Json;
 using System.Web;
+using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
-using XblApp.Shared.DTOs;
 
-namespace XblApp.Infrastructure.XboxLiveServices
+namespace XblApp.XboxLiveService
 {
     public class AuthenticationService : BaseService, IAuthenticationService
     {
@@ -50,7 +50,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// </summary>
         /// <param name="authorizationCode"></param>
         /// <returns></returns>
-        public async Task<TokenOAuthDTO> RequestOauth2Token(string authorizationCode)
+        public async Task<TokenOAuth> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -69,7 +69,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             TokenOAuthJson resultJson = await DeserializeJson<TokenOAuthJson>(response);
 
-            return new TokenOAuthDTO
+            return new TokenOAuth
             {
                 UserId = resultJson.UserId,
                 TokenType = resultJson.TokenType,
@@ -87,7 +87,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// <param name="relying_party"></param>
         /// <param name="use_compact_ticket"></param>
         /// <returns></returns>
-        public async Task<TokenXauDTO> RequestXauToken(TokenOAuthDTO tokenOAuth)
+        public async Task<TokenXau> RequestXauToken(TokenOAuth tokenOAuth)
         {
             HttpClient httpClient = factory.CreateClient("authServiceUserToken");
 
@@ -115,7 +115,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             TokenXauJson result = await DeserializeJson<TokenXauJson>(response);
 
-            return new TokenXauDTO
+            return new TokenXau
             {
                 Token = result.Token,
                 NotAfter = result.NotAfter,
@@ -129,7 +129,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// </summary>
         /// <param name="relying_party"></param>
         /// <returns></returns>
-        public async Task<TokenXstsDTO> RequestXstsToken(TokenXauDTO tokenXau)
+        public async Task<TokenXsts> RequestXstsToken(TokenXau tokenXau)
         {
             HttpClient httpClient = factory.CreateClient("authServiceXstsToken");
 
@@ -156,7 +156,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             TokenXstsJson result = await DeserializeJson<TokenXstsJson>(response);
 
-            return new TokenXstsDTO
+            return new TokenXsts
             {
                 Gamertag = result.Gamertag,
                 Token = result.Token,
@@ -176,7 +176,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
         /// Refresh OAuth2 token
         /// </summary>
         /// <returns></returns>
-        public async Task<TokenOAuthDTO> RefreshOauth2Token(TokenOAuthDTO expiredTokenOAuthDTO)
+        public async Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuthDTO)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -189,7 +189,7 @@ namespace XblApp.Infrastructure.XboxLiveServices
 
             TokenOAuthJson result = await DeserializeJson<TokenOAuthJson>(response);
 
-            return new TokenOAuthDTO
+            return new TokenOAuth
             {
                 AccessToken = result.AccessToken,
                 RefreshToken = result.RefreshToken,

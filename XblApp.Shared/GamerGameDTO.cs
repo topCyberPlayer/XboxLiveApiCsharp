@@ -1,4 +1,4 @@
-﻿namespace XblApp.Shared.DTOs
+﻿namespace XblApp.DTO
 {
     public class GamerGameDTO
     {
@@ -14,12 +14,12 @@
         public int TotalAchievements { get; set; }
         public int TotalGamerscore { get; set; }
         public int CurrentAchievements { get; set; }
-        public int CurrentGamerscore { get;set; }
-        
+        public int CurrentGamerscore { get; set; }
+
         /// <summary>
         /// Прогресс достижений
         /// </summary>
-        public double AchievementsProgress => CurrentAchievements/TotalAchievements;
+        public double AchievementsProgress => CurrentAchievements / TotalAchievements;
     }
 
 }

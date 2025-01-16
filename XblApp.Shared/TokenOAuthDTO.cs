@@ -1,4 +1,4 @@
-﻿namespace XblApp.Shared.DTOs
+﻿namespace XblApp.DTO
 {
     public partial class TokenOAuthDTO
     {

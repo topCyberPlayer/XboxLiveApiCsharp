@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace XblApp.Shared.DTOs
+﻿namespace XblApp.DTO
 {
     /// <summary>
     /// Представление для игры вне зависимости от игрока
@@ -11,7 +9,7 @@ namespace XblApp.Shared.DTOs
         public string? GameName { get; set; }
         public int TotalAchievements { get; set; }
         public int TotalGamerscore { get; set; }
-        
+
         /// <summary>
         /// Кол-во игроков играющие в данную игру
         /// </summary>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XblApp.Shared.DTOs
+namespace XblApp.DTO
 {
     public class GameAchievementDTO
     {
@@ -19,6 +19,6 @@ namespace XblApp.Shared.DTOs
 
         public string Description { get; set; }
 
-        public int Score { get;set; }
+        public int Score { get; set; }
     }
 }

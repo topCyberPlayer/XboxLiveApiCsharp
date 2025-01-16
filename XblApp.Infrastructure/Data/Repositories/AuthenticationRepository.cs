@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Shared.DTOs;
+using XblApp.DTO;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {

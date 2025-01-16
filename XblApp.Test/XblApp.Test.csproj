@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XblApp.Infrastructure\XblApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\XblApp.Infrastructure\XblApp.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>
