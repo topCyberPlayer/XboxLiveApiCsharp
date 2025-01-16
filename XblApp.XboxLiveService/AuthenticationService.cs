@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.Specialized;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Web;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
@@ -11,86 +11,56 @@ namespace XblApp.XboxLiveService
 {
     public class AuthenticationService : BaseService, IAuthenticationService
     {
-        private readonly string? _clientId;
-        private readonly string? _clientSecret;
-        private readonly string? _redirectUri;
-        
-        private static string DefaultScopes => string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
+        private readonly AuthenticationConfig _config;
+        private readonly HttpClient _authClient;
+        private readonly HttpClient _userTokenClient;
+        private readonly HttpClient _xstsTokenClient;
 
-        public AuthenticationService(IConfiguration configuration, IHttpClientFactory factory) : base(factory)
+        private static readonly string DefScopes = string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
+
+        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config) : base(factory)
         {
-            _clientId = configuration["Authentication:Microsoft:ClientId"];
-            _clientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-            _redirectUri = configuration["ConnectionStrings:RedirectUrl"];
+            _config = config.Value;
+            _authClient = factory.CreateClient("AuthServiceAuthToken");
+            _userTokenClient = factory.CreateClient("AuthServiceUserToken");
+            _xstsTokenClient = factory.CreateClient("AuthServiceXstsToken");
         }
 
         public string GenerateAuthorizationUrl()
         {
-            string baseAddress = "https://login.live.com/oauth20_authorize.srf";
+            const string baseAddress = "https://login.live.com/oauth20_authorize.srf";
 
-            UriBuilder uriBuilder = new UriBuilder(baseAddress);
+            Dictionary<string, string> queryParameters = new()
+            {
+                { "scope", DefScopes },
+                { "client_id", _config.ClientId },
+                { "redirect_uri", _config.RedirectUri },
+                { "response_type", "code" },
+                { "approval_prompt", "auto" }
+            };
 
-            NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["client_id"] = _clientId;
-            query["response_type"] = "code";
-            query["approval_prompt"] = "auto";
-            query["scope"] = DefaultScopes;
-            query["redirect_uri"] = _redirectUri;
-            uriBuilder.Query = query.ToString();
-
-            string result = uriBuilder.ToString();
-
-            return result;
+            return QueryHelpers.AddQueryString(baseAddress, queryParameters);
         }
 
-        #region Request
-
-        /// <summary>
-        /// 1. 
-        /// </summary>
-        /// <param name="authorizationCode"></param>
-        /// <returns></returns>
         public async Task<TokenOAuth> RequestOauth2Token(string authorizationCode)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>
+            Dictionary<string, string> data = new()
             {
                 {"grant_type", "authorization_code"},
                 {"code", authorizationCode},
-                {"scope", DefaultScopes},
-                {"redirect_uri", _redirectUri}
+                {"scope", DefScopes},
+                {"redirect_uri", _config.RedirectUri},
+                {"client_id", _config.ClientId},
+                {"client_secret", _config.ClientSecret}
             };
 
-            HttpResponseMessage response = await RequestRefreshOauthToken(data);
+            TokenOAuthJson resultJson = await SendFormUrlEncodedRequestAsync<TokenOAuthJson>(_authClient, data);
 
-            if (!response.IsSuccessStatusCode)
-            {
-
-            }
-
-            TokenOAuthJson resultJson = await DeserializeJson<TokenOAuthJson>(response);
-
-            return new TokenOAuth
-            {
-                UserId = resultJson.UserId,
-                TokenType = resultJson.TokenType,
-                ExpiresIn = resultJson.ExpiresIn,
-                Scope = resultJson.Scope,
-                AccessToken = resultJson.AccessToken,
-                RefreshToken = resultJson.RefreshToken,
-                AuthenticationToken = resultJson.AuthenticationToken
-            };
+            return MapToTokenOAuth(resultJson);
         }
 
-        /// <summary>
-        /// 2. Authenticate via access token and receive user token.
-        /// </summary>
-        /// <param name="relying_party"></param>
-        /// <param name="use_compact_ticket"></param>
-        /// <returns></returns>
         public async Task<TokenXau> RequestXauToken(TokenOAuth tokenOAuth)
         {
-            HttpClient httpClient = factory.CreateClient("authServiceUserToken");
-
             var data = new
             {
                 RelyingParty = "http://auth.xboxlive.com",
@@ -99,123 +69,110 @@ namespace XblApp.XboxLiveService
                 {
                     AuthMethod = "RPS",
                     SiteName = "user.auth.xboxlive.com",
-                    RpsTicket = $"d={tokenOAuth.AccessToken}",
+                    RpsTicket = $"d={tokenOAuth.AccessToken}"
                 }
             };
 
-            string jsonData = JsonSerializer.Serialize(data);
-            StringContent content = new(jsonData, Encoding.UTF8, "application/json");
+            TokenXauJson result = await SendJsonRequestAsync<TokenXauJson>(_userTokenClient, data);
 
-            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, content);
-
-            if (!response.IsSuccessStatusCode)
-            {
-
-            }
-
-            TokenXauJson result = await DeserializeJson<TokenXauJson>(response);
-
-            return new TokenXau
-            {
-                Token = result.Token,
-                NotAfter = result.NotAfter,
-                Uhs = result.Uhs,
-                IssueInstant = result.IssueInstant,
-            };
+            return MapToTokenXau(result);
         }
 
-        /// <summary>
-        /// 3. Authorize via user token and receive final X token
-        /// </summary>
-        /// <param name="relying_party"></param>
-        /// <returns></returns>
         public async Task<TokenXsts> RequestXstsToken(TokenXau tokenXau)
         {
-            HttpClient httpClient = factory.CreateClient("authServiceXstsToken");
-
             var data = new
             {
                 RelyingParty = "http://xboxlive.com",
                 TokenType = "JWT",
                 Properties = new
                 {
-                    UserTokens = new List<string>() { tokenXau.Token },
+                    UserTokens = new List<string> { tokenXau.Token },
                     SandboxId = "RETAIL"
                 }
             };
 
+            TokenXstsJson result = await SendJsonRequestAsync<TokenXstsJson>(_xstsTokenClient, data);
+
+            return MapToTokenXsts(result);
+        }
+
+        public async Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuth)
+        {
+            var data = new Dictionary<string, string>
+            {
+                { "grant_type", "refresh_token" },
+                { "scope", DefScopes },
+                { "refresh_token", expiredTokenOAuth.RefreshToken },
+                { "client_id", _config.ClientId },
+                { "client_secret", _config.ClientSecret }
+            };
+
+            TokenOAuthJson resultJson = await SendFormUrlEncodedRequestAsync<TokenOAuthJson>(_authClient, data);
+
+            return MapToTokenOAuth(resultJson);
+        }
+
+        private async Task<T> SendFormUrlEncodedRequestAsync<T>(HttpClient client, Dictionary<string, string> data)
+        {
+            using var response = await client.PostAsync(string.Empty, new FormUrlEncodedContent(data));
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<T>()
+                ?? throw new InvalidOperationException("Failed to deserialize response");
+        }
+
+        private async Task<T> SendJsonRequestAsync<T>(HttpClient client, object data)
+        {
             string jsonData = JsonSerializer.Serialize(data);
-            StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            StringContent content = new(jsonData, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, content);
+            using var response = await client.PostAsync(string.Empty, content);
+            response.EnsureSuccessStatusCode();
 
-            if (!response.IsSuccessStatusCode)
-            {
-
-            }
-
-            TokenXstsJson result = await DeserializeJson<TokenXstsJson>(response);
-
-            return new TokenXsts
-            {
-                Gamertag = result.Gamertag,
-                Token = result.Token,
-                IssueInstant = result.IssueInstant,
-                AgeGroup = result.AgeGroup, 
-                NotAfter = result.NotAfter,
-                Privileges = result.Privileges,
-                Userhash = result.Userhash,
-                UserPrivileges = result.UserPrivileges,
-                Xuid = result.Xuid,
-            };
+            return await response.Content.ReadFromJsonAsync<T>()
+                ?? throw new InvalidOperationException("Failed to deserialize response");
         }
 
-        #endregion
-
-        /// <summary>
-        /// Refresh OAuth2 token
-        /// </summary>
-        /// <returns></returns>
-        public async Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuthDTO)
-        {
-            Dictionary<string, string> data = new Dictionary<string, string>
+        private static TokenOAuth MapToTokenOAuth(TokenOAuthJson json) =>
+            new()
             {
-                {"grant_type", "refresh_token"},
-                {"scope", DefaultScopes},
-                {"refresh_token", expiredTokenOAuthDTO.RefreshToken}
+                UserId = json.UserId,
+                TokenType = json.TokenType,
+                ExpiresIn = json.ExpiresIn,
+                Scope = json.Scope,
+                AccessToken = json.AccessToken,
+                RefreshToken = json.RefreshToken,
+                AuthenticationToken = json.AuthenticationToken
             };
 
-            HttpResponseMessage response = await RequestRefreshOauthToken(data);
-
-            TokenOAuthJson result = await DeserializeJson<TokenOAuthJson>(response);
-
-            return new TokenOAuth
+        private static TokenXau MapToTokenXau(TokenXauJson json) =>
+            new()
             {
-                AccessToken = result.AccessToken,
-                RefreshToken = result.RefreshToken,
-                TokenType = result.TokenType,
-                AuthenticationToken = result.AuthenticationToken,
-                ExpiresIn = result.ExpiresIn,
-                Scope = result.Scope,
-                UserId = result.UserId,
+                Token = json.Token,
+                NotAfter = json.NotAfter,
+                Uhs = json.Uhs,
+                IssueInstant = json.IssueInstant
             };
-        }
 
-        /// <summary>
-        /// 1.2. Request/Refresh OAuth token
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private async Task<HttpResponseMessage> RequestRefreshOauthToken(Dictionary<string, string> data)
-        {
-            HttpClient httpClient = factory.CreateClient("authServiceAuthToken");
+        private static TokenXsts MapToTokenXsts(TokenXstsJson json) =>
+            new()
+            {
+                Gamertag = json.Gamertag,
+                Token = json.Token,
+                IssueInstant = json.IssueInstant,
+                AgeGroup = json.AgeGroup,
+                NotAfter = json.NotAfter,
+                Privileges = json.Privileges,
+                Userhash = json.Userhash,
+                UserPrivileges = json.UserPrivileges,
+                Xuid = json.Xuid
+            };
+    }
 
-            data.Add("client_id", _clientId);
-            data.Add("client_secret", _clientSecret);
-
-            HttpResponseMessage response = await httpClient.PostAsync(string.Empty, new FormUrlEncodedContent(data));
-
-            return response;
-        }
+    public class AuthenticationConfig
+    {
+        public string? ClientId { get; set; }
+        public string? ClientSecret { get; set; }
+        public string? RedirectUri { get; set; }
     }
 }

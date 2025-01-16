@@ -1,6 +1,5 @@
 ﻿using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.DTO;
 
 namespace XblApp.Application.UseCases
 {

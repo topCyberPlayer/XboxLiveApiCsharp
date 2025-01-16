@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
+using System.Net.Http.Headers;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
@@ -7,77 +9,84 @@ namespace XblApp.XboxLiveService
 {
     public class GamerService : BaseService, IXboxLiveGamerService
     {
-        private static string DefScopes
-        {
-            get
-            {
-                return string.Join(",",
-                    ProfileSettings.ACCOUNT_TIER,
-                    ProfileSettings.APP_DISPLAY_NAME,
-                    ProfileSettings.APP_DISPLAYPIC_RAW,
-                    ProfileSettings.BIOGRAPHY,
-                    ProfileSettings.GAME_DISPLAYPIC_RAW,
-                    ProfileSettings.GAME_DISPLAY_NAME,
-                    ProfileSettings.GAMERSCORE,
-                    ProfileSettings.GAMERTAG,
-                    ProfileSettings.PUBLIC_GAMERPIC,
-                    ProfileSettings.MODERN_GAMERTAG,
-                    ProfileSettings.MODERN_GAMERTAG_SUFFIX,
-                    ProfileSettings.PREFERRED_COLOR,
-                    ProfileSettings.LOCATION,
-                    ProfileSettings.REAL_NAME,
-                    ProfileSettings.REAL_NAME_OVERRIDE,
-                    ProfileSettings.IS_QUARANTINED,
-                    ProfileSettings.TENURE_LEVEL,
-                    ProfileSettings.SHOW_USER_AS_AVATAR,
-                    ProfileSettings.UNIQUE_MODERN_GAMERTAG,
-                    ProfileSettings.XBOX_ONE_REP,
-                    ProfileSettings.WATERMARKS);
-            }
+        private static readonly string DefScopes = string.Join(",",
+            ProfileSettings.ACCOUNT_TIER,
+            ProfileSettings.APP_DISPLAY_NAME,
+            ProfileSettings.APP_DISPLAYPIC_RAW,
+            ProfileSettings.BIOGRAPHY,
+            ProfileSettings.GAME_DISPLAYPIC_RAW,
+            ProfileSettings.GAME_DISPLAY_NAME,
+            ProfileSettings.GAMERSCORE,
+            ProfileSettings.GAMERTAG,
+            ProfileSettings.PUBLIC_GAMERPIC,
+            ProfileSettings.MODERN_GAMERTAG,
+            ProfileSettings.MODERN_GAMERTAG_SUFFIX,
+            ProfileSettings.PREFERRED_COLOR,
+            ProfileSettings.LOCATION,
+            ProfileSettings.REAL_NAME,
+            ProfileSettings.REAL_NAME_OVERRIDE,
+            ProfileSettings.IS_QUARANTINED,
+            ProfileSettings.TENURE_LEVEL,
+            ProfileSettings.SHOW_USER_AS_AVATAR,
+            ProfileSettings.UNIQUE_MODERN_GAMERTAG,
+            ProfileSettings.XBOX_ONE_REP,
+            ProfileSettings.WATERMARKS
+        );
+
+        private readonly ILogger<GamerService> _logger;
+
+        public GamerService(IHttpClientFactory factory, ILogger<GamerService> logger) : base(factory) 
+        { 
+            _logger = logger;
         }
 
-        public GamerService(IHttpClientFactory factory) : base(factory) { }
-
-        public async Task<Gamer> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
+        public async Task<List<Gamer>> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
             return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        public async Task<Gamer> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
+        public async Task<List<Gamer>> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
             return await GetProfileBase(relativeUrl, authorizationHeaderValue);
         }
 
-        private async Task<Gamer> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
+        private async Task<List<Gamer>> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
         {
-            string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
+            _logger.LogInformation("Fetching profile from URL: {Url}", relativeUrl);
 
-            HttpClient client = factory.CreateClient("gamerService");
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
-
-            HttpResponseMessage response = await client.GetAsync(uri);
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                //throw new Exception($"Error retrieving profile: {response.ReasonPhrase}");
+                string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
+
+                HttpClient client = factory.CreateClient("GamerService");
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
+
+                GamerJson result = await SendRequestAsync<GamerJson>(client, uri);
+
+                return MapToGamer(result);
             }
-
-            GamerJson result = await DeserializeJson<GamerJson>(response);
-
-            return new Gamer
+            catch (Exception ex)
             {
-                GamerId = long.Parse(result.ProfileUsers.FirstOrDefault().ProfileId),
-                Gamertag = result.ProfileUsers.FirstOrDefault().Gamertag,
-                Gamerscore = result.ProfileUsers.FirstOrDefault().Gamerscore,
-                Bio = result.ProfileUsers.FirstOrDefault().Bio,
-                Location = result.ProfileUsers.FirstOrDefault().Location,
-                
-            };
+                _logger.LogError(ex, "Failed to fetch profile.");
+                throw;
+            }
         }
+
+        private static List<Gamer> MapToGamer(GamerJson gamerJson) =>
+            gamerJson.ProfileUsers
+            .Select(p => new Gamer
+            {
+                GamerId = long.TryParse(p.ProfileId, out var gamerId) ? gamerId : throw new FormatException($"Invalid ProfileId format for Gamer: {p.Gamertag}"),
+                Gamertag = p.Gamertag,
+                Gamerscore = p.Gamerscore,
+                Location = p.Location,
+                Bio = p.Bio
+            })
+            .ToList();
     }
 }

@@ -5,7 +5,7 @@ namespace XblApp.Infrastructure.XboxLiveServices.Models
     public class GamerJson
     {
         [JsonPropertyName("profileUsers")]
-        public ICollection<ProfileUser>? ProfileUsers { get; set; }
+        public ICollection<ProfileUser> ProfileUsers { get; set; }
     }
 
     public class ProfileUser

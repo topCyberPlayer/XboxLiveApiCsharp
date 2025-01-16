@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using System.Net.Http.Headers;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
@@ -7,17 +8,18 @@ namespace XblApp.XboxLiveService
 {
     public class GameService : BaseService, IXboxLiveGameService
     {
-        private string TitleHubSettings_SCOPES => string.Join(",",
-                    TitleHubSettings.ACHIEVEMENT,
-                    TitleHubSettings.ALTERNATE_TITLE_ID,
-                    TitleHubSettings.CONTENT_BOARD,
-                    TitleHubSettings.SERVICE_CONFIG_ID,
-                    TitleHubSettings.STATS,
-                    TitleHubSettings.GAME_PASS,
-                    TitleHubSettings.IMAGE,
-                    TitleHubSettings.DETAIL,
-                    TitleHubSettings.FRIENDS_WHO_PLAYED,
-                    TitleHubSettings.PRODUCT_ID);
+        private static readonly string DefScopes = string.Join(",",
+            TitleHubSettings.ACHIEVEMENT,
+            TitleHubSettings.ALTERNATE_TITLE_ID,
+            TitleHubSettings.CONTENT_BOARD,
+            TitleHubSettings.SERVICE_CONFIG_ID,
+            TitleHubSettings.STATS,
+            TitleHubSettings.GAME_PASS,
+            TitleHubSettings.IMAGE,
+            TitleHubSettings.DETAIL,
+            TitleHubSettings.FRIENDS_WHO_PLAYED,
+            TitleHubSettings.PRODUCT_ID
+        );
 
         public GameService(IHttpClientFactory factory) : base(factory) { }
 
@@ -37,11 +39,11 @@ namespace XblApp.XboxLiveService
 
         private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl, string authorizationHeaderValue, int maxItems)
         {
-            HttpClient client = factory.CreateClient("gameService");
+            HttpClient client = factory.CreateClient("GameService");
 
             IDictionary<string, string> queryParams = new Dictionary<string, string>
             {
-                { "decoration", TitleHubSettings_SCOPES },
+                { "decoration", DefScopes },
                 { "maxItems", maxItems.ToString() },
             };
 
@@ -49,19 +51,16 @@ namespace XblApp.XboxLiveService
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
 
-            HttpResponseMessage response = await client.GetAsync(uri);
-
-            GameJson result = await DeserializeJson<GameJson>(response);
+            GameJson result = await SendRequestAsync<GameJson>(client, uri);
 
             return MapToGame(result);
         }
 
-        public static List<Game> MapToGame(GameJson gameJson)
-        {
-            return gameJson.Titles
+        private static List<Game> MapToGame(GameJson gameJson) =>
+            gameJson.Titles
                 .Select(title => new Game
                 {
-                    GameId = long.TryParse(title.TitleId, out var gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
+                    GameId = long.TryParse(title.TitleId, out long gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
                     GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
                     TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
                     TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
@@ -69,13 +68,12 @@ namespace XblApp.XboxLiveService
                     {
                         new GamerGame
                         {
-                            GamerId = long.TryParse(gameJson.Xuid., out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
+                            GamerId = long.TryParse(gameJson.Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
                             CurrentAchievements = title.Achievement.CurrentAchievements,
                             CurrentGamerscore = title.Achievement.CurrentGamerscore
-                        }
-                    }
+    }
+}
                 })
                 .ToList();
-        }
     }
 }

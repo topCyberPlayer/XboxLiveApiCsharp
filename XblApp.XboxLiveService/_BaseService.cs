@@ -1,9 +1,8 @@
-﻿using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 
 namespace XblApp.XboxLiveService
 {
-    public abstract class BaseService //: IBaseService
+    public abstract class BaseService
     {
         internal readonly IHttpClientFactory factory;
 
@@ -12,27 +11,15 @@ namespace XblApp.XboxLiveService
             this.factory = factory;
         }
 
-        public async Task<T> DeserializeJson<T>(HttpResponseMessage httpResponse)// where T: ITokenJson
+        public async Task<T> SendRequestAsync<T>(HttpClient client, string uri)
         {
-            //// Пример обработки HTTP-ответа
-            //string responseContent = await httpResponse.Content.ReadAsStringAsync();
+            using HttpResponseMessage response = await client.GetAsync(uri);
 
-            //// Пример десериализации JSON-ответа в экземпляр типа T
-            //T result = JsonSerializer.Deserialize<T>(responseContent);
+            response.EnsureSuccessStatusCode();
 
-            //return result;
-
-            T? result = default;
-
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                //string content = await httpResponse.Content.ReadAsStringAsync();
-                //result = JsonSerializer.Deserialize<T>(content);
-
-                result = await httpResponse.Content.ReadFromJsonAsync<T>();
-            }
-
-            return result;
+            string content = await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadFromJsonAsync<T>() 
+                ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(T).Name}.");
         }
     }
 }

@@ -35,19 +35,19 @@ namespace XblApp.Application.UseCases
         {
             if (tokenOAuthDTO != null)
             {
-                await _authRepository.SaveAsync(tokenOAuthDTO);
+                await _authRepository.SaveTokenAsync(tokenOAuthDTO);
 
                 TokenXau tokenXau = await _authService.RequestXauToken(tokenOAuthDTO);
 
                 if (tokenXau != null)
                 {
-                    await _authRepository.SaveAsync(tokenXau);
+                    await _authRepository.SaveTokenAsync(tokenXau);
 
                     TokenXsts responseXsts = await _authService.RequestXstsToken(tokenXau);
 
                     if (responseXsts != null)
                     {
-                        await _authRepository.SaveAsync(responseXsts);
+                        await _authRepository.SaveTokenAsync(responseXsts);
                     }
                 }
             }

@@ -5,10 +5,10 @@ using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.Data;
 using XblApp.Infrastructure.Data.Repositories;
 using XblApp.Infrastructure.Data.Seeding;
-using XblApp.Infrastructure.XboxLiveServices;
+using XblApp.XboxLiveService;
 
 namespace XblApp
-{   
+{
     public class Program
     {
         public static async Task Main(string[] args)
@@ -28,35 +28,8 @@ namespace XblApp
     {
         public static WebApplicationBuilder RegisterApplicationServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceAuthToken", (HttpClient client) =>
-            {
-                client.BaseAddress = new Uri("https://login.live.com/oauth20_token.srf");
-            });
-
-            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceUserToken", (HttpClient client) =>
-            {
-                client.BaseAddress = new Uri("https://user.auth.xboxlive.com/user/authenticate");
-                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
-            });
-
-            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("authServiceXstsToken", (HttpClient client) =>
-            {
-                client.BaseAddress = new Uri("https://xsts.auth.xboxlive.com/xsts/authorize");
-                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "1");
-            });
-
-            builder.Services.AddHttpClient<IXboxLiveGamerService, GamerService>("gamerService", (HttpClient client) =>
-            {
-                client.BaseAddress = new Uri("https://profile.xboxlive.com");
-                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "3");
-            });
-
-            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>("gameService", (HttpClient client) =>
-            {
-                client.BaseAddress = new Uri("https://xsts.auth.xboxlive.com/xsts/authorize");
-                client.DefaultRequestHeaders.Add("x-xbl-contract-version", "2");
-                client.DefaultRequestHeaders.Add("Accept-Language", "en-US");
-            });
+            builder.Services.Configure<AuthenticationConfig>(builder.Configuration.GetSection("Authentication:Microsoft"));
+            builder.Services.AddHttpClientsFromConfig(builder.Configuration);
 
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
@@ -67,6 +40,7 @@ namespace XblApp
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();
+            
             builder.Services
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<XblAppDbContext>();
@@ -156,5 +130,34 @@ namespace XblApp
 
             return app;
         }
+    }
+
+    public static class HttpClientExtensions
+    {
+        public static IServiceCollection AddHttpClientsFromConfig(this IServiceCollection services, IConfiguration configuration)
+        {
+            var clientsConfig = configuration.GetSection("HttpClients").Get<Dictionary<string, HttpClientConfig>>();
+
+            foreach (var clientConfig in clientsConfig)
+            {
+                services.AddHttpClient(clientConfig.Key, (HttpClient client) =>
+                {
+                    client.BaseAddress = new Uri(clientConfig.Value.BaseAddress);
+
+                    foreach (var header in clientConfig.Value.Headers)
+                    {
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                });
+            }
+
+            return services;
+        }
+    }
+
+    public class HttpClientConfig
+    {
+        public string BaseAddress { get; set; }
+        public Dictionary<string, string> Headers { get; set; } = new();
     }
 }
