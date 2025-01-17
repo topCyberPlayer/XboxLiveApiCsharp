@@ -12,6 +12,6 @@ namespace XblApp.Domain.Interfaces
         /// </summary>
         /// <param name="game"></param>
         /// <returns></returns>
-        public Task SaveGameAsync(Game game);
+        public Task SaveGameAsync(List<Game> games);
     }
 }

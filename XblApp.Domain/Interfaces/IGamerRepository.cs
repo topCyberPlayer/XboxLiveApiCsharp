@@ -7,7 +7,7 @@ namespace XblApp.Domain.Interfaces
         public Task<Gamer> GetGamerProfileAsync(long id);
         public Task<Gamer> GetGamerProfileAsync(string gamertag);
         public Task<List<Gamer>> GetAllGamerProfilesAsync();
-        public Task<GamerGame> GetGamesForGamerAsync(string gamertag);
-        public Task SaveGamerAsync(Gamer gamer);
+        public Task<Gamer> GetGamesForGamerAsync(string gamertag);
+        public Task SaveGamerAsync(List<Gamer> gamers);
     }
 }

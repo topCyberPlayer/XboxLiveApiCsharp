@@ -1,33 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using XblApp.Domain.Entities;
-using XblApp.Infrastructure.Data;
+﻿using XblApp.Domain.Entities;
 
-namespace XblApp.Test
+namespace XblApp.Test.RepositoryTest
 {
-    public class TotalAchievementsTests
+    public class TotalAchievementsTests : BaseRepository
     {
-        private readonly IConfiguration configuration;
-
-        internal readonly Dictionary<string, string> inMemorySettings = new()
-        {
-            {"Key1", "Value1"},
-            {"ConnectionStrings:MsSqlConnection", "Server=(localdb)\\mssqllocaldb;Database=XblApp;Trusted_Connection=True;MultipleActiveResultSets=true"},
-            {"Nested:Key2", "NestedValue2"}
-        };
-
-        public TotalAchievementsTests()
-        {
-            configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
-        }
-
         [Fact]
         public void TotalAchievements_ShouldBeCalculatedCorrectly()
         {
-            using var context = new MsSqlDbContext(configuration);
-            var a = context.Games.ToList();
             context.Games.AddRange(
                 new Game
                 {

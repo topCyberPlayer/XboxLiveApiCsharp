@@ -2,11 +2,11 @@
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
-    public class BaseService
+    public class BaseRepository
     {
         internal readonly XblAppDbContext _context;
         
-        public BaseService(XblAppDbContext context)
+        public BaseRepository(XblAppDbContext context)
         {
             _context = context;
         }

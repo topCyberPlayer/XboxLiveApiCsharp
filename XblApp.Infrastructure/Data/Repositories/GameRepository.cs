@@ -4,7 +4,7 @@ using XblApp.Domain.Interfaces;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
-    public class GameRepository : BaseService, IGameRepository
+    public class GameRepository : BaseRepository, IGameRepository
     {
         public GameRepository(XblAppDbContext context) : base(context) { }
 
@@ -18,55 +18,59 @@ namespace XblApp.Infrastructure.Data.Repositories
             return await _context.Games.AsNoTracking().FirstOrDefaultAsync(g => g.GameName == gameName);
         }
 
-        public async Task SaveGameAsync(Game game)
+        public async Task SaveGameAsync(List<Game> games)
         {
-            // Ищем игру в базе данных по идентификатору
-            Game? existingGame = await _context.Games.FindAsync(game.GameId);
-
-            if (existingGame != null)
+            foreach (Game game in games) 
             {
-                // Если игра уже существует, обновляем его данные
-                existingGame.GameName = game.GameName;
-                existingGame.TotalGamerscore = game.TotalGamerscore;
-                existingGame.TotalAchievements = game.TotalAchievements;
-                existingGame.GamerLinks = new List<GamerGame>()
-                {
-                    new GamerGame()
-                    {
-                        GameId = game.GameId,
-                        GamerId = game.GamerLinks.Select(g => g.GameId).FirstOrDefault(),
-                        CurrentAchievements = game.GamerLinks.Select(g => g.CurrentAchievements).FirstOrDefault(),
-                        CurrentGamerscore = game.Achievement.CurrentGamerscore,
-                    }
-                };
+                // Ищем игру в базе данных по идентификатору
+                Game? existingGame = await _context.Games.FindAsync(game.GameId);
 
-                _context.Games.Update(existingGame);
-            }
-            else
-            {
-                // Если игры нет в базе данных, добавляем новую
-                Game newGame = new Game()
+                // Если игра уже существует, обновляем ее данные
+                if (existingGame != null)
                 {
-                    GameId = game.TitleId,
-                    GameName = game.GameName,
-                    TotalAchievements = game.Achievement.TotalAchievements,
-                    TotalGamerscore = game.Achievement.TotalGamerscore,
-                    GamerLinks = new List<GamerGame>()
+                    existingGame.GameName = game.GameName;
+                    existingGame.TotalGamerscore = game.TotalGamerscore;
+                    existingGame.TotalAchievements = game.TotalAchievements;
+                    existingGame.GamerLinks = new List<GamerGame>()
                     {
                         new GamerGame()
                         {
-                            GameId = game.TitleId,
-                            GamerId = gamerId,
-                            CurrentAchievements = game.Achievement.CurrentAchievements,
-                            CurrentGamerscore = game.Achievement.CurrentGamerscore,
+                            GameId = game.GameId,
+                            GamerId = game.GamerLinks.Select(g => g.GameId).FirstOrDefault(),
+                            CurrentAchievements = game.GamerLinks.Select(g => g.CurrentAchievements).FirstOrDefault(),
+                            CurrentGamerscore = game.GamerLinks.Select(g => g.CurrentGamerscore).FirstOrDefault(),
                         }
-                    }
-                };
+                    };
 
-                _context.Games.Add(newGame);
+                    _context.Games.Update(existingGame);
+                }
+                else
+                {
+                    // Если игры нет в базе данных, добавляем новую
+                    Game newGame = new Game()
+                    {
+                        GameId = game.GameId,
+                        GameName = game.GameName,
+                        TotalAchievements = game.TotalAchievements,
+                        TotalGamerscore = game.TotalGamerscore,
+                        GamerLinks = new List<GamerGame>()
+                        {
+                            new GamerGame()
+                            {
+                                GameId = game.GameId,
+                                GamerId = game.GamerLinks.Select(g => g.GameId).FirstOrDefault(),
+                                CurrentAchievements = game.GamerLinks.Select(g => g.CurrentAchievements).FirstOrDefault(),
+                                CurrentGamerscore = game.GamerLinks.Select(g => g.CurrentGamerscore).FirstOrDefault(),
+                            }
+                        }
+                    };
+
+                    _context.Games.Add(newGame);
+                }
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
         }
     }
 }

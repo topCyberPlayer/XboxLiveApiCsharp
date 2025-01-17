@@ -21,9 +21,35 @@ namespace XblApp.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            GamerOutput = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
-            GameOutput = await _getGameUseCase.GetAllGamesAsync();
+            List<Domain.Entities.Gamer> gamers = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
+            GamerOutput = MapToGamerDTO(gamers);
+
+            List<Domain.Entities.Game> games = await _getGameUseCase.GetAllGamesAsync();
+            GameOutput = MapToGameDTO(games);
+
             return Page();
         }
+
+        private static List<GamerDTO> MapToGamerDTO(List<Domain.Entities.Gamer> gamers) =>
+            gamers.Select(gamer => new GamerDTO
+            {
+                GamerId = gamer.GamerId,
+                Gamertag = gamer.Gamertag,
+                Gamerscore = gamer.Gamerscore,
+                Bio = gamer.Bio,
+                Location = gamer.Location,
+                Games = gamer.GameLinks.Select(x => x.Game).Count(),
+                Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
+            }).ToList();
+
+        private static List<GameDTO> MapToGameDTO(List<Domain.Entities.Game> gamers) =>
+            gamers.Select(game => new GameDTO
+            {
+                GameId = game.GameId,
+                GameName = game.GameName,
+                Gamers = game.GamerLinks.Count,
+                TotalAchievements = game.TotalAchievements,
+                TotalGamerscore = game.TotalGamerscore,
+            }).ToList();
     }
 }

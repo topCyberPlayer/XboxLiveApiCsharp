@@ -3,7 +3,7 @@ using XblApp.Domain.Interfaces;
 
 namespace XblApp.Infrastructure.Data.Repositories
 {
-    public class AuthenticationRepository : BaseService, IAuthenticationRepository
+    public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {
         public AuthenticationRepository(XblAppDbContext context) : base(context)
         {

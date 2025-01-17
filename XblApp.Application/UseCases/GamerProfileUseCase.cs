@@ -40,9 +40,9 @@ namespace XblApp.Application.UseCases
             return gamers;
         }
 
-        public async Task<GamerGame> GetGamesForGamerAsync(string gamertag)
+        public async Task<Gamer> GetGamesForGamerAsync(string gamertag)
         {
-            GamerGame gamesForGamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
+            Gamer gamesForGamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
             return gamesForGamer;
         }
@@ -51,7 +51,7 @@ namespace XblApp.Application.UseCases
         {
             if (IsDateXstsTokenExperid())
             {
-                //Если дата XstsToken истекла, то запрашиваю из БД OAuthToken и обновляю его
+                //Если дата XstsToken истекла, то запрашиваю OAuthToken и обновляю его
                 TokenOAuth experidTokenOAuth = await _authRepository.GetTokenOAuth();
 
                 await RefreshTokens(experidTokenOAuth);
@@ -59,17 +59,16 @@ namespace XblApp.Application.UseCases
 
             string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();
 
-            Gamer gamerResponse = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
-            await _gamerRepository.SaveGamerAsync(gamerResponse);
+            List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
+            await _gamerRepository.SaveGamerAsync(gamers);
+                        
+            List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamertag, authorizationHeaderValue);
+            await _gameRepository.SaveGameAsync(games);
 
-            //Получаю список игр и ИД игрока, которому они принадлежат
-            GamerGame gameResponse = await _gameService.GetGamesForGamerProfileAsync(gamertag, authorizationHeaderValue);
-            //await _gameRepository.SaveGamesAsync(gameResponse);/* Надо сохранить в таблицу: GamerGamer, Games */
-
-            return gamerResponse;
+            return gamers.FirstOrDefault();
         }
 
-        public bool IsDateXstsTokenExperid()
+        private bool IsDateXstsTokenExperid()
         {
             DateTime? dateNow = DateTime.Now;
 

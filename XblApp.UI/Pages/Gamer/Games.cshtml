@@ -1,5 +1,5 @@
 ﻿@page "/gamer/{gamertag}/games"
-@    using XblApp.Shared.DTOs
+@using XblApp.DTO
 
 @model XblApp.Pages.Gamer.GamesModel
 @{
@@ -19,6 +19,7 @@
                     <th>Game</th>
                     <th>Achievements</th>
                     <th>Gamerscore</th>
+                    <th>Progress</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,8 +27,9 @@
                 {
                     <tr>
                         <td class="align-middle">@game.GameName</td>
-                        <td class="align-middle">@game.CurrentAchievements of @game.TotalAchievements</td>
                         <td class="align-middle">@game.CurrentGamerscore of @game.TotalGamerscore</td>
+                        <td class="align-middle">@game.CurrentAchievements of @game.TotalAchievements</td>
+                        <td class="align-middle">@game.AchievementsProgress</td>
                     </tr>
                 }
             </tbody>
