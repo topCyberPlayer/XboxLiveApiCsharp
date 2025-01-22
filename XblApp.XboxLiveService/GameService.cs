@@ -25,14 +25,14 @@ namespace XblApp.XboxLiveService
 
         public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, string authorizationHeaderValue, int maxItems)
         {
-            string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory";
+            string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory/decoration/{DefScopes}";
 
             return await GetGamesForGamerBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
         }
 
         public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, string authorizationHeaderValue, int maxItems)
         {
-            string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory";
+            string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory/decoration/{DefScopes}";
 
             return await GetGamesForGamerBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
         }
@@ -41,15 +41,14 @@ namespace XblApp.XboxLiveService
         {
             HttpClient client = factory.CreateClient("GameService");
 
-            IDictionary<string, string> queryParams = new Dictionary<string, string>
+            Dictionary<string, string> queryParams = new()
             {
-                { "decoration", DefScopes },
                 { "maxItems", maxItems.ToString() },
             };
 
             string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", authorizationHeaderValue);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
 
             GameJson result = await SendRequestAsync<GameJson>(client, uri);
 

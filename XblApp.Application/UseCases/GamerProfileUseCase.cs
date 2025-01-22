@@ -47,7 +47,7 @@ namespace XblApp.Application.UseCases
             return gamesForGamer;
         }
 
-        public async Task<Gamer?> UpdateProfileAsync(string gamertag)
+        public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
             if (IsDateXstsTokenExperid())
             {
@@ -59,10 +59,10 @@ namespace XblApp.Application.UseCases
 
             string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();
 
-            List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamertag, authorizationHeaderValue);
+            List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId, authorizationHeaderValue);
             await _gamerRepository.SaveGamerAsync(gamers);
-                        
-            List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamertag, authorizationHeaderValue);
+
+            List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId, authorizationHeaderValue);
             await _gameRepository.SaveGameAsync(games);
 
             return gamers.FirstOrDefault();

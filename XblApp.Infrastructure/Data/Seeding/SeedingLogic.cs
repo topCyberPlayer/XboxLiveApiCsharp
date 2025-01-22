@@ -6,7 +6,9 @@ namespace XblApp.Infrastructure.Data.Seeding
     {
         public static async Task SeedDatabase(this XblAppDbContext context)
         {
-            List<Game> games = new List<Game>()
+            if (!context.Games.Any() && !context.Gamers.Any()) 
+            {
+                List<Game> games = new List<Game>()
                 {
                     new Game()
                     {
@@ -65,16 +67,17 @@ namespace XblApp.Infrastructure.Data.Seeding
                         }
                     },
                 };
-            await context.Games.AddRangeAsync(games);
+                await context.Games.AddRangeAsync(games);
 
-            List<Gamer> gamers = new List<Gamer>()
+                List<Gamer> gamers = new List<Gamer>()
                 {
                     new Gamer() { GamerId = 1, Gamertag = "Player 1", Gamerscore = 23540 },
                     new Gamer() { GamerId = 2, Gamertag = "Player 2", Gamerscore = 8200 }
                 };
-            await context.Gamers.AddRangeAsync(gamers);
+                await context.Gamers.AddRangeAsync(gamers);
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
