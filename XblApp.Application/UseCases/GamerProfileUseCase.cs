@@ -19,8 +19,8 @@ namespace XblApp.Application.UseCases
             IXboxLiveGameService gameService,
             IGameRepository gameRepository) : base(authService, authRepository)
         {
-            _gamerRepository = gamerRepository;
             _gamerService = gamerService;
+            _gamerRepository = gamerRepository;
 
             _gameService = gameService;
             _gameRepository = gameRepository;
@@ -49,9 +49,9 @@ namespace XblApp.Application.UseCases
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
+            //Если дата XstsToken истекла, то запрашиваю OAuthToken и обновляю его
             if (IsDateXstsTokenExperid())
             {
-                //Если дата XstsToken истекла, то запрашиваю OAuthToken и обновляю его
                 TokenOAuth experidTokenOAuth = await _authRepository.GetTokenOAuth();
 
                 await RefreshTokens(experidTokenOAuth);
