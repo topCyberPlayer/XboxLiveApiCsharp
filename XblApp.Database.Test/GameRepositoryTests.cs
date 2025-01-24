@@ -3,7 +3,7 @@ using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
 using XblApp.Domain.Entities;
 
-namespace XblApp.Test._4_Infrastructure.Database
+namespace XblApp.Database.Test
 {
     public class GameRepositoryTests
     {
