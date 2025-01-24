@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using XblApp.Infrastructure.Data.Contexts;
 
-namespace XblApp.Infrastructure.Data
+namespace XblApp.Database.Contexts
 {
     public class MsSqlDbContext : XblAppDbContext
     {

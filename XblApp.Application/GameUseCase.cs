@@ -1,7 +1,7 @@
 ﻿using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
-namespace XblApp.Application.UseCases
+namespace XblApp.Application
 {
     public class GameUseCase : BaseUseCase
     {
@@ -12,7 +12,7 @@ namespace XblApp.Application.UseCases
             IAuthenticationService authService,
             IAuthenticationRepository authRepository) : base(authService, authRepository)
         {
-            _gameRepository = gameRepository;   
+            _gameRepository = gameRepository;
         }
 
         public async Task<List<Game>> GetAllGamesAsync()

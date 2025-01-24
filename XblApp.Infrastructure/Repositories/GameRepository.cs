@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
-namespace XblApp.Infrastructure.Data.Repositories
+namespace XblApp.Database.Repositories
 {
     public class GameRepository : BaseRepository, IGameRepository
     {
@@ -20,7 +21,7 @@ namespace XblApp.Infrastructure.Data.Repositories
 
         public async Task SaveGameAsync(List<Game> games)
         {
-            foreach (Game game in games) 
+            foreach (Game game in games)
             {
                 // Ищем игру в базе данных по идентификатору
                 Game? existingGame = await _context.Games.FindAsync(game.GameId);

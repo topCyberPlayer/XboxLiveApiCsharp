@@ -2,7 +2,7 @@
 using XblApp.Domain.Entities;
 using XblApp.Infrastructure.XboxLiveServices.Models;
 
-namespace XblApp.Infrastructure.Data.Seeding
+namespace XblApp.Database.Seeding
 {
     public class GameJsonLoader : AbstractJsonLoader
     {
@@ -17,11 +17,11 @@ namespace XblApp.Infrastructure.Data.Seeding
         private static IEnumerable<Game> CreateGame(GameJson gameJson)
         {
             long gamerJsonId = long.Parse(gameJson.Xuid);
-            
+
             List<Game> games = new List<Game>();
 
             foreach (Title? title in gameJson.Titles)
-            {               
+            {
                 Game game = new Game
                 {
                     GameId = long.Parse(title.TitleId),

@@ -2,7 +2,7 @@
 using XblApp.Domain.Entities;
 using XblApp.Infrastructure.XboxLiveServices.Models;
 
-namespace XblApp.Infrastructure.Data.Seeding
+namespace XblApp.Database.Seeding
 {
 
     public class GamerJsonLoader : AbstractJsonLoader
@@ -23,7 +23,7 @@ namespace XblApp.Infrastructure.Data.Seeding
                 Gamertag = profileUserJson.Gamertag,
                 Gamerscore = profileUserJson.Gamerscore,
                 Location = profileUserJson.Location,
-                Bio = profileUserJson.Bio                
+                Bio = profileUserJson.Bio
             };
 
             return gamer;

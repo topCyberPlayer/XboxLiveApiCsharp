@@ -3,17 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using XblApp.Infrastructure.Data;
+using XblApp.Database.Contexts;
+
 
 #nullable disable
 
 namespace XblApp.Infrastructure.Data.Migrations.MsSql
 {
     [DbContext(typeof(MsSqlDbContext))]
-    partial class MsSqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530165947_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,35 +225,6 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                     b.ToTable("AspNetUserTokens", "nba");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
-                {
-                    b.Property<long>("AchievementId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("GameId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Gamerscore")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSecret")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AchievementId");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Achievements", "nba");
-                });
-
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
                 {
                     b.Property<long>("GameId")
@@ -291,24 +266,6 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                     b.HasKey("GamerId");
 
                     b.ToTable("Gamers", "nba");
-                });
-
-            modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
-                {
-                    b.Property<long>("GamerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("AchievementId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("DateUnlocked")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("GamerId", "AchievementId");
-
-                    b.HasIndex("AchievementId");
-
-                    b.ToTable("GamerAchievement", "nba");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
@@ -475,36 +432,6 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
-                {
-                    b.HasOne("XblApp.Domain.Entities.Game", "Game")
-                        .WithMany("Achievements")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
-                {
-                    b.HasOne("XblApp.Domain.Entities.Achievement", "Achievement")
-                        .WithMany("GamerLinks")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("XblApp.Domain.Entities.Gamer", "Gamer")
-                        .WithMany("AchievementLinks")
-                        .HasForeignKey("GamerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Achievement");
-
-                    b.Navigation("Gamer");
-                });
-
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
                 {
                     b.HasOne("XblApp.Domain.Entities.Game", "Game")
@@ -524,22 +451,13 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                     b.Navigation("Gamer");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
-                {
-                    b.Navigation("GamerLinks");
-                });
-
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
                 {
-                    b.Navigation("Achievements");
-
                     b.Navigation("GamerLinks");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Gamer", b =>
                 {
-                    b.Navigation("AchievementLinks");
-
                     b.Navigation("GameLinks");
                 });
 #pragma warning restore 612, 618

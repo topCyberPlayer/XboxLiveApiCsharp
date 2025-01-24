@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using XblApp.Domain.Entities;
 
-namespace XblApp.Infrastructure.Data.Contexts
+namespace XblApp.Database.Contexts
 {
     public class TotalAchievementsInterceptor : SaveChangesInterceptor
     {

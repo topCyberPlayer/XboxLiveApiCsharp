@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using XblApp.Application.UseCases;
+using XblApp.Application;
+using XblApp.Database.Contexts;
+using XblApp.Database.Repositories;
+using XblApp.Database.Seeding;
 using XblApp.Domain.Interfaces;
-using XblApp.Infrastructure.Data;
-using XblApp.Infrastructure.Data.Repositories;
-using XblApp.Infrastructure.Data.Seeding;
 using XblApp.XboxLiveService;
 
 namespace XblApp

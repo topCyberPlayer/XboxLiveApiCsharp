@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
-namespace XblApp.Infrastructure.Data.Repositories
+namespace XblApp.Database.Repositories
 {
     public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {

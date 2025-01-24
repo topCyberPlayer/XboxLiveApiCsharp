@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using XblApp.Domain.Entities;
 
-namespace XblApp.Infrastructure.Data
+namespace XblApp.Database.Contexts
 {
     public class XblAppDbContext : IdentityDbContext
     {
@@ -23,9 +23,9 @@ namespace XblApp.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GamerGame>()
-                .HasKey(x => new {x.GamerId, x.GameId});
+                .HasKey(x => new { x.GamerId, x.GameId });
             modelBuilder.Entity<GamerAchievement>()
-                .HasKey(x => new {x.GamerId, x.AchievementId});
+                .HasKey(x => new { x.GamerId, x.AchievementId });
 
             base.OnModelCreating(modelBuilder);
         }

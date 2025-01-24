@@ -1,4 +1,4 @@
-﻿namespace XblApp.Infrastructure.Data.Seeding
+﻿namespace XblApp.Database.Seeding
 {
     public abstract class AbstractJsonLoader
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Application.UseCases;
+using XblApp.Application;
 using XblApp.DTO;
 
 namespace XblApp.Pages

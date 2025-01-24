@@ -1,7 +1,7 @@
 ﻿using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
-namespace XblApp.Application.UseCases
+namespace XblApp.Application
 {
     public class GamerProfileUseCase : BaseUseCase
     {

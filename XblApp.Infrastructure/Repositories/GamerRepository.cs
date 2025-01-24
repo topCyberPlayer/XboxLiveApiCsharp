@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.DTO;
 
-namespace XblApp.Infrastructure.Data.Repositories
+namespace XblApp.Database.Repositories
 {
     public class GamerRepository : BaseRepository, IGamerRepository
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using XblApp.Infrastructure.Data;
+using XblApp.Database.Contexts;
 
 namespace XblApp.Test.RepositoryTest
 {

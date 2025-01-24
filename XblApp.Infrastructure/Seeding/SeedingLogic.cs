@@ -1,12 +1,13 @@
-﻿using XblApp.Domain.Entities;
+﻿using XblApp.Database.Contexts;
+using XblApp.Domain.Entities;
 
-namespace XblApp.Infrastructure.Data.Seeding
+namespace XblApp.Database.Seeding
 {
     public static class SeedingLogic
     {
         public static async Task SeedDatabase(this XblAppDbContext context)
         {
-            if (!context.Games.Any() && !context.Gamers.Any()) 
+            if (!context.Games.Any() && !context.Gamers.Any())
             {
                 List<Game> games = new List<Game>()
                 {
