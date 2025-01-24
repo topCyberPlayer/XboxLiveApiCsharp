@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using XblApp.Application;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
-namespace XblApp.Test.UseCaseTest
+namespace XblApp.Application.Test
 {
     public class GamerProfileUseCaseTests : IClassFixture<WebApplicationFactory<Program>>
     {
