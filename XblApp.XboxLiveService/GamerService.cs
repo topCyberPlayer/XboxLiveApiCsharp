@@ -44,17 +44,17 @@ namespace XblApp.XboxLiveService
         {
             string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
-            return await GetProfileBase(relativeUrl, authorizationHeaderValue);
+            return await GetProfileBaseAsync(relativeUrl, authorizationHeaderValue);
         }
 
         public async Task<List<Gamer>> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
-            return await GetProfileBase(relativeUrl, authorizationHeaderValue);
+            return await GetProfileBaseAsync(relativeUrl, authorizationHeaderValue);
         }
 
-        private async Task<List<Gamer>> GetProfileBase(string relativeUrl, string authorizationHeaderValue)
+        private async Task<List<Gamer>> GetProfileBaseAsync(string relativeUrl, string authorizationHeaderValue)
         {
             _logger.LogInformation("Fetching profile from URL: {Url}", relativeUrl);
 
