@@ -19,9 +19,11 @@ namespace XblApp.Database.Repositories
 
         public async Task<Gamer> GetGamerProfileAsync(string gamertag) =>
             await _context.Gamers
-            .Where(x => x.Gamertag == gamertag)
-            .AsNoTracking()
-            .FirstOrDefaultAsync();
+                .Where(x => x.Gamertag == gamertag)
+                .Include(a => a.GameLinks)
+                    .ThenInclude(b => b.Game)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
         public async Task<List<Gamer>> GetAllGamerProfilesAsync() =>
             await _context.Gamers
@@ -32,11 +34,11 @@ namespace XblApp.Database.Repositories
 
         public async Task<Gamer> GetGamesForGamerAsync(string gamertag) =>
             await _context.Gamers
-            .Where(x => x.Gamertag == gamertag)
-            .AsNoTracking()
-            .Include(a => a.GameLinks)
-                .ThenInclude(b => b.Game)
-            .FirstOrDefaultAsync();
+                .Where(x => x.Gamertag == gamertag)
+                .AsNoTracking()
+                .Include(a => a.GameLinks)
+                    .ThenInclude(b => b.Game)
+                .FirstOrDefaultAsync();
 
         public async Task SaveGamerAsync(List<Gamer> gamers)
         {
