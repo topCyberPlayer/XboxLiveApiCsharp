@@ -7,10 +7,8 @@ namespace XblApp.Database.Contexts
 {
     public class XblAppDbContext : IdentityDbContext
     {
-        protected readonly IConfiguration Configuration;
-        public XblAppDbContext(IConfiguration configuration)
+        public XblAppDbContext(DbContextOptions<XblAppDbContext> options) : base(options)
         {
-            Configuration = configuration;
         }
 
         public DbSet<Gamer> Gamers { get; set; }

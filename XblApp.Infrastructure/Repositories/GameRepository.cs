@@ -68,10 +68,8 @@ namespace XblApp.Database.Repositories
 
                     _context.Games.Add(newGame);
                 }
-
-                await _context.SaveChangesAsync();
             }
-
+            await _context.SaveChangesAsync();
         }
     }
 }

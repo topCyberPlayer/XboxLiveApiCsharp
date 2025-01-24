@@ -5,22 +5,16 @@ namespace XblApp.Database.Contexts
 {
     public class MsSqlDbContext : XblAppDbContext
     {
-        public MsSqlDbContext(IConfiguration configuration) : base(configuration)
+        public MsSqlDbContext(DbContextOptions<XblAppDbContext> options) : base(options)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.AddInterceptors(new TotalAchievementsInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("nba");//Не все БД поддерживают "Имя Схемы"
-            //У вас может быть две таблицы с одинаковым именем, но разными именами схемы: например,таблица Books с именем схемы Display отличается от таблицы Books с именем схемы Order.
-
+            //Не все БД поддерживают "Имя Схемы"
+            //У вас может быть две таблицы с одинаковым именем, но разными именами схемы:
+            //например,таблица Books с именем схемы Display отличается от таблицы Books с именем схемы Order.
+            modelBuilder.HasDefaultSchema("nba");
             base.OnModelCreating(modelBuilder);
         }
     }

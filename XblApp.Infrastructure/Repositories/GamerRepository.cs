@@ -69,9 +69,9 @@ namespace XblApp.Database.Repositories
 
                     _context.Gamers.Add(newGamer);
                 }
-
-                await _context.SaveChangesAsync();
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

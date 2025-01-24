@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using XblApp.Application;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
@@ -53,10 +54,18 @@ namespace XblApp
             switch (dbProvider)
             {
                 case "MsSql":
-                    builder.Services.AddDbContext<XblAppDbContext, MsSqlDbContext>();
+                    builder.Services.AddDbContext<XblAppDbContext, MsSqlDbContext>(options =>
+                    {
+                        options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlConnection"));
+                        options.EnableSensitiveDataLogging();
+                        options.AddInterceptors(new TotalAchievementsInterceptor());
+                    });
                     break;
                 case "PostgreSql":
-                    builder.Services.AddDbContext<XblAppDbContext, PostgresDbContext>();
+                    builder.Services.AddDbContext<XblAppDbContext, PostgresDbContext>(options =>
+                    {
+                        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSqlConnection"));
+                    });
                     break;
             }
 
