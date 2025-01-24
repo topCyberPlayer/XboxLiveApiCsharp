@@ -5,7 +5,7 @@ namespace XblApp.Database.Contexts
 {
     public class MsSqlDbContext : XblAppDbContext
     {
-        public MsSqlDbContext(DbContextOptions<XblAppDbContext> options) : base(options)
+        public MsSqlDbContext(DbContextOptions<MsSqlDbContext> options) : base(options)
         {
         }
 

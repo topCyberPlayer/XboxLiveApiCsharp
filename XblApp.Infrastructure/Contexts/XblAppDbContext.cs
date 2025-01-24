@@ -7,7 +7,7 @@ namespace XblApp.Database.Contexts
 {
     public class XblAppDbContext : IdentityDbContext
     {
-        public XblAppDbContext(DbContextOptions<XblAppDbContext> options) : base(options)
+        public XblAppDbContext(DbContextOptions options) : base(options)
         {
         }
 

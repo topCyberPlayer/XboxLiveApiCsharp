@@ -4,7 +4,7 @@ namespace XblApp.Database.Contexts
 {
     public class PostgresDbContext : XblAppDbContext
     {
-        public PostgresDbContext(DbContextOptions<XblAppDbContext> options) : base(options)
+        public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
         {
         }
     }
