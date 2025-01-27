@@ -5,10 +5,10 @@ namespace XblApp.Application
 {
     public class BaseUseCase
     {
-        internal readonly IAuthenticationService _authService;
+        internal readonly IXboxLiveAuthenticationService _authService;
         internal readonly IAuthenticationRepository _authRepository;
 
-        public BaseUseCase(IAuthenticationService authService, IAuthenticationRepository authRepository)
+        public BaseUseCase(IXboxLiveAuthenticationService authService, IAuthenticationRepository authRepository)
         {
             _authService = authService;
             _authRepository = authRepository;

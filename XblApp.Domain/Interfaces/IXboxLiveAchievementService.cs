@@ -9,13 +9,13 @@ namespace XblApp.Domain.Interfaces
         /// </summary>
         /// <param name="xuid">Xbox User Id</param>
         /// <returns>Recent Xbox One Progress Response</returns>
-        public Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue);
+        public Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid);
 
         /// <summary>
         /// Get recent achievement progress and information
         /// </summary>
         /// <param name="xuid">Xbox User Id</param>
         /// <returns>Achievement 360 Response</returns>
-        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue);
+        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid);
     }
 }

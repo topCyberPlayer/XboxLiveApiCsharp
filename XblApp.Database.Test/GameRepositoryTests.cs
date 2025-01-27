@@ -7,11 +7,11 @@ namespace XblApp.Database.Test
 {
     public class GameRepositoryTests
     {
-        private readonly DbContextOptions<XblAppDbContext> _options;
+        private readonly DbContextOptions<MsSqlDbContext> _options;
 
         public GameRepositoryTests()
         {
-            _options = new DbContextOptionsBuilder<XblAppDbContext>()
+            _options = new DbContextOptionsBuilder<MsSqlDbContext>()
                 .UseInMemoryDatabase("TestDatabase")
                 .Options;
         }

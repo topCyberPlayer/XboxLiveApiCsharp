@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using XblApp.Application;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
@@ -35,9 +34,11 @@ namespace XblApp
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
+            builder.Services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IXboxLiveGameService, GameService>();
+            builder.Services.AddScoped<IXboxLiveAchievementService, AchievementService>();
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();

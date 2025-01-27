@@ -2,7 +2,7 @@
 
 namespace XblApp.Domain.Interfaces
 {
-    public interface IAuthenticationService //: IBaseService
+    public interface IXboxLiveAuthenticationService
     {
         public Task<TokenOAuth> RequestOauth2Token(string authorizationCode);
         public Task<TokenXau> RequestXauToken(TokenOAuth tokenOAuth);

@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XblApp.XboxLiveService.Models
+﻿namespace XblApp.XboxLiveService.Models
 {
     public class AchievementJson
     {
+        public ICollection<Title> Titles { get; set; }
+    }
+
+    public class Title
+    {
+        public string LastUnlock { get; set; } // Используем string, если не хотим парсить дату сразу
+        public long TitleId { get; set; }
+        public string ServiceConfigId { get; set; }
+        public string TitleType { get; set; }
+        public string Platform { get; set; }
+        public string Name { get; set; }
+        public int EarnedAchievements { get; set; }
+        public int CurrentGamerscore { get; set; }
+        public int MaxGamerscore { get; set; }
     }
 }

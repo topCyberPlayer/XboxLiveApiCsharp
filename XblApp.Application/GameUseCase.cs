@@ -9,7 +9,7 @@ namespace XblApp.Application
 
         public GameUseCase(
             IGameRepository gameRepository,
-            IAuthenticationService authService,
+            IXboxLiveAuthenticationService authService,
             IAuthenticationRepository authRepository) : base(authService, authRepository)
         {
             _gameRepository = gameRepository;

@@ -40,12 +40,12 @@ namespace XblApp.Application.Test
 
     public class XboxLiveGameServiceMock : IXboxLiveGameService
     {
-        public Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, string authorizationHeaderValue, int maxItems = 5)
+        public Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, int maxItems = 5)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, string authorizationHeaderValue, int maxItems = 5)
+        public Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, int maxItems = 5)
         {
             List<Game> result = new List<Game>()
             {

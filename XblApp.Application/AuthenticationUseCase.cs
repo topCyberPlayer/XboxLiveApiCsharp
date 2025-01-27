@@ -7,7 +7,7 @@ namespace XblApp.Application
     {
         public AuthenticationUseCase(
             IAuthenticationRepository authRepository,
-            IAuthenticationService authService) : base(authService, authRepository) { }
+            IXboxLiveAuthenticationService authService) : base(authService, authRepository) { }
 
         /// <summary>
         /// Использовать когда OAuthToken вообще нет.

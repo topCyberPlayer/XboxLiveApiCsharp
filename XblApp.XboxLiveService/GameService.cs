@@ -21,23 +21,23 @@ namespace XblApp.XboxLiveService
             TitleHubSettings.PRODUCT_ID
         );
 
-        public GameService(IHttpClientFactory factory) : base(factory) { }
+        public GameService(IHttpClientFactory factory, IAuthenticationRepository authRepository) : base(factory, authRepository) { }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, string authorizationHeaderValue, int maxItems)
+        public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, int maxItems)
         {
             string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
+            return await GetGamesForGamerBaseAsync(relativeUrl, maxItems);
         }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, string authorizationHeaderValue, int maxItems)
+        public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, int maxItems)
         {
             string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl, authorizationHeaderValue, maxItems);
+            return await GetGamesForGamerBaseAsync(relativeUrl, maxItems);
         }
 
-        private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl, string authorizationHeaderValue, int maxItems)
+        private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl, int maxItems)
         {
             HttpClient client = factory.CreateClient("GameService");
 
@@ -70,8 +70,8 @@ namespace XblApp.XboxLiveService
                             GamerId = long.TryParse(gameJson.Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
                             CurrentAchievements = title.Achievement.CurrentAchievements,
                             CurrentGamerscore = title.Achievement.CurrentGamerscore
-    }
-}
+                        }
+                    }
                 })
                 .ToList();
     }

@@ -7,29 +7,30 @@ namespace XblApp.XboxLiveService
 {
     public class AchievementService : BaseService, IXboxLiveAchievementService
     {
-        public AchievementService(IHttpClientFactory factory) : base(factory)
+        public AchievementService(IHttpClientFactory factory, IAuthenticationRepository authRepository) : base(factory, authRepository)
         {
         }
 
-        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue)
+        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue)
+        public async Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/history/titles";
 
-            return await GetAchievementBaseAsync(relativeUrl, authorizationHeaderValue);
+            return await GetAchievementBaseAsync(relativeUrl);
         }
 
-        private async Task<List<Achievement>> GetAchievementBaseAsync(string relativeUrl, string authorizationHeaderValue)
+        private async Task<List<Achievement>> GetAchievementBaseAsync(string relativeUrl)
         {
             try
             {
                 HttpClient client = factory.CreateClient("AchievementService");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
+                client.DefaultRequestHeaders.Add("MS-CV", "eK4nT8CkJzEpWF3j.2");
 
                 AchievementJson result = await SendRequestAsync<AchievementJson>(client, relativeUrl);
 
@@ -41,5 +42,12 @@ namespace XblApp.XboxLiveService
                 throw;
             }
         }
+
+        private List<Achievement> MapToAchievements(AchievementJson achievement) =>
+            new List<Achievement>()
+            {
+
+            };
+
     }
 }

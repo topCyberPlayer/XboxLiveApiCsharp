@@ -35,26 +35,28 @@ namespace XblApp.XboxLiveService
 
         private readonly ILogger<GamerService> _logger;
 
-        public GamerService(IHttpClientFactory factory, ILogger<GamerService> logger) : base(factory) 
+        public GamerService(IHttpClientFactory factory,
+            IAuthenticationRepository authRepository,
+            ILogger<GamerService> logger) : base(factory, authRepository)
         { 
             _logger = logger;
         }
 
-        public async Task<List<Gamer>> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue)
+        public async Task<List<Gamer>> GetGamerProfileAsync(string gamertag)
         {
             string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
-            return await GetProfileBaseAsync(relativeUrl, authorizationHeaderValue);
+            return await GetProfileBaseAsync(relativeUrl);
         }
 
-        public async Task<List<Gamer>> GetGamerProfileAsync(long xuid, string authorizationHeaderValue)
+        public async Task<List<Gamer>> GetGamerProfileAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
-            return await GetProfileBaseAsync(relativeUrl, authorizationHeaderValue);
+            return await GetProfileBaseAsync(relativeUrl);
         }
 
-        private async Task<List<Gamer>> GetProfileBaseAsync(string relativeUrl, string authorizationHeaderValue)
+        private async Task<List<Gamer>> GetProfileBaseAsync(string relativeUrl)
         {
             _logger.LogInformation("Fetching profile from URL: {Url}", relativeUrl);
 

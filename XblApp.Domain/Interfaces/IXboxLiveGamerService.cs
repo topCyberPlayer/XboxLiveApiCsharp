@@ -4,7 +4,7 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IXboxLiveGamerService
     {
-        public Task<List<Gamer>> GetGamerProfileAsync(string gamertag, string authorizationHeaderValue);
-        public Task<List<Gamer>> GetGamerProfileAsync(long xuid, string authorizationHeaderValue);
+        public Task<List<Gamer>> GetGamerProfileAsync(string gamertag);
+        public Task<List<Gamer>> GetGamerProfileAsync(long xuid);
     }
 }

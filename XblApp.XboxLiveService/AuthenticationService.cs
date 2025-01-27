@@ -9,7 +9,7 @@ using XblApp.Infrastructure.XboxLiveServices.Models;
 
 namespace XblApp.XboxLiveService
 {
-    public class AuthenticationService : BaseService, IAuthenticationService
+    public class AuthenticationService : IXboxLiveAuthenticationService
     {
         private readonly AuthenticationConfig _config;
         private readonly HttpClient _authClient;
@@ -18,7 +18,7 @@ namespace XblApp.XboxLiveService
 
         private static readonly string DefScopes = string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
 
-        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config) : base(factory)
+        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config)
         {
             _config = config.Value;
             _authClient = factory.CreateClient("AuthServiceAuthToken");
