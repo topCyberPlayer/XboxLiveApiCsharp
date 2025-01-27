@@ -11,12 +11,12 @@ namespace XblApp.XboxLiveService
         {
         }
 
-        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfo(long xuid, string authorizationHeaderValue)
+        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfo(long xuid, string authorizationHeaderValue)
+        public async Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid, string authorizationHeaderValue)
         {
             string relativeUrl = $"/users/xuid({xuid})/history/titles";
 

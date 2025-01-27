@@ -11,13 +11,18 @@ namespace XblApp.Application
         private readonly IXboxLiveGameService _gameService;
         private readonly IGameRepository _gameRepository;
 
+        private readonly IXboxLiveAchievementService _achievementService;
+        private readonly IAchievementRepository _achievementRepository;
+
         public GamerProfileUseCase(
             IAuthenticationService authService,
             IAuthenticationRepository authRepository,
             IXboxLiveGamerService gamerService,
             IGamerRepository gamerRepository,
             IXboxLiveGameService gameService,
-            IGameRepository gameRepository) : base(authService, authRepository)
+            IGameRepository gameRepository,
+            IXboxLiveAchievementService achievementService,
+            IAchievementRepository achievementRepository) : base(authService, authRepository)
         {
             _gamerService = gamerService;
             _gamerRepository = gamerRepository;
@@ -64,6 +69,9 @@ namespace XblApp.Application
 
             List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId, authorizationHeaderValue);
             await _gameRepository.SaveGameAsync(games);
+
+            List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId, authorizationHeaderValue);
+            await _achievementRepository.SaveAchievementsAsync(achievements);
 
             return gamers.FirstOrDefault();
         }
