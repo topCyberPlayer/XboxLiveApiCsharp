@@ -7,8 +7,8 @@
 
     public class Title
     {
-        public string LastUnlock { get; set; } // Используем string, если не хотим парсить дату сразу
         public long TitleId { get; set; }
+        public string LastUnlock { get; set; } // Используем string, если не хотим парсить дату сразу
         public string ServiceConfigId { get; set; }
         public string TitleType { get; set; }
         public string Platform { get; set; }

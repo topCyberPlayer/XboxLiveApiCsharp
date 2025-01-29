@@ -24,6 +24,8 @@ namespace XblApp.Domain.Entities
         [Required]
         public bool IsSecret { get; set; }
 
+        [Required]
+        public DateTime DateUnlock {  get; set; }
         
 
         // Навигационное свойство для связи с игрой

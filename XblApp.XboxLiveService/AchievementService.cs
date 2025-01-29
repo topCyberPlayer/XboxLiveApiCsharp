@@ -34,7 +34,7 @@ namespace XblApp.XboxLiveService
 
                 AchievementJson result = await SendRequestAsync<AchievementJson>(client, relativeUrl);
 
-                return null;
+                return MapToAchievements(result);
             }
             catch (Exception)
             {
@@ -44,10 +44,13 @@ namespace XblApp.XboxLiveService
         }
 
         private List<Achievement> MapToAchievements(AchievementJson achievement) =>
-            new List<Achievement>()
+            achievement.Titles
+            .Select(t => new Achievement
             {
-
-            };
+                AchievementId = t.TitleId,
+                //DateUnlock = DateTimeOffset.Parse(t.LastUnlock)
+            })
+            .ToList();
 
     }
 }
