@@ -14,6 +14,7 @@ namespace XblApp
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
             builder.RegisterApplicationServices();
             WebApplication? app = builder.Build();
 
