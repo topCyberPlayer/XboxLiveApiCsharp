@@ -23,8 +23,8 @@ namespace XblApp.Database.Contexts
                 Game game = gameEntry.Entity;
 
                 // Подсчитываем достижения, связанные с текущей игрой
-                game.TotalAchievements = game.Achievements.Count;
-                game.TotalGamerscore = game.Achievements.Sum(a => a.Gamerscore);
+                game.TotalAchievements = game.AchievementLinks.Count;
+                game.TotalGamerscore = game.AchievementLinks.Sum(a => a.Gamerscore);
             }
 
             return base.SavingChanges(eventData, result);

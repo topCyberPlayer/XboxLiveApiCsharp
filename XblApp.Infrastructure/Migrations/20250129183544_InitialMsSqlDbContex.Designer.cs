@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XblApp.Database.Contexts;
 
-
 #nullable disable
 
-namespace XblApp.Infrastructure.Data.Migrations.MsSql
+namespace XblApp.Database.Migrations
 {
     [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20250114150016_AchievementTable")]
-    partial class AchievementTable
+    [Migration("20250129183544_InitialMsSqlDbContex")]
+    partial class InitialMsSqlDbContex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +21,7 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("nba")
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -172,10 +171,12 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -212,10 +213,12 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -229,6 +232,9 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
                 {
                     b.Property<long>("AchievementId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("DateUnlock")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -481,51 +487,51 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
 
             modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.Game", "Game")
-                        .WithMany("Achievements")
+                    b.HasOne("XblApp.Domain.Entities.Game", "GameLink")
+                        .WithMany("AchievementLinks")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Game");
+                    b.Navigation("GameLink");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.Achievement", "Achievement")
+                    b.HasOne("XblApp.Domain.Entities.Achievement", "AchievementLink")
                         .WithMany("GamerLinks")
                         .HasForeignKey("AchievementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("XblApp.Domain.Entities.Gamer", "Gamer")
+                    b.HasOne("XblApp.Domain.Entities.Gamer", "GamerLink")
                         .WithMany("AchievementLinks")
                         .HasForeignKey("GamerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Achievement");
+                    b.Navigation("AchievementLink");
 
-                    b.Navigation("Gamer");
+                    b.Navigation("GamerLink");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.Game", "Game")
+                    b.HasOne("XblApp.Domain.Entities.Game", "GameLink")
                         .WithMany("GamerLinks")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("XblApp.Domain.Entities.Gamer", "Gamer")
+                    b.HasOne("XblApp.Domain.Entities.Gamer", "GamerLink")
                         .WithMany("GameLinks")
                         .HasForeignKey("GamerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Game");
+                    b.Navigation("GameLink");
 
-                    b.Navigation("Gamer");
+                    b.Navigation("GamerLink");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
@@ -535,7 +541,7 @@ namespace XblApp.Infrastructure.Data.Migrations.MsSql
 
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
                 {
-                    b.Navigation("Achievements");
+                    b.Navigation("AchievementLinks");
 
                     b.Navigation("GamerLinks");
                 });

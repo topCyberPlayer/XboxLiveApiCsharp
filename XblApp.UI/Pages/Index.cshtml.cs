@@ -38,7 +38,7 @@ namespace XblApp.Pages
                 Gamerscore = gamer.Gamerscore,
                 Bio = gamer.Bio,
                 Location = gamer.Location,
-                Games = gamer.GameLinks.Select(x => x.Game).Count(),
+                Games = gamer.GameLinks.Select(x => x.GameLink).Count(),
                 Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
             }).ToList();
 
@@ -47,7 +47,7 @@ namespace XblApp.Pages
             {
                 GameId = game.GameId,
                 GameName = game.GameName,
-                Gamers = game.GamerLinks.Count,
+                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(),
                 TotalAchievements = game.TotalAchievements,
                 TotalGamerscore = game.TotalGamerscore,
             }).ToList();

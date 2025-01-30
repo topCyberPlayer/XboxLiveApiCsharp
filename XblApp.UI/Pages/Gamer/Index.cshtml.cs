@@ -40,7 +40,7 @@ namespace XblApp.Pages.Gamer
                 Gamerscore = gamer.Gamerscore,
                 Bio = gamer.Bio,
                 Location = gamer.Location,
-                Games = gamer.GameLinks.Select(x => x.Game).Count(),
+                Games = gamer.GameLinks.Select(x => x.GameLink).Count(),
                 Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
             };
     }

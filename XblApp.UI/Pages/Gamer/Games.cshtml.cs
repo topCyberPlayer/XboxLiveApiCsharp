@@ -32,9 +32,9 @@ namespace XblApp.Pages.Gamer
                 Games = gamer.GameLinks.Select(gg => new GameInnerDTO
                 {
                     GameId = gg.GameId,
-                    GameName = gg.Game.GameName,
-                    TotalAchievements = gg.Game.TotalAchievements,
-                    TotalGamerscore = gg.Game.TotalGamerscore,
+                    GameName = gg.GameLink.GameName,
+                    TotalAchievements = gg.GameLink.TotalAchievements,
+                    TotalGamerscore = gg.GameLink.TotalGamerscore,
                     CurrentAchievements = gg.CurrentAchievements,
                     CurrentGamerscore = gg.CurrentGamerscore
                 }).ToList()

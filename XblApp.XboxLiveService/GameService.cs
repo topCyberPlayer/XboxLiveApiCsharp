@@ -9,16 +9,16 @@ namespace XblApp.XboxLiveService
     public class GameService : BaseService, IXboxLiveGameService
     {
         private static readonly string DefScopes = string.Join(",",
-            TitleHubSettings.ACHIEVEMENT,
-            TitleHubSettings.ALTERNATE_TITLE_ID,
-            TitleHubSettings.CONTENT_BOARD,
-            TitleHubSettings.SERVICE_CONFIG_ID,
-            TitleHubSettings.STATS,
-            TitleHubSettings.GAME_PASS,
-            TitleHubSettings.IMAGE,
-            TitleHubSettings.DETAIL,
-            TitleHubSettings.FRIENDS_WHO_PLAYED,
-            TitleHubSettings.PRODUCT_ID
+            TitleHubSettings.ACHIEVEMENT
+            //,TitleHubSettings.ALTERNATE_TITLE_ID
+            //,TitleHubSettings.CONTENT_BOARD
+            //,TitleHubSettings.SERVICE_CONFIG_ID
+            //,TitleHubSettings.STATS
+            //,TitleHubSettings.GAME_PASS
+            //,TitleHubSettings.IMAGE
+            //,TitleHubSettings.DETAIL
+            //,TitleHubSettings.FRIENDS_WHO_PLAYED
+            //,TitleHubSettings.PRODUCT_ID
         );
 
         public GameService(IHttpClientFactory factory, IAuthenticationRepository authRepository) : base(factory, authRepository) { }
@@ -52,10 +52,12 @@ namespace XblApp.XboxLiveService
 
             GameJson result = await SendRequestAsync<GameJson>(client, uri);
 
-            return MapToGame(result);
+            List<Game> games = MapToGame(result);
+
+            return games;
         }
 
-        private static List<Game> MapToGame(GameJson gameJson) =>
+        public static List<Game> MapToGame(GameJson gameJson) =>
             gameJson.Titles
                 .Select(title => new Game
                 {

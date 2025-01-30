@@ -9,10 +9,10 @@ namespace XblApp.Domain.Entities
     public class GamerAchievement
     {
         public long GamerId { get; set; }
-        public Gamer Gamer { get; set; }
+        public Gamer GamerLink { get; set; }
 
         public long AchievementId { get; set; }
-        public Achievement Achievement { get; set; }
+        public Achievement AchievementLink { get; set; }
 
         public DateTime DateUnlocked { get; set; }
     }

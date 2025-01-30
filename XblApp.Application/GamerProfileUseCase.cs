@@ -65,8 +65,6 @@ namespace XblApp.Application
                 await RefreshTokens(experidTokenOAuth);
             }
 
-            string authorizationHeaderValue = _authRepository.GetAuthorizationHeaderValue();
-
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
             await _gamerRepository.SaveGamerAsync(gamers);
 
@@ -76,7 +74,7 @@ namespace XblApp.Application
             List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId);
             await _achievementRepository.SaveAchievementsAsync(achievements);
             
-            return gamers.FirstOrDefault();
+            return await _gamerRepository.GetGamerProfileAsync(gamerId);
         }
 
         private bool IsDateXstsTokenExperid()

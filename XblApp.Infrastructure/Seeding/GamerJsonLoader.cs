@@ -1,32 +1,19 @@
 ﻿using System.Text.Json;
 using XblApp.Domain.Entities;
 using XblApp.Infrastructure.XboxLiveServices.Models;
+using XblApp.XboxLiveService;
 
 namespace XblApp.Database.Seeding
 {
-
-    public class GamerJsonLoader : AbstractJsonLoader
+    public static class GamerJsonLoader
     {
         public static IEnumerable<Gamer> LoadGamers(string fileDir, string fileSearchString)
         {
-            string filePath = GetJsonFilePath(fileDir, fileSearchString);
-            GamerJson jsonDecoded = JsonSerializer.Deserialize<GamerJson>(File.ReadAllText(filePath));
+            string filePath = AbstractJsonLoader.GetJsonFilePath(fileDir, fileSearchString);
+            string jsonContent = File.ReadAllText(filePath);
+            GamerJson jsonDecoded = JsonSerializer.Deserialize<GamerJson>(jsonContent);
 
-            return jsonDecoded.ProfileUsers.Select(x => CreateGamers(x));
-        }
-
-        private static Gamer CreateGamers(ProfileUser profileUserJson)
-        {
-            var gamer = new Gamer
-            {
-                GamerId = long.Parse(profileUserJson.ProfileId),
-                Gamertag = profileUserJson.Gamertag,
-                Gamerscore = profileUserJson.Gamerscore,
-                Location = profileUserJson.Location,
-                Bio = profileUserJson.Bio
-            };
-
-            return gamer;
+            return GamerService.MapToGamer(jsonDecoded);
         }
     }
 }

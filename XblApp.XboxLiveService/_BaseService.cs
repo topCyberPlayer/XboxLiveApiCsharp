@@ -11,8 +11,7 @@ namespace XblApp.XboxLiveService
         protected BaseService(IHttpClientFactory factory, IAuthenticationRepository authRepository)
         {
             this.factory = factory;
-            this.authorizationHeaderValue = authRepository.GetAuthorizationHeaderValue()
-                ?? throw new InvalidOperationException("Authorization header value cannot be null.");
+            this.authorizationHeaderValue = authRepository.GetAuthorizationHeaderValue();
         }
 
         public async Task<T> SendRequestAsync<T>(HttpClient client, string uri)
@@ -24,8 +23,10 @@ namespace XblApp.XboxLiveService
                 response.EnsureSuccessStatusCode();
 
                 string content = await response.Content.ReadAsStringAsync();
-                return await response.Content.ReadFromJsonAsync<T>()
+                T? result = await response.Content.ReadFromJsonAsync<T>()
                     ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(T).Name}.");
+
+                return result;
             }
             catch (Exception)
             {

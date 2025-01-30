@@ -9,15 +9,19 @@ namespace XblApp.Database.Repositories
     {
         public GameRepository(XblAppDbContext context) : base(context) { }
 
-        public async Task<List<Game>> GetAllGamesAsync()
-        {
-            return _context.Games.AsNoTracking().ToList();
-        }
+        public async Task<List<Game>> GetAllGamesAsync() =>
+            await _context.Games
+            .AsNoTracking()
+            .Include(x => x.GamerLinks)
+            .ToListAsync();
 
-        public async Task<Game> GetGameAsync(string gameName)
-        {
-            return await _context.Games.AsNoTracking().FirstOrDefaultAsync(g => g.GameName == gameName);
-        }
+        public async Task<Game> GetGameAsync(string gameName) =>
+            await _context.Games
+            .AsNoTracking()
+            .Include(x => x.GamerLinks)
+            .Where(g => g.GameName == gameName)
+            .FirstOrDefaultAsync();
+        
 
         public async Task SaveGameAsync(List<Game> games)
         {

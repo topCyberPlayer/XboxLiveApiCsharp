@@ -25,11 +25,11 @@ namespace XblApp.Domain.Entities
         public bool IsSecret { get; set; }
 
         [Required]
-        public DateTime DateUnlock {  get; set; }
-        
+        public DateTimeOffset DateUnlock { get; set; }
+
 
         // Навигационное свойство для связи с игрой
-        public Game Game { get; set; }
+        public Game GameLink { get; set; }
 
         public ICollection<GamerAchievement> GamerLinks { get; set; }
     }

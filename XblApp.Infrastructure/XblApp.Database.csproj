@@ -10,10 +10,12 @@
     <Content Include="Seeding\seedData\Gamers.json">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Seeding\seedData\Games.json">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -30,6 +32,10 @@
 	  <ProjectReference Include="..\XblApp.Domain\XblApp.Domain.csproj" />
 	  <ProjectReference Include="..\XblApp.Shared\XblApp.DTO.csproj" />
 	  <ProjectReference Include="..\XblApp.XboxLiveService\XblApp.XboxLiveService.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>
