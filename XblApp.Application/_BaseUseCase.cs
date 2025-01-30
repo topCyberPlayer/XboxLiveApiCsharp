@@ -15,42 +15,36 @@ namespace XblApp.Application
         }
 
         /// <summary>
-        /// Использовать когда уже есть OAuthToken, но его срок истек.
-        /// </summary>
-        /// <param name="tokenOAuth"></param>
-        /// <returns></returns>
-        public async Task RefreshTokens(TokenOAuth expiredTokenOAuth)
-        {
-            TokenOAuth freshTokeneOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth);
-
-            await ProcessTokens(freshTokeneOAuth);
-        }
-
-        /// <summary>
         /// Запрос и сохранение 2х токенов: TokenXau и TokenXsts
         /// </summary>
         /// <param name="tokenOAuthDTO"></param>
         /// <returns></returns>
         internal async Task ProcessTokens(TokenOAuth tokenOAuthDTO)
         {
-            if (tokenOAuthDTO != null)
-            {
-                await _authRepository.SaveTokenAsync(tokenOAuthDTO);
+            if (tokenOAuthDTO == null)
+                throw new ArgumentNullException(nameof(tokenOAuthDTO));
 
-                TokenXau tokenXau = await _authService.RequestXauToken(tokenOAuthDTO);
+            await _authRepository.SaveTokenAsync(tokenOAuthDTO);
 
-                if (tokenXau != null)
-                {
-                    await _authRepository.SaveTokenAsync(tokenXau);
+            TokenXau tokenXau = await RequestAndSaveXauToken(tokenOAuthDTO);
+            await RequestAndSaveXstsToken(tokenXau);
+        }
 
-                    TokenXsts responseXsts = await _authService.RequestXstsToken(tokenXau);
+        private async Task<TokenXau> RequestAndSaveXauToken(TokenOAuth tokenOAuth)
+        {
+            TokenXau tokenXau = await _authService.RequestXauToken(tokenOAuth)
+                ?? throw new InvalidOperationException("Failed to retrieve XAU token.");
 
-                    if (responseXsts != null)
-                    {
-                        await _authRepository.SaveTokenAsync(responseXsts);
-                    }
-                }
-            }
+            await _authRepository.SaveTokenAsync(tokenXau);
+            return tokenXau;
+        }
+
+        private async Task RequestAndSaveXstsToken(TokenXau tokenXau)
+        {
+            TokenXsts tokenXsts = await _authService.RequestXstsToken(tokenXau)
+                ?? throw new InvalidOperationException("Failed to retrieve XSTS token.");
+
+            await _authRepository.SaveTokenAsync(tokenXsts);
         }
     }
 }

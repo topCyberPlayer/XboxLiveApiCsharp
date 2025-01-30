@@ -34,35 +34,24 @@ namespace XblApp.Application
             _achievementRepository = achievementRepository;
         }
 
-        public async Task<Gamer> GetGamerProfileAsync(string gamertag)
-        {
-            Gamer gamer = await _gamerRepository.GetGamerProfileAsync(gamertag);
+        public async Task<Gamer> GetGamerProfileAsync(string gamertag) =>
+            await _gamerRepository.GetGamerProfileAsync(gamertag);
 
-            return gamer;
-        }
+        public async Task<List<Gamer>> GetAllGamerProfilesAsync() =>
+            await _gamerRepository.GetAllGamerProfilesAsync();
 
-        public async Task<List<Gamer>> GetAllGamerProfilesAsync()
-        {
-            List<Gamer> gamers = await _gamerRepository.GetAllGamerProfilesAsync();
+        public async Task<Gamer> GetGamesForGamerAsync(string gamertag) =>
+            await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
-            return gamers;
-        }
-
-        public async Task<Gamer> GetGamesForGamerAsync(string gamertag)
-        {
-            Gamer gamesForGamer = await _gamerRepository.GetGamesForGamerAsync(gamertag);
-
-            return gamesForGamer;
-        }
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
             //Если дата XstsToken истекла, то запрашиваю OAuthToken и обновляю его
             if (IsDateXstsTokenExperid())
             {
-                TokenOAuth experidTokenOAuth = await _authRepository.GetTokenOAuth();
-
-                await RefreshTokens(experidTokenOAuth);
+                TokenOAuth expiredTokenOAuth = await _authRepository.GetTokenOAuth();
+                TokenOAuth freshTokeneOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth);
+                await ProcessTokens(freshTokeneOAuth);
             }
 
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
