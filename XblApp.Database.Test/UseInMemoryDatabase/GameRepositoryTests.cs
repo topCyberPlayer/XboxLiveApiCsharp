@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
+using XblApp.Database.Seeding;
 using XblApp.Domain.Entities;
 
-namespace XblApp.Database.Test
+namespace XblApp.Database.Test.UseInMemoryDatabase
 {
     public class GameRepositoryTests
     {
@@ -105,6 +106,20 @@ namespace XblApp.Database.Test
                 Assert.Equal("Updated Game", updatedGame2.GameName);
                 Assert.Equal(10, updatedGame2.TotalAchievements);
                 Assert.Equal(200, updatedGame2.TotalGamerscore);
+            }
+        }
+
+        [Fact]
+        public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
+        {
+            List<Game> games = GameJsonLoader.LoadGames("DataForTest", "TitleHub.json").ToList();
+
+            // Act
+            using (var context = CreateContext())
+            {
+                var repository = new GameRepository(context);
+
+                await repository.SaveGameAsync(games);
             }
         }
     }
