@@ -41,7 +41,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
 
             using (var context = CreateContext())
             {
-                var repository = new AuthenticationRepository(context);
+                var repository = new AuthenticationRepository(context, null);
 
                 await repository.SaveTokenAsync(tokenOAuth);
             }
