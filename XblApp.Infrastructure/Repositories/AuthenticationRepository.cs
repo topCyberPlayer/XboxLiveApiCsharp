@@ -13,8 +13,7 @@ namespace XblApp.Database.Repositories
 
         public AuthenticationRepository(XblAppDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
         {
-            _aspNetUserId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-            ?? throw new UnauthorizedAccessException("User is not authenticated.");
+            _aspNetUserId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
         public Task<List<Gamer>> GetAllDonorsAsync()
