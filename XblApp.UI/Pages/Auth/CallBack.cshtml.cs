@@ -19,16 +19,13 @@ namespace XblApp.Pages.Auth
             var errorDescription = HttpContext.Request.Query["error_description"];
 
             if (code == null)
-            {
-                return NotFound("er");
-                //return RedirectToAction("ExternalLoginFailure");
-            }
+                return NotFound(error);
 
             try
             {
                 await _authServ.RequestTokens(code);
 
-                return RedirectToPage("/Privacy");
+                return RedirectToPage("/Index");
             }
             catch (Exception ex)
             {

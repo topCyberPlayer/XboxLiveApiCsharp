@@ -15,6 +15,5 @@ namespace XblApp.Domain.Interfaces
         /// <returns></returns>
         public Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuth);
         public string GenerateAuthorizationUrl();
-        
     }
 }

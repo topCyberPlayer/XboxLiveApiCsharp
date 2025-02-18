@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Interface_Adapters", "3_I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Database", "XblApp.Infrastructure\XblApp.Database.csproj", "{EBDA786F-A925-44AD-A654-BE0F1F2517C4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_External_Intefaces_or_Infrastructure", "4_External_Intefaces_or_Infrastructure", "{A57CFBC4-B7C0-44CD-8942-7691237C78A4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Infrastructure", "4_Infrastructure", "{A57CFBC4-B7C0-44CD-8942-7691237C78A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.UI", "XblApp.UI\XblApp.UI.csproj", "{6DE479C1-FD8B-4BC4-8D1A-75ABDBD4147B}"
 EndProject

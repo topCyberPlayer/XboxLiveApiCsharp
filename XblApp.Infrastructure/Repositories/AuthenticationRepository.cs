@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
@@ -7,16 +9,23 @@ namespace XblApp.Database.Repositories
 {
     public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {
-        private const string AspNetUserId = "14111a1d-0ce5-485a-b032-987e7f10ec72";
+        private readonly string _aspNetUserId;
 
-        public AuthenticationRepository(XblAppDbContext context) : base(context)
+        public AuthenticationRepository(XblAppDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
         {
+            _aspNetUserId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            ?? throw new UnauthorizedAccessException("User is not authenticated.");
+        }
+
+        public Task<List<Gamer>> GetAllDonorsAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public string GetAuthorizationHeaderValue()
         {
             return _context.XstsTokens
-                .Where(x => x.AspNetUserId == AspNetUserId)
+                .Where(x => x.AspNetUserId == _aspNetUserId)
                 .Select(x => $"x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
         }
@@ -24,7 +33,7 @@ namespace XblApp.Database.Repositories
         public DateTime GetDateXauTokenExpired()
         {
             return _context.XauTokens
-                .Where(a => a.AspNetUserId == AspNetUserId)
+                .Where(a => a.AspNetUserId == _aspNetUserId)
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
@@ -32,7 +41,7 @@ namespace XblApp.Database.Repositories
         public DateTime GetDateXstsTokenExpired()
         {
             return _context.XstsTokens
-                .Where(a => a.AspNetUserId == AspNetUserId)
+                .Where(a => a.AspNetUserId == _aspNetUserId)
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
@@ -40,27 +49,31 @@ namespace XblApp.Database.Repositories
         public async Task<TokenOAuth> GetTokenOAuth()
         {
             return await _context.OAuthTokens
-                .Where(a => a.AspNetUserId == AspNetUserId)
+                .Where(a => a.AspNetUserId == _aspNetUserId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task SaveTokenAsync(TokenOAuth tokenXbl)
         {
-            TokenOAuth token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == AspNetUserId);
+            TokenOAuth token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _aspNetUserId);
 
             if (token == null)
             {
-                await _context.OAuthTokens.AddAsync(tokenXbl);
+                await _context.OAuthTokens.AddAsync(new TokenOAuth
+                {
+                    AspNetUserId = _aspNetUserId,
+                    AccessToken = tokenXbl.AccessToken,
+                    AuthenticationToken = tokenXbl.AuthenticationToken,
+                    ExpiresIn = tokenXbl.ExpiresIn,
+                    RefreshToken = tokenXbl.RefreshToken,
+                    TokenType = tokenXbl.TokenType,
+                    UserId  = tokenXbl.UserId,
+                    Scope = tokenXbl.Scope
+                });
             }
             else
             {
-                token.AccessToken = tokenXbl.AccessToken;
-                token.AuthenticationToken = tokenXbl.AuthenticationToken;
-                token.ExpiresIn = tokenXbl.ExpiresIn;
-                token.RefreshToken = tokenXbl.RefreshToken;
-                token.TokenType = tokenXbl.TokenType;
-                token.UserId = tokenXbl.UserId;
-                token.Scope = tokenXbl.Scope;
+                _context.OAuthTokens.Update(tokenXbl);
             }
 
             await _context.SaveChangesAsync();
@@ -68,19 +81,22 @@ namespace XblApp.Database.Repositories
 
         public async Task SaveTokenAsync(TokenXau tokenXbl)
         {
-            TokenXau token = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == AspNetUserId);
+            TokenXau token = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _aspNetUserId);
 
             if (token == null)
             {
-                await _context.XauTokens.AddAsync(tokenXbl);
+                await _context.XauTokens.AddAsync(new TokenXau
+                {
+                    AspNetUserId = _aspNetUserId,
+                    IssueInstant = tokenXbl.IssueInstant,
+                    NotAfter = tokenXbl.NotAfter,
+                    Token = tokenXbl.Token,
+                    Uhs = tokenXbl.Uhs
+                });
             }
-
             else
             {
-                token.IssueInstant = tokenXbl.IssueInstant;
-                token.NotAfter = tokenXbl.NotAfter;
-                token.Token = tokenXbl.Token;
-                token.Uhs = tokenXbl.Uhs;
+                _context.XauTokens.Update(tokenXbl);
             }
 
             await _context.SaveChangesAsync();
@@ -88,24 +104,27 @@ namespace XblApp.Database.Repositories
 
         public async Task SaveTokenAsync(TokenXsts tokenXbl)
         {
-            TokenXsts token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == AspNetUserId);
+            TokenXsts token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == _aspNetUserId);
 
             if (token == null)
             {
-                await _context.XstsTokens.AddAsync(tokenXbl);
+                await _context.XstsTokens.AddAsync(new TokenXsts
+                {
+                    AspNetUserId = _aspNetUserId,
+                    IssueInstant = tokenXbl.IssueInstant,
+                    NotAfter = tokenXbl.NotAfter,
+                    Token = tokenXbl.Token,
+                    AgeGroup = tokenXbl.AgeGroup,
+                    Gamertag = tokenXbl.Gamertag,
+                    Privileges = tokenXbl.Privileges,
+                    Userhash = tokenXbl.Userhash,
+                    UserPrivileges = tokenXbl.UserPrivileges,
+                    Xuid = tokenXbl.Xuid,
+                });
             }
             else
             {
-                token.IssueInstant = tokenXbl.IssueInstant;
-                token.NotAfter = tokenXbl.NotAfter;
-                token.Token = tokenXbl.Token;
-
-                token.Xuid = tokenXbl.Xuid;
-                token.Userhash = tokenXbl.Userhash;
-                token.Gamertag = tokenXbl.Gamertag;
-                token.AgeGroup = tokenXbl.AgeGroup;
-                token.Privileges = tokenXbl.Privileges;
-                token.UserPrivileges = tokenXbl.UserPrivileges;
+                _context.XstsTokens.Update(tokenXbl);
             }
 
             await _context.SaveChangesAsync();
