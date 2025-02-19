@@ -5,7 +5,7 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.Database.Contexts
 {
-    public class XblAppDbContext : IdentityDbContext
+    public class XblAppDbContext : IdentityDbContext//<ApplicationUser>
     {
         public XblAppDbContext(DbContextOptions options) : base(options)
         {
