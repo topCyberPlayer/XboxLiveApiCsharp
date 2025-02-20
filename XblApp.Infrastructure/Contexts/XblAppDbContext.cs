@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using XblApp.Database.Models;
 using XblApp.Domain.Entities;
 
 namespace XblApp.Database.Contexts
 {
-    public class XblAppDbContext : IdentityDbContext//<ApplicationUser>
+    public class XblAppDbContext : IdentityDbContext<ApplicationUser>
     {
         public XblAppDbContext(DbContextOptions options) : base(options)
         {
