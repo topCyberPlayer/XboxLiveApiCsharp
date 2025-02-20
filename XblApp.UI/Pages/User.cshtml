@@ -1,0 +1,13 @@
+﻿@page
+@model XblApp.UI.Pages.UserModel
+@{
+}
+
+<h2 class="text-center">Welcome to your Profile</h2>
+
+<div>
+    Gamertag: @Model.appUser?.UserName
+</div>
+<div>
+    CreatedAt: @Model.appUser?.CrearedAt.ToString("dd/MM/yyyy")
+</div>
