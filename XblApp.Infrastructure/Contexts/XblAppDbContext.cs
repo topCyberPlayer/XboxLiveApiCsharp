@@ -21,8 +21,6 @@ namespace XblApp.Database.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<GamerGame>()
                 .HasKey(x => new { x.GamerId, x.GameId });
             modelBuilder.Entity<GamerAchievement>()
@@ -38,6 +36,8 @@ namespace XblApp.Database.Contexts
             moderatorTeam.NormalizedName = "moderatorteam";
 
             modelBuilder.Entity<IdentityRole>().HasData(adminTeam, gamerTeam, moderatorTeam);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

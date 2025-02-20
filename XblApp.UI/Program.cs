@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using XblApp.Application;
 using XblApp.Database.Contexts;
+using XblApp.Database.Models;
 using XblApp.Database.Repositories;
 using XblApp.Database.Seeding;
 using XblApp.Domain.Interfaces;
@@ -43,33 +44,24 @@ namespace XblApp
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();
-            
+
+            builder.Services.AddDbContext<XblAppDbContext>(options =>
+            {
+                string? connectionString = builder.Configuration.GetConnectionString("MsSqlConnection");
+                options.UseSqlServer(connectionString);
+            });
+
             builder.Services
-                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<XblAppDbContext>();
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
             string? dbProvider = builder.Configuration.GetConnectionString("DatabaseProvider");
 
-            switch (dbProvider)
-            {
-                case "MsSql":
-                    builder.Services.AddDbContext<XblAppDbContext, MsSqlDbContext>(options =>
-                    {
-                        options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlConnection"));
-                        options.EnableSensitiveDataLogging();
-                        options.AddInterceptors(new TotalAchievementsInterceptor());
-                    });
-                    break;
-                case "PostgreSql":
-                    builder.Services.AddDbContext<XblAppDbContext, PostgresDbContext>(options =>
-                    {
-                        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSqlConnection"));
-                    });
-                    break;
-            }
+            
 
             return builder;
         }
@@ -129,7 +121,7 @@ namespace XblApp
                     if (arePendingMigrations)
                         await context.Database.MigrateAsync();
 
-                    await context.SeedDatabase();
+                    //await context.SeedDatabase();
                 }
                 catch (Exception)
                 {

@@ -3,20 +3,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace XblApp.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMsSqlDbContex : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "nba");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
-                schema: "nba",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -31,10 +29,10 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
-                schema: "nba",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CrearedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -57,7 +55,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Gamers",
-                schema: "nba",
                 columns: table => new
                 {
                     GamerId = table.Column<long>(type: "bigint", nullable: false),
@@ -73,7 +70,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Games",
-                schema: "nba",
                 columns: table => new
                 {
                     GameId = table.Column<long>(type: "bigint", nullable: false),
@@ -88,7 +84,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "OAuthTokens",
-                schema: "nba",
                 columns: table => new
                 {
                     AspNetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -107,7 +102,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "XauTokens",
-                schema: "nba",
                 columns: table => new
                 {
                     AspNetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -123,7 +117,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "XstsTokens",
-                schema: "nba",
                 columns: table => new
                 {
                     AspNetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -144,7 +137,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
-                schema: "nba",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -159,7 +151,6 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "nba",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -167,7 +158,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
-                schema: "nba",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -182,7 +172,6 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "nba",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -190,7 +179,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
-                schema: "nba",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
@@ -204,7 +192,6 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "nba",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -212,7 +199,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
-                schema: "nba",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -224,14 +210,12 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "nba",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "nba",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -239,7 +223,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
-                schema: "nba",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -253,7 +236,6 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "nba",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -261,7 +243,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Achievements",
-                schema: "nba",
                 columns: table => new
                 {
                     AchievementId = table.Column<long>(type: "bigint", nullable: false),
@@ -278,7 +259,6 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_Achievements_Games_GameId",
                         column: x => x.GameId,
-                        principalSchema: "nba",
                         principalTable: "Games",
                         principalColumn: "GameId",
                         onDelete: ReferentialAction.Cascade);
@@ -286,7 +266,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "GamerGame",
-                schema: "nba",
                 columns: table => new
                 {
                     GamerId = table.Column<long>(type: "bigint", nullable: false),
@@ -300,14 +279,12 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_GamerGame_Gamers_GamerId",
                         column: x => x.GamerId,
-                        principalSchema: "nba",
                         principalTable: "Gamers",
                         principalColumn: "GamerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GamerGame_Games_GameId",
                         column: x => x.GameId,
-                        principalSchema: "nba",
                         principalTable: "Games",
                         principalColumn: "GameId",
                         onDelete: ReferentialAction.Cascade);
@@ -315,7 +292,6 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateTable(
                 name: "GamerAchievement",
-                schema: "nba",
                 columns: table => new
                 {
                     GamerId = table.Column<long>(type: "bigint", nullable: false),
@@ -328,34 +304,39 @@ namespace XblApp.Database.Migrations
                     table.ForeignKey(
                         name: "FK_GamerAchievement_Achievements_AchievementId",
                         column: x => x.AchievementId,
-                        principalSchema: "nba",
                         principalTable: "Achievements",
                         principalColumn: "AchievementId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GamerAchievement_Gamers_GamerId",
                         column: x => x.GamerId,
-                        principalSchema: "nba",
                         principalTable: "Gamers",
                         principalColumn: "GamerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "555f396b-7e3f-41e0-b00a-fcfe952fd9d0", null, "moderatorTeam", "moderatorteam" },
+                    { "b99ffd51-ce82-4230-9f3c-ba40af4808ed", null, "gamerTeam", "gamerteam" },
+                    { "d9b7de0a-02f1-4a5c-a7c1-ad71022a9948", null, "adminTeam", "adminteam" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Achievements_GameId",
-                schema: "nba",
                 table: "Achievements",
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
-                schema: "nba",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "nba",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
@@ -363,31 +344,26 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
-                schema: "nba",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
-                schema: "nba",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
-                schema: "nba",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "nba",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "nba",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
@@ -395,13 +371,11 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_GamerAchievement_AchievementId",
-                schema: "nba",
                 table: "GamerAchievement",
                 column: "AchievementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GamerGame_GameId",
-                schema: "nba",
                 table: "GamerGame",
                 column: "GameId");
         }
@@ -410,64 +384,49 @@ namespace XblApp.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims",
-                schema: "nba");
+                name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims",
-                schema: "nba");
+                name: "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins",
-                schema: "nba");
+                name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles",
-                schema: "nba");
+                name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens",
-                schema: "nba");
+                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "GamerAchievement",
-                schema: "nba");
+                name: "GamerAchievement");
 
             migrationBuilder.DropTable(
-                name: "GamerGame",
-                schema: "nba");
+                name: "GamerGame");
 
             migrationBuilder.DropTable(
-                name: "OAuthTokens",
-                schema: "nba");
+                name: "OAuthTokens");
 
             migrationBuilder.DropTable(
-                name: "XauTokens",
-                schema: "nba");
+                name: "XauTokens");
 
             migrationBuilder.DropTable(
-                name: "XstsTokens",
-                schema: "nba");
+                name: "XstsTokens");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles",
-                schema: "nba");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers",
-                schema: "nba");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Achievements",
-                schema: "nba");
+                name: "Achievements");
 
             migrationBuilder.DropTable(
-                name: "Gamers",
-                schema: "nba");
+                name: "Gamers");
 
             migrationBuilder.DropTable(
-                name: "Games",
-                schema: "nba");
+                name: "Games");
         }
     }
 }

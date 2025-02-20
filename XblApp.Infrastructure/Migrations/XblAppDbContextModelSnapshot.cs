@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XblApp.Database.Contexts;
 
@@ -11,17 +10,14 @@ using XblApp.Database.Contexts;
 
 namespace XblApp.Database.Migrations
 {
-    [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20250218200945_AddedIdentityRoles")]
-    partial class AddedIdentityRoles
+    [DbContext(typeof(XblAppDbContext))]
+    partial class XblAppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("nba")
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,24 +46,24 @@ namespace XblApp.Database.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", "nba");
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = "fb753122-a37e-4ad7-a5ed-d53cdbb655e1",
+                            Id = "d9b7de0a-02f1-4a5c-a7c1-ad71022a9948",
                             Name = "adminTeam",
                             NormalizedName = "adminteam"
                         },
                         new
                         {
-                            Id = "154a496b-980e-4e60-9086-ae46be82ddc1",
+                            Id = "b99ffd51-ce82-4230-9f3c-ba40af4808ed",
                             Name = "gamerTeam",
                             NormalizedName = "gamerteam"
                         },
                         new
                         {
-                            Id = "ddebf89d-163d-4c1f-8130-23a4997daef9",
+                            Id = "555f396b-7e3f-41e0-b00a-fcfe952fd9d0",
                             Name = "moderatorTeam",
                             NormalizedName = "moderatorteam"
                         });
@@ -95,10 +91,95 @@ namespace XblApp.Database.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "nba");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("XblApp.Database.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -109,6 +190,9 @@ namespace XblApp.Database.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CrearedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -160,92 +244,7 @@ namespace XblApp.Database.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", "nba");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", "nba");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", "nba");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", "nba");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", "nba");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
@@ -277,7 +276,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Achievements", "nba");
+                    b.ToTable("Achievements");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
@@ -297,7 +296,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("GameId");
 
-                    b.ToTable("Games", "nba");
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Gamer", b =>
@@ -320,7 +319,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("GamerId");
 
-                    b.ToTable("Gamers", "nba");
+                    b.ToTable("Gamers");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
@@ -338,7 +337,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasIndex("AchievementId");
 
-                    b.ToTable("GamerAchievement", "nba");
+                    b.ToTable("GamerAchievement");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
@@ -359,7 +358,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("GamerGame", "nba");
+                    b.ToTable("GamerGame");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.TokenOAuth", b =>
@@ -390,7 +389,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("AspNetUserId");
 
-                    b.ToTable("OAuthTokens", "nba");
+                    b.ToTable("OAuthTokens");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.TokenXau", b =>
@@ -414,7 +413,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("AspNetUserId");
 
-                    b.ToTable("XauTokens", "nba");
+                    b.ToTable("XauTokens");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.TokenXsts", b =>
@@ -451,7 +450,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("AspNetUserId");
 
-                    b.ToTable("XstsTokens", "nba");
+                    b.ToTable("XstsTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -465,7 +464,7 @@ namespace XblApp.Database.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,7 +473,7 @@ namespace XblApp.Database.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -489,7 +488,7 @@ namespace XblApp.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -498,7 +497,7 @@ namespace XblApp.Database.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
