@@ -32,11 +32,12 @@ namespace XblApp
         {
             builder.Services.Configure<AuthenticationConfig>(builder.Configuration.GetSection("Authentication:Microsoft"));
             builder.Services.AddHttpClientsFromConfig(builder.Configuration);
-
+            
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
+
             builder.Services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IXboxLiveGameService, GameService>();
@@ -114,6 +115,7 @@ namespace XblApp
             {
                 var services = scope.ServiceProvider;
                 var context = scope.ServiceProvider.GetRequiredService<XblAppDbContext>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
                 try
                 {
@@ -122,7 +124,8 @@ namespace XblApp
                     if (arePendingMigrations)
                         await context.Database.MigrateAsync();
 
-                    //await context.SeedDatabase();
+                    await context.SeedDbDefaultUserAsync(userManager);
+                    //await context.SeedDbGamersAndGamesAsync();
                 }
                 catch (Exception)
                 {

@@ -9,6 +9,6 @@ namespace XblApp.Database.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public DateTime CrearedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

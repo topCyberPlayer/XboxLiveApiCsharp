@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿//using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text;
@@ -17,8 +18,12 @@ namespace XblApp.XboxLiveService
         private readonly HttpClient _xstsTokenClient;
 
         private static readonly string DefScopes = string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
+        private static string _aspNetUserIdRnd = Guid.NewGuid().ToString();//todo Подумать, что использовать: настоящий AspNetUserId или ничего?
 
-        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config)
+        public AuthenticationService(IHttpClientFactory factory
+            ,IOptions<AuthenticationConfig> config
+            //,IHttpContextAccessor httpContextAccessor
+            )
         {
             _config = config.Value;
             _authClient = factory.CreateClient("AuthServiceAuthToken");
@@ -136,6 +141,7 @@ namespace XblApp.XboxLiveService
         private static TokenOAuth MapToTokenOAuth(TokenOAuthJson json) =>
             new()
             {
+                AspNetUserId = _aspNetUserIdRnd,
                 UserId = json.UserId,
                 TokenType = json.TokenType,
                 ExpiresIn = json.ExpiresIn,
@@ -148,6 +154,7 @@ namespace XblApp.XboxLiveService
         private static TokenXau MapToTokenXau(TokenXauJson json) =>
             new()
             {
+                AspNetUserId = _aspNetUserIdRnd,
                 Token = json.Token,
                 NotAfter = json.NotAfter,
                 Uhs = json.Uhs,
@@ -157,6 +164,7 @@ namespace XblApp.XboxLiveService
         private static TokenXsts MapToTokenXsts(TokenXstsJson json) =>
             new()
             {
+                AspNetUserId = _aspNetUserIdRnd,
                 Gamertag = json.Gamertag,
                 Token = json.Token,
                 IssueInstant = json.IssueInstant,

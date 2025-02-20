@@ -12,6 +12,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using XblApp.Database.Models;
+using XblApp.Database.Repositories;
+using XblApp.Domain.Entities;
+using XblApp.Domain.Interfaces;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {
@@ -23,13 +26,17 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IXboxLiveGamerService _xblGamerService;
+        private readonly IGamerRepository _gamerRepository;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IXboxLiveGamerService xblGamerService,
+            IGamerRepository gamerRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -37,6 +44,8 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _xblGamerService = xblGamerService;
+            _gamerRepository = gamerRepository;
         }
 
         /// <summary>
@@ -110,18 +119,24 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser()
+                ApplicationUser user = new()
                 {
                     UserName = Input.Gamertag,
                     Email = Input.Email,
-                    CrearedAt = DateTime.Now,
+                    CreatedAt = DateTime.UtcNow,
                 };
 
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                List<Gamer> gamerData = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
+                
 
-                if (result.Succeeded)
+                var result = await _userManager.CreateAsync(user, Input.Password);
+                
+                if (result.Succeeded && gamerData.Any())
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    gamerData.ForEach(a => a.ApplicationUserId = user.Id);
+                    await _gamerRepository.SaveGamerAsync(gamerData);
 
                     await _userManager.AddToRoleAsync(user, "gamerTeam");
 

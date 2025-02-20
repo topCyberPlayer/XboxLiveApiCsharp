@@ -47,30 +47,10 @@ namespace XblApp.Database.Repositories
                 // Ищем геймера в базе данных по его идентификатору
                 Gamer? existingGamer = await _context.Gamers.FindAsync(gamer.GamerId);
 
-                // Если геймер уже существует, обновляем его данные
-                if (existingGamer != null)
-                {
-                    existingGamer.Gamertag = gamer.Gamertag;
-                    existingGamer.Gamerscore = gamer.Gamerscore;
-                    existingGamer.Bio = gamer.Bio;
-                    existingGamer.Location = gamer.Location;
-
-                    _context.Gamers.Update(existingGamer);
-                }
+                if (existingGamer == null)
+                    _context.Gamers.Add(gamer);
                 else
-                {
-                    // Если геймера нет в базе данных, добавляем нового
-                    Gamer newGamer = new Gamer()
-                    {
-                        GamerId = gamer.GamerId,
-                        Gamertag = gamer.Gamertag,
-                        Gamerscore = gamer.Gamerscore,
-                        Bio = gamer.Bio,
-                        Location = gamer.Location,
-                    };
-
-                    _context.Gamers.Add(newGamer);
-                }
+                    _context.Gamers.Update(gamer);
             }
 
             await _context.SaveChangesAsync();
