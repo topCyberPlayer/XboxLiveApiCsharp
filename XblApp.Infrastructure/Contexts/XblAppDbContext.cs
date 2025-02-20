@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using XblApp.Database.Configurations;
 using XblApp.Database.Models;
 using XblApp.Domain.Entities;
 
@@ -21,10 +22,13 @@ namespace XblApp.Database.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GamerGame>()
-                .HasKey(x => new { x.GamerId, x.GameId });
-            modelBuilder.Entity<GamerAchievement>()
-                .HasKey(x => new { x.GamerId, x.AchievementId });
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new GamerConfiguration());
+            modelBuilder.ApplyConfiguration(new GameConfiguration());
+            modelBuilder.ApplyConfiguration(new AchievementConfiguration());
+            modelBuilder.ApplyConfiguration(new GamerGameConfiguration());
+            modelBuilder.ApplyConfiguration(new GamerAchievementConfiguration());
 
             var adminTeam = new IdentityRole("adminTeam");
             adminTeam.NormalizedName = "adminteam";
@@ -36,8 +40,6 @@ namespace XblApp.Database.Contexts
             moderatorTeam.NormalizedName = "moderatorteam";
 
             modelBuilder.Entity<IdentityRole>().HasData(adminTeam, gamerTeam, moderatorTeam);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

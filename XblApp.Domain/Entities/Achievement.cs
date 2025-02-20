@@ -5,32 +5,15 @@ namespace XblApp.Domain.Entities
 {
     public class Achievement
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long AchievementId { get; set; }
-
-        [ForeignKey("Game")]
-        public long GameId { get; set; } // Внешний ключ к игре
-
-        [Required(AllowEmptyStrings = false)]
+        public long GameId { get; set; }
         public string? Name { get; set; }
-        
-        [Required(AllowEmptyStrings = false)]
         public string? Description { get; set; }
-
-        [Required]
         public int Gamerscore { get; set; }
-
-        [Required]
         public bool IsSecret { get; set; }
-
-        [Required]
         public DateTimeOffset DateUnlock { get; set; }
 
-
-        // Навигационное свойство для связи с игрой
-        public Game GameLink { get; set; }
-
-        public ICollection<GamerAchievement> GamerLinks { get; set; }
+        public Game? GameLink { get; set; }// Навигационное свойство для связи с игрой
+        public ICollection<GamerAchievement>? GamerLinks { get; set; }
     }
 }

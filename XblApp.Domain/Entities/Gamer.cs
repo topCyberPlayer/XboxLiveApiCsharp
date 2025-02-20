@@ -1,28 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace XblApp.Domain.Entities
+﻿namespace XblApp.Domain.Entities
 {
+    /// <summary>
+    /// Все аннотации описаны в классе GamerConfiguration через Fluent API
+    /// </summary>
     public class Gamer
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long GamerId { get; set; }
-
-        [Required(AllowEmptyStrings = false)]
-        public string Gamertag { get; set; }
-
-        [Required]
+        public long GamerId { get; set; } //ID из Xbox Live API
+        public string? Gamertag { get; set; }
         public int Gamerscore { get; set; }
-
         public string? Bio { get; set; }
-
         public string? Location { get; set; }
 
-        // Игры, в которые играет пользователь
-        public ICollection<GamerGame> GameLinks { get; set; } = new List<GamerGame>();
+        public string? ApplicationUserId { get; set; } // Внешний ключ к IdentityUser
 
-        // Связь с достижениями через промежуточную таблицу
-        public ICollection<GamerAchievement> AchievementLinks { get; set; } = new List<GamerAchievement>();
+        public ICollection<GamerGame> GameLinks { get; set; } = []; // Игры, в которые играет пользователь
+        public ICollection<GamerAchievement> AchievementLinks { get; set; } = []; // Связь с достижениями через промежуточную таблицу
     }
 }

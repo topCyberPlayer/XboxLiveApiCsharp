@@ -54,26 +54,11 @@ namespace XblApp.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gamers",
-                columns: table => new
-                {
-                    GamerId = table.Column<long>(type: "bigint", nullable: false),
-                    Gamertag = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gamerscore = table.Column<int>(type: "int", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Gamers", x => x.GamerId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
                     GameId = table.Column<long>(type: "bigint", nullable: false),
-                    GameName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GameName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     TotalAchievements = table.Column<int>(type: "int", nullable: false),
                     TotalGamerscore = table.Column<int>(type: "int", nullable: false)
                 },
@@ -242,13 +227,35 @@ namespace XblApp.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Gamers",
+                columns: table => new
+                {
+                    GamerId = table.Column<long>(type: "bigint", nullable: false),
+                    Gamertag = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Gamerscore = table.Column<int>(type: "int", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gamers", x => x.GamerId);
+                    table.ForeignKey(
+                        name: "FK_Gamers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Achievements",
                 columns: table => new
                 {
                     AchievementId = table.Column<long>(type: "bigint", nullable: false),
                     GameId = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Gamerscore = table.Column<int>(type: "int", nullable: false),
                     IsSecret = table.Column<bool>(type: "bit", nullable: false),
                     DateUnlock = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
@@ -320,9 +327,9 @@ namespace XblApp.Database.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "555f396b-7e3f-41e0-b00a-fcfe952fd9d0", null, "moderatorTeam", "moderatorteam" },
-                    { "b99ffd51-ce82-4230-9f3c-ba40af4808ed", null, "gamerTeam", "gamerteam" },
-                    { "d9b7de0a-02f1-4a5c-a7c1-ad71022a9948", null, "adminTeam", "adminteam" }
+                    { "2279d679-7e65-43be-a610-1c781a9ec02e", null, "moderatorTeam", "moderatorteam" },
+                    { "3986b10a-b925-47dd-b6ea-fbde89f1de75", null, "gamerTeam", "gamerteam" },
+                    { "4a418837-7fd1-4f11-a910-c08cf38b645f", null, "adminTeam", "adminteam" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -378,6 +385,12 @@ namespace XblApp.Database.Migrations
                 name: "IX_GamerGame_GameId",
                 table: "GamerGame",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gamers_ApplicationUserId",
+                table: "Gamers",
+                column: "ApplicationUserId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -417,9 +430,6 @@ namespace XblApp.Database.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Achievements");
 
             migrationBuilder.DropTable(
@@ -427,6 +437,9 @@ namespace XblApp.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

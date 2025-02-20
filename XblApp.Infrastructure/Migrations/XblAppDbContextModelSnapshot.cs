@@ -51,19 +51,19 @@ namespace XblApp.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d9b7de0a-02f1-4a5c-a7c1-ad71022a9948",
+                            Id = "4a418837-7fd1-4f11-a910-c08cf38b645f",
                             Name = "adminTeam",
                             NormalizedName = "adminteam"
                         },
                         new
                         {
-                            Id = "b99ffd51-ce82-4230-9f3c-ba40af4808ed",
+                            Id = "3986b10a-b925-47dd-b6ea-fbde89f1de75",
                             Name = "gamerTeam",
                             NormalizedName = "gamerteam"
                         },
                         new
                         {
-                            Id = "555f396b-7e3f-41e0-b00a-fcfe952fd9d0",
+                            Id = "2279d679-7e65-43be-a610-1c781a9ec02e",
                             Name = "moderatorTeam",
                             NormalizedName = "moderatorteam"
                         });
@@ -257,7 +257,8 @@ namespace XblApp.Database.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<long>("GameId")
                         .HasColumnType("bigint");
@@ -270,7 +271,8 @@ namespace XblApp.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("AchievementId");
 
@@ -286,7 +288,8 @@ namespace XblApp.Database.Migrations
 
                     b.Property<string>("GameName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("TotalAchievements")
                         .HasColumnType("int");
@@ -304,20 +307,30 @@ namespace XblApp.Database.Migrations
                     b.Property<long>("GamerId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Gamerscore")
                         .HasColumnType("int");
 
                     b.Property<string>("Gamertag")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("GamerId");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.ToTable("Gamers");
                 });
@@ -513,6 +526,15 @@ namespace XblApp.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("GameLink");
+                });
+
+            modelBuilder.Entity("XblApp.Domain.Entities.Gamer", b =>
+                {
+                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("XblApp.Domain.Entities.Gamer", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
