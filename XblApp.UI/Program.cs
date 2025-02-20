@@ -53,6 +53,7 @@ namespace XblApp
 
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<XblAppDbContext>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
