@@ -7,7 +7,14 @@ namespace XblApp.Domain.Entities
         [Key]
         [Required]
         public string? AspNetUserId { get; set; }
+
+        /// <summary>
+        /// Время выдачи профиля
+        /// </summary>
         public DateTime IssueInstant { get; set; }
+        /// <summary>
+        /// Время истечения данных
+        /// </summary>
         public DateTime NotAfter { get; set; }
         public string? Token { get; set; }
 
