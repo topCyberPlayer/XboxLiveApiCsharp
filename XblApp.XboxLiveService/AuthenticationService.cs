@@ -148,7 +148,9 @@ namespace XblApp.XboxLiveService
                 Scope = json.Scope,
                 AccessToken = json.AccessToken,
                 RefreshToken = json.RefreshToken,
-                AuthenticationToken = json.AuthenticationToken
+                AuthenticationToken = json.AuthenticationToken,
+                DateOfIssue = DateTimeOffset.UtcNow,
+                DateOfExpiry = DateTimeOffset.UtcNow.AddSeconds(json.ExpiresIn)
             };
 
         private static TokenXau MapToTokenXau(TokenXauJson json) =>
