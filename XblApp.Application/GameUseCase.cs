@@ -3,7 +3,7 @@ using XblApp.Domain.Interfaces;
 
 namespace XblApp.Application
 {
-    public class GameUseCase : BaseUseCase
+    public class GameUseCase : AuthenticationUseCase
     {
         private readonly IGameRepository _gameRepository;
 

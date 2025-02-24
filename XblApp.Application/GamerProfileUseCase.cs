@@ -3,7 +3,7 @@ using XblApp.Domain.Interfaces;
 
 namespace XblApp.Application
 {
-    public class GamerProfileUseCase : BaseUseCase
+    public class GamerProfileUseCase : AuthenticationUseCase
     {
         private readonly IXboxLiveGamerService _gamerService;
         private readonly IGamerRepository _gamerRepository;
@@ -46,13 +46,7 @@ namespace XblApp.Application
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
-            //Если дата XstsToken истекла, то запрашиваю OAuthToken и обновляю его
-            if (IsDateXstsTokenExperid())
-            {
-                TokenOAuth expiredTokenOAuth = await _authRepository.GetTokenOAuth();
-                TokenOAuth freshTokeneOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth);
-                await ProcessTokens(freshTokeneOAuth);
-            }
+            await base.CheckDateOfExpiry();
 
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
             await _gamerRepository.SaveGamerAsync(gamers);
@@ -64,24 +58,6 @@ namespace XblApp.Application
             await _achievementRepository.SaveAchievementsAsync(achievements);
             
             return await _gamerRepository.GetGamerProfileAsync(gamerId);
-        }
-
-        private bool IsDateXstsTokenExperid()
-        {
-            DateTime? dateNow = DateTime.Now;
-
-            DateTime? dateDb = _authRepository.GetDateXstsTokenExpired();
-
-            return dateNow > dateDb ? true : false;
-        }
-
-        public bool IsDateXauTokenExperid()
-        {
-            DateTime? dateNow = DateTime.Now;
-
-            DateTime? dateDb = _authRepository.GetDateXauTokenExpired();
-
-            return dateNow > dateDb ? true : false;
         }
     }
 }
