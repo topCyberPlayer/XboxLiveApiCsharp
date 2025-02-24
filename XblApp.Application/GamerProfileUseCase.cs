@@ -54,8 +54,8 @@ namespace XblApp.Application
             List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId);
             await _gameRepository.SaveGameAsync(games);
 
-            List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId);
-            await _achievementRepository.SaveAchievementsAsync(achievements);
+            //List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId);
+            //await _achievementRepository.SaveAchievementsAsync(achievements);
             
             return await _gamerRepository.GetGamerProfileAsync(gamerId);
         }

@@ -21,59 +21,53 @@ namespace XblApp.Database.Repositories
             .Include(x => x.GamerLinks)
             .Where(g => g.GameName == gameName)
             .FirstOrDefaultAsync();
-        
+
 
         public async Task SaveGameAsync(List<Game> games)
         {
             foreach (Game game in games)
             {
                 // Ищем игру в базе данных по идентификатору
-                Game? existingGame = await _context.Games.FindAsync(game.GameId);
+                Game? existingGame = await _context.Games
+                    .Include(g => g.GamerLinks) // Загружаем связанные записи
+                    .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 
-                // Если игра уже существует, обновляем ее данные
+                List<GamerGame> gamerLinks = new List<GamerGame>();
+
+                foreach (var gamerGame in game.GamerLinks)
+                {
+                    gamerLinks.Add(new GamerGame
+                    {
+                        GameId = game.GameId,
+                        GamerId = gamerGame.GamerId,
+                        CurrentAchievements = gamerGame.CurrentAchievements,
+                        CurrentGamerscore = gamerGame.CurrentGamerscore
+                    });
+                }
+
                 if (existingGame != null)
                 {
                     existingGame.GameName = game.GameName;
                     existingGame.TotalGamerscore = game.TotalGamerscore;
                     existingGame.TotalAchievements = game.TotalAchievements;
-                    existingGame.GamerLinks = new List<GamerGame>()
-                    {
-                        new GamerGame()
-                        {
-                            GameId = game.GameId,
-                            GamerId = game.GamerLinks.Select(g => g.GameId).FirstOrDefault(),
-                            CurrentAchievements = game.GamerLinks.Select(g => g.CurrentAchievements).FirstOrDefault(),
-                            CurrentGamerscore = game.GamerLinks.Select(g => g.CurrentGamerscore).FirstOrDefault(),
-                        }
-                    };
+                    existingGame.GamerLinks = gamerLinks;
 
                     _context.Games.Update(existingGame);
                 }
                 else
                 {
-                    // Если игры нет в базе данных, добавляем новую
-                    Game newGame = new Game()
+                    _context.Games.Add(new Game
                     {
                         GameId = game.GameId,
                         GameName = game.GameName,
                         TotalAchievements = game.TotalAchievements,
                         TotalGamerscore = game.TotalGamerscore,
-                        GamerLinks = new List<GamerGame>()
-                        {
-                            new GamerGame()
-                            {
-                                GameId = game.GameId,
-                                GamerId = game.GamerLinks.Select(g => g.GameId).FirstOrDefault(),
-                                CurrentAchievements = game.GamerLinks.Select(g => g.CurrentAchievements).FirstOrDefault(),
-                                CurrentGamerscore = game.GamerLinks.Select(g => g.CurrentGamerscore).FirstOrDefault(),
-                            }
-                        }
-                    };
-
-                    _context.Games.Add(newGame);
+                        GamerLinks = gamerLinks
+                    });
                 }
             }
             await _context.SaveChangesAsync();
         }
+
     }
 }

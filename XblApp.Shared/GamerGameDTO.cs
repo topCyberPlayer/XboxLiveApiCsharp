@@ -19,7 +19,8 @@
         /// <summary>
         /// Прогресс достижений
         /// </summary>
-        public double AchievementsProgress => CurrentAchievements / TotalAchievements;
+        public double AchievementsProgress => TotalAchievements == 0 ? 0 : (double)CurrentAchievements / TotalAchievements;
+
     }
 
 }

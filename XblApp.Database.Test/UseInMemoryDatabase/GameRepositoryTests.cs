@@ -8,19 +8,19 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
 {
     public class GameRepositoryTests
     {
-        private readonly DbContextOptions<MsSqlDbContext> _options;
+        private readonly DbContextOptions<XblAppDbContext> _options;
 
         public GameRepositoryTests()
         {
-            _options = new DbContextOptionsBuilder<MsSqlDbContext>()
+            _options = new DbContextOptionsBuilder<XblAppDbContext>()
                 .UseInMemoryDatabase("TestDatabase")
                 .Options;
         }
 
-        private MsSqlDbContext CreateContext()
+        private XblAppDbContext CreateContext()
         {
             // Создаем новый контекст для каждой "сессии"
-            return new MsSqlDbContext(_options);
+            return new XblAppDbContext(_options);
         }
 
         [Fact]

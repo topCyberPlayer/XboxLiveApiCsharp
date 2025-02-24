@@ -50,7 +50,12 @@ namespace XblApp.Database.Repositories
                 if (existingGamer == null)
                     _context.Gamers.Add(gamer);
                 else
-                    _context.Gamers.Update(gamer);
+                {
+                    existingGamer.Gamertag = gamer.Gamertag;
+                    existingGamer.Gamerscore = gamer.Gamerscore;
+                    existingGamer.Bio = gamer.Bio;
+                    existingGamer.Location = gamer.Location;
+                }    
             }
 
             await _context.SaveChangesAsync();
