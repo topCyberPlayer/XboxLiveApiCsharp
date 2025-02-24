@@ -14,5 +14,15 @@ namespace XblApp.Domain.Entities
         public string? AccessToken { get; set; }
         public string? RefreshToken { get; set; }
         public string? AuthenticationToken { get; set; }
+
+        /// <summary>
+        /// Дата выдачи
+        /// </summary>
+        public DateTimeOffset? DateOfIssue { get; set; }
+        /// <summary>
+        /// Дата окончания срока действия
+        /// </summary>
+        public DateTimeOffset? DateOfExpiry { get; set; }
+
     }
 }
