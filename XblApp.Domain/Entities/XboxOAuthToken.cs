@@ -2,12 +2,12 @@
 
 namespace XblApp.Domain.Entities
 {
-    public partial class TokenOAuth
+    /// <summary>
+    /// // 1-й токен
+    /// </summary>
+    public partial class XboxOAuthToken 
     {
-        [Key]
-        [Required]
-        public string? AspNetUserId { get; set; }
-        public string? UserId { get; set; }
+        public string? UserId { get; set; } = null!; // Ключ
         public string? TokenType { get; set; }
         public int ExpiresIn { get; set; }
         public string? Scope { get; set; }
@@ -18,11 +18,15 @@ namespace XblApp.Domain.Entities
         /// <summary>
         /// Дата выдачи
         /// </summary>
-        public DateTimeOffset? DateOfIssue { get; set; }
+        public DateTime? DateOfIssue { get; set; } = DateTime.UtcNow;
         /// <summary>
         /// Дата окончания срока действия
         /// </summary>
-        public DateTimeOffset? DateOfExpiry { get; set; }
+        public DateTime? DateOfExpiry { get; set; }
 
+        /// <summary>
+        /// Связь с 2-м токеном
+        /// </summary>
+        public XboxLiveToken? XboxLiveTokenLink { get; set; }
     }
 }

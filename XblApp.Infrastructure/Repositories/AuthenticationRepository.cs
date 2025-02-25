@@ -37,44 +37,59 @@ namespace XblApp.Database.Repositories
                 .FirstOrDefault();
         }
 
-        public async Task<TokenOAuth> GetTokenOAuth()
+        public async Task<XboxOAuthToken> GetTokenOAuth()
         {
             return await _context.OAuthTokens
                 .FirstOrDefaultAsync();
         }
 
-        public async Task SaveTokenAsync(TokenOAuth tokenXbl)
+        public async Task SaveTokenAsync(XboxOAuthToken tokenXbl)
         {
-            TokenOAuth? token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.AspNetUserId == tokenXbl.AspNetUserId);
+            XboxOAuthToken? token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.UserId == tokenXbl.UserId);
 
             if (token == null)
                 await _context.OAuthTokens.AddAsync(tokenXbl);
             else
-                _context.OAuthTokens.Update(tokenXbl);
+            {
+                token.AccessToken = tokenXbl.AccessToken;
+                token.RefreshToken = tokenXbl.RefreshToken;
+                token.AuthenticationToken = tokenXbl.AuthenticationToken;
+                token.DateOfIssue = tokenXbl.DateOfIssue;
+                token.DateOfExpiry = tokenXbl.DateOfExpiry;
+            }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SaveTokenAsync(TokenXau tokenXbl)
+        public async Task SaveTokenAsync(XboxLiveToken tokenXbl)
         {
-            TokenXau? token = await _context.XauTokens.FirstOrDefaultAsync(x => x.AspNetUserId == tokenXbl.AspNetUserId);
+            XboxLiveToken? token = await _context.XauTokens.FirstOrDefaultAsync(x => x.UhsId == tokenXbl.UhsId);
 
             if (token == null)
                 await _context.XauTokens.AddAsync(tokenXbl);
             else
-                _context.XauTokens.Update(tokenXbl);
+            {
+                token.Token = tokenXbl.Token;
+                token.IssueInstant = tokenXbl.IssueInstant;
+                token.NotAfter = tokenXbl.NotAfter;
+            }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SaveTokenAsync(TokenXsts tokenXbl)
+        public async Task SaveTokenAsync(XboxUserToken tokenXbl)
         {
-            TokenXsts? token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.AspNetUserId == tokenXbl.AspNetUserId);
+            XboxUserToken? token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.Xuid == tokenXbl.Xuid);
 
             if (token == null)
                 await _context.XstsTokens.AddAsync(tokenXbl);
             else
-                _context.XstsTokens.Update(tokenXbl);
+            {
+                token.Token = tokenXbl?.Token;
+                token.IssueInstant = tokenXbl.IssueInstant;
+                token.NotAfter = tokenXbl.NotAfter;
+                token.Gamertag = tokenXbl?.Gamertag;
+            }
 
             await _context.SaveChangesAsync();
         }

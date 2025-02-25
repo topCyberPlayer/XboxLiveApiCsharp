@@ -7,27 +7,27 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
 {
     public class AuthenticationRepositoryTests
     {
-        private readonly DbContextOptions<MsSqlDbContext> _options;
+        private readonly DbContextOptions<XblAppDbContext> _options;
         public AuthenticationRepositoryTests()
         {
-            _options = new DbContextOptionsBuilder<MsSqlDbContext>()
+            _options = new DbContextOptionsBuilder<XblAppDbContext>()
                 .UseInMemoryDatabase("TestDatabase")
                 .Options;
         }
 
-        private MsSqlDbContext CreateContext()
+        private XblAppDbContext CreateContext()
         {
             // Создаем новый контекст для каждой "сессии"
-            return new MsSqlDbContext(_options);
+            return new XblAppDbContext(_options);
         }
 
         [Fact()]
         public async Task SaveTokenOAuthTest_ShouldSave()
         {
-            string aspNetUser = "1";
+            string userId = "TestUserIdHU";
             string accessToken = "Test/Acess;token";
 
-            TokenOAuth tokenOAuth = new TokenOAuth
+            XboxOAuthToken tokenOAuth = new XboxOAuthToken
             {
                 TokenType = "bearer",
                 ExpiresIn = 3600,
@@ -35,13 +35,12 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 AccessToken = accessToken,
                 RefreshToken = "Test.Refresh-Token",
                 AuthenticationToken = "Test_Authentication.Token",
-                UserId = "TestUserIdHU",
-                AspNetUserId = aspNetUser
+                UserId = userId,
             };
 
             using (var context = CreateContext())
             {
-                var repository = new AuthenticationRepository(context, null);
+                var repository = new AuthenticationRepository(context);
 
                 await repository.SaveTokenAsync(tokenOAuth);
             }
@@ -49,7 +48,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             // Assert (в новом контексте)
             using (var context = CreateContext())
             {
-                TokenOAuth tokenOAuthRespone = context.OAuthTokens.FirstOrDefault(u => u.AspNetUserId == aspNetUser);
+                XboxOAuthToken tokenOAuthRespone = context.OAuthTokens.FirstOrDefault(u => u.UserId == userId);
 
                 Assert.NotNull(tokenOAuthRespone);
                 Assert.Equal(accessToken, tokenOAuthRespone.AccessToken);

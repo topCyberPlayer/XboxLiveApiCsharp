@@ -4,16 +4,16 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IXboxLiveAuthenticationService
     {
-        public Task<TokenOAuth> RequestOauth2Token(string authorizationCode);
-        public Task<TokenXau> RequestXauToken(TokenOAuth tokenOAuth);
-        public Task<TokenXsts> RequestXstsToken(TokenXau tokenXau);
+        public Task<XboxOAuthToken> RequestOauth2Token(string authorizationCode);
+        public Task<XboxLiveToken> RequestXauToken(XboxOAuthToken tokenOAuth);
+        public Task<XboxUserToken> RequestXstsToken(XboxLiveToken tokenXau);
 
         /// <summary>
         /// Возвращает новый (обновляет) Oauth2Token
         /// </summary>
         /// <param name="expiredTokenOAuth"></param>
         /// <returns></returns>
-        public Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuth);
+        public Task<XboxOAuthToken> RefreshOauth2Token(XboxOAuthToken expiredTokenOAuth);
         public string GenerateAuthorizationUrl();
     }
 }

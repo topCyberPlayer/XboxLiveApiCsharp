@@ -8,9 +8,9 @@ namespace XblApp.Application
         internal readonly IXboxLiveAuthenticationService _authService;
         internal readonly IAuthenticationRepository _authRepository;
 
-        private TokenOAuth? _tokenOAuth;
-        private TokenXau? _tokenXau;
-        private TokenXsts? _tokenXsts;
+        private XboxOAuthToken? _tokenOAuth;
+        private XboxLiveToken? _tokenXau;
+        private XboxUserToken? _tokenXsts;
 
         public AuthenticationUseCase(
             IXboxLiveAuthenticationService authService, 
@@ -47,7 +47,7 @@ namespace XblApp.Application
             if (!resultTokenXau)
                 return;
 
-            TokenOAuth expiredTokenOAuth = await _authRepository.GetTokenOAuth();
+            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetTokenOAuth();
             
             _tokenOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");

@@ -47,7 +47,7 @@ namespace XblApp.XboxLiveService
             return QueryHelpers.AddQueryString(baseAddress, queryParameters);
         }
 
-        public async Task<TokenOAuth> RequestOauth2Token(string authorizationCode)
+        public async Task<XboxOAuthToken> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new()
             {
@@ -64,7 +64,7 @@ namespace XblApp.XboxLiveService
             return MapToTokenOAuth(resultJson);
         }
 
-        public async Task<TokenXau> RequestXauToken(TokenOAuth tokenOAuth)
+        public async Task<XboxLiveToken> RequestXauToken(XboxOAuthToken tokenOAuth)
         {
             var data = new
             {
@@ -83,7 +83,7 @@ namespace XblApp.XboxLiveService
             return MapToTokenXau(result);
         }
 
-        public async Task<TokenXsts> RequestXstsToken(TokenXau tokenXau)
+        public async Task<XboxUserToken> RequestXstsToken(XboxLiveToken tokenXau)
         {
             var data = new
             {
@@ -101,7 +101,7 @@ namespace XblApp.XboxLiveService
             return MapToTokenXsts(result);
         }
 
-        public async Task<TokenOAuth> RefreshOauth2Token(TokenOAuth expiredTokenOAuth)
+        public async Task<XboxOAuthToken> RefreshOauth2Token(XboxOAuthToken expiredTokenOAuth)
         {
             var data = new Dictionary<string, string>
             {
@@ -138,10 +138,9 @@ namespace XblApp.XboxLiveService
                 ?? throw new InvalidOperationException("Failed to deserialize response");
         }
 
-        private static TokenOAuth MapToTokenOAuth(TokenOAuthJson json) =>
+        private static XboxOAuthToken MapToTokenOAuth(TokenOAuthJson json) =>
             new()
             {
-                AspNetUserId = _aspNetUserIdRnd,
                 UserId = json.UserId,
                 TokenType = json.TokenType,
                 ExpiresIn = json.ExpiresIn,
@@ -149,24 +148,21 @@ namespace XblApp.XboxLiveService
                 AccessToken = json.AccessToken,
                 RefreshToken = json.RefreshToken,
                 AuthenticationToken = json.AuthenticationToken,
-                DateOfIssue = DateTimeOffset.UtcNow,
-                DateOfExpiry = DateTimeOffset.UtcNow.AddSeconds(json.ExpiresIn)
+                DateOfExpiry = DateTime.UtcNow.AddSeconds(json.ExpiresIn)
             };
 
-        private static TokenXau MapToTokenXau(TokenXauJson json) =>
+        private static XboxLiveToken MapToTokenXau(TokenXauJson json) =>
             new()
             {
-                AspNetUserId = _aspNetUserIdRnd,
                 Token = json.Token,
                 NotAfter = json.NotAfter,
-                Uhs = json.Uhs,
+                UhsId = json.Uhs,
                 IssueInstant = json.IssueInstant
             };
 
-        private static TokenXsts MapToTokenXsts(TokenXstsJson json) =>
+        private static XboxUserToken MapToTokenXsts(TokenXstsJson json) =>
             new()
             {
-                AspNetUserId = _aspNetUserIdRnd,
                 Gamertag = json.Gamertag,
                 Token = json.Token,
                 IssueInstant = json.IssueInstant,
