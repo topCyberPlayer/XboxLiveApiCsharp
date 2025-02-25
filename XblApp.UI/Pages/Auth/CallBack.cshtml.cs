@@ -25,7 +25,7 @@ namespace XblApp.Pages.Auth
             {
                 await _authServ.RequestTokens(code);
 
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Admin/Donor");
             }
             catch (Exception ex)
             {

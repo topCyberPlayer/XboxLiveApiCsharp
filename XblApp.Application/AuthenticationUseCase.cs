@@ -20,6 +20,9 @@ namespace XblApp.Application
             _authRepository = authRepository;
         }
 
+        public async Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?> GetAllDonors() => 
+            await _authRepository.GetAllDonorsAsync();
+
         public string GenerateAuthorizationUrl() => _authService.GenerateAuthorizationUrl();
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace XblApp.Application
             if (!resultTokenXau)
                 return;
 
-            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetTokenAuth();
+            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
             
             _authToken = await _authService.RefreshOauth2Token(expiredTokenOAuth)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");

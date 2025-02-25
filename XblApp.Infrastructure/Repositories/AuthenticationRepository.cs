@@ -11,9 +11,25 @@ namespace XblApp.Database.Repositories
         {
         }
 
-        public Task<List<Gamer>> GetAllDonorsAsync()
+        public async Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?>
+        GetAllDonorsAsync()
         {
-            throw new NotImplementedException();
+            var result = await (from oauth in _context.XboxOAuthTokens
+                                join live in _context.XboxLiveTokens on oauth.UserId equals live.UserIdFK
+                                join user in _context.XboxUserTokens on live.UhsId equals user.UhsIdFK
+                                select new
+                                {
+                                    oauth.UserId,
+                                    XboxLiveNotAfter = live.NotAfter,
+                                    XboxUserNotAfter = user.NotAfter,
+                                    user.Xuid,
+                                    user.Gamertag
+                                })
+                                .ToListAsync();
+
+            return result
+                .Select(r => (r.UserId, r.XboxLiveNotAfter, r.XboxUserNotAfter, r.Xuid, r.Gamertag))
+                .ToList();
         }
 
         public string? GetAuthorizationHeaderValue()
@@ -37,7 +53,7 @@ namespace XblApp.Database.Repositories
                 .FirstOrDefault();
         }
 
-        public async Task<XboxOAuthToken> GetTokenAuth()
+        public async Task<XboxOAuthToken> GetXboxAuthToken()
         {
             return await _context.XboxOAuthTokens
                 .FirstOrDefaultAsync();
@@ -83,58 +99,6 @@ namespace XblApp.Database.Repositories
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Token = userToken.Token;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Gamertag = userToken.Gamertag;
                 }
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
-
-        public async Task SaveTokenAsync(XboxOAuthToken tokenXbl)
-        {
-            XboxOAuthToken? token = await _context.XboxOAuthTokens.FirstOrDefaultAsync(x => x.UserId == tokenXbl.UserId);
-
-            if (token == null)
-                await _context.XboxOAuthTokens.AddAsync(tokenXbl);
-            else
-            {
-                token.AccessToken = tokenXbl.AccessToken;
-                token.RefreshToken = tokenXbl.RefreshToken;
-                token.AuthenticationToken = tokenXbl.AuthenticationToken;
-                token.DateOfIssue = tokenXbl.DateOfIssue;
-                token.DateOfExpiry = tokenXbl.DateOfExpiry;
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task SaveTokenAsync(XboxLiveToken tokenXbl)
-        {
-            XboxLiveToken? token = await _context.XboxLiveTokens.FirstOrDefaultAsync(x => x.UhsId == tokenXbl.UhsId);
-
-            if (token == null)
-                await _context.XboxLiveTokens.AddAsync(tokenXbl);
-            else
-            {
-                token.Token = tokenXbl.Token;
-                token.IssueInstant = tokenXbl.IssueInstant;
-                token.NotAfter = tokenXbl.NotAfter;
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task SaveTokenAsync(XboxUserToken tokenXbl)
-        {
-            XboxUserToken? token = await _context.XboxUserTokens.FirstOrDefaultAsync(x => x.Xuid == tokenXbl.Xuid);
-
-            if (token == null)
-                await _context.XboxUserTokens.AddAsync(tokenXbl);
-            else
-            {
-                token.Token = tokenXbl?.Token;
-                token.IssueInstant = tokenXbl.IssueInstant;
-                token.NotAfter = tokenXbl.NotAfter;
-                token.Gamertag = tokenXbl?.Gamertag;
             }
 
             await _context.SaveChangesAsync();

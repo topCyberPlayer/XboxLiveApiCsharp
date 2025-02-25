@@ -1,0 +1,38 @@
+﻿@page
+@model XblApp.UI.Pages.Admin.DonorModel
+@{
+}
+
+<form method="post" asp-page-handler="GetXboxTokens" class="d-inline">
+    <input type="hidden" />
+    <button type="submit" class="btn btn-primary ms-2">Получить токены</button>
+</form>
+
+<body>
+<div class="table-responsive">
+    <p>All Donors</p>
+    <table class="table table-striped recipe">
+        <thead>
+            <tr>
+                    <th>Gamertag</th>
+                    <th>Xuid</th>
+                    <th>UserId</th>
+                    <th>Дата истечения XboxLive токена</th>
+                    <th>Дата истечения XboxUser токена</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var profile in Model.Output)
+            {
+                <tr>
+                    <td class="align-middle">@profile.Gamertag</td>
+                    <td class="align-middle">@profile.Xuid</td>
+                    <td class="align-middle">@profile.UserId</td>
+                    <td class="align-middle">@profile.XboxLiveNotAfter</td>
+                    <td class="align-middle">@profile.XboxUserNotAfter</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</body>
