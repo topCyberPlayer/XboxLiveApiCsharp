@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XblApp.Database.Contexts;
 
@@ -11,9 +12,11 @@ using XblApp.Database.Contexts;
 namespace XblApp.Database.Migrations
 {
     [DbContext(typeof(XblAppDbContext))]
-    partial class XblAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250225091424_RebuildXboxTokens")]
+    partial class RebuildXboxTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +54,19 @@ namespace XblApp.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3bebb3ad-9fb0-413c-ae70-d102373d3fd8",
+                            Id = "c7e1ddaf-ff12-48e9-b8fb-b2c08a47158e",
                             Name = "adminTeam",
                             NormalizedName = "adminteam"
                         },
                         new
                         {
-                            Id = "3b7abfef-fd91-4077-8dd6-df857ceaab75",
+                            Id = "2df76980-9583-4b62-b381-00ea350c5787",
                             Name = "gamerTeam",
                             NormalizedName = "gamerteam"
                         },
                         new
                         {
-                            Id = "c09c11de-fa15-4ce3-8f1d-f2e9a34296da",
+                            Id = "7fda2af7-a5c2-48a1-8d82-8fa3804a9efa",
                             Name = "moderatorTeam",
                             NormalizedName = "moderatorteam"
                         });
@@ -397,7 +400,7 @@ namespace XblApp.Database.Migrations
                     b.HasIndex("UserIdFK")
                         .IsUnique();
 
-                    b.ToTable("XboxLiveTokens");
+                    b.ToTable("XauTokens");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.XboxOAuthToken", b =>
@@ -431,7 +434,7 @@ namespace XblApp.Database.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("XboxOAuthTokens");
+                    b.ToTable("OAuthTokens");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.XboxUserToken", b =>
@@ -472,7 +475,7 @@ namespace XblApp.Database.Migrations
                     b.HasIndex("UhsIdFK")
                         .IsUnique();
 
-                    b.ToTable("XboxUserTokens");
+                    b.ToTable("XstsTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

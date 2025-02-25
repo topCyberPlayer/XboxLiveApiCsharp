@@ -48,7 +48,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             // Assert (в новом контексте)
             using (var context = CreateContext())
             {
-                XboxOAuthToken tokenOAuthRespone = context.OAuthTokens.FirstOrDefault(u => u.UserId == userId);
+                XboxOAuthToken tokenOAuthRespone = context.XboxOAuthTokens.FirstOrDefault(u => u.UserId == userId);
 
                 Assert.NotNull(tokenOAuthRespone);
                 Assert.Equal(accessToken, tokenOAuthRespone.AccessToken);

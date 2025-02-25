@@ -18,37 +18,37 @@ namespace XblApp.Database.Repositories
 
         public string? GetAuthorizationHeaderValue()
         {
-            return _context.XstsTokens
+            return _context.XboxUserTokens
                 .Select(x => $"x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
         }
 
         public DateTime GetDateXauTokenExpired()
         {
-            return _context.XauTokens
+            return _context.XboxLiveTokens
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
 
         public DateTime GetDateXstsTokenExpired()
         {
-            return _context.XstsTokens
+            return _context.XboxUserTokens
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
 
         public async Task<XboxOAuthToken> GetTokenOAuth()
         {
-            return await _context.OAuthTokens
+            return await _context.XboxOAuthTokens
                 .FirstOrDefaultAsync();
         }
 
         public async Task SaveTokenAsync(XboxOAuthToken tokenXbl)
         {
-            XboxOAuthToken? token = await _context.OAuthTokens.FirstOrDefaultAsync(x => x.UserId == tokenXbl.UserId);
+            XboxOAuthToken? token = await _context.XboxOAuthTokens.FirstOrDefaultAsync(x => x.UserId == tokenXbl.UserId);
 
             if (token == null)
-                await _context.OAuthTokens.AddAsync(tokenXbl);
+                await _context.XboxOAuthTokens.AddAsync(tokenXbl);
             else
             {
                 token.AccessToken = tokenXbl.AccessToken;
@@ -63,10 +63,10 @@ namespace XblApp.Database.Repositories
 
         public async Task SaveTokenAsync(XboxLiveToken tokenXbl)
         {
-            XboxLiveToken? token = await _context.XauTokens.FirstOrDefaultAsync(x => x.UhsId == tokenXbl.UhsId);
+            XboxLiveToken? token = await _context.XboxLiveTokens.FirstOrDefaultAsync(x => x.UhsId == tokenXbl.UhsId);
 
             if (token == null)
-                await _context.XauTokens.AddAsync(tokenXbl);
+                await _context.XboxLiveTokens.AddAsync(tokenXbl);
             else
             {
                 token.Token = tokenXbl.Token;
@@ -79,10 +79,10 @@ namespace XblApp.Database.Repositories
 
         public async Task SaveTokenAsync(XboxUserToken tokenXbl)
         {
-            XboxUserToken? token = await _context.XstsTokens.FirstOrDefaultAsync(x => x.Xuid == tokenXbl.Xuid);
+            XboxUserToken? token = await _context.XboxUserTokens.FirstOrDefaultAsync(x => x.Xuid == tokenXbl.Xuid);
 
             if (token == null)
-                await _context.XstsTokens.AddAsync(tokenXbl);
+                await _context.XboxUserTokens.AddAsync(tokenXbl);
             else
             {
                 token.Token = tokenXbl?.Token;

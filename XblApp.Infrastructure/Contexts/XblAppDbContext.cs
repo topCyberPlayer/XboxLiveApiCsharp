@@ -12,13 +12,13 @@ namespace XblApp.Database.Contexts
         public XblAppDbContext(DbContextOptions options) : base(options)
         {
         }
-
+        
         public DbSet<Gamer> Gamers { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
-        public DbSet<XboxOAuthToken> OAuthTokens { get; set; }
-        public DbSet<XboxLiveToken> XauTokens { get; set; }
-        public DbSet<XboxUserToken> XstsTokens { get; set; }
+        public DbSet<XboxOAuthToken> XboxOAuthTokens { get; set; }
+        public DbSet<XboxLiveToken> XboxLiveTokens { get; set; }
+        public DbSet<XboxUserToken> XboxUserTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace XblApp.Database.Contexts
             modelBuilder.ApplyConfiguration(new AchievementConfiguration());
             modelBuilder.ApplyConfiguration(new GamerGameConfiguration());
             modelBuilder.ApplyConfiguration(new GamerAchievementConfiguration());
+            modelBuilder.ApplyConfiguration(new XboxOAuthTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new XboxLiveTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new XboxUserTokenConfiguration());
 
             var adminTeam = new IdentityRole("adminTeam");
             adminTeam.NormalizedName = "adminteam";
