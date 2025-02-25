@@ -4,12 +4,13 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IAuthenticationRepository
     {
-        public Task SaveTokenAsync(XboxOAuthToken tokenXbl);
-        public Task SaveTokenAsync(XboxLiveToken tokenXbl);
-        public Task SaveTokenAsync(XboxUserToken tokenXbl);
-        public Task<XboxOAuthToken> GetTokenOAuth();
-        public DateTime GetDateXstsTokenExpired();
-        public DateTime GetDateXauTokenExpired();
+        public Task SaveTokenAsync(XboxOAuthToken authToken);
+        public Task SaveTokenAsync(XboxLiveToken liveToken);
+        public Task SaveTokenAsync(XboxUserToken userToken);
+        public Task SaveTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken);
+        public Task<XboxOAuthToken> GetTokenAuth();
+        public DateTime GetDateUserTokenExpired();
+        public DateTime GetDateLiveTokenExpired();
         public string GetAuthorizationHeaderValue();
     }
 }

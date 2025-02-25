@@ -8,9 +8,9 @@ namespace XblApp.Application
         internal readonly IXboxLiveAuthenticationService _authService;
         internal readonly IAuthenticationRepository _authRepository;
 
-        private XboxOAuthToken? _tokenOAuth;
-        private XboxLiveToken? _tokenXau;
-        private XboxUserToken? _tokenXsts;
+        private XboxOAuthToken? _authToken;
+        private XboxLiveToken? _liveToken;
+        private XboxUserToken? _userToken;
 
         public AuthenticationUseCase(
             IXboxLiveAuthenticationService authService, 
@@ -29,7 +29,7 @@ namespace XblApp.Application
         /// <returns></returns>
         public async Task RequestTokens(string authorizationCode)
         {
-            _tokenOAuth = await _authService.RequestOauth2Token(authorizationCode)
+            _authToken = await _authService.RequestOauth2Token(authorizationCode)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 
             await BaseTokens();
@@ -47,9 +47,9 @@ namespace XblApp.Application
             if (!resultTokenXau)
                 return;
 
-            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetTokenOAuth();
+            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetTokenAuth();
             
-            _tokenOAuth = await _authService.RefreshOauth2Token(expiredTokenOAuth)
+            _authToken = await _authService.RefreshOauth2Token(expiredTokenOAuth)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 
             await BaseTokens();
@@ -57,27 +57,20 @@ namespace XblApp.Application
 
         private async Task BaseTokens()
         {
-            _tokenXau = await _authService.RequestXauToken(_tokenOAuth)
+            _liveToken = await _authService.RequestXauToken(_authToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XAU token.");
 
-            _tokenXsts = await _authService.RequestXstsToken(_tokenXau)
+            _userToken = await _authService.RequestXstsToken(_liveToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XSTS token.");
 
-            await SaveTokens();
-        }
-
-        private async Task SaveTokens()
-        {
-            await _authRepository.SaveTokenAsync(_tokenOAuth);
-            await _authRepository.SaveTokenAsync(_tokenXau);
-            await _authRepository.SaveTokenAsync(_tokenXsts);
+            await _authRepository.SaveTokensAsync(_authToken,_liveToken, _userToken);
         }
 
         private bool IsDateXstsTokenExperid()
         {
             DateTime? dateNow = DateTime.Now;
 
-            DateTime? dateDb = _authRepository.GetDateXstsTokenExpired();
+            DateTime? dateDb = _authRepository.GetDateUserTokenExpired();
 
             return dateNow > dateDb ? true : false;
         }
@@ -90,7 +83,7 @@ namespace XblApp.Application
         {
             DateTime? dateNow = DateTime.Now;
 
-            DateTime? dateDb = _authRepository.GetDateXauTokenExpired();
+            DateTime? dateDb = _authRepository.GetDateLiveTokenExpired();
 
             return dateNow > dateDb ? true : false;
         }
