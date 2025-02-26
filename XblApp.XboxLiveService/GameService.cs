@@ -45,9 +45,9 @@ namespace XblApp.XboxLiveService
                 { "maxItems", maxItems.ToString() },
             };
 
-            string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
+            //string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
-            GameJson result = await SendRequestAsync<GameJson>(client, uri);
+            GameJson result = await SendRequestAsync<GameJson>(client, relativeUrl);
 
             List<Game> games = MapToGame(result);
 

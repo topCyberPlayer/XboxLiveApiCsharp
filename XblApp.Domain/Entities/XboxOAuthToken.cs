@@ -1,16 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace XblApp.Domain.Entities
+﻿namespace XblApp.Domain.Entities
 {
     /// <summary>
     /// // 1-й токен
     /// </summary>
     public partial class XboxOAuthToken 
     {
-        public string? UserId { get; set; } = null!; // Ключ
+        /// <summary>
+        /// Ключ
+        /// </summary>
+        public string? UserId { get; set; } = null!;
         public string? TokenType { get; set; }
         public int ExpiresIn { get; set; }
         public string? Scope { get; set; }
+        /// <summary>
+        /// Нужен для получения Xbox Live Token
+        /// </summary>
         public string? AccessToken { get; set; }
         public string? RefreshToken { get; set; }
         public string? AuthenticationToken { get; set; }

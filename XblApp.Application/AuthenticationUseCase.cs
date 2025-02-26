@@ -51,7 +51,14 @@ namespace XblApp.Application
                 return _authRepository.GetAuthorizationHeaderValue();
 
             XboxOAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
-            
+
+            if (expiredTokenOAuth is null)
+            {
+                string authorizationUrl = GenerateAuthorizationUrl();
+
+                //todo Этот веб адрес(authorizationUrl) надо переадрисовать или выбросить исключение
+            }
+
             _authToken = await _authService.RefreshOauth2Token(expiredTokenOAuth)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 

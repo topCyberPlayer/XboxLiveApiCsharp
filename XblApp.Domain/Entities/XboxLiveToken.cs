@@ -18,7 +18,7 @@
         /// </summary>
         public DateTime NotAfter { get; set; }
         /// <summary>
-        /// Token передается в заголовке Authorization в каждом запросе к Xbox API
+        /// Нужен для получения Xbox Live User Token
         /// </summary>
         public string? Token { get; set; }
         

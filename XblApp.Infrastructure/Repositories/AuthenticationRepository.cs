@@ -59,6 +59,7 @@ namespace XblApp.Database.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        //todo Есть ошибка при обновлении токенов. Ощущение что какой-то токен не обновляется в БД.
         public async Task SaveTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken)
         {
             var existingAuthToken = await _context.XboxOAuthTokens
@@ -77,8 +78,8 @@ namespace XblApp.Database.Repositories
                 // Обновляем данные OAuth токена
                 existingAuthToken.AccessToken = authToken.AccessToken;
                 existingAuthToken.RefreshToken = authToken.RefreshToken;
-                existingAuthToken.ExpiresIn = authToken.ExpiresIn;
                 existingAuthToken.AuthenticationToken = authToken.AuthenticationToken;
+                existingAuthToken.ExpiresIn = authToken.ExpiresIn;
 
                 if (existingAuthToken.XboxLiveTokenLink == null)
                 {
