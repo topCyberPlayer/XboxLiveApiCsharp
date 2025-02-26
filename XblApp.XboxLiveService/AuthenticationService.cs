@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Infrastructure.XboxLiveServices.Models;
+using XblApp.DTO.JsonModels;
 
 namespace XblApp.XboxLiveService
 {

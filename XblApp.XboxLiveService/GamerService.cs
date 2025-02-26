@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using System.Net.Http.Headers;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Infrastructure.XboxLiveServices.Models;
+using XblApp.DTO.JsonModels;
 
 namespace XblApp.XboxLiveService
 {

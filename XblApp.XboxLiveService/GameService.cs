@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
-using XblApp.Domain.Entities;
+﻿using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
-using XblApp.Infrastructure.XboxLiveServices.Models;
+using XblApp.DTO.JsonModels;
 
 namespace XblApp.XboxLiveService
 {

@@ -1,11 +1,11 @@
-﻿namespace XblApp.XboxLiveService.Models
+﻿namespace XblApp.DTO.JsonModels
 {
     public class AchievementJson
     {
-        public ICollection<Title> Titles { get; set; }
+        public ICollection<TitleW> Titles { get; set; }
     }
 
-    public class Title
+    public class TitleW
     {
         public long TitleId { get; set; }
         public string LastUnlock { get; set; } // Используем string, если не хотим парсить дату сразу

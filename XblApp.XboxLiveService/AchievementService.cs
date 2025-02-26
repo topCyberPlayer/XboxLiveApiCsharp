@@ -1,6 +1,5 @@
-﻿using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.XboxLiveService.Models;
+﻿using XblApp.Domain.Interfaces;
+using XblApp.DTO.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
@@ -10,38 +9,38 @@ namespace XblApp.XboxLiveService
         {
         }
 
-        public async Task<List<Achievement>> GetAchievements(long xuid)
+        public async Task<List<Domain.Entities.Achievement>> GetAchievements(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
             return await GetAchievementBaseAsync(relativeUrl);
         }
 
-        public async Task<List<Achievement>> GetAchievementsXbox360All(long xuid)
+        public async Task<List<Domain.Entities.Achievement>> GetAchievementsXbox360All(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/titleachievements";
 
             return await GetAchievementBaseAsync(relativeUrl);
         }
 
-        public Task<List<Achievement>> GetAchievementsXbox360All(string gamertag)
+        public Task<List<Domain.Entities.Achievement>> GetAchievementsXbox360All(string gamertag)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid)
+        public Task<List<Domain.Entities.Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid)
+        public async Task<List<Domain.Entities.Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/history/titles";
 
             return await GetAchievementBaseAsync(relativeUrl);
         }
 
-        private async Task<List<Achievement>> GetAchievementBaseAsync(string relativeUrl)
+        private async Task<List<Domain.Entities.Achievement>> GetAchievementBaseAsync(string relativeUrl)
         {
             try
             {
@@ -58,9 +57,9 @@ namespace XblApp.XboxLiveService
             }
         }
 
-        private List<Achievement> MapToAchievements(AchievementJson achievement) =>
+        private List<Domain.Entities.Achievement> MapToAchievements(AchievementJson achievement) =>
             achievement.Titles
-            .Select(t => new Achievement
+            .Select(t => new Domain.Entities.Achievement
             {
                 AchievementId = t.TitleId,
                 //DateUnlock = DateTimeOffset.Parse(t.LastUnlock)
