@@ -17,5 +17,11 @@ namespace XblApp.Domain.Interfaces
         /// <param name="xuid">Xbox User Id</param>
         /// <returns>Achievement 360 Response</returns>
         public Task<List<Achievement>> GetAchievementsXbox360RecentProgressAndInfoAsync(long xuid);
+
+        public Task<List<Achievement>> GetAchievementsXbox360All(long xuid);
+
+        public Task<List<Achievement>> GetAchievementsXbox360All(string gamertag);
+
+        public Task<List<Achievement>> GetAchievements(long xuid);
     }
 }

@@ -13,14 +13,24 @@ namespace XblApp.XboxLiveService.Tests
             _factory = factory;
         }
 
-        [Fact]
-        public async Task Abc()
+        [Theory]
+        [InlineData(2533274912896954)]
+        public async Task GetAchievementsXboxoneRecentProgressAndInfoAsyncTest_(long xuid)
         {
-            long xuid = 2533274912896954;
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            var result = service.GetAchievementsXboxoneRecentProgressAndInfoAsync(xuid);
+            var result = await service.GetAchievementsXboxoneRecentProgressAndInfoAsync(xuid);
+        }
+
+        [Theory]
+        [InlineData(2533274912896954)]
+        public async Task GetAchievementsTest_(long xuid)
+        {
+            IServiceScope scope = _factory.Services.CreateScope();
+            IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
+
+            var result = await service.GetAchievements(xuid);
         }
     }
 }

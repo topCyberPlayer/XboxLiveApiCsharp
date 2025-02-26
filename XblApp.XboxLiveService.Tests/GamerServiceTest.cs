@@ -13,14 +13,28 @@ namespace XblApp.XboxLiveService.Tests
             _factory = factory;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gamertag"></param>
+        /// <returns></returns>
         [Theory]
         [InlineData("HnS l top l")]
-        public async Task Abc(string gamertag)
+        public async Task GetGamerProfileAsync_ShouldReturnValidProfile(string gamertag)
         {
             IServiceScope scope = _factory.Services.CreateScope();
-            IXboxLiveGameService service = scope.ServiceProvider.GetRequiredService<IXboxLiveGameService>();
+            IXboxLiveGamerService service = scope.ServiceProvider.GetRequiredService<IXboxLiveGamerService>();
 
-            var result = service.GetGamesForGamerProfileAsync(gamertag);
+            var result = await service.GetGamerProfileAsync(gamertag);
+
+            Assert.NotNull(result); // Коллекция не должна быть null
+            Assert.NotEmpty(result); // Должна содержать хотя бы один элемент
+            Assert.All(result, profile =>
+            {
+                Assert.NotNull(profile);
+                Assert.False(string.IsNullOrEmpty(profile.Gamertag), "Gamertag не должен быть пустым");
+                Assert.Equal(gamertag, profile.Gamertag); // Проверяем, что каждый объект содержит ожидаемый gamertag
+            });
         }
     }
 }
