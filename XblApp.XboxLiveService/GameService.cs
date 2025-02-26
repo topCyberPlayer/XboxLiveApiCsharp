@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using System.Net.Http.Headers;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.Infrastructure.XboxLiveServices.Models;
@@ -21,7 +20,7 @@ namespace XblApp.XboxLiveService
             //,TitleHubSettings.PRODUCT_ID
         );
 
-        public GameService(IHttpClientFactory factory, IAuthenticationRepository authRepository) : base(factory, authRepository) { }
+        public GameService(IHttpClientFactory factory) : base(factory) { }
 
         public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, int maxItems)
         {
@@ -47,8 +46,6 @@ namespace XblApp.XboxLiveService
             };
 
             string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
 
             GameJson result = await SendRequestAsync<GameJson>(client, uri);
 

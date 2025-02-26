@@ -7,7 +7,7 @@ namespace XblApp.XboxLiveService
 {
     public class AchievementService : BaseService, IXboxLiveAchievementService
     {
-        public AchievementService(IHttpClientFactory factory, IAuthenticationRepository authRepository) : base(factory, authRepository)
+        public AchievementService(IHttpClientFactory factory) : base(factory)
         {
         }
 
@@ -29,7 +29,6 @@ namespace XblApp.XboxLiveService
             {
                 HttpClient client = factory.CreateClient("AchievementService");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
                 client.DefaultRequestHeaders.Add("MS-CV", "eK4nT8CkJzEpWF3j.2");
 
                 AchievementJson result = await SendRequestAsync<AchievementJson>(client, relativeUrl);

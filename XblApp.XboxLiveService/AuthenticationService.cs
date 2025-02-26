@@ -42,6 +42,11 @@ namespace XblApp.XboxLiveService
             return QueryHelpers.AddQueryString(baseAddress, queryParameters);
         }
 
+        public async Task<string> GetValidTokenAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<XboxOAuthToken> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new()
@@ -168,6 +173,8 @@ namespace XblApp.XboxLiveService
                 UserPrivileges = json.UserPrivileges,
                 Xuid = json.Xuid
             };
+
+        
     }
 
     public class AuthenticationConfig

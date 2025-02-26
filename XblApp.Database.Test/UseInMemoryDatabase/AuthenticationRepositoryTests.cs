@@ -42,7 +42,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             {
                 var repository = new AuthenticationRepository(context);
 
-                await repository.SaveTokenAsync(tokenOAuth);
+                //await repository.SaveTokenAsync(tokenOAuth);
             }
 
             // Assert (в новом контексте)

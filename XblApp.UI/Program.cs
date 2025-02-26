@@ -38,6 +38,7 @@ namespace XblApp
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
 
+            builder.Services.AddScoped<TokenHandler>();
             builder.Services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IXboxLiveGameService, GameService>();
@@ -143,19 +144,34 @@ namespace XblApp
     {
         public static IServiceCollection AddHttpClientsFromConfig(this IServiceCollection services, IConfiguration configuration)
         {
-            var clientsConfig = configuration.GetSection("HttpClients").Get<Dictionary<string, HttpClientConfig>>();
+            var authConfigs = configuration.GetSection("XboxAuthenticationServices").Get<Dictionary<string, HttpClientConfig>>();
 
-            foreach (var clientConfig in clientsConfig)
+            foreach (var authConfig in authConfigs)
             {
-                services.AddHttpClient(clientConfig.Key, (HttpClient client) =>
+                services.AddHttpClient(authConfig.Key, (HttpClient client) =>
                 {
-                    client.BaseAddress = new Uri(clientConfig.Value.BaseAddress);
+                    client.BaseAddress = new Uri(authConfig.Value.BaseAddress);
 
-                    foreach (var header in clientConfig.Value.Headers)
+                    foreach (var header in authConfig.Value.Headers)
                     {
                         client.DefaultRequestHeaders.Add(header.Key, header.Value);
                     }
                 });
+            }
+
+            var xboxConfigs = configuration.GetSection("XboxServices").Get<Dictionary<string, HttpClientConfig>>();
+
+            foreach (var xboxConfig in xboxConfigs)
+            {
+                services.AddHttpClient(xboxConfig.Key, (HttpClient client) =>
+                {
+                    client.BaseAddress = new Uri(xboxConfig.Value.BaseAddress);
+
+                    foreach (var header in xboxConfig.Value.Headers)
+                    {
+                        client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                }).AddHttpMessageHandler<TokenHandler>();
             }
 
             return services;

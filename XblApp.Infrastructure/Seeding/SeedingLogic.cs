@@ -32,13 +32,13 @@ namespace XblApp.Database.Seeding
         {
             if (!context.Games.Any() && !context.Gamers.Any())
             {
-                List<Game> games = GameJsonLoader.LoadGames("Seeding\\seedData", "Games.json").ToList();
-                await context.Games.AddRangeAsync(games);
+                //List<Game> games = GameJsonLoader.LoadGames("Seeding\\seedData", "Games.json").ToList();
+                //await context.Games.AddRangeAsync(games);
 
-                List<Gamer> gamers = GamerJsonLoader.LoadGamers("Seeding\\seedData", "Gamers.json").ToList();
-                await context.Gamers.AddRangeAsync(gamers);
+                //List<Gamer> gamers = GamerJsonLoader.LoadGamers("Seeding\\seedData", "Gamers.json").ToList();
+                //await context.Gamers.AddRangeAsync(gamers);
 
-                await context.SaveChangesAsync();
+                //await context.SaveChangesAsync();
             }
         }
     }

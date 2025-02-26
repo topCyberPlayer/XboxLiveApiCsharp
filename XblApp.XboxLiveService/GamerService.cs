@@ -35,9 +35,7 @@ namespace XblApp.XboxLiveService
 
         private readonly ILogger<GamerService> _logger;
 
-        public GamerService(IHttpClientFactory factory,
-            IAuthenticationRepository authRepository,
-            ILogger<GamerService> logger) : base(factory, authRepository)
+        public GamerService(IHttpClientFactory factory, ILogger<GamerService> logger) : base(factory)
         { 
             _logger = logger;
         }
@@ -65,8 +63,6 @@ namespace XblApp.XboxLiveService
                 string? uri = QueryHelpers.AddQueryString(relativeUrl, "settings", DefScopes);
 
                 HttpClient client = factory.CreateClient("GamerService");
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("XBL3.0", authorizationHeaderValue);
 
                 GamerJson result = await SendRequestAsync<GamerJson>(client, uri);
 

@@ -86,8 +86,10 @@ namespace XblApp.Database.Repositories
                 }
                 else
                 {
-                    existingAuthToken.XboxLiveTokenLink.Token = liveToken.Token;
+                    existingAuthToken.XboxLiveTokenLink.IssueInstant = liveToken.IssueInstant;
                     existingAuthToken.XboxLiveTokenLink.NotAfter = liveToken.NotAfter;
+                    existingAuthToken.XboxLiveTokenLink.Token = liveToken.Token;
+                    
                 }
 
                 if (existingAuthToken.XboxLiveTokenLink!.UserTokenLink == null)
@@ -96,6 +98,8 @@ namespace XblApp.Database.Repositories
                 }
                 else
                 {
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.IssueInstant = userToken.IssueInstant;
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.NotAfter = userToken.NotAfter;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Token = userToken.Token;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Gamertag = userToken.Gamertag;
                 }

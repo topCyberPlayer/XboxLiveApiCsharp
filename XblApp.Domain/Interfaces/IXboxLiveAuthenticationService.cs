@@ -15,5 +15,6 @@ namespace XblApp.Domain.Interfaces
         /// <returns></returns>
         public Task<XboxOAuthToken> RefreshOauth2Token(XboxOAuthToken expiredAuthToken);
         public string GenerateAuthorizationUrl();
+        public Task<string> GetValidTokenAsync();
     }
 }

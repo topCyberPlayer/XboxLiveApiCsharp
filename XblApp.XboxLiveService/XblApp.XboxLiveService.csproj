@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
     <ProjectReference Include="..\XblApp.Domain\XblApp.Domain.csproj" />
     <ProjectReference Include="..\XblApp.Shared\XblApp.DTO.csproj" />
   </ItemGroup>

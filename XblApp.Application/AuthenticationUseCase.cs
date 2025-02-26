@@ -43,12 +43,12 @@ namespace XblApp.Application
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task CheckDateOfExpiry()
+        public async ValueTask<string> GetValidAuthHeaderAsync()
         {
-            var resultTokenXau = IsDateXauTokenExperid();
+            bool isExpired = IsDateUserTokenExperid();
 
-            if (!resultTokenXau)
-                return;
+            if (!isExpired)
+                return _authRepository.GetAuthorizationHeaderValue();
 
             XboxOAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
             
@@ -56,6 +56,8 @@ namespace XblApp.Application
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 
             await BaseTokens();
+
+            return _authRepository.GetAuthorizationHeaderValue();
         }
 
         private async Task BaseTokens()
@@ -69,26 +71,8 @@ namespace XblApp.Application
             await _authRepository.SaveTokensAsync(_authToken,_liveToken, _userToken);
         }
 
-        private bool IsDateXstsTokenExperid()
-        {
-            DateTime? dateNow = DateTime.Now;
+        private bool IsDateUserTokenExperid() => DateTime.UtcNow > _authRepository.GetDateUserTokenExpired();
 
-            DateTime? dateDb = _authRepository.GetDateUserTokenExpired();
-
-            return dateNow > dateDb ? true : false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>true - истек</returns>
-        private bool IsDateXauTokenExperid()
-        {
-            DateTime? dateNow = DateTime.Now;
-
-            DateTime? dateDb = _authRepository.GetDateLiveTokenExpired();
-
-            return dateNow > dateDb ? true : false;
-        }
+        private bool IsDateLiveTokenExperid() => DateTime.Now > _authRepository.GetDateLiveTokenExpired();
     }
 }

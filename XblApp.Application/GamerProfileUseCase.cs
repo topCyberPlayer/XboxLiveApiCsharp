@@ -46,7 +46,7 @@ namespace XblApp.Application
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
-            await base.CheckDateOfExpiry();
+            //await base.CheckDateOfExpiry();
 
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
             await _gamerRepository.SaveGamerAsync(gamers);
