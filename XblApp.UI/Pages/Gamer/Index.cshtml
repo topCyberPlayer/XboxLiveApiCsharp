@@ -8,11 +8,6 @@
 @await Html.PartialAsync("_GamerTabs", Model.Output.Gamertag)
 
 <h2 class="d-inline">@Model.Output.Gamertag</h2>
-<form method="post" asp-page-handler="UpdateProfile" class="d-inline">
-    <input type="hidden" name="gamerId" value="@Model.Output.GamerId" />
-    <button type="submit" class="btn btn-primary ms-2">Update Profile</button>
-</form>
-
 <body>
     <td>
         <div>

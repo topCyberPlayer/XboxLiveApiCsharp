@@ -47,7 +47,7 @@ namespace XblApp.Pages
             {
                 GameId = game.GameId,
                 GameName = game.GameName,
-                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(),
+                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(), //todo Исправить. Отображает неверное значение
                 TotalAchievements = game.TotalAchievements,
                 TotalGamerscore = game.TotalGamerscore,
             }).ToList();

@@ -24,14 +24,6 @@ namespace XblApp.Pages.Gamer
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdateProfileAsync(long gamerId)
-        {
-
-            Domain.Entities.Gamer? gamer = await _gamerProfileUseCase.UpdateProfileAsync(gamerId);
-            Output = CastToGamerDTO(gamer);
-            return Page();
-        }
-
         private static GamerDTO CastToGamerDTO(Domain.Entities.Gamer? gamer) =>
             new()
             {

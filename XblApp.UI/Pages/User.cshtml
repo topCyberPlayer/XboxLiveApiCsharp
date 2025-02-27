@@ -4,10 +4,28 @@
 }
 
 <h2 class="text-center">Welcome to your Profile</h2>
+<form method="post" asp-page-handler="UpdateProfile" class="d-inline">
+    <input type="hidden" name="gamerId" value="@Model.Output.GamerId" />
+    <button type="submit" class="btn btn-primary ms-2">Update Profile</button>
+</form>
 
+<div>
+    Registered: @Model.appUser?.CreatedAt.ToString("dd/MM/yyyy")
+</div>
 <div>
     Gamertag: @Model.appUser?.UserName
 </div>
 <div>
-    CreatedAt: @Model.appUser?.CreatedAt.ToString("dd/MM/yyyy")
+    Email: @Model.appUser?.Email
 </div>
+<div>
+    Gamerscore: @Model.Output.Gamerscore
+</div>
+<div>
+    Games: @Model.Output.Games
+</div>
+<div>
+    Earned Achievements: @Model.Output.Achievements
+</div>
+
+
