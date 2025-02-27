@@ -128,9 +128,15 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
 
                 List<Gamer> gamerData = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
 
+                if (!gamerData.Any())
+                {
+                    ModelState.AddModelError("Input.Gamertag", "Такой игрок не существует.");
+                    return Page();
+                }
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
-                if (result.Succeeded && gamerData.Any())
+                if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
