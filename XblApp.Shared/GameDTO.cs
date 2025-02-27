@@ -22,7 +22,7 @@ namespace XblApp.DTO
             {
                 GameId = game.GameId,
                 GameName = game.GameName,
-                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(), //todo Исправить. Отображает неверное значение
+                Gamers = game.GamerLinks.Count,
                 TotalAchievements = game.TotalAchievements,
                 TotalGamerscore = game.TotalGamerscore,
             }).ToList();

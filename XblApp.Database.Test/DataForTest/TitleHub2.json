@@ -1,0 +1,43 @@
+{
+  "xuid": "102",
+  "titles": [
+    {
+      "titleId": "502",
+      "name": "Sniper Elite 5",
+      "type": "Game",
+      "devices": [ "PC", "XboxOne", "XboxSeries" ],
+      "achievement": {
+        "currentAchievements": 56,
+        "totalAchievements": 71,
+        "currentGamerscore": 920,
+        "totalGamerscore": 1375,
+        "progressPercentage": 0.0,
+        "sourceVersion": 2
+      },
+      "titleHistory": {
+        "lastTimePlayed": "2025-01-24T12:57:41.3915751Z",
+        "visible": true,
+        "canHide": true
+      }
+    },
+    {
+      "titleId": "503",
+      "name": "Gears Tactics - Base Game",
+      "type": "Game",
+      "devices": [ "PC", "XboxOne", "XboxSeries" ],
+      "achievement": {
+        "currentAchievements": 61,
+        "totalAchievements": 61,
+        "currentGamerscore": 1400,
+        "totalGamerscore": 1400,
+        "progressPercentage": 100.0,
+        "sourceVersion": 2
+      },
+      "titleHistory": {
+        "lastTimePlayed": "2024-12-28T14:10:02.919734Z",
+        "visible": true,
+        "canHide": false
+      }
+    }
+  ]
+}

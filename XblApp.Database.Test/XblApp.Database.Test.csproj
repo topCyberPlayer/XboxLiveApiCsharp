@@ -29,7 +29,10 @@
     <None Update="DataForTest\Profile.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="DataForTest\TitleHub.json">
+    <None Update="DataForTest\TitleHub2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DataForTest\TitleHub1.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

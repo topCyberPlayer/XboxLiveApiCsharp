@@ -1,7 +1,7 @@
 {
   "profileUsers": [
     {
-      "id": "2533274912896954",
+      "id": "101",
       "hostId": "2533274912896954",
       "settings": [
         {
@@ -14,11 +14,11 @@
         },
         {
           "id": "Gamerscore",
-          "value": "134650"
+          "value": "159840"
         },
         {
           "id": "Gamertag",
-          "value": "HnS l top l"
+          "value": "Anton"
         },
         {
           "id": "Location",
@@ -36,7 +36,7 @@
       "isSponsoredUser": false
     },
     {
-      "id": "2533274912896956",
+      "id": "102",
       "hostId": "2533274912896956",
       "settings": [
         {
@@ -49,11 +49,11 @@
         },
         {
           "id": "Gamerscore",
-          "value": "129557"
+          "value": "156120"
         },
         {
           "id": "Gamertag",
-          "value": "RiotGran"
+          "value": "Bogdan"
         },
         {
           "id": "Location",

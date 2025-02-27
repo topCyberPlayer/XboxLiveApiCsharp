@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
@@ -6,6 +7,18 @@ namespace XblApp.DTO.JsonModels
     {
         [JsonPropertyName("profileUsers")]
         public ICollection<ProfileUser> ProfileUsers { get; set; }
+
+        public static List<Gamer> MapToGamer(GamerJson gamerJson) =>
+            gamerJson.ProfileUsers
+            .Select(p => new Gamer
+            {
+                GamerId = long.TryParse(p.ProfileId, out var gamerId) ? gamerId : throw new FormatException($"Invalid ProfileId format for Gamer: {p.Gamertag}"),
+                Gamertag = p.Gamertag,
+                Gamerscore = p.Gamerscore,
+                Location = p.Location,
+                Bio = p.Bio
+            })
+            .ToList();
     }
 
     public class ProfileUser

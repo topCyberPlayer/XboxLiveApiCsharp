@@ -1,0 +1,43 @@
+{
+  "xuid": "101",
+  "titles": [
+    {
+      "titleId": "501",
+      "name": "Just Cause 2",
+      "type": "Game",
+      "devices": [ "Xbox360", "XboxOne", "XboxSeries" ],
+      "achievement": {
+        "currentAchievements": 30,
+        "totalAchievements": 50,
+        "currentGamerscore": 640,
+        "totalGamerscore": 1000,
+        "progressPercentage": 64.0,
+        "sourceVersion": 1
+      },
+      "titleHistory": {
+        "lastTimePlayed": "2025-01-27T07:10:01.633Z",
+        "visible": true,
+        "canHide": false
+      }
+    },
+    {
+      "titleId": "502",
+      "name": "Sniper Elite 5",
+      "type": "Game",
+      "devices": [ "PC", "XboxOne", "XboxSeries" ],
+      "achievement": {
+        "currentAchievements": 8,
+        "totalAchievements": 71,
+        "currentGamerscore": 190,
+        "totalGamerscore": 1375,
+        "progressPercentage": 0.0,
+        "sourceVersion": 2
+      },
+      "titleHistory": {
+        "lastTimePlayed": "2025-01-24T12:57:41.3915751Z",
+        "visible": true,
+        "canHide": true
+      }
+    }
+  ]
+}

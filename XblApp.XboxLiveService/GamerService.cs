@@ -65,7 +65,7 @@ namespace XblApp.XboxLiveService
 
                 GamerJson result = await SendRequestAsync<GamerJson>(client, uri);
 
-                return MapToGamer(result);
+                return GamerJson.MapToGamer(result);
             }
             catch (Exception ex)
             {
@@ -74,16 +74,6 @@ namespace XblApp.XboxLiveService
             }
         }
 
-        public static List<Gamer> MapToGamer(GamerJson gamerJson) =>
-            gamerJson.ProfileUsers
-            .Select(p => new Gamer
-            {
-                GamerId = long.TryParse(p.ProfileId, out var gamerId) ? gamerId : throw new FormatException($"Invalid ProfileId format for Gamer: {p.Gamertag}"),
-                Gamertag = p.Gamertag,
-                Gamerscore = p.Gamerscore,
-                Location = p.Location,
-                Bio = p.Bio
-            })
-            .ToList();
+        
     }
 }

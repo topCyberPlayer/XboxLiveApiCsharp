@@ -12,7 +12,7 @@ namespace XblApp.Database.Seeding
             string jsonContent = File.ReadAllText(filePath);
             GamerJson jsonDecoded = JsonSerializer.Deserialize<GamerJson>(jsonContent);
 
-            return new List<Gamer>(); //GamerService.MapToGamer(jsonDecoded); //todo метод MapToGame перенести
+            return GamerJson.MapToGamer(jsonDecoded); //todo метод MapToGame перенести
         }
     }
 }

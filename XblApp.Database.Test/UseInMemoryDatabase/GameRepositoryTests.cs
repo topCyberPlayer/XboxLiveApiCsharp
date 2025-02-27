@@ -135,13 +135,35 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
         {
             // Arrange
-            List<Game> games = GameJsonLoader.LoadGames("DataForTest", "TitleHub.json").ToList();
-            
+            List<Gamer> gamers = GamerJsonLoader.LoadGamers("DataForTest", "Profile.json").ToList();
+            List<Game> games1 = GameJsonLoader.LoadGames("DataForTest", "TitleHub1.json").ToList();
+            List<Game> games2 = GameJsonLoader.LoadGames("DataForTest", "TitleHub2.json").ToList();
+
+            gamers[0].ApplicationUserId = "0";
+            gamers[1].ApplicationUserId = "1";
+
+            using (var context = CreateContext())
+            {
+                var gamerRepository = new GamerRepository(context);
+                var gameRepository = new GameRepository(context);
+
+                await gamerRepository.SaveOrUpdateGamersAsync(gamers);
+                await gameRepository.SaveOrUpdateGamesAsync(games1);
+                await gameRepository.SaveOrUpdateGamesAsync(games2);
+            }
+
+            // Act
             using (var context = CreateContext())
             {
                 var repository = new GameRepository(context);
 
-                await repository.SaveOrUpdateGamesAsync(games);
+                // Assert
+                var result = await repository.GetAllGamesAsync2();
+
+                var game = result.FirstOrDefault(g => g.Item1 == "Sniper Elite 5");
+
+                Assert.NotNull(game.Item1);
+                Assert.Equal(2, game.Item4); // Проверяем количество общих игроков у игры
             }
         }
 

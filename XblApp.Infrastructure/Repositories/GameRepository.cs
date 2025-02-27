@@ -9,6 +9,21 @@ namespace XblApp.Database.Repositories
     {
         public GameRepository(XblAppDbContext context) : base(context) { }
 
+        public async Task<List<(string, int, int, int)>> GetAllGamesAsync2()
+        {
+            var games = await _context.Games
+                .Select(game => new ValueTuple<string, int, int, int>
+                (
+                    game.GameName,
+                    game.TotalAchievements,
+                    game.TotalGamerscore,
+                    game.GamerLinks.Count // Количество игроков, связанных с игрой
+                ))
+                .ToListAsync();
+
+            return games;
+        }
+
         public async Task<List<Game>> GetAllGamesAsync() =>
             await _context.Games
             .AsNoTracking()
@@ -44,8 +59,23 @@ namespace XblApp.Database.Repositories
                     existingGame.TotalGamerscore = game.TotalGamerscore;
 
                     // Обновляем связи GamerGame
-                    existingGame.GamerLinks.First().CurrentGamerscore = game.GamerLinks.First().CurrentGamerscore;
-                    existingGame.GamerLinks.First().CurrentAchievements = game.GamerLinks.First().CurrentAchievements;
+                    foreach (var newGamerGame in game.GamerLinks)
+                    {
+                        var existingGamerGame = existingGame.GamerLinks
+                            .FirstOrDefault(gg => gg.GamerId == newGamerGame.GamerId);
+
+                        if (existingGamerGame != null)
+                        {
+                            // Обновляем статистику игрока
+                            existingGamerGame.CurrentAchievements = newGamerGame.CurrentAchievements;
+                            existingGamerGame.CurrentGamerscore = newGamerGame.CurrentGamerscore;
+                        }
+                        else
+                        {
+                            // Добавляем новую связь
+                            existingGame.GamerLinks.Add(newGamerGame);
+                        }
+                    }
                 }
             }
 

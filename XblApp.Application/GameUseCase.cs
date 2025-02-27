@@ -14,7 +14,10 @@ namespace XblApp.Application
         {
             _gameRepository = gameRepository;
         }
-
+        /// <summary>
+        /// Отобразить все игры: Название, Достижения, Геймерскор, Кол-во игроков
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Game>> GetAllGamesAsync()
         {
             List<Game> games = await _gameRepository.GetAllGamesAsync();

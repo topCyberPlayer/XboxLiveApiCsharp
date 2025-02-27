@@ -41,29 +41,11 @@ namespace XblApp.XboxLiveService
 
             GameJson result = await SendRequestAsync<GameJson>(client, relativeUrl);
 
-            List<Game> games = MapToGame(result);
+            List<Game> games = GameJson.MapToGame(result);
 
             return games;
         }
 
-        public static List<Game> MapToGame(GameJson gameJson) =>
-            gameJson.Titles
-                .Select(title => new Game
-                {
-                    GameId = long.TryParse(title.TitleId, out long gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
-                    GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
-                    TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
-                    TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
-                    GamerLinks = new List<GamerGame>()
-                    {
-                        new GamerGame
-                        {
-                            GamerId = long.TryParse(gameJson.Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
-                            CurrentAchievements = title.Achievement.CurrentAchievements,
-                            CurrentGamerscore = title.Achievement.CurrentGamerscore
-                        }
-                    }
-                })
-                .ToList();
+        
     }
 }
