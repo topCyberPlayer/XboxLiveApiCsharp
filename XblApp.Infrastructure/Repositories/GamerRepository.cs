@@ -40,7 +40,7 @@ namespace XblApp.Database.Repositories
                     .ThenInclude(b => b.GameLink)
                 .FirstOrDefaultAsync();
 
-        public async Task SaveGamerAsync(List<Gamer> gamers)
+        public async Task SaveOrUpdateGamersAsync(List<Gamer> gamers)
         {
             foreach (Gamer gamer in gamers)
             {

@@ -60,7 +60,7 @@ namespace XblApp.Database.Repositories
         }
 
         //todo Есть ошибка при обновлении токенов. Ощущение что какой-то токен не обновляется в БД.
-        public async Task SaveTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken)
+        public async Task SaveOrUpdateTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken)
         {
             var existingAuthToken = await _context.XboxOAuthTokens
                 .Include(x => x.XboxLiveTokenLink)

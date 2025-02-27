@@ -25,7 +25,7 @@ namespace XblApp.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Task SaveAchievementsAsync(List<Achievement> achievements)
+        public Task SaveOrUpdateAchievementsAsync(List<Achievement> achievements)
         {
             throw new NotImplementedException();
         }

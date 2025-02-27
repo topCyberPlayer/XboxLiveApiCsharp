@@ -47,10 +47,10 @@ namespace XblApp.Application
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
-            await _gamerRepository.SaveGamerAsync(gamers);
+            await _gamerRepository.SaveOrUpdateGamersAsync(gamers);
 
             List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId);
-            await _gameRepository.SaveGameAsync(games);
+            await _gameRepository.SaveOrUpdateGamesAsync(games);
 
             //List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId);
             //await _achievementRepository.SaveAchievementsAsync(achievements);

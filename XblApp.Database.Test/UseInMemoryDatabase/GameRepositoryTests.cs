@@ -55,7 +55,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 };
 
                 // Act
-                await repository.SaveGameAsync(games);
+                await repository.SaveOrUpdateGamesAsync(games);
             }
 
             // Assert (в новом контексте)
@@ -93,7 +93,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                     }
                 };
 
-                await repository.SaveGameAsync(games);
+                await repository.SaveOrUpdateGamesAsync(games);
             }
 
             // Act
@@ -112,7 +112,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                     }
                 };
 
-                await repository.SaveGameAsync(games);
+                await repository.SaveOrUpdateGamesAsync(games);
             }
 
             // Assert (в новом контексте)
@@ -141,7 +141,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             {
                 var repository = new GameRepository(context);
 
-                await repository.SaveGameAsync(games);
+                await repository.SaveOrUpdateGamesAsync(games);
             }
         }
 
@@ -155,7 +155,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             {
                 var repository = new GameRepository(context);
 
-                await repository.SaveGameAsync(games);
+                await repository.SaveOrUpdateGamesAsync(games);
             }
 
             // Act

@@ -8,6 +8,6 @@ namespace XblApp.Domain.Interfaces
         public Task<Gamer> GetGamerProfileAsync(string gamertag);
         public Task<List<Gamer>> GetAllGamerProfilesAsync();
         public Task<Gamer> GetGamesForGamerAsync(string gamertag);
-        public Task SaveGamerAsync(List<Gamer> gamers);
+        public Task SaveOrUpdateGamersAsync(List<Gamer> gamers);
     }
 }

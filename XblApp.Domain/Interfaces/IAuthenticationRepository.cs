@@ -4,7 +4,7 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IAuthenticationRepository
     {
-        public Task SaveTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken);
+        public Task SaveOrUpdateTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken);
         public Task<XboxOAuthToken> GetXboxAuthToken();
         /// <summary>
         /// Живет 16 часов

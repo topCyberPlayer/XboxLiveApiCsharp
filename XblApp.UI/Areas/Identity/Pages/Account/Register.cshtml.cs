@@ -141,7 +141,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     gamerData.ForEach(a => a.ApplicationUserId = user.Id);
-                    await _gamerRepository.SaveGamerAsync(gamerData);
+                    await _gamerRepository.SaveOrUpdateGamersAsync(gamerData);
 
                     await _userManager.AddToRoleAsync(user, "gamerTeam");
 

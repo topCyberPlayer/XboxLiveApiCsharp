@@ -75,7 +75,7 @@ namespace XblApp.Application
             _userToken = await _authService.RequestXstsToken(_liveToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XSTS token.");
 
-            await _authRepository.SaveTokensAsync(_authToken,_liveToken, _userToken);
+            await _authRepository.SaveOrUpdateTokensAsync(_authToken,_liveToken, _userToken);
         }
 
         private bool IsDateUserTokenExperid() => DateTime.UtcNow > _authRepository.GetDateUserTokenExpired();
