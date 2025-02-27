@@ -13,7 +13,29 @@ namespace XblApp.XboxLiveService
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
-            return await GetAchievementBaseAsync(relativeUrl);
+            return await GetAchievementBaseAsync2(relativeUrl);
+        }
+
+        /// <summary>
+        /// Возвращает только 32 элемента
+        /// </summary>
+        /// <param name="relativeUrl"></param>
+        /// <returns></returns>
+        private async Task<List<Domain.Entities.Achievement>> GetAchievementBaseAsync2(string relativeUrl)
+        {
+            try
+            {
+                HttpClient client = factory.CreateClient("AchievementService");
+
+                AchievementJson2 result = await SendRequestAsync<AchievementJson2>(client, relativeUrl);
+
+                return MapToAchievements2(result);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<List<Domain.Entities.Achievement>> GetAchievementsXbox360All(long xuid)
@@ -63,6 +85,16 @@ namespace XblApp.XboxLiveService
             {
                 AchievementId = t.TitleId,
                 //DateUnlock = DateTimeOffset.Parse(t.LastUnlock)
+            })
+            .ToList();
+
+        private List<Domain.Entities.Achievement> MapToAchievements2(AchievementJson2 achievements) =>
+            achievements.Titles
+            .Select(t => new Domain.Entities.Achievement
+            {
+                AchievementId = long.TryParse(t.Id, out long result) ? result : throw new FormatException("sd"),
+                GameId = long.TryParse(t.ProductId, out long productId) ? productId : throw new FormatException("sd"),
+
             })
             .ToList();
 
