@@ -54,7 +54,11 @@ namespace XblApp
             });
 
             builder.Services
-                .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultIdentity<ApplicationUser>(options => 
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.User.RequireUniqueEmail = true;
+                })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<XblAppDbContext>();
 
@@ -63,9 +67,7 @@ namespace XblApp
             builder.Services.AddHttpContextAccessor();
 
             string? dbProvider = builder.Configuration.GetConnectionString("DatabaseProvider");
-
             
-
             return builder;
         }
     }
@@ -181,6 +183,6 @@ namespace XblApp
     public class HttpClientConfig
     {
         public string BaseAddress { get; set; }
-        public Dictionary<string, string> Headers { get; set; } = new();
+        public Dictionary<string, string> Headers { get; set; } = [];
     }
 }

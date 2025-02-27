@@ -127,7 +127,6 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                 };
 
                 List<Gamer> gamerData = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
-                
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
