@@ -45,6 +45,13 @@ namespace XblApp.Database.Repositories
                     });
                 }
 
+                //if (existingGame == null)
+                //{
+
+
+                //    await _context.Games.AddAsync(game);
+                //}
+
                 if (existingGame != null)
                 {
                     existingGame.GameName = game.GameName;

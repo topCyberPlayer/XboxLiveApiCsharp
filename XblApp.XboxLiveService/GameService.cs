@@ -21,30 +21,23 @@ namespace XblApp.XboxLiveService
 
         public GameService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag, int maxItems)
+        public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag)
         {
             string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl, maxItems);
+            return await GetGamesForGamerBaseAsync(relativeUrl);
         }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid, int maxItems)
+        public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl, maxItems);
+            return await GetGamesForGamerBaseAsync(relativeUrl);
         }
 
-        private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl, int maxItems)
+        private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl)
         {
             HttpClient client = factory.CreateClient("GameService");
-
-            Dictionary<string, string> queryParams = new()
-            {
-                { "maxItems", maxItems.ToString() },
-            };
-
-            //string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
             GameJson result = await SendRequestAsync<GameJson>(client, relativeUrl);
 

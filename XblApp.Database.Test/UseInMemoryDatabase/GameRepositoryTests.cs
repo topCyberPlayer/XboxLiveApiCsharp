@@ -17,14 +17,65 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 .Options;
         }
 
+        /// <summary>
+        /// Создаем новый контекст для каждой "сессии"
+        /// </summary>
+        /// <returns></returns>
         private XblAppDbContext CreateContext()
         {
-            // Создаем новый контекст для каждой "сессии"
             return new XblAppDbContext(_options);
         }
 
-        [Fact]
-        public async Task SaveGameAsync_ShouldAddNewGame_WhenGameDoesNotExist()
+        /// <summary>
+        /// Проверяю логику сохранения новой игры в БД (такой игры в БД еще нет)
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="gameName"></param>
+        /// <param name="totalAchivos"></param>
+        /// <param name="totalGs"></param>
+        /// <returns></returns>
+        [Theory]
+        [InlineData(1, "Test Game", 5, 100)]
+        public async Task SaveGameAsync_ShouldAddNewGame_WhenGameDoesNotExist(long gameId, string gameName, int totalAchivos, int totalGs)
+        {
+            // Arrange
+            using (var context = CreateContext())
+            {
+                var repository = new GameRepository(context);
+
+                var games = new List<Game>
+                {
+                    new Game
+                    {
+                        GameId = gameId,
+                        GameName = gameName,
+                        TotalAchievements = totalAchivos,
+                        TotalGamerscore = totalGs
+                    }
+                };
+
+                // Act
+                await repository.SaveGameAsync(games);
+            }
+
+            // Assert (в новом контексте)
+            using (var context = CreateContext())
+            {
+                Game? savedGame = context.Games.FirstOrDefault(g => g.GameId == 1);
+                Assert.NotNull(savedGame);
+                Assert.Equal(gameName, savedGame.GameName);
+                Assert.Equal(totalAchivos, savedGame.TotalAchievements);
+                Assert.Equal(totalGs, savedGame.TotalGamerscore);
+            }
+        }
+
+        /// <summary>
+        /// Проверяю логику сохранения уже существующей игры в БД
+        /// </summary>
+        /// <returns></returns>
+        [Theory]
+        [InlineData(1, "Updated Game", 10, 200)]
+        public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists(long gameId, string gameName, int totalAchivos, int totalGs)
         {
             // Arrange
             using (var context = CreateContext())
@@ -36,49 +87,13 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                     new Game
                     {
                         GameId = 1,
-                        GameName = "Test Game",
-                        TotalAchievements = 5,
-                        TotalGamerscore = 100
-                    }
-                };
-
-                // Act
-                await repository.SaveGameAsync(games);
-            }
-
-            // Assert (в новом контексте)
-            using (var context = CreateContext())
-            {
-                var savedGame = context.Games.FirstOrDefault(g => g.GameId == 1);
-                Assert.NotNull(savedGame);
-                Assert.Equal("Test Game", savedGame.GameName);
-                Assert.Equal(5, savedGame.TotalAchievements);
-                Assert.Equal(100, savedGame.TotalGamerscore);
-            }
-        }
-
-        [Fact]
-        public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists()
-        {
-            // Arrange
-            using (var context = CreateContext())
-            {
-                var repository = new GameRepository(context);
-
-                await repository.SaveGameAsync(new List<Game>
-                {
-                    new Game
-                    {
-                        GameId = 1,
                         GameName = "Old Game",
                         TotalAchievements = 3,
                         TotalGamerscore = 50
                     }
-                });
+                };
 
-                var updatedGame1 = context.Games.FirstOrDefault(g => g.GameId == 1);
-                Assert.NotNull(updatedGame1);
-                Assert.Equal("Old Game", updatedGame1.GameName);
+                await repository.SaveGameAsync(games);
             }
 
             // Act
@@ -86,40 +101,72 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             {
                 var repository = new GameRepository(context);
 
-                await repository.SaveGameAsync(new List<Game>
+                var games = new List<Game>
                 {
                     new Game
                     {
-                        GameId = 1,
-                        GameName = "Updated Game",
-                        TotalAchievements = 10,
-                        TotalGamerscore = 200
+                        GameId = gameId,
+                        GameName = gameName,
+                        TotalAchievements = totalAchivos,
+                        TotalGamerscore = totalGs
                     }
-                });
+                };
+
+                await repository.SaveGameAsync(games);
             }
 
             // Assert (в новом контексте)
             using (var context = CreateContext())
             {
-                var updatedGame2 = context.Games.FirstOrDefault(g => g.GameId == 1);
+                var updatedGame2 = context.Games.FirstOrDefault(g => g.GameId == gameId);
+                
                 Assert.NotNull(updatedGame2);
-                Assert.Equal("Updated Game", updatedGame2.GameName);
-                Assert.Equal(10, updatedGame2.TotalAchievements);
-                Assert.Equal(200, updatedGame2.TotalGamerscore);
+                Assert.Equal(gameName, updatedGame2.GameName);
+                Assert.Equal(totalAchivos, updatedGame2.TotalAchievements);
+                Assert.Equal(totalGs, updatedGame2.TotalGamerscore);
+            }
+        }
+
+        /// <summary>
+        /// Проверка логики загрузки игр из json-файла
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
+        {
+            // Arrange
+            List<Game> games = GameJsonLoader.LoadGames("DataForTest", "TitleHub.json").ToList();
+            
+            using (var context = CreateContext())
+            {
+                var repository = new GameRepository(context);
+
+                await repository.SaveGameAsync(games);
             }
         }
 
         [Fact]
-        public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
+        public async Task GetGameAsyncTest()
         {
+            // Arrange
             List<Game> games = GameJsonLoader.LoadGames("DataForTest", "TitleHub.json").ToList();
+
+            using (var context = CreateContext())
+            {
+                var repository = new GameRepository(context);
+
+                await repository.SaveGameAsync(games);
+            }
 
             // Act
             using (var context = CreateContext())
             {
                 var repository = new GameRepository(context);
 
-                await repository.SaveGameAsync(games);
+                // Assert
+                List<Game>? result = await repository.GetAllGamesAsync();
+                Assert.NotNull(result);
+                Assert.Equal(5, result.Count());
             }
         }
     }
