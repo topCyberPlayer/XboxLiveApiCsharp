@@ -23,58 +23,34 @@ namespace XblApp.Database.Repositories
             .FirstOrDefaultAsync();
 
 
-        public async Task SaveGameAsync(List<Game> games)
+        public async Task SaveOrUpdateGamesAsync(List<Game> games)
         {
-            foreach (Game game in games)
+            foreach (Game? game in games)
             {
-                // Ищем игру в базе данных по идентификатору
-                Game? existingGame = await _context.Games
-                    .Include(g => g.GamerLinks) // Загружаем связанные записи
+                var existingGame = await _context.Games
+                    .Include(g => g.GamerLinks)
                     .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 
-                List<GamerGame> gamerLinks = new List<GamerGame>();
-
-                foreach (var gamerGame in game.GamerLinks)
+                if (existingGame == null)
                 {
-                    gamerLinks.Add(new GamerGame
-                    {
-                        GameId = game.GameId,
-                        GamerId = gamerGame.GamerId,
-                        CurrentAchievements = gamerGame.CurrentAchievements,
-                        CurrentGamerscore = gamerGame.CurrentGamerscore
-                    });
-                }
-
-                //if (existingGame == null)
-                //{
-
-
-                //    await _context.Games.AddAsync(game);
-                //}
-
-                if (existingGame != null)
-                {
-                    existingGame.GameName = game.GameName;
-                    existingGame.TotalGamerscore = game.TotalGamerscore;
-                    existingGame.TotalAchievements = game.TotalAchievements;
-                    existingGame.GamerLinks = gamerLinks;
-
-                    _context.Games.Update(existingGame);
+                    // Если игры нет в БД, добавляем новую
+                    _context.Games.Add(game);
                 }
                 else
                 {
-                    _context.Games.Add(new Game
-                    {
-                        GameId = game.GameId,
-                        GameName = game.GameName,
-                        TotalAchievements = game.TotalAchievements,
-                        TotalGamerscore = game.TotalGamerscore,
-                        GamerLinks = gamerLinks
-                    });
+                    // Обновляем данные
+                    existingGame.GameName = game.GameName;
+                    existingGame.TotalAchievements = game.TotalAchievements;
+                    existingGame.TotalGamerscore = game.TotalGamerscore;
+
+                    // Обновляем связи GamerGame
+                    existingGame.GamerLinks.First().CurrentGamerscore = game.GamerLinks.First().CurrentGamerscore;
+                    existingGame.GamerLinks.First().CurrentAchievements = game.GamerLinks.First().CurrentAchievements;
                 }
             }
-            await _context.SaveChangesAsync();
-        }
 
+            await _context.SaveChangesAsync();
+
+        }
     }
 }
