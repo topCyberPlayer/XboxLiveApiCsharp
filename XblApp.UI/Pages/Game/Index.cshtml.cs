@@ -19,18 +19,8 @@ namespace XblApp.Pages.Game
         public async Task<IActionResult> OnGet()
         {
             List<Domain.Entities.Game> games = await _gameUseCase.GetAllGamesAsync();
-            Output = MapToGameDTO(games);
+            Output = GameDTO.CastToGameDTO(games);
             return Page();
         }
-
-        private static List<GameDTO> MapToGameDTO(List<Domain.Entities.Game> games) =>
-            games.Select(g => new GameDTO
-            {
-                GameId = g.GameId,
-                GameName = g.GameName,
-                Gamers = g.GamerLinks.Count,
-                TotalAchievements = g.TotalAchievements,
-                TotalGamerscore = g.TotalGamerscore
-            }).ToList();
     }
 }

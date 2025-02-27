@@ -20,20 +20,10 @@ namespace XblApp.Pages.Gamer
         public async Task<IActionResult> OnGet(string gamertag)
         {
             Domain.Entities.Gamer? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
-            Output = CastToGamerDTO(gamer);
+            Output = GamerDTO.CastToGamerDTO(gamer);
             return Page();
         }
 
-        private static GamerDTO CastToGamerDTO(Domain.Entities.Gamer? gamer) =>
-            new()
-            {
-                GamerId = gamer.GamerId,
-                Gamertag = gamer.Gamertag,
-                Gamerscore = gamer.Gamerscore,
-                Bio = gamer.Bio,
-                Location = gamer.Location,
-                Games = gamer.GameLinks.Select(x => x.GameLink).Count(),
-                Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
-            };
+        
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace XblApp.DTO
+﻿using XblApp.Domain.Entities;
+
+namespace XblApp.DTO
 {
     /// <summary>
     /// Представление для игры вне зависимости от игрока
@@ -14,5 +16,15 @@
         /// Кол-во игроков играющие в данную игру
         /// </summary>
         public int Gamers { get; set; }
+
+        public static List<GameDTO> CastToGameDTO(List<Game> gamers) =>
+            gamers.Select(game => new GameDTO
+            {
+                GameId = game.GameId,
+                GameName = game.GameName,
+                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(), //todo Исправить. Отображает неверное значение
+                TotalAchievements = game.TotalAchievements,
+                TotalGamerscore = game.TotalGamerscore,
+            }).ToList();
     }
 }

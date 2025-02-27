@@ -22,34 +22,12 @@ namespace XblApp.Pages
         public async Task<IActionResult> OnGet()
         {
             List<Domain.Entities.Gamer> gamers = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
-            GamerOutput = MapToGamerDTO(gamers);
+            GamerOutput = GamerDTO.CastToToGamerDTO(gamers);
 
             List<Domain.Entities.Game> games = await _getGameUseCase.GetAllGamesAsync();
-            GameOutput = MapToGameDTO(games);
+            GameOutput = GameDTO.CastToGameDTO(games);
 
             return Page();
         }
-
-        private static List<GamerDTO> MapToGamerDTO(List<Domain.Entities.Gamer> gamers) =>
-            gamers.Select(gamer => new GamerDTO
-            {
-                GamerId = gamer.GamerId,
-                Gamertag = gamer.Gamertag,
-                Gamerscore = gamer.Gamerscore,
-                Bio = gamer.Bio,
-                Location = gamer.Location,
-                Games = gamer.GameLinks.Select(x => x.GameLink).Count(),
-                Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
-            }).ToList();
-
-        private static List<GameDTO> MapToGameDTO(List<Domain.Entities.Game> gamers) =>
-            gamers.Select(game => new GameDTO
-            {
-                GameId = game.GameId,
-                GameName = game.GameName,
-                Gamers = game.GamerLinks.Select(x => x.GamerLink).Count(), //todo Исправить. Отображает неверное значение
-                TotalAchievements = game.TotalAchievements,
-                TotalGamerscore = game.TotalGamerscore,
-            }).ToList();
     }
 }

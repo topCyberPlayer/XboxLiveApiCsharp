@@ -1,4 +1,6 @@
-﻿namespace XblApp.DTO
+﻿using XblApp.Domain.Entities;
+
+namespace XblApp.DTO
 {
     public class GamerDTO
     {
@@ -17,5 +19,22 @@
         /// Сумма всех игр
         /// </summary>
         public int Games { get; set; }
+
+        public static List<GamerDTO> CastToToGamerDTO(List<Gamer> gamers) =>
+            gamers.Select(MapToGamerDTO).ToList();
+
+        public static GamerDTO CastToGamerDTO(Gamer? gamer) =>
+            gamer is null ? null : MapToGamerDTO(gamer);
+
+        private static GamerDTO MapToGamerDTO(Gamer gamer) => new()
+        {
+            GamerId = gamer.GamerId,
+            Gamertag = gamer.Gamertag,
+            Gamerscore = gamer.Gamerscore,
+            Bio = gamer.Bio,
+            Location = gamer.Location,
+            Games = gamer.GameLinks.Count,
+            Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
+        };
     }
 }
