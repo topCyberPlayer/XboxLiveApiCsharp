@@ -87,6 +87,7 @@ namespace XblApp.Database.Repositories
                 }
                 else
                 {
+                    // Обновляем данные Live токена
                     existingAuthToken.XboxLiveTokenLink.IssueInstant = liveToken.IssueInstant;
                     existingAuthToken.XboxLiveTokenLink.NotAfter = liveToken.NotAfter;
                     existingAuthToken.XboxLiveTokenLink.Token = liveToken.Token;
@@ -99,10 +100,16 @@ namespace XblApp.Database.Repositories
                 }
                 else
                 {
+                    // Обновляем данные OAuth токена
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.IssueInstant = userToken.IssueInstant;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.NotAfter = userToken.NotAfter;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Token = userToken.Token;
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Userhash = userToken.Userhash;
                     existingAuthToken.XboxLiveTokenLink.UserTokenLink.Gamertag = userToken.Gamertag;
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.AgeGroup = userToken.AgeGroup;
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Privileges = userToken.Privileges;
+                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.UserPrivileges = userToken.Privileges;
+
                 }
             }
 
