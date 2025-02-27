@@ -19,7 +19,7 @@ namespace XblApp.Pages.Auth
             var errorDescription = HttpContext.Request.Query["error_description"];
 
             if (code == null)
-                return NotFound(error);
+                return RedirectToPage("/Error");
 
             try
             {

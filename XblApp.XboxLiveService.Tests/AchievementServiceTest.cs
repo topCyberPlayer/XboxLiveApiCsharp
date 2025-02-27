@@ -32,5 +32,15 @@ namespace XblApp.XboxLiveService.Tests
 
             var result = await service.GetAchievements(xuid);
         }
+
+        [Theory]
+        [InlineData(2533274912896954, 1386529057)]//HnS l top l, Battlefield™ 1
+        public async Task GetAchievementsX1GameprogressTest(long xuid, long titleid)
+        {
+            IServiceScope scope = _factory.Services.CreateScope();
+            IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
+
+            var result = await service.GetAchievementsX1Gameprogress(xuid, titleid);
+        }
     }
 }
