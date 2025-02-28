@@ -8,7 +8,7 @@
       "devices": [ "PC", "XboxOne", "XboxSeries" ],
       "achievement": {
         "currentAchievements": 56,
-        "totalAchievements": 71,
+        "totalAchievements": 4,
         "currentGamerscore": 920,
         "totalGamerscore": 1375,
         "progressPercentage": 0.0,
@@ -18,8 +18,13 @@
         "lastTimePlayed": "2025-01-24T12:57:41.3915751Z",
         "visible": true,
         "canHide": true
+      },
+      "detail": {
+        "description": "The latest instalment in the award-winning series, Sniper Elite 5 offers unparalleled sniping, tactical third-person combat and an enhanced kill cam. Fight your way across the most immersive maps yet, with many real-world locations captured in stunning detail, and an improved traversal system that lets you explore more of them than ever before.\r\nFrance, 1944 – As part of a covert US Rangers operation to weaken the Atlantikwall fortifications along the coast of Brittany, elite marksman Karl Fairburne makes contact with the French Resistance. Soon they uncover a secret Nazi project that threatens to end the war before the Allies can even invade Europe: Operation Kraken.\r\n\r\nEXPANSIVE CAMPAIGN\r\nMany real-world locations have been captured using photogrammetry to recreate a living, immersive environment, and multiple infiltration and extraction points and kill list targets provide a whole new perspective on each mission. Take on the Nazi plot solo or work with a partner, with improved co-op mechanics allowing you to share ammo and items, give orders and heal each other.\r\n\r\nADVANCED GUNPLAY PHYSICS AND TRAVERSAL\r\nUse ziplines, slide down slopes and shimmy along ledges to reach the perfect vantage point, or to sneak past a sharp-eyed lookout. Factor in rifle stock and barrel options along with gravity, wind and heart rate while you line up your sights on the target.\r\n\r\nHIGH CALIBRE CUSTOMISATION\r\nUse workbenches to customise and upgrade virtually every aspect of your weapon – change scopes, stocks, barrels, magazines and more. Rifles, secondaries and pistols all have a huge variety of options. On top of that you can select the ammo to suit your target, from armour-piercing right down to non-lethal.\r\n\r\nINVASION MODE – CAMPAIGN DROP IN PvP AND CO-OP\r\nInvade another player’s Campaign as an Axis sniper and engage in a deadly game of cat and mouse, providing a new dimension to the challenge as you stalk your prey. Alternatively, as Karl you can call for assistance and have a second sniper drop in to help you out of a tricky situation.\r\n\r\nTENSE ADVERSIAL MULTIPLAYER\r\nCustomise your character and loadout and earn XP, medals and ribbons as you take on intensely competitive 16 player battles that will really test your sharpshooting skills. If co-op’s more your style, you can team up with up to 3 other players against waves of enemies in Survival mode.\r\n\r\nENHANCED KILL CAM\r\nMore realistic and grisly than ever, the trademark X-ray kill cam returns, showing you the true destructive power of each shot. Bones deflect bullets unpredictably, ripping a new path through enemy bodies. SMGs and pistols can also trigger kill cams, including multiple shots in dramatic slow motion.\r\n",
+        "publisherName": "Rebellion",
+        "releaseDate": "2022-05-26T00:00:00Z"
       }
-    },
+     },
     {
       "titleId": "503",
       "name": "Gears Tactics - Base Game",
@@ -37,6 +42,11 @@
         "lastTimePlayed": "2024-12-28T14:10:02.919734Z",
         "visible": true,
         "canHide": false
+      },
+      "detail": {
+        "description": "Bla",
+        "publisherName": "Xbox Game Studios",
+        "releaseDate": "2020-05-26T00:00:00Z"
       }
     }
   ]

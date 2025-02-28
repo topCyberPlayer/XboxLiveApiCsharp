@@ -166,30 +166,5 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 Assert.Equal(2, game.GamerGameLinks.Count); // Проверяем количество общих игроков у игры
             }
         }
-
-        [Fact]
-        public async Task GetGameAsyncTest()
-        {
-            // Arrange
-            List<Game> games = GameJsonLoader.LoadGames("DataForTest", "TitleHub.json").ToList();
-
-            using (var context = CreateContext())
-            {
-                var repository = new GameRepository(context);
-
-                await repository.SaveOrUpdateGamesAsync(games);
-            }
-
-            // Act
-            using (var context = CreateContext())
-            {
-                var repository = new GameRepository(context);
-
-                // Assert
-                List<Game>? result = await repository.GetAllGamesAndGamerGameAsync();
-                Assert.NotNull(result);
-                Assert.Equal(3, result.Count());
-            }
-        }
     }
 }

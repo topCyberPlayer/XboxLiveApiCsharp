@@ -38,9 +38,9 @@ namespace XblApp.Database.Repositories
             .FirstOrDefaultAsync();
 
 
-        public async Task SaveOrUpdateGamesAsync(List<Game> games)//todo надо переделать обновление, потому что легко забыть добавить свойство и оно не будет обновляться.
+        public async Task SaveOrUpdateGamesAsync(List<Game> games)
         {
-            foreach (Game? game in games)
+            foreach (Game game in games)
             {
                 var existingGame = await _context.Games
                     .Include(g => g.GamerGameLinks)
@@ -48,18 +48,15 @@ namespace XblApp.Database.Repositories
 
                 if (existingGame == null)
                 {
-                    // Если игры нет в БД, добавляем новую
                     _context.Games.Add(game);
                 }
                 else
                 {
-                    // Обновляем данные
-                    existingGame.GameName = game.GameName;
-                    existingGame.TotalAchievements = Math.Max(existingGame.TotalAchievements, game.TotalAchievements);
-                    existingGame.TotalGamerscore = Math.Max(existingGame.TotalGamerscore ,game.TotalGamerscore);
-                    existingGame.ReleaseDate = game.ReleaseDate;
+                    //Иногда от Xbox Live приходит TotalAchievements равный 0.
+                    game.TotalAchievements = Math.Max(existingGame.TotalAchievements, game.TotalAchievements);
+                    _context.Entry(existingGame).CurrentValues.SetValues(game);
 
-                    // Обновляем связи GamerGame
+                    // Обновляем связи GamerGame (чтобы не перезаписывать всю коллекцию)
                     foreach (var newGamerGame in game.GamerGameLinks)
                     {
                         var existingGamerGame = existingGame.GamerGameLinks
@@ -67,14 +64,10 @@ namespace XblApp.Database.Repositories
 
                         if (existingGamerGame != null)
                         {
-                            // Обновляем статистику игрока
-                            existingGamerGame.CurrentAchievements = Math.Max(existingGamerGame.CurrentAchievements, newGamerGame.CurrentAchievements);
-                            existingGamerGame.CurrentGamerscore = Math.Max(existingGamerGame.CurrentGamerscore, newGamerGame.CurrentGamerscore);
-                            existingGamerGame.LastTimePlayed = newGamerGame.LastTimePlayed;
+                            _context.Entry(existingGamerGame).CurrentValues.SetValues(newGamerGame);
                         }
                         else
                         {
-                            // Добавляем новую связь
                             existingGame.GamerGameLinks.Add(newGamerGame);
                         }
                     }
@@ -82,7 +75,6 @@ namespace XblApp.Database.Repositories
             }
 
             await _context.SaveChangesAsync();
-
         }
     }
 }

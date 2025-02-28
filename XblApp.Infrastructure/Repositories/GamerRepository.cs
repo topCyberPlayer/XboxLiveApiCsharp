@@ -51,10 +51,7 @@ namespace XblApp.Database.Repositories
                     _context.Gamers.Add(gamer);
                 else
                 {
-                    existingGamer.Gamertag = gamer.Gamertag;
-                    existingGamer.Gamerscore = gamer.Gamerscore;
-                    existingGamer.Bio = gamer.Bio;
-                    existingGamer.Location = gamer.Location;
+                    _context.Entry(existingGamer).CurrentValues.SetValues(gamer);
                 }    
             }
 
