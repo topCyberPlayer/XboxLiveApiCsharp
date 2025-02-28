@@ -38,7 +38,7 @@ namespace XblApp.DTO
         /// Прогресс достижений
         /// </summary>
         public double AchievementsProgress => TotalAchievements == 0 ? 
-            0 : Math.Floor((double)CurrentAchievements / TotalAchievements * 100) / 100;
+            0 : Math.Floor((double)CurrentAchievements / TotalAchievements * 100);
 
     }
 
