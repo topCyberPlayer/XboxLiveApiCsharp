@@ -8,6 +8,8 @@
         public long GameId { get; set; }
         public Game GameLink { get; set; } = null!; // Навигационное свойство
 
+        public DateTimeOffset LastTimePlayed { get; set; }
+
         public int CurrentAchievements { get; set; }
         public int CurrentGamerscore { get; set; }
     }

@@ -8,7 +8,6 @@
         public string? Description { get; set; }
         public int Gamerscore { get; set; }
         public bool IsSecret { get; set; }
-        public DateTimeOffset DateUnlock { get; set; }
 
         public Game? GameLink { get; set; }// Навигационное свойство для связи с игрой
         public ICollection<GamerAchievement>? GamerLinks { get; set; }

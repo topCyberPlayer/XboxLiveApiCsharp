@@ -37,10 +37,6 @@ namespace XblApp.Database.Configurations
             builder.Property(a => a.IsSecret)
                 .IsRequired();
 
-            // DateUnlock (обязательное поле)
-            builder.Property(a => a.DateUnlock)
-                .IsRequired();
-
             // Один ко многим: Achievement <-> GamerAchievement (многие ко многим через промежуточную таблицу)
             builder.HasMany(a => a.GamerLinks)
                 .WithOne()
