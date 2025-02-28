@@ -8,6 +8,11 @@
     <input type="hidden" name="gamerId" value="@Model.Output.GamerId" />
     <button type="submit" class="btn btn-primary ms-2">Update Profile</button>
 </form>
+<a class="btn btn-info"
+   asp-page="/Gamer/Games"
+   asp-route-gamertag="@Model.Output.Gamertag">
+   My Games
+</a>
 
 <div>
     Registered: @Model.appUser?.CreatedAt.ToString("dd/MM/yyyy")
