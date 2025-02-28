@@ -19,13 +19,15 @@ namespace XblApp.DTO.JsonModels
                     GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
                     TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
                     TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
+                    ReleaseDate = title.Detail.ReleaseDate != null ? DateOnly.FromDateTime((DateTime)title.Detail.ReleaseDate) : null,
                     GamerGameLinks = new List<GamerGame>()
                     {
                         new GamerGame
                         {
                             GamerId = long.TryParse(gameJson.Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
                             CurrentAchievements = title.Achievement.CurrentAchievements,
-                            CurrentGamerscore = title.Achievement.CurrentGamerscore
+                            CurrentGamerscore = title.Achievement.CurrentGamerscore,
+                            LastTimePlayed = title.TitleHistory.LastTimePlayed
                         }
                     }
                 })
@@ -272,7 +274,7 @@ namespace XblApp.DTO.JsonModels
     public class TitleHistory
     {
         [JsonPropertyName("lastTimePlayed")]
-        public DateTime LastTimePlayed { get; set; }
+        public DateTimeOffset LastTimePlayed { get; set; }
 
         [JsonPropertyName("visible")]
         public bool Visible { get; set; }

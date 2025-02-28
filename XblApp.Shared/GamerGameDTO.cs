@@ -20,7 +20,8 @@ namespace XblApp.DTO
                     TotalAchievements = gg.GameLink.TotalAchievements,
                     TotalGamerscore = gg.GameLink.TotalGamerscore,
                     CurrentAchievements = gg.CurrentAchievements,
-                    CurrentGamerscore = gg.CurrentGamerscore
+                    CurrentGamerscore = gg.CurrentGamerscore,
+                    LastTimePlayed = gg.LastTimePlayed
                 }).ToList()
             };
     }
@@ -33,6 +34,7 @@ namespace XblApp.DTO
         public int TotalGamerscore { get; set; }
         public int CurrentAchievements { get; set; }
         public int CurrentGamerscore { get; set; }
+        public DateTimeOffset LastTimePlayed { get; set; }
 
         /// <summary>
         /// Прогресс достижений

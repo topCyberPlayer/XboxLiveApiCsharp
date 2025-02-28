@@ -14,7 +14,7 @@ namespace XblApp.XboxLiveService
             //,TitleHubSettings.STATS
             //,TitleHubSettings.GAME_PASS
             //,TitleHubSettings.IMAGE
-            //,TitleHubSettings.DETAIL
+            , TitleHubSettings.DETAIL
             //,TitleHubSettings.FRIENDS_WHO_PLAYED
             //,TitleHubSettings.PRODUCT_ID
         );

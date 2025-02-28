@@ -38,7 +38,7 @@ namespace XblApp.Database.Repositories
             .FirstOrDefaultAsync();
 
 
-        public async Task SaveOrUpdateGamesAsync(List<Game> games)
+        public async Task SaveOrUpdateGamesAsync(List<Game> games)//todo надо переделать обновление, потому что легко забыть добавить свойство и оно не будет обновляться.
         {
             foreach (Game? game in games)
             {
@@ -57,6 +57,7 @@ namespace XblApp.Database.Repositories
                     existingGame.GameName = game.GameName;
                     existingGame.TotalAchievements = Math.Max(existingGame.TotalAchievements, game.TotalAchievements);
                     existingGame.TotalGamerscore = Math.Max(existingGame.TotalGamerscore ,game.TotalGamerscore);
+                    existingGame.ReleaseDate = game.ReleaseDate;
 
                     // Обновляем связи GamerGame
                     foreach (var newGamerGame in game.GamerGameLinks)
@@ -69,6 +70,7 @@ namespace XblApp.Database.Repositories
                             // Обновляем статистику игрока
                             existingGamerGame.CurrentAchievements = Math.Max(existingGamerGame.CurrentAchievements, newGamerGame.CurrentAchievements);
                             existingGamerGame.CurrentGamerscore = Math.Max(existingGamerGame.CurrentGamerscore, newGamerGame.CurrentGamerscore);
+                            existingGamerGame.LastTimePlayed = newGamerGame.LastTimePlayed;
                         }
                         else
                         {

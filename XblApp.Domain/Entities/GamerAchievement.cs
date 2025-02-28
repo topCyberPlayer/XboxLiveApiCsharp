@@ -8,6 +8,6 @@
         public long AchievementId { get; set; }
         public Achievement AchievementLink { get; set; } = null!; // Навигационное свойство
 
-        public DateTime DateUnlocked { get; set; }
+        public DateTimeOffset DateUnlocked { get; set; }
     }
 }
