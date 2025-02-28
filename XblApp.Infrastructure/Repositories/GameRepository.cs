@@ -55,8 +55,8 @@ namespace XblApp.Database.Repositories
                 {
                     // Обновляем данные
                     existingGame.GameName = game.GameName;
-                    existingGame.TotalAchievements = game.TotalAchievements;
-                    existingGame.TotalGamerscore = game.TotalGamerscore;
+                    existingGame.TotalAchievements = Math.Max(existingGame.TotalAchievements, game.TotalAchievements);
+                    existingGame.TotalGamerscore = Math.Max(existingGame.TotalGamerscore ,game.TotalGamerscore);
 
                     // Обновляем связи GamerGame
                     foreach (var newGamerGame in game.GamerGameLinks)
@@ -67,8 +67,8 @@ namespace XblApp.Database.Repositories
                         if (existingGamerGame != null)
                         {
                             // Обновляем статистику игрока
-                            existingGamerGame.CurrentAchievements = newGamerGame.CurrentAchievements;
-                            existingGamerGame.CurrentGamerscore = newGamerGame.CurrentGamerscore;
+                            existingGamerGame.CurrentAchievements = Math.Max(existingGamerGame.CurrentAchievements, newGamerGame.CurrentAchievements);
+                            existingGamerGame.CurrentGamerscore = Math.Max(existingGamerGame.CurrentGamerscore, newGamerGame.CurrentGamerscore);
                         }
                         else
                         {
