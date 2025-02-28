@@ -17,7 +17,7 @@ namespace XblApp.Database.Repositories
                     game.GameName,
                     game.TotalAchievements,
                     game.TotalGamerscore,
-                    game.GamerLinks.Count // Количество игроков, связанных с игрой
+                    game.GamerGameLinks.Count // Количество игроков, связанных с игрой
                 ))
                 .ToListAsync();
 
@@ -27,13 +27,13 @@ namespace XblApp.Database.Repositories
         public async Task<List<Game>> GetAllGamesAsync() =>
             await _context.Games
             .AsNoTracking()
-            .Include(x => x.GamerLinks)
+            .Include(x => x.GamerGameLinks)
             .ToListAsync();
 
         public async Task<Game> GetGameAsync(string gameName) =>
             await _context.Games
             .AsNoTracking()
-            .Include(x => x.GamerLinks)
+            .Include(x => x.GamerGameLinks)
             .Where(g => g.GameName == gameName)
             .FirstOrDefaultAsync();
 
@@ -43,7 +43,7 @@ namespace XblApp.Database.Repositories
             foreach (Game? game in games)
             {
                 var existingGame = await _context.Games
-                    .Include(g => g.GamerLinks)
+                    .Include(g => g.GamerGameLinks)
                     .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 
                 if (existingGame == null)
@@ -59,9 +59,9 @@ namespace XblApp.Database.Repositories
                     existingGame.TotalGamerscore = game.TotalGamerscore;
 
                     // Обновляем связи GamerGame
-                    foreach (var newGamerGame in game.GamerLinks)
+                    foreach (var newGamerGame in game.GamerGameLinks)
                     {
-                        var existingGamerGame = existingGame.GamerLinks
+                        var existingGamerGame = existingGame.GamerGameLinks
                             .FirstOrDefault(gg => gg.GamerId == newGamerGame.GamerId);
 
                         if (existingGamerGame != null)
@@ -73,7 +73,7 @@ namespace XblApp.Database.Repositories
                         else
                         {
                             // Добавляем новую связь
-                            existingGame.GamerLinks.Add(newGamerGame);
+                            existingGame.GamerGameLinks.Add(newGamerGame);
                         }
                     }
                 }

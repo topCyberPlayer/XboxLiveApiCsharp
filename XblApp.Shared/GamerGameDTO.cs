@@ -13,7 +13,7 @@ namespace XblApp.DTO
             {
                 GamerId = gamer.GamerId,
                 Gamertag = gamer.Gamertag,
-                Games = gamer.GameLinks.Select(gg => new GameInnerDTO
+                Games = gamer.GamerGameLinks.Select(gg => new GameInnerDTO
                 {
                     GameId = gg.GameId,
                     GameName = gg.GameLink.GameName,

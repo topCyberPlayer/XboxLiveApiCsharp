@@ -33,8 +33,8 @@ namespace XblApp.DTO
             Gamerscore = gamer.Gamerscore,
             Bio = gamer.Bio,
             Location = gamer.Location,
-            Games = gamer.GameLinks.Count,
-            Achievements = gamer.GameLinks.Sum(x => x.CurrentAchievements)
+            Games = gamer.GamerGameLinks.Count,
+            Achievements = gamer.GamerGameLinks.Sum(x => x.CurrentAchievements)
         };
     }
 }

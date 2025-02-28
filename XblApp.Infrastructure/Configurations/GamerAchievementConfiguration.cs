@@ -13,7 +13,7 @@ namespace XblApp.Database.Configurations
 
             // Связь с Gamer (многие ко многим)
             builder.HasOne(ga => ga.GamerLink)
-                .WithMany(g => g.AchievementLinks)
+                .WithMany(g => g.GamerAchievementLinks)
                 .HasForeignKey(ga => ga.GamerId)
                 .OnDelete(DeleteBehavior.Cascade); // Удаление достижений при удалении игрока
 

@@ -13,13 +13,13 @@ namespace XblApp.Database.Configurations
 
             // Связь с Gamer (многие ко многим)
             builder.HasOne(gg => gg.GamerLink)
-                .WithMany(g => g.GameLinks)
+                .WithMany(g => g.GamerGameLinks)
                 .HasForeignKey(gg => gg.GamerId)
                 .OnDelete(DeleteBehavior.Cascade); // Если игрок удаляется, связи удаляются
 
             // Связь с Game (многие ко многим)
             builder.HasOne(gg => gg.GameLink)
-                .WithMany(g => g.GamerLinks)
+                .WithMany(g => g.GamerGameLinks)
                 .HasForeignKey(gg => gg.GameId)
                 .OnDelete(DeleteBehavior.Cascade); // Если игра удаляется, связи удаляются
 

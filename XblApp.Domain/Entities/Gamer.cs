@@ -13,7 +13,7 @@
 
         public string? ApplicationUserId { get; set; } // Внешний ключ к IdentityUser
 
-        public ICollection<GamerGame> GameLinks { get; set; } = []; // Игры, в которые играет пользователь
-        public ICollection<GamerAchievement> AchievementLinks { get; set; } = []; // Связь с достижениями через промежуточную таблицу
+        public ICollection<GamerGame> GamerGameLinks { get; set; } = []; // Игры, в которые играет пользователь
+        public ICollection<GamerAchievement> GamerAchievementLinks { get; set; } = []; // Связь с достижениями через промежуточную таблицу
     }
 }

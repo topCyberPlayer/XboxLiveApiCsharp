@@ -10,6 +10,6 @@
         public string? Description { get; set; }
 
         public ICollection<Achievement> AchievementLinks { get; set; } = []; // Коллекция достижений для этой игры
-        public ICollection<GamerGame> GamerLinks { get; set; } = []; // Игроки, играющие в эту игру (связь через промежуточную таблицу)
+        public ICollection<GamerGame> GamerGameLinks { get; set; } = []; // Игроки, играющие в эту игру (связь через промежуточную таблицу)
     }
 }

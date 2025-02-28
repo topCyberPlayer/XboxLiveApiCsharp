@@ -30,13 +30,13 @@ namespace XblApp.Database.Configurations
                 .HasMaxLength(100);
 
             // Один ко многим: Gamer <-> GamerGame
-            builder.HasMany(g => g.GameLinks)
+            builder.HasMany(g => g.GamerGameLinks)
                 .WithOne()
                 .HasForeignKey(gg => gg.GamerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Один ко многим: Gamer <-> GamerAchievement
-            builder.HasMany(g => g.AchievementLinks)
+            builder.HasMany(g => g.GamerAchievementLinks)
                 .WithOne()
                 .HasForeignKey(ga => ga.GamerId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -19,7 +19,7 @@ namespace XblApp.DTO.JsonModels
                     GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
                     TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
                     TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
-                    GamerLinks = new List<GamerGame>()
+                    GamerGameLinks = new List<GamerGame>()
                     {
                         new GamerGame
                         {

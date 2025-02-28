@@ -38,7 +38,7 @@ namespace XblApp.Database.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Один ко многим: Game <-> GamerGame (многие ко многим через промежуточную таблицу)
-            builder.HasMany(g => g.GamerLinks)
+            builder.HasMany(g => g.GamerGameLinks)
                 .WithOne()
                 .HasForeignKey(gg => gg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
