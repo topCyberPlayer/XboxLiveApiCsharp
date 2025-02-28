@@ -7,12 +7,15 @@ namespace XblApp.DTO.JsonModels
     {
         [JsonPropertyName("achievements")]
         public ICollection<TitleB> Titles { get; set; }
+        
+        [JsonPropertyName("pagingInfo")]
+        public PagingInfo PagingInfos { get; set; }
     }
 
     public class TitleB
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string TitleId { get; set; }
 
         [JsonPropertyName("serviceConfigId")]
         public string ServiceConfigId { get; set; }
@@ -119,8 +122,6 @@ namespace XblApp.DTO.JsonModels
         [JsonPropertyName("valueType")]
         public string ValueType { get; set; }
     }
-
-    
 
     public class TimeWindow
     {

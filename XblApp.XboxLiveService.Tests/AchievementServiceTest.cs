@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
 namespace XblApp.XboxLiveService.Tests
@@ -20,7 +21,10 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            var result = await service.GetAchievementsXboxoneRecentProgressAndInfoAsync(xuid);
+            List<Achievement> result = await service.GetAchievementsX1RecentProgressAndInfoAsync(xuid);
+
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
         }
 
         [Theory]
@@ -31,6 +35,9 @@ namespace XblApp.XboxLiveService.Tests
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
             var result = await service.GetAchievements(xuid);
+
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
         }
 
         [Theory]
@@ -41,6 +48,9 @@ namespace XblApp.XboxLiveService.Tests
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
             var result = await service.GetAchievementsX1Gameprogress(xuid, titleid);
+
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
         }
     }
 }

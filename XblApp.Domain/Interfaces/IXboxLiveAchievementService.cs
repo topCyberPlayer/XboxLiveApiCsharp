@@ -9,7 +9,7 @@ namespace XblApp.Domain.Interfaces
         /// </summary>
         /// <param name="xuid">Xbox User Id</param>
         /// <returns>Recent Xbox One Progress Response</returns>
-        public Task<List<Achievement>> GetAchievementsXboxoneRecentProgressAndInfoAsync(long xuid);
+        public Task<List<Achievement>> GetAchievementsX1RecentProgressAndInfoAsync(long xuid);
 
         public Task<List<Achievement>> GetAchievements(long xuid);
 
