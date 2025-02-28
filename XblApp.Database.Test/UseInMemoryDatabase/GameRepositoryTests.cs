@@ -158,12 +158,12 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 var repository = new GameRepository(context);
 
                 // Assert
-                var result = await repository.GetAllGamesAsync2();
+                var result = await repository.GetAllGamesAndGamerGameAsync();
 
-                var game = result.FirstOrDefault(g => g.Item1 == "Sniper Elite 5");
+                var game = result.FirstOrDefault(g => g.GameName == "Sniper Elite 5");
 
-                Assert.NotNull(game.Item1);
-                Assert.Equal(2, game.Item4); // Проверяем количество общих игроков у игры
+                Assert.NotNull(game.GameName);
+                Assert.Equal(2, game.GamerGameLinks.Count); // Проверяем количество общих игроков у игры
             }
         }
 
@@ -186,9 +186,9 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 var repository = new GameRepository(context);
 
                 // Assert
-                List<Game>? result = await repository.GetAllGamesAsync();
+                List<Game>? result = await repository.GetAllGamesAndGamerGameAsync();
                 Assert.NotNull(result);
-                Assert.Equal(5, result.Count());
+                Assert.Equal(3, result.Count());
             }
         }
     }

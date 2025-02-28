@@ -20,7 +20,7 @@ namespace XblApp.Application
         /// <returns></returns>
         public async Task<List<Game>> GetAllGamesAsync()
         {
-            List<Game> games = await _gameRepository.GetAllGamesAsync();
+            List<Game> games = await _gameRepository.GetAllGamesAndGamerGameAsync();
 
             return games;
         }

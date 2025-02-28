@@ -9,7 +9,7 @@ namespace XblApp.Database.Repositories
     {
         public GameRepository(XblAppDbContext context) : base(context) { }
 
-        public async Task<List<(string, int, int, int)>> GetAllGamesAsync2()
+        public async Task<List<(string, int, int, int)>> GetAllGamesAndGamerGameAsync2()
         {
             var games = await _context.Games
                 .Select(game => new ValueTuple<string, int, int, int>
@@ -24,13 +24,13 @@ namespace XblApp.Database.Repositories
             return games;
         }
 
-        public async Task<List<Game>> GetAllGamesAsync() =>
+        public async Task<List<Game>> GetAllGamesAndGamerGameAsync() =>
             await _context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
             .ToListAsync();
 
-        public async Task<Game> GetGameAsync(string gameName) =>
+        public async Task<Game> GetGameAndGamerGameAsync(string gameName) =>
             await _context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
