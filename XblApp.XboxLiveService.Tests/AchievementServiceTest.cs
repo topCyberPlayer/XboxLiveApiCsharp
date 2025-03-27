@@ -16,38 +16,32 @@ namespace XblApp.XboxLiveService.Tests
 
         [Theory]
         [InlineData(2533274912896954)]
-        public async Task GetAchievementsXboxoneRecentProgressAndInfoAsyncTest_(long xuid)
-        {
-            IServiceScope scope = _factory.Services.CreateScope();
-            IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
-
-            List<Achievement> result = await service.GetAchievementsX1RecentProgressAndInfoAsync(xuid);
-
-            Assert.NotNull(result);
-            Assert.NotEmpty(result);
-        }
-
-        [Theory]
-        [InlineData(2533274912896954)]
         public async Task GetAchievementsTest_(long xuid)
         {
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            var result = await service.GetAchievements(xuid);
+            var result = await service.GetAchievementsAsync(xuid);
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
         }
 
+        /// <summary>
+        /// Загружаю из Xbox Live достижения для игры и игрока
+        /// </summary>
+        /// <param name="xuid"></param>
+        /// <param name="titleid"></param>
+        /// <returns></returns>
         [Theory]
+        [InlineData(2533274912896954, 552499398)]//HnS l top l, Gears of  War 4
         [InlineData(2533274912896954, 1386529057)]//HnS l top l, Battlefield™ 1
         public async Task GetAchievementsX1GameprogressTest(long xuid, long titleid)
         {
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            var result = await service.GetAchievementsX1Gameprogress(xuid, titleid);
+            List<Achievement> result = await service.GetAchievementsAsync(xuid, titleid);
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);

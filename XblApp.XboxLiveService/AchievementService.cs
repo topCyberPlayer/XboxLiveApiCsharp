@@ -9,16 +9,16 @@ namespace XblApp.XboxLiveService
     {
         public AchievementService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<List<Domain.Entities.Achievement>> GetAchievements(long xuid)
+        public async Task<List<Domain.Entities.Achievement>> GetAchievementsAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
-            var result = await GetAchievementBaseAsync(relativeUrl);
+            AchievementJson2? result = await GetAchievementBaseAsync(relativeUrl);
 
             return MapToAchievements(result);
         }
 
-        public async Task<List<Domain.Entities.Achievement>> GetAchievementsX1Gameprogress(long xuid, long titleId)
+        public async Task<List<Domain.Entities.Achievement>> GetAchievementsAsync(long xuid, long titleId)
         {
             string relativeUrl = $"users/xuid({xuid})/achievements";
 
@@ -34,19 +34,17 @@ namespace XblApp.XboxLiveService
             return MapToAchievements(result);
         }
 
-        /// <summary>
-        /// Возвращает только 32 элемента
-        /// </summary>
-        /// <param name="relativeUrl"></param>
-        /// <returns></returns>
-        public async Task<List<Domain.Entities.Achievement>> GetAchievementsX1RecentProgressAndInfoAsync(long xuid)
-        {
-            string relativeUrl = $"/users/xuid({xuid})/history/titles";
 
-            var result = await GetAchievementBaseAsync(relativeUrl);
+        //public async Task<List<Domain.Entities.Achievement>> GetAchievementsX1RecentProgressAsync(long xuid)
+        //{
+        //    string relativeUrl = $"/users/xuid({xuid})/history/titles";
 
-            return MapToAchievements(result);
-        }
+        //    HttpClient client = factory.CreateClient("AchievementService");
+
+        //    AchievementJson result = await SendPaginatedRequestAsync<AchievementJson, TitleA>(client, relativeUrl);
+
+        //    return MapToAchievements(result);
+        //}
 
         private async Task<AchievementJson2> GetAchievementBaseAsync(string relativeUrl)
         {
@@ -68,7 +66,7 @@ namespace XblApp.XboxLiveService
         public async Task<AchievementJson2> SendPaginatedRequestAsync(HttpClient client, string baseUri)
         {
             string? continuationToken = default;
-            List<TitleB> collAchivos = [];
+            AchievementJson2 result = new() { Titles = new List<TitleB>() }; // Создаем объект сразу
             do
             {
                 // Формируем URL с continuationToken, если он есть
@@ -83,40 +81,29 @@ namespace XblApp.XboxLiveService
 
                 AchievementJson2? collJsonAchivos = await response.Content.ReadFromJsonAsync<AchievementJson2>()
                     ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(AchievementJson2).Name}.");
-                
+
                 if (collJsonAchivos.Titles != null)
-                    collAchivos.AddRange(collJsonAchivos.Titles);
+                    ((List<TitleB>)result.Titles!).AddRange(collJsonAchivos.Titles); // Добавляем напрямую
 
                 // Получаем continuationToken для следующего запроса
                 continuationToken = collJsonAchivos.PagingInfos.ContinuationToken;
 
             } while (!string.IsNullOrEmpty(continuationToken)); // Повторяем, пока есть токен
 
-            AchievementJson2 result = new()
-            {
-                Titles = collAchivos
-            };
-
             return result;
         }
-
-
-        private List<Domain.Entities.Achievement> MapToAchievements(AchievementJson achievement) =>
-            achievement.Titles
-            .Select(t => new Domain.Entities.Achievement
-            {
-                AchievementId = t.TitleId,
-                //DateUnlock = DateTimeOffset.Parse(t.LastUnlock)
-            })
-            .ToList();
 
         private List<Domain.Entities.Achievement> MapToAchievements(AchievementJson2 achievements) =>
             achievements.Titles
             .Select(t => new Domain.Entities.Achievement
             {
-                AchievementId = long.TryParse(t.TitleId, out long result) ? result : throw new FormatException($"Ошибка при парсинге {nameof(t.TitleId)}"),
+                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
                 GameId = t.TitleAssociations[0].Id,
                 Name = t.Name,
+                Description = t.Description,
+                LockedDescription = t.LockedDescription,
+                Gamerscore = int.TryParse(t.Rewards[0].Value, out int outGamerscore) ? outGamerscore : - 1,
+                IsSecret = t.IsSecret,
             })
             .ToList();
     }

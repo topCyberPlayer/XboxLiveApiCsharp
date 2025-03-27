@@ -4,15 +4,21 @@ namespace XblApp.Domain.Interfaces
 {
     public interface IXboxLiveAchievementService
     {
+        //public Task<List<Achievement>> GetAchievementsX1RecentProgressAsync(long xuid);
+
         /// <summary>
-        /// Get recent achievement progress and information
+        /// Возвращает все достижения для игрока
         /// </summary>
-        /// <param name="xuid">Xbox User Id</param>
-        /// <returns>Recent Xbox One Progress Response</returns>
-        public Task<List<Achievement>> GetAchievementsX1RecentProgressAndInfoAsync(long xuid);
+        /// <param name="xuid"></param>
+        /// <returns></returns>
+        public Task<List<Achievement>> GetAchievementsAsync(long xuid);
 
-        public Task<List<Achievement>> GetAchievements(long xuid);
-
-        public Task<List<Achievement>> GetAchievementsX1Gameprogress(long xuid, long titleId);
+        /// <summary>
+        /// Возвращает все достижения для игры, с указанием разблокировано достижение для игрока или нет
+        /// </summary>
+        /// <param name="xuid">ID игрока</param>
+        /// <param name="titleId">ID игры</param>
+        /// <returns></returns>
+        public Task<List<Achievement>> GetAchievementsAsync(long xuid, long titleId);
     }
 }

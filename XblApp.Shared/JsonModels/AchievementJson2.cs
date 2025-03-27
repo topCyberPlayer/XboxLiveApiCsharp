@@ -2,7 +2,6 @@
 
 namespace XblApp.DTO.JsonModels
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class AchievementJson2
     {
         [JsonPropertyName("achievements")]
@@ -143,7 +142,4 @@ namespace XblApp.DTO.JsonModels
         [JsonPropertyName("version")]
         public string Version { get; set; }
     }
-
-
-
 }
