@@ -6,18 +6,21 @@ using XblApp.Domain.Interfaces;
 
 namespace XblApp.Application.Test
 {
-    public class GamerProfileUseCaseTests : IClassFixture<WebApplicationFactory<Program>>
+    public class GamerProfileUseCase_MockTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
 
-        public GamerProfileUseCaseTests(WebApplicationFactory<Program> factory)
+        public GamerProfileUseCase_MockTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.RemoveAll<IXboxLiveGameService>();
-                    services.AddSingleton<IXboxLiveGameService, XboxLiveGameServiceMock>();
+                    //services.RemoveAll<IXboxLiveGameService>();
+                    //services.AddSingleton<IXboxLiveGameService, XboxLiveGameServiceMock>();
+
+                    //или
+                    services.AddScoped<IXboxLiveGameService, XboxLiveGameServiceMock>();
                 });
             });
         }

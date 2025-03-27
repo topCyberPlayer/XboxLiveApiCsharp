@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Json;
+using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 using XblApp.DTO.JsonModels;
 
@@ -9,16 +10,16 @@ namespace XblApp.XboxLiveService
     {
         public AchievementService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<List<Domain.Entities.Achievement>> GetAchievementsAsync(long xuid)
+        public async Task<List<Achievement>> GetAchievementsAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
-            AchievementJson2? result = await GetAchievementBaseAsync(relativeUrl);
-
-            return MapToAchievements(result);
+            AchievementJson? result = await GetAchievementBaseAsync(relativeUrl);
+            
+            return result.MapTo();
         }
 
-        public async Task<List<Domain.Entities.Achievement>> GetAchievementsAsync(long xuid, long titleId)
+        public async Task<(List<Achievement>,List<GamerAchievement>)> GetAchievementsAsync(long xuid, long titleId)
         {
             string relativeUrl = $"users/xuid({xuid})/achievements";
 
@@ -29,9 +30,12 @@ namespace XblApp.XboxLiveService
 
             string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
-            AchievementJson2? result = await GetAchievementBaseAsync(uri);
+            AchievementJson? achievementJson = await GetAchievementBaseAsync(uri);
 
-            return MapToAchievements(result);
+            List<Achievement> achievementColl = achievementJson.MapTo();
+            List<GamerAchievement> gamerAchievementColl = achievementJson.MapTo(xuid);
+
+            return (achievementColl, gamerAchievementColl);
         }
 
 
@@ -46,13 +50,13 @@ namespace XblApp.XboxLiveService
         //    return MapToAchievements(result);
         //}
 
-        private async Task<AchievementJson2> GetAchievementBaseAsync(string relativeUrl)
+        private async Task<AchievementJson> GetAchievementBaseAsync(string relativeUrl)
         {
             try
             {
                 HttpClient client = factory.CreateClient("AchievementService");
 
-                AchievementJson2 result = await SendPaginatedRequestAsync(client, relativeUrl);
+                AchievementJson result = await SendPaginatedRequestAsync(client, relativeUrl);
 
                 return result;
             }
@@ -63,10 +67,10 @@ namespace XblApp.XboxLiveService
             }
         }
 
-        public async Task<AchievementJson2> SendPaginatedRequestAsync(HttpClient client, string baseUri)
+        public async Task<AchievementJson> SendPaginatedRequestAsync(HttpClient client, string baseUri)
         {
             string? continuationToken = default;
-            AchievementJson2 result = new() { Titles = new List<TitleB>() }; // Создаем объект сразу
+            AchievementJson result = new() { Titles = new List<TitleB>() }; // Создаем объект сразу
             do
             {
                 // Формируем URL с continuationToken, если он есть
@@ -79,8 +83,8 @@ namespace XblApp.XboxLiveService
 
                 string content = await response.Content.ReadAsStringAsync();
 
-                AchievementJson2? collJsonAchivos = await response.Content.ReadFromJsonAsync<AchievementJson2>()
-                    ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(AchievementJson2).Name}.");
+                AchievementJson? collJsonAchivos = await response.Content.ReadFromJsonAsync<AchievementJson>()
+                    ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(AchievementJson).Name}.");
 
                 if (collJsonAchivos.Titles != null)
                     ((List<TitleB>)result.Titles!).AddRange(collJsonAchivos.Titles); // Добавляем напрямую
@@ -93,18 +97,6 @@ namespace XblApp.XboxLiveService
             return result;
         }
 
-        private List<Domain.Entities.Achievement> MapToAchievements(AchievementJson2 achievements) =>
-            achievements.Titles
-            .Select(t => new Domain.Entities.Achievement
-            {
-                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
-                GameId = t.TitleAssociations[0].Id,
-                Name = t.Name,
-                Description = t.Description,
-                LockedDescription = t.LockedDescription,
-                Gamerscore = int.TryParse(t.Rewards[0].Value, out int outGamerscore) ? outGamerscore : - 1,
-                IsSecret = t.IsSecret,
-            })
-            .ToList();
+        
     }
 }

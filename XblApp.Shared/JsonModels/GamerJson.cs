@@ -3,22 +3,23 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class GamerJson
+    public class GamerJson : IMappable<Gamer>
     {
         [JsonPropertyName("profileUsers")]
         public ICollection<ProfileUser> ProfileUsers { get; set; }
 
-        public static List<Gamer> MapToGamer(GamerJson gamerJson) =>
-            gamerJson.ProfileUsers
-            .Select(p => new Gamer
+        public List<Gamer> MapTo()
+        {
+            return ProfileUsers.Select(p => new Gamer
             {
-                GamerId = long.TryParse(p.ProfileId, out var gamerId) ? gamerId : throw new FormatException($"Invalid ProfileId format for Gamer: {p.Gamertag}"),
+                GamerId = long.TryParse(p.ProfileId, out var gamerId) ? gamerId :
+                          throw new FormatException($"Invalid ProfileId format for Gamer: {p.Gamertag}"),
                 Gamertag = p.Gamertag,
                 Gamerscore = p.Gamerscore,
                 Location = p.Location,
                 Bio = p.Bio
-            })
-            .ToList();
+            }).ToList();
+        }
     }
 
     public class ProfileUser

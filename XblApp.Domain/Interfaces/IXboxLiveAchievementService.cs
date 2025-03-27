@@ -19,6 +19,6 @@ namespace XblApp.Domain.Interfaces
         /// <param name="xuid">ID игрока</param>
         /// <param name="titleId">ID игры</param>
         /// <returns></returns>
-        public Task<List<Achievement>> GetAchievementsAsync(long xuid, long titleId);
+        public Task<(List<Achievement>, List<GamerAchievement>)> GetAchievementsAsync(long xuid, long titleId);
     }
 }

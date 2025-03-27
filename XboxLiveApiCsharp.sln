@@ -35,6 +35,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Use_Cases", "2_Use_Cases"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Infrastructure", "4_Infrastructure", "{0EA4845B-BB0B-481A-98EB-D0884A20F962}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataForTests", "DataForTests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Achievements.json = Achievements.json
+		GamerProfiles.json = GamerProfiles.json
+		Games1.json = Games1.json
+		Games2.json = Games2.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +101,7 @@ Global
 		{F290921A-72F8-47C4-9306-6939B2BEA2E1} = {0EA4845B-BB0B-481A-98EB-D0884A20F962}
 		{668134B5-636A-4A2E-9E12-FB4613EB4B46} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 		{0EA4845B-BB0B-481A-98EB-D0884A20F962} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C99C6295-7845-4FA6-BC67-9CEAB2C21C23}

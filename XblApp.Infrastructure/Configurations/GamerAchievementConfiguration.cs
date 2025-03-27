@@ -24,8 +24,7 @@ namespace XblApp.Database.Configurations
                 .OnDelete(DeleteBehavior.Cascade); // Удаление связки при удалении достижения
 
             // Дата получения достижения
-            builder.Property(ga => ga.DateUnlocked)
-                .IsRequired();
+            builder.Property(ga => ga.DateUnlocked);
         }
     }
 }

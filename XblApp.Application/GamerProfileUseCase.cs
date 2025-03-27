@@ -34,28 +34,67 @@ namespace XblApp.Application
             _achievementRepository = achievementRepository;
         }
 
-        public async Task<Gamer> GetGamerProfileAsync(string gamertag) =>
+        public async Task<Gamer> GetGamerProfileRepoAsync(string gamertag) =>
             await _gamerRepository.GetGamerProfileAsync(gamertag);
 
-        public async Task<List<Gamer>> GetAllGamerProfilesAsync() =>
+        public async Task<List<Gamer>> GetAllGamerProfilesRepoAsync() =>
             await _gamerRepository.GetAllGamerProfilesAsync();
 
-        public async Task<Gamer> GetGamesForGamerAsync(string gamertag) =>
+        public async Task<Gamer> GetGamesForGamerRepoAsync(string gamertag) =>
             await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
+            List<Gamer> gamers = await GetAndSaveGamerProfile(gamerId);
+
+            List<Game> games = await GetAndSaveGames(gamerId);
+
+            await GetAchievementsParallels(gamerId, games);
+
+            return gamers.First();
+        }
+
+        public async Task<List<Gamer>> GetAndSaveGamerProfile(long gamerId)
+        {
             List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
             await _gamerRepository.SaveOrUpdateGamersAsync(gamers);
 
+            return gamers;
+        }
+
+        public async Task<List<Game>> GetAndSaveGames(long gamerId)
+        {
             List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId);
             await _gameRepository.SaveOrUpdateGamesAsync(games);
 
-            //List<Achievement> achievements = await _achievementService.GetAchievementsXboxoneRecentProgressAndInfoAsync(gamerId);
-            //await _achievementRepository.SaveAchievementsAsync(achievements);
-            
-            return await _gamerRepository.GetGamerProfileAsync(gamerId);
+            return games;
+        }
+
+        public async Task GetAchievementsParallels(long gamerId, List<Game> games)
+        {
+            var semaphore = new SemaphoreSlim(5); // Ограничиваем до 5 параллельных задач
+
+            await Task.WhenAll(games.Select(async game =>
+            {
+                await semaphore.WaitAsync();
+                try
+                {
+                    await GetAndSaveAchievements(gamerId, game.GameId);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }));
+
+        }
+
+        public async Task GetAndSaveAchievements(long gamerId, long gameId)
+        {
+            (List<Achievement> achievements, List<GamerAchievement> gamerAchievements) = await _achievementService.GetAchievementsAsync(gamerId, gameId);
+            await _achievementRepository.SaveOrUpdateAchievementsAsync(achievements);
+            //await _achievementRepository.SaveOrUpdateGamerAchievementsAsync(gamerAchievements);
         }
     }
 }

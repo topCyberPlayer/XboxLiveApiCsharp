@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using XblApp.Database.Configurations;
 using XblApp.Database.Models;
 using XblApp.Domain.Entities;
@@ -16,6 +17,7 @@ namespace XblApp.Database.Contexts
         public DbSet<Gamer> Gamers { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<GamerAchievement> GamerAchievements { get; set; }
         public DbSet<XboxOAuthToken> XboxOAuthTokens { get; set; }
         public DbSet<XboxLiveToken> XboxLiveTokens { get; set; }
         public DbSet<XboxUserToken> XboxUserTokens { get; set; }

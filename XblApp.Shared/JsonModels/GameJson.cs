@@ -3,7 +3,7 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class GameJson
+    public class GameJson : IMappable<Game>
     {
         [JsonPropertyName("xuid")]
         public string Xuid { get; set; }
@@ -11,27 +11,28 @@ namespace XblApp.DTO.JsonModels
         [JsonPropertyName("titles")]
         public ICollection<Title> Titles { get; set; }
 
-        public static List<Game> MapToGame(GameJson gameJson) =>
-            gameJson.Titles
-                .Select(title => new Game
-                {
-                    GameId = long.TryParse(title.TitleId, out long gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
-                    GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
-                    TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
-                    TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
-                    ReleaseDate = title.Detail.ReleaseDate != null ? DateOnly.FromDateTime((DateTime)title.Detail.ReleaseDate) : null,
-                    GamerGameLinks = new List<GamerGame>()
+        public List<Game> MapTo()
+        {
+            return Titles.Select(title => new Game
+            {
+                GameId = long.TryParse(title.TitleId, out long gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
+                GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
+                TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
+                TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
+                ReleaseDate = title.Detail.ReleaseDate != null ? DateOnly.FromDateTime((DateTime)title.Detail.ReleaseDate) : null,
+                GamerGameLinks = new List<GamerGame>()
                     {
                         new GamerGame
                         {
-                            GamerId = long.TryParse(gameJson.Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
+                            GamerId = long.TryParse(Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
                             CurrentAchievements = title.Achievement.CurrentAchievements,
                             CurrentGamerscore = title.Achievement.CurrentGamerscore,
                             LastTimePlayed = title.TitleHistory.LastTimePlayed
                         }
                     }
-                })
-                .ToList();
+            }).ToList();
+        }
+            
     }
 
     public class Title
@@ -82,7 +83,7 @@ namespace XblApp.DTO.JsonModels
         public bool IsBundle { get; set; }
 
         [JsonPropertyName("achievement")]
-        public Achievement Achievement { get; set; }
+        public GameAchievement Achievement { get; set; }
 
         [JsonPropertyName("stats")]
         public Stats Stats { get; set; }
@@ -118,7 +119,7 @@ namespace XblApp.DTO.JsonModels
         public bool? IsStreamable { get; set; }
     }
 
-    public class Achievement
+    public class GameAchievement
     {
         [JsonPropertyName("currentAchievements")]
         public int CurrentAchievements { get; set; }

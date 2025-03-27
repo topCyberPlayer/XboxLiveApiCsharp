@@ -42,7 +42,7 @@ namespace XblApp.Database.Repositories
         {
             foreach (Game game in games)
             {
-                var existingGame = await _context.Games
+                Game? existingGame = await _context.Games
                     .Include(g => g.GamerGameLinks)
                     .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 

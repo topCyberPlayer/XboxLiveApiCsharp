@@ -3,7 +3,6 @@ using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
 using XblApp.Database.Seeding;
 using XblApp.Domain.Entities;
-using XblApp.DTO.JsonModels;
 
 namespace XblApp.Database.Test.UseInMemoryDatabase
 {
@@ -129,16 +128,16 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         }
 
         /// <summary>
-        /// Проверка логику сохранения игр из json-файла
+        /// Проверка логики загрузки игр из json-файла
         /// </summary>
         /// <returns></returns>
         [Fact]
         public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
         {
             // Arrange
-            List<Gamer> gamers = JsonLoader<GamerJson, Gamer>.LoadJsonFile("../../../../", "GamerProfiles.json").ToList();
-            List<Game> games1 = JsonLoader<GameJson, Game>.LoadJsonFile("../../../../", "Games1.json").ToList();
-            List<Game> games2 = JsonLoader<GameJson, Game>.LoadJsonFile("../../../../", "Games2.json").ToList();
+            List<Gamer> gamers = GamerJsonLoader.LoadGamers("DataForTest", "Profile.json").ToList();
+            List<Game> games1 = GameJsonLoader.LoadGames("DataForTest", "TitleHub1.json").ToList();
+            List<Game> games2 = GameJsonLoader.LoadGames("DataForTest", "TitleHub2.json").ToList();
 
             gamers[0].ApplicationUserId = "0";
             gamers[1].ApplicationUserId = "1";

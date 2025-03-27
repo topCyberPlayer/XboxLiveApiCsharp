@@ -27,14 +27,14 @@
      },
     {
       "titleId": "503",
-      "name": "Gears Tactics - Base Game",
+      "name": "Gears of War 4",
       "type": "Game",
       "devices": [ "PC", "XboxOne", "XboxSeries" ],
       "achievement": {
-        "currentAchievements": 61,
-        "totalAchievements": 61,
-        "currentGamerscore": 1400,
-        "totalGamerscore": 1400,
+        "currentAchievements": 181,
+        "totalAchievements": 181,
+        "currentGamerscore": 4000,
+        "totalGamerscore": 4000,
         "progressPercentage": 100.0,
         "sourceVersion": 2
       },
@@ -46,7 +46,7 @@
       "detail": {
         "description": "Bla",
         "publisherName": "Xbox Game Studios",
-        "releaseDate": "2020-05-26T00:00:00Z"
+        "releaseDate": "2016-10-11T00:00:00Z"
       }
     }
   ]

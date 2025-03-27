@@ -1,52 +1,174 @@
 ﻿using System.Text.Json.Serialization;
+using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class AchievementJson
+    public class AchievementJson : IAchievementMappable<Achievement, GamerAchievement>
     {
-        [JsonPropertyName("titles")]
-        public ICollection<TitleA> Titles { get; set; }
-
+        [JsonPropertyName("achievements")]
+        public ICollection<TitleB> Titles { get; set; }
+        
         [JsonPropertyName("pagingInfo")]
         public PagingInfo PagingInfos { get; set; }
+
+        public List<Achievement> MapTo()
+        {
+            return Titles.Select(t => new Achievement
+            {
+                GameId = t.TitleAssociations[0].Id,
+                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
+                Name = t.Name,
+                Description = t.Description,
+                LockedDescription = t.LockedDescription,
+                Gamerscore = int.TryParse(t.Rewards[0].Value, out int outGamerscore) ? outGamerscore : -1,
+                IsSecret = t.IsSecret,
+            })
+            .ToList();
+        }
+            
+
+        public List<GamerAchievement> MapTo(long xuid)
+        {
+            return Titles.Select(t => new GamerAchievement
+            {
+                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
+                GamerId = xuid,
+                IsUnlocked = t.ProgressState == "Achieved",
+                DateUnlocked = t.Progression.TimeUnlocked,
+            })
+            .ToList();
+        }
     }
 
-    public class PagingInfo
+    public class TitleB
     {
-        [JsonPropertyName("continuationToken")]
-        public string? ContinuationToken { get; set; }
+        [JsonPropertyName("id")]
+        public string TitleId { get; set; }
 
-        [JsonPropertyName("totalRecords")]
-        public int TotalRecords { get; set; }
-    }
-
-    public class TitleA
-    {
-        [JsonPropertyName("titleId")]
-        public long TitleId { get; set; }
-        
-        [JsonPropertyName("lastUnlock")]
-        public DateTimeOffset LastUnlock { get; set; }
-        
         [JsonPropertyName("serviceConfigId")]
         public string ServiceConfigId { get; set; }
-        
-        [JsonPropertyName("titleType")]
-        public string TitleType { get; set; }
-        
-        [JsonPropertyName("platform")]
-        public string Platform { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("earnedAchievements")]
-        public int EarnedAchievements { get; set; }
+        [JsonPropertyName("titleAssociations")]
+        public List<TitleAssociation> TitleAssociations { get; set; }
 
-        [JsonPropertyName("currentGamerscore")]
-        public int CurrentGamerscore { get; set; }
+        [JsonPropertyName("progressState")]
+        public string ProgressState { get; set; }
 
-        [JsonPropertyName("maxGamerscore")]
-        public int MaxGamerscore { get; set; }
+        [JsonPropertyName("progression")]
+        public Progression Progression { get; set; }
+
+        [JsonPropertyName("mediaAssets")]
+        public List<MediaAsset> MediaAssets { get; set; }
+
+        [JsonPropertyName("platform")]
+        public string Platform { get; set; }
+
+        [JsonPropertyName("isSecret")]
+        public bool? IsSecret { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("lockedDescription")]
+        public string LockedDescription { get; set; }
+
+        [JsonPropertyName("productId")]
+        public string ProductId { get; set; }
+
+        [JsonPropertyName("achievementType")]
+        public string AchievementType { get; set; }
+
+        [JsonPropertyName("participationType")]
+        public string ParticipationType { get; set; }
+
+        [JsonPropertyName("timeWindow")]
+        public TimeWindow TimeWindow { get; set; }
+
+        [JsonPropertyName("rewards")]
+        public List<Reward> Rewards { get; set; }
+
+        [JsonPropertyName("estimatedTime")]
+        public string EstimatedTime { get; set; }
+
+        [JsonPropertyName("deeplink")]
+        public string Deeplink { get; set; }
+
+        [JsonPropertyName("isRevoked")]
+        public bool? IsRevoked { get; set; }
+    }
+
+    public class MediaAsset
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("url")]
+        public string Url { get; set; }
+    }
+
+    public class Progression
+    {
+        [JsonPropertyName("requirements")]
+        public List<Requirement> Requirements { get; set; }
+
+        [JsonPropertyName("timeUnlocked")]
+        public DateTime? TimeUnlocked { get; set; }
+    }
+
+    public class Requirement
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("current")]
+        public object Current { get; set; }
+
+        [JsonPropertyName("target")]
+        public string Target { get; set; }
+    }
+
+    public class Reward
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("value")]
+        public string Value { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("valueType")]
+        public string ValueType { get; set; }
+    }
+
+    public class TimeWindow
+    {
+        [JsonPropertyName("startDate")]
+        public DateTime? StartDate { get; set; }
+
+        [JsonPropertyName("endDate")]
+        public DateTime? EndDate { get; set; }
+    }
+
+    public class TitleAssociation
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("id")]
+        public long? Id { get; set; }
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
     }
 }

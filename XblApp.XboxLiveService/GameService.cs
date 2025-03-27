@@ -41,9 +41,7 @@ namespace XblApp.XboxLiveService
 
             GameJson result = await SendRequestAsync<GameJson>(client, relativeUrl);
 
-            List<Game> games = GameJson.MapToGame(result);
-
-            return games;
+            return result.MapTo();
         }
 
         

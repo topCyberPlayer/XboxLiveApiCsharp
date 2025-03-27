@@ -65,7 +65,7 @@ namespace XblApp.XboxLiveService
 
                 GamerJson result = await SendRequestAsync<GamerJson>(client, uri);
 
-                return GamerJson.MapToGamer(result);
+                return result.MapTo();
             }
             catch (Exception ex)
             {
@@ -73,7 +73,5 @@ namespace XblApp.XboxLiveService
                 throw;
             }
         }
-
-        
     }
 }
