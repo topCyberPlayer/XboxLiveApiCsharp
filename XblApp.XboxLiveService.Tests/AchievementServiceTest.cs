@@ -41,10 +41,10 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            List<Achievement> result = await service.GetAchievementsAsync(xuid, titleid);
+            (List<Achievement> achievements,List<GamerAchievement> gamerAchievements) = await service.GetAchievementsAsync(xuid, titleid);
 
-            Assert.NotNull(result);
-            Assert.NotEmpty(result);
+            Assert.NotNull(achievements);
+            Assert.NotEmpty(achievements);
         }
     }
 }
