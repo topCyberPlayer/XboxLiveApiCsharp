@@ -3,7 +3,7 @@
     /// <summary>
     /// Живет 16 часов
     /// </summary>
-    public partial class XboxUserToken
+    public partial class XboxXstsToken
     {
         /// <summary>
         /// Ключ
@@ -37,6 +37,6 @@
         /// <summary>
         /// Связь со 2-м токеном
         /// </summary>
-        public XboxLiveToken XboxLiveToken { get; set; } = null!;
+        public XboxXauToken XboxXauTokenLink { get; set; } = null!;
     }
 }

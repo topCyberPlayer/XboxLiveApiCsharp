@@ -1,5 +1,6 @@
 ﻿using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.IXboxLiveService;
 
 namespace XblApp.Application
 {

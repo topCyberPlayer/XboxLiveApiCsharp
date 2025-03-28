@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.DTO;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Repositories
 {
@@ -17,7 +17,7 @@ namespace XblApp.Database.Repositories
                 .ThenInclude(b => b.GameLink)
             .FirstAsync(x => x.GamerId == id);
 
-        public async Task<Gamer> GetGamerProfileAsync(string gamertag) =>
+        public async Task<Gamer?> GetGamerProfileAsync(string gamertag) =>
             await _context.Gamers
                 .Where(x => x.Gamertag == gamertag)
                 .Include(a => a.GamerGameLinks)
@@ -32,7 +32,7 @@ namespace XblApp.Database.Repositories
                     .ThenInclude(b => b.GameLink)
                 .ToListAsync();
 
-        public async Task<Gamer> GetGamesForGamerAsync(string gamertag) =>
+        public async Task<Gamer?> GetGamesForGamerAsync(string gamertag) =>
             await _context.Gamers
                 .Where(x => x.Gamertag == gamertag)
                 .AsNoTracking()
@@ -40,22 +40,45 @@ namespace XblApp.Database.Repositories
                     .ThenInclude(b => b.GameLink)
                 .FirstOrDefaultAsync();
 
-        public async Task SaveOrUpdateGamersAsync(List<Gamer> gamers)
+        public async Task SaveOrUpdateGamersAsync(GamerJson gamerJson)
         {
-            foreach (Gamer gamer in gamers)
+            foreach (var profile in gamerJson.ProfileUsers)
             {
-                // Ищем геймера в базе данных по его идентификатору
-                Gamer? existingGamer = await _context.Gamers.FindAsync(gamer.GamerId);
+                if (!long.TryParse(profile.ProfileId, out long gamerId))
+                {
+                    // Пропускаем, если ID некорректный
+                    continue;
+                }
 
-                if (existingGamer == null)
+                // Ищем существующего игрока в БД
+                Gamer? gamer = await _context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerId);
+
+                if (gamer == null)
+                {
+                    // Если игрока нет – создаем нового
+                    gamer = new Gamer
+                    {
+                        GamerId = gamerId,
+                        Gamertag = profile.Gamertag,
+                        Gamerscore = profile.Gamerscore,
+                        Bio = profile.Bio,
+                        Location = profile.Location
+                    };
+
                     _context.Gamers.Add(gamer);
+                }
                 else
                 {
-                    _context.Entry(existingGamer).CurrentValues.SetValues(gamer);
-                }    
+                    // Если игрок уже есть – обновляем данные
+                    gamer.Gamertag = profile.Gamertag;
+                    gamer.Gamerscore = profile.Gamerscore;
+                    gamer.Bio = profile.Bio;
+                    gamer.Location = profile.Location;
+                }
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Сохраняем в БД
         }
+
     }
 }

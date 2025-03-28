@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Application.Test
 {
@@ -44,12 +44,12 @@ namespace XblApp.Application.Test
 
     public class XboxLiveGamerServiceMock : IXboxLiveGamerService
     {
-        public Task<List<Gamer>> GetGamerProfileAsync(string gamertag)
+        public Task<GamerJson> GetGamerProfileAsync(string gamertag)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Gamer>> GetGamerProfileAsync(long xuid)
+        public Task<GamerJson> GetGamerProfileAsync(long xuid)
         {
             throw new NotImplementedException();
         }
@@ -57,12 +57,12 @@ namespace XblApp.Application.Test
 
     public class XboxLiveGameServiceMock : IXboxLiveGameService
     {
-        public Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag)
+        public Task<GameJson> GetGamesForGamerProfileAsync(string gamertag)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Game>> GetGamesForGamerProfileAsync(long xuid)
+        public Task<GameJson> GetGamesForGamerProfileAsync(long xuid)
         {
             throw new NotImplementedException();
         }

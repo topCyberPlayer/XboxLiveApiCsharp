@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Repositories
 {
@@ -26,58 +27,73 @@ namespace XblApp.Database.Repositories
             return await _context.Achievements.ToListAsync();
         }
 
-        public async Task SaveOrUpdateAchievementsAsync(List<Achievement?> achievements)
+        public async Task SaveAchievementsAsync(AchievementJson achievementJson)
         {
-            List<long> achievementIds = achievements.Select(a => a.AchievementId).ToList();
+            long gamerId = achievementJson.Xuid;
 
-            Dictionary<long, Achievement> existingAchievements = await _context.Achievements
-                .Where(a => achievementIds.Contains(a.AchievementId))
-                .ToDictionaryAsync(a => a.AchievementId);
-
-            foreach (Achievement? achievement in achievements)
+            foreach (AchievementInnerJson achJson in achievementJson.Achievements)
             {
-                if (existingAchievements.TryGetValue(achievement.AchievementId, out var existingAchievement))
+                // Получаем идентификатор игры
+                var gameId = achJson.TitleAssociations.FirstOrDefault()?.Id ?? 0;
+                if (gameId == 0) continue; // Пропускаем некорректные записи
+
+                // Проверяем, существует ли игра
+                var game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == gameId);
+                if (game == null)
                 {
-                    // Обновляем существующее достижение
-                    _context.Entry(existingAchievement).CurrentValues.SetValues(achievement);
+                    // Пропускаем, если игры нет
+                    continue;
                 }
-                else
+
+                // Проверяем, существует ли достижение в БД
+                Achievement? achievement = await _context.Achievements
+                    .FirstOrDefaultAsync(a => a.AchievementId == long.Parse(achJson.TitleId) && a.GameId == gameId);
+
+                if (achievement == null)
                 {
-                    // Добавляем новое достижение
+                    // Если нет, создаем новое достижение
+                    achievement = new Achievement
+                    {
+                        AchievementId = long.Parse(achJson.TitleId),
+                        GameId = gameId,
+                        Name = achJson.Name,
+                        Description = achJson.Description,
+                        LockedDescription = achJson.LockedDescription,
+                        Gamerscore = achJson.Rewards.FirstOrDefault()?.Value is string value ? int.Parse(value) : 0,
+                        IsSecret = achJson.IsSecret
+                    };
+
                     _context.Achievements.Add(achievement);
+                    await _context.SaveChangesAsync(); // Сохраняем, чтобы получить ID
                 }
-            }
 
-            await _context.SaveChangesAsync();
-        }
+                // Проверяем, существует ли запись в GamerAchievement
+                var gamerAchievement = await _context.GamerAchievements
+                    .FirstOrDefaultAsync(ga => ga.GamerId == gamerId && ga.AchievementId == achievement.AchievementId);
 
-        public async Task SaveOrUpdateGamerAchievementsAsync(List<GamerAchievement> gamerAchievements)
-        {
-            List<long>? achievementIds = gamerAchievements.Select(ga => ga.AchievementId).ToList();
-            List<long>? gamerIds = gamerAchievements.Select(ga => ga.GamerId).ToList();
-
-            // Загружаем уже существующие записи
-            var existingGamerAchievements = await _context.GamerAchievements
-                .Where(ga => achievementIds.Contains(ga.AchievementId) && gamerIds.Contains(ga.GamerId))
-                .ToDictionaryAsync(ga => new { ga.GamerId, ga.AchievementId });
-
-            foreach (var gamerAchievement in gamerAchievements)
-            {
-                var key = new { gamerAchievement.GamerId, gamerAchievement.AchievementId };
-
-                if (existingGamerAchievements.TryGetValue(key, out var existingGamerAchievement))
+                if (gamerAchievement == null)
                 {
-                    // Обновляем существующую запись
-                    _context.Entry(existingGamerAchievement).CurrentValues.SetValues(gamerAchievement);
-                }
-                else
-                {
-                    // Добавляем новую запись
+                    // Создаем новую связь между игроком и достижением
+                    gamerAchievement = new GamerAchievement
+                    {
+                        GamerId = gamerId,
+                        GameId = gameId,
+                        AchievementId = achievement.AchievementId,
+                        IsUnlocked = achJson.ProgressState == "Achieved",
+                        DateUnlocked = achJson.Progression?.TimeUnlocked
+                    };
+
                     _context.GamerAchievements.Add(gamerAchievement);
                 }
+                else
+                {
+                    // Обновляем статус, если он изменился
+                    gamerAchievement.IsUnlocked = achJson.ProgressState == "Achieved";
+                    gamerAchievement.DateUnlocked = achJson.Progression?.TimeUnlocked;
+                }
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Финальное сохранение всех изменений
         }
 
     }

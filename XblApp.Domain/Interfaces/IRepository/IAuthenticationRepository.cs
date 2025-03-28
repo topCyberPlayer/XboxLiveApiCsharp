@@ -1,11 +1,12 @@
 ﻿using XblApp.Domain.Entities;
+using XblApp.Domain.JsonModels;
 
-namespace XblApp.Domain.Interfaces
+namespace XblApp.Domain.Interfaces.IRepository
 {
     public interface IAuthenticationRepository
     {
-        public Task SaveOrUpdateTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken);
-        public Task<XboxOAuthToken> GetXboxAuthToken();
+        public Task SaveOrUpdateTokensAsync(OAuthTokenJson authToken, XauTokenJson liveToken, XstsTokenJson userToken);
+        public Task<XboxAuthToken> GetXboxAuthToken();
         /// <summary>
         /// Живет 16 часов
         /// </summary>

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Repositories
 {
@@ -53,62 +54,117 @@ namespace XblApp.Database.Repositories
                 .FirstOrDefault();
         }
 
-        public async Task<XboxOAuthToken> GetXboxAuthToken()
-        {
-            return await _context.XboxOAuthTokens
-                .FirstOrDefaultAsync();
-        }
+        public async Task<XboxAuthToken?> GetXboxAuthToken() =>
+            await _context.XboxOAuthTokens.FirstOrDefaultAsync();
 
-        //todo Есть ошибка при обновлении токенов. Ощущение что какой-то токен не обновляется в БД.
-        public async Task SaveOrUpdateTokensAsync(XboxOAuthToken authToken, XboxLiveToken liveToken, XboxUserToken userToken)
+
+        public async Task SaveOrUpdateTokensAsync(
+            OAuthTokenJson authTokenJson, XauTokenJson xauTokenJson, XstsTokenJson xstsTokenJson)
         {
-            var existingAuthToken = await _context.XboxOAuthTokens
-                .Include(x => x.XboxLiveTokenLink)
-                .ThenInclude(x => x!.UserTokenLink)
-                .FirstOrDefaultAsync(x => x.UserId == authToken.UserId);
+            XboxAuthToken? existingAuthToken = await _context.XboxOAuthTokens
+                .Include(x => x.XboxXauTokenLink)
+                .ThenInclude(x => x!.XboxXstsTokenLink)
+                .FirstOrDefaultAsync(x => x.UserId == authTokenJson.UserId);
 
             if (existingAuthToken == null)
             {
-                authToken.XboxLiveTokenLink = liveToken;
-                liveToken.UserTokenLink = userToken;
+                XboxAuthToken authToken = new()
+                {
+                    AccessToken = authTokenJson.AccessToken,
+                    AuthenticationToken = authTokenJson.AuthenticationToken,
+                    ExpiresIn = authTokenJson.ExpiresIn,
+                    RefreshToken = authTokenJson.RefreshToken,
+                    Scope = authTokenJson.Scope,
+                    TokenType = authTokenJson.TokenType,
+                    UserId = authTokenJson.UserId,
+                    XboxXauTokenLink = new()
+                    {
+                        IssueInstant = xauTokenJson.IssueInstant,
+                        NotAfter = xauTokenJson.NotAfter,
+                        Token = xauTokenJson?.Token,
+                        UhsId = xauTokenJson.Uhs,
+                        XboxXstsTokenLink = new()
+                        {
+                            Gamertag = xstsTokenJson?.Gamertag,
+                            Userhash = xstsTokenJson?.Userhash,
+                            Token = xstsTokenJson?.Token,
+                            AgeGroup = xstsTokenJson?.AgeGroup,
+                            IssueInstant = xstsTokenJson.IssueInstant,
+                            NotAfter = xstsTokenJson.NotAfter,
+                            Privileges = xstsTokenJson?.Privileges,
+                            Xuid = xstsTokenJson?.Xuid,
+                            UserPrivileges = xstsTokenJson?.UserPrivileges,
+                        }
+                    }
+                };
+                
                 await _context.XboxOAuthTokens.AddAsync(authToken);
             }
             else
             {
                 // Обновляем данные OAuth токена
-                existingAuthToken.AccessToken = authToken.AccessToken;
-                existingAuthToken.RefreshToken = authToken.RefreshToken;
-                existingAuthToken.AuthenticationToken = authToken.AuthenticationToken;
-                existingAuthToken.ExpiresIn = authToken.ExpiresIn;
+                existingAuthToken.AccessToken = authTokenJson.AccessToken;
+                existingAuthToken.RefreshToken = authTokenJson.RefreshToken;
+                existingAuthToken.AuthenticationToken = authTokenJson.AuthenticationToken;
+                existingAuthToken.ExpiresIn = authTokenJson.ExpiresIn;
 
-                if (existingAuthToken.XboxLiveTokenLink == null)
+                if (existingAuthToken.XboxXauTokenLink == null)
                 {
-                    existingAuthToken.XboxLiveTokenLink = liveToken;
+                    existingAuthToken.XboxXauTokenLink = new()
+                    {
+                        IssueInstant = xauTokenJson.IssueInstant,
+                        NotAfter = xauTokenJson.NotAfter,
+                        Token = xauTokenJson?.Token,
+                        UhsId = xauTokenJson.Uhs,
+                        XboxXstsTokenLink = new()
+                        {
+                            Gamertag = xstsTokenJson?.Gamertag,
+                            Userhash = xstsTokenJson?.Userhash,
+                            Token = xstsTokenJson?.Token,
+                            AgeGroup = xstsTokenJson?.AgeGroup,
+                            IssueInstant = xstsTokenJson.IssueInstant,
+                            NotAfter = xstsTokenJson.NotAfter,
+                            Privileges = xstsTokenJson?.Privileges,
+                            Xuid = xstsTokenJson?.Xuid,
+                            UserPrivileges = xstsTokenJson?.UserPrivileges,
+                        }
+                    };
                 }
                 else
                 {
                     // Обновляем данные Live токена
-                    existingAuthToken.XboxLiveTokenLink.IssueInstant = liveToken.IssueInstant;
-                    existingAuthToken.XboxLiveTokenLink.NotAfter = liveToken.NotAfter;
-                    existingAuthToken.XboxLiveTokenLink.Token = liveToken.Token;
+                    existingAuthToken.XboxXauTokenLink.IssueInstant = xauTokenJson.IssueInstant;
+                    existingAuthToken.XboxXauTokenLink.NotAfter = xauTokenJson.NotAfter;
+                    existingAuthToken.XboxXauTokenLink.Token = xauTokenJson.Token;
                     
                 }
 
-                if (existingAuthToken.XboxLiveTokenLink!.UserTokenLink == null)
+                if (existingAuthToken.XboxXauTokenLink!.XboxXstsTokenLink == null)
                 {
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink = userToken;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink = new()
+                    {
+                        Gamertag = xstsTokenJson?.Gamertag,
+                        Userhash = xstsTokenJson?.Userhash,
+                        Token = xstsTokenJson?.Token,
+                        AgeGroup = xstsTokenJson?.AgeGroup,
+                        IssueInstant = xstsTokenJson.IssueInstant,
+                        NotAfter = xstsTokenJson.NotAfter,
+                        Privileges = xstsTokenJson?.Privileges,
+                        Xuid = xstsTokenJson?.Xuid,
+                        UserPrivileges = xstsTokenJson?.UserPrivileges,
+                    };
                 }
                 else
                 {
                     // Обновляем данные OAuth токена
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.IssueInstant = userToken.IssueInstant;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.NotAfter = userToken.NotAfter;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Token = userToken.Token;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Userhash = userToken.Userhash;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Gamertag = userToken.Gamertag;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.AgeGroup = userToken.AgeGroup;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.Privileges = userToken.Privileges;
-                    existingAuthToken.XboxLiveTokenLink.UserTokenLink.UserPrivileges = userToken.Privileges;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.IssueInstant = xstsTokenJson.IssueInstant;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.NotAfter = xstsTokenJson.NotAfter;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.Token = xstsTokenJson.Token;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.Userhash = xstsTokenJson.Userhash;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.Gamertag = xstsTokenJson.Gamertag;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.AgeGroup = xstsTokenJson.AgeGroup;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.Privileges = xstsTokenJson.Privileges;
+                    existingAuthToken.XboxXauTokenLink.XboxXstsTokenLink.UserPrivileges = xstsTokenJson.Privileges;
 
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using XblApp.Domain.Entities;
 
-namespace XblApp.DTO.JsonModels
+namespace XblApp.Domain.JsonModels
 {
     public class GameJson
     {
@@ -9,30 +9,7 @@ namespace XblApp.DTO.JsonModels
         public string Xuid { get; set; }
 
         [JsonPropertyName("titles")]
-        public ICollection<Title> Titles { get; set; }
-
-        public List<Game> MapTo()
-        {
-            return Titles.Select(title => new Game
-            {
-                GameId = long.TryParse(title.TitleId, out long gameId) ? gameId : throw new FormatException($"Invalid TitleId format for Game: {title.Name}"),
-                GameName = title.Name ?? throw new ArgumentException("Game name cannot be null."),
-                TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
-                TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
-                ReleaseDate = title.Detail.ReleaseDate != null ? DateOnly.FromDateTime((DateTime)title.Detail.ReleaseDate) : null,
-                GamerGameLinks = new List<GamerGame>()
-                    {
-                        new GamerGame
-                        {
-                            GamerId = long.TryParse(Xuid, out var gamerId) ? gamerId : throw new FormatException($"Invalid GamerId format for Game: {title.Name}"),
-                            CurrentAchievements = title.Achievement.CurrentAchievements,
-                            CurrentGamerscore = title.Achievement.CurrentGamerscore,
-                            LastTimePlayed = title.TitleHistory.LastTimePlayed
-                        }
-                    }
-            }).ToList();
-        }
-            
+        public ICollection<Title> Titles { get; set; }            
     }
 
     public class Title

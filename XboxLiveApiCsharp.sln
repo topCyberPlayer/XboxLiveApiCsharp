@@ -43,6 +43,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataForTests", "DataForTest
 		Games2.json = Games2.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthTokens", "AuthTokens", "{0C877FD8-7B12-4116-B310-216C4D14951B}"
+	ProjectSection(SolutionItems) = preProject
+		AuthToken.json = AuthToken.json
+		XauToken.json = XauToken.json
+		XstsToken.json = XstsToken.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +109,7 @@ Global
 		{668134B5-636A-4A2E-9E12-FB4613EB4B46} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 		{0EA4845B-BB0B-481A-98EB-D0884A20F962} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
+		{0C877FD8-7B12-4116-B310-216C4D14951B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C99C6295-7845-4FA6-BC67-9CEAB2C21C23}

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using XblApp.DTO.JsonModels;
 
 namespace XblApp.Database.Seeding
 {

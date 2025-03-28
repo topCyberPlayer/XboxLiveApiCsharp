@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.DTO.JsonModels;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
@@ -39,21 +38,25 @@ namespace XblApp.XboxLiveService
             _logger = logger;
         }
 
-        public async Task<List<Gamer>> GetGamerProfileAsync(string gamertag)
+        public async Task<GamerJson> GetGamerProfileAsync(string gamertag)
         {
             string relativeUrl = $"/users/gt({gamertag})/profile/settings";
 
-            return await GetProfileBaseAsync(relativeUrl);
+            GamerJson result = await GetProfileBaseAsync(relativeUrl);
+
+            return result;
         }
 
-        public async Task<List<Gamer>> GetGamerProfileAsync(long xuid)
+        public async Task<GamerJson> GetGamerProfileAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/profile/settings";
 
-            return await GetProfileBaseAsync(relativeUrl);
+            GamerJson result = await GetProfileBaseAsync(relativeUrl);
+
+            return result;
         }
 
-        private async Task<List<Gamer>> GetProfileBaseAsync(string relativeUrl)
+        private async Task<GamerJson> GetProfileBaseAsync(string relativeUrl)
         {
             _logger.LogInformation("Fetching profile from URL: {Url}", relativeUrl);
 
@@ -65,7 +68,7 @@ namespace XblApp.XboxLiveService
 
                 GamerJson result = await SendRequestAsync<GamerJson>(client, uri);
 
-                return result.MapTo();
+                return result;
             }
             catch (Exception ex)
             {

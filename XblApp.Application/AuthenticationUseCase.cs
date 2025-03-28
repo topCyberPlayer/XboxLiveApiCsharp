@@ -1,5 +1,7 @@
 ﻿using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Application
 {
@@ -8,9 +10,7 @@ namespace XblApp.Application
         internal readonly IXboxLiveAuthenticationService _authService;
         internal readonly IAuthenticationRepository _authRepository;
 
-        private XboxOAuthToken? _authToken;
-        private XboxLiveToken? _liveToken;
-        private XboxUserToken? _userToken;
+        private OAuthTokenJson? _authToken;
 
         public AuthenticationUseCase(
             IXboxLiveAuthenticationService authService, 
@@ -50,7 +50,7 @@ namespace XblApp.Application
             if (!isExpired)
                 return _authRepository.GetAuthorizationHeaderValue();
 
-            XboxOAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
+            XboxAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
 
             if (expiredTokenOAuth is null)
             {
@@ -69,13 +69,13 @@ namespace XblApp.Application
 
         private async Task BaseTokens()
         {
-            _liveToken = await _authService.RequestXauToken(_authToken)
+            XauTokenJson xauToken = await _authService.RequestXauToken(_authToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XAU token.");
 
-            _userToken = await _authService.RequestXstsToken(_liveToken)
+            XstsTokenJson xstsToken = await _authService.RequestXstsToken(xauToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XSTS token.");
 
-            await _authRepository.SaveOrUpdateTokensAsync(_authToken,_liveToken, _userToken);
+            await _authRepository.SaveOrUpdateTokensAsync(_authToken,xauToken, xstsToken);
         }
 
         private bool IsDateUserTokenExperid() => DateTime.UtcNow > _authRepository.GetDateUserTokenExpired();

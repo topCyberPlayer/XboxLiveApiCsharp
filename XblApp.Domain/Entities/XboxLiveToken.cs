@@ -3,7 +3,7 @@
     /// <summary>
     /// 2-й токен. Живет 4 дня
     /// </summary>
-    public partial class XboxLiveToken
+    public partial class XboxXauToken
     {
         /// <summary>
         /// User Hash — Уникальный хеш пользователя в системе Xbox Live
@@ -29,10 +29,10 @@
         /// <summary>
         /// Связь с 1-м токеном
         /// </summary>
-        public XboxOAuthToken XboxOAuthTokenLink { get; set; } = null!;
+        public XboxAuthToken XboxOAuthTokenLink { get; set; } = null!;
         /// <summary>
         /// Связь с 3-м токеном
         /// </summary>
-        public XboxUserToken? UserTokenLink { get; set; }
+        public XboxXstsToken? XboxXstsTokenLink { get; set; }
     }
 }

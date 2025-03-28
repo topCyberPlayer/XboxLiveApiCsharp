@@ -4,8 +4,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.DTO.JsonModels;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
@@ -47,7 +47,7 @@ namespace XblApp.XboxLiveService
             throw new NotImplementedException();
         }
 
-        public async Task<XboxOAuthToken> RequestOauth2Token(string authorizationCode)
+        public async Task<OAuthTokenJson> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new()
             {
@@ -59,12 +59,12 @@ namespace XblApp.XboxLiveService
                 {"client_secret", _config.ClientSecret}
             };
 
-            TokenOAuthJson resultJson = await SendFormUrlEncodedRequestAsync<TokenOAuthJson>(_authClient, data);
+            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(_authClient, data);
 
-            return MapToTokenOAuth(resultJson);
+            return resultJson;
         }
 
-        public async Task<XboxLiveToken> RequestXauToken(XboxOAuthToken tokenOAuth)
+        public async Task<XauTokenJson> RequestXauToken(OAuthTokenJson token)
         {
             var data = new
             {
@@ -74,16 +74,16 @@ namespace XblApp.XboxLiveService
                 {
                     AuthMethod = "RPS",
                     SiteName = "user.auth.xboxlive.com",
-                    RpsTicket = $"d={tokenOAuth.AccessToken}"
+                    RpsTicket = $"d={token.AccessToken}"
                 }
             };
 
-            TokenXauJson result = await SendJsonRequestAsync<TokenXauJson>(_userTokenClient, data);
+            XauTokenJson result = await SendJsonRequestAsync<XauTokenJson>(_userTokenClient, data);
 
-            return MapToTokenXau(result);
+            return result;
         }
 
-        public async Task<XboxUserToken> RequestXstsToken(XboxLiveToken tokenXau)
+        public async Task<XstsTokenJson> RequestXstsToken(XauTokenJson token)
         {
             var data = new
             {
@@ -91,17 +91,17 @@ namespace XblApp.XboxLiveService
                 TokenType = "JWT",
                 Properties = new
                 {
-                    UserTokens = new List<string> { tokenXau.Token },
+                    UserTokens = new List<string> { token.Token },
                     SandboxId = "RETAIL"
                 }
             };
 
-            TokenXstsJson result = await SendJsonRequestAsync<TokenXstsJson>(_xstsTokenClient, data);
+            XstsTokenJson result = await SendJsonRequestAsync<XstsTokenJson>(_xstsTokenClient, data);
 
-            return MapToTokenXsts(result);
+            return result;
         }
 
-        public async Task<XboxOAuthToken> RefreshOauth2Token(XboxOAuthToken expiredTokenOAuth)
+        public async Task<OAuthTokenJson> RefreshOauth2Token(XboxAuthToken expiredTokenOAuth)
         {
             var data = new Dictionary<string, string>
             {
@@ -112,9 +112,9 @@ namespace XblApp.XboxLiveService
                 { "client_secret", _config.ClientSecret }
             };
 
-            TokenOAuthJson resultJson = await SendFormUrlEncodedRequestAsync<TokenOAuthJson>(_authClient, data);
+            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(_authClient, data);
 
-            return MapToTokenOAuth(resultJson);
+            return resultJson;
         }
 
         private async Task<T> SendFormUrlEncodedRequestAsync<T>(HttpClient client, Dictionary<string, string> data)
@@ -138,7 +138,7 @@ namespace XblApp.XboxLiveService
                 ?? throw new InvalidOperationException("Failed to deserialize response");
         }
 
-        private static XboxOAuthToken MapToTokenOAuth(TokenOAuthJson json) =>
+        private static XboxAuthToken MapToTokenOAuth(OAuthTokenJson json) =>
             new()
             {
                 UserId = json.UserId,
@@ -151,7 +151,7 @@ namespace XblApp.XboxLiveService
                 DateOfExpiry = DateTime.UtcNow.AddSeconds(json.ExpiresIn)
             };
 
-        private static XboxLiveToken MapToTokenXau(TokenXauJson json) =>
+        private static XboxXauToken MapToTokenXau(XauTokenJson json) =>
             new()
             {
                 Token = json.Token,
@@ -160,7 +160,7 @@ namespace XblApp.XboxLiveService
                 IssueInstant = json.IssueInstant
             };
 
-        private static XboxUserToken MapToTokenXsts(TokenXstsJson json) =>
+        private static XboxXstsToken MapToTokenXsts(XstsTokenJson json) =>
             new()
             {
                 Gamertag = json.Gamertag,

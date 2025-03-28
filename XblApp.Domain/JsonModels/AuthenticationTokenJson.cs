@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XblApp.DTO.JsonModels
+namespace XblApp.Domain.JsonModels
 {
-    public class TokenOAuthJson
+    public class OAuthTokenJson
     {
         [JsonPropertyName("user_id")]
         public string? UserId { get; set; }
@@ -38,7 +38,7 @@ namespace XblApp.DTO.JsonModels
         public string Token { get; set; }
     }
 
-    public class TokenXauJson : TokenBaseJson
+    public class XauTokenJson : TokenBaseJson
     {
         [JsonPropertyName("DisplayClaims")]
         public XAUDisplayClaims DisplayClaims { get; set; }
@@ -46,7 +46,7 @@ namespace XblApp.DTO.JsonModels
         public string Uhs { get { return DisplayClaims.Xui[0]["uhs"]; } }
     }
 
-    public class TokenXstsJson : TokenBaseJson
+    public class XstsTokenJson : TokenBaseJson
     {
         [JsonPropertyName("DisplayClaims")]
         public XSTSDisplayClaims DisplayClaims { get; set; }

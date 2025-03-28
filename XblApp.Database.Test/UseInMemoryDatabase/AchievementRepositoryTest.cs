@@ -3,7 +3,7 @@ using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
 using XblApp.Database.Seeding;
 using XblApp.Domain.Entities;
-using XblApp.DTO.JsonModels;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Test.UseInMemoryDatabase
 {
@@ -37,13 +37,12 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         public async Task SaveAchievementsAsync_ReadJson()
         {
             AchievementJson? achievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
-            List<Achievement?> achievements = achievementJson.MapTo();
 
             using (var context = CreateContext())
             {
                 AchievementRepository? achievementRepository = new(context);
 
-                await achievementRepository.SaveOrUpdateAchievementsAsync(achievements);
+                await achievementRepository.SaveAchievementsAsync(achievementJson);
             }
 
             using (var context = CreateContext())
@@ -61,13 +60,12 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         public async Task SaveGamerAchievementsAsync_ReadJson(long xuid)
         {
             AchievementJson gamerAchievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
-            List<GamerAchievement?> gamerAchievements = gamerAchievementJson.MapTo(xuid);
 
             using (var context = CreateContext())
             {
                 AchievementRepository? achievementRepository = new(context);
 
-                await achievementRepository.SaveOrUpdateGamerAchievementsAsync(gamerAchievements);
+                await achievementRepository.SaveAchievementsAsync(gamerAchievementJson);
             }
 
             using (var context = CreateContext())

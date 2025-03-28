@@ -1,5 +1,7 @@
 ﻿using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Application
 {
@@ -46,41 +48,41 @@ namespace XblApp.Application
 
         public async Task<Gamer?> UpdateProfileAsync(long gamerId)
         {
-            List<Gamer> gamers = await GetAndSaveGamerProfile(gamerId);
+            GamerJson gamers = await GetAndSaveGamerProfile(gamerId);
 
-            List<Game> games = await GetAndSaveGames(gamerId);
+            GameJson games = await GetAndSaveGames(gamerId);
 
             await GetAchievementsParallels(gamerId, games);
 
-            return gamers.First();
+            return null; //todo Вернуть инфо из БД
         }
 
-        public async Task<List<Gamer>> GetAndSaveGamerProfile(long gamerId)
+        public async Task<GamerJson> GetAndSaveGamerProfile(long gamerId)
         {
-            List<Gamer> gamers = await _gamerService.GetGamerProfileAsync(gamerId);
+            GamerJson gamers = await _gamerService.GetGamerProfileAsync(gamerId);
             await _gamerRepository.SaveOrUpdateGamersAsync(gamers);
 
             return gamers;
         }
 
-        public async Task<List<Game>> GetAndSaveGames(long gamerId)
+        public async Task<GameJson> GetAndSaveGames(long gamerId)
         {
-            List<Game> games = await _gameService.GetGamesForGamerProfileAsync(gamerId);
+            GameJson games = await _gameService.GetGamesForGamerProfileAsync(gamerId);
             await _gameRepository.SaveOrUpdateGamesAsync(games);
 
             return games;
         }
 
-        public async Task GetAchievementsParallels(long gamerId, List<Game> games)
+        public async Task GetAchievementsParallels(long gamerId, GameJson games)
         {
-            var semaphore = new SemaphoreSlim(5); // Ограничиваем до 5 параллельных задач
+            SemaphoreSlim? semaphore = new(5); // Ограничиваем до 5 параллельных задач
 
-            await Task.WhenAll(games.Select(async game =>
+            await Task.WhenAll(games.Titles.Select(async game =>
             {
                 await semaphore.WaitAsync();
                 try
                 {
-                    await GetAndSaveAchievements(gamerId, game.GameId);
+                    await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default); 
                 }
                 finally
                 {
@@ -92,9 +94,8 @@ namespace XblApp.Application
 
         public async Task GetAndSaveAchievements(long gamerId, long gameId)
         {
-            (List<Achievement> achievements, List<GamerAchievement> gamerAchievements) = await _achievementService.GetAchievementsAsync(gamerId, gameId);
-            await _achievementRepository.SaveOrUpdateAchievementsAsync(achievements);
-            //await _achievementRepository.SaveOrUpdateGamerAchievementsAsync(gamerAchievements);
+            AchievementJson achievements = await _achievementService.GetAchievementsAsync(gamerId, gameId);
+            await _achievementRepository.SaveAchievementsAsync(achievements);
         }
     }
 }

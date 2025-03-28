@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService.Tests
 {
@@ -21,10 +22,10 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            var result = await service.GetAchievementsAsync(xuid);
+            AchievementJson result = await service.GetAchievementsAsync(xuid);
 
-            Assert.NotNull(result);
-            Assert.NotEmpty(result);
+            Assert.NotNull(result.Achievements);
+            Assert.NotEmpty(result.Achievements);
         }
 
         /// <summary>
@@ -41,10 +42,10 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            (List<Achievement> achievements,List<GamerAchievement> gamerAchievements) = await service.GetAchievementsAsync(xuid, titleid);
+            AchievementJson achievements = await service.GetAchievementsAsync(xuid, titleid);
 
-            Assert.NotNull(achievements);
-            Assert.NotEmpty(achievements);
+            Assert.NotNull(achievements.Achievements);
+            Assert.NotEmpty(achievements.Achievements);
         }
     }
 }

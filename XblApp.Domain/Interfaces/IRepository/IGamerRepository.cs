@@ -1,6 +1,7 @@
 ﻿using XblApp.Domain.Entities;
+using XblApp.Domain.JsonModels;
 
-namespace XblApp.Domain.Interfaces
+namespace XblApp.Domain.Interfaces.IRepository
 {
     public interface IGamerRepository
     {
@@ -8,6 +9,6 @@ namespace XblApp.Domain.Interfaces
         public Task<Gamer> GetGamerProfileAsync(string gamertag);
         public Task<List<Gamer>> GetAllGamerProfilesAsync();
         public Task<Gamer> GetGamesForGamerAsync(string gamertag);
-        public Task SaveOrUpdateGamersAsync(List<Gamer> gamers);
+        public Task SaveOrUpdateGamersAsync(GamerJson gamers);
     }
 }

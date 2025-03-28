@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Json;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.DTO.JsonModels;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
@@ -10,16 +9,16 @@ namespace XblApp.XboxLiveService
     {
         public AchievementService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<List<Achievement>> GetAchievementsAsync(long xuid)
+        public async Task<AchievementJson> GetAchievementsAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
-            AchievementJson? result = await GetAchievementBaseAsync(relativeUrl);
-            
-            return result.MapTo();
+            AchievementJson? result = await GetAchievementBaseAsync(relativeUrl, xuid);
+
+            return result;
         }
 
-        public async Task<(List<Achievement>,List<GamerAchievement>)> GetAchievementsAsync(long xuid, long titleId)
+        public async Task<AchievementJson> GetAchievementsAsync(long xuid, long titleId)
         {
             string relativeUrl = $"users/xuid({xuid})/achievements";
 
@@ -30,12 +29,9 @@ namespace XblApp.XboxLiveService
 
             string? uri = QueryHelpers.AddQueryString(relativeUrl, queryParams);
 
-            AchievementJson? achievementJson = await GetAchievementBaseAsync(uri);
+            AchievementJson? result = await GetAchievementBaseAsync(uri, xuid);
 
-            List<Achievement> achievementColl = achievementJson.MapTo();
-            List<GamerAchievement> gamerAchievementColl = achievementJson.MapTo(xuid);
-
-            return (achievementColl, gamerAchievementColl);
+            return result;
         }
 
 
@@ -50,27 +46,20 @@ namespace XblApp.XboxLiveService
         //    return MapToAchievements(result);
         //}
 
-        private async Task<AchievementJson> GetAchievementBaseAsync(string relativeUrl)
+        private async Task<AchievementJson> GetAchievementBaseAsync(string relativeUrl, long xuid)
         {
-            try
-            {
-                HttpClient client = factory.CreateClient("AchievementService");
+            HttpClient client = factory.CreateClient("AchievementService");
 
-                AchievementJson result = await SendPaginatedRequestAsync(client, relativeUrl);
+            AchievementJson result = await SendPaginatedRequestAsync(client, relativeUrl);
+            result.Xuid = xuid;
 
-                return result;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return result;
         }
 
-        public async Task<AchievementJson> SendPaginatedRequestAsync(HttpClient client, string baseUri)
+        private async Task<AchievementJson> SendPaginatedRequestAsync(HttpClient client, string baseUri)
         {
             string? continuationToken = default;
-            AchievementJson result = new() { Titles = new List<TitleB>() }; // Создаем объект сразу
+            AchievementJson result = new() { Achievements = new List<AchievementInnerJson>() }; // Создаем объект сразу
             do
             {
                 // Формируем URL с continuationToken, если он есть
@@ -86,8 +75,8 @@ namespace XblApp.XboxLiveService
                 AchievementJson? collJsonAchivos = await response.Content.ReadFromJsonAsync<AchievementJson>()
                     ?? throw new InvalidOperationException($"Failed to deserialize response content to type {typeof(AchievementJson).Name}.");
 
-                if (collJsonAchivos.Titles != null)
-                    ((List<TitleB>)result.Titles!).AddRange(collJsonAchivos.Titles); // Добавляем напрямую
+                if (collJsonAchivos.Achievements != null)
+                    ((List<AchievementInnerJson>)result.Achievements!).AddRange(collJsonAchivos.Achievements); // Добавляем напрямую
 
                 // Получаем continuationToken для следующего запроса
                 continuationToken = collJsonAchivos.PagingInfos.ContinuationToken;
@@ -96,7 +85,5 @@ namespace XblApp.XboxLiveService
 
             return result;
         }
-
-        
     }
 }

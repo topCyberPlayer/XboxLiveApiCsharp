@@ -1,47 +1,21 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 using XblApp.Domain.Entities;
 
-namespace XblApp.DTO.JsonModels
+namespace XblApp.Domain.JsonModels
 {
     public class AchievementJson
     {
         [JsonPropertyName("achievements")]
-        public ICollection<TitleB> Titles { get; set; }
+        public ICollection<AchievementInnerJson> Achievements { get; set; }
         
         [JsonPropertyName("pagingInfo")]
         public PagingInfo PagingInfos { get; set; }
 
-        public List<Achievement> MapTo()
-        {
-            return Titles.Select(t => new Achievement
-            {
-                GameId = t.TitleAssociations[0].Id,
-                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
-                Name = t.Name,
-                Description = t.Description,
-                LockedDescription = t.LockedDescription,
-                Gamerscore = int.TryParse(t.Rewards[0].Value, out int outGamerscore) ? outGamerscore : -1,
-                IsSecret = t.IsSecret,
-            })
-            .ToList();
-        }
-            
-
-        public List<GamerAchievement> MapTo(long xuid)
-        {
-            return Titles.Select(t => new GamerAchievement
-            {
-                AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
-                GameId = t.TitleAssociations[0].Id,
-                GamerId = xuid,
-                IsUnlocked = t.ProgressState == "Achieved",
-                DateUnlocked = t.Progression.TimeUnlocked,
-            })
-            .ToList();
-        }
+        public long Xuid { get; set; }
     }
 
-    public class TitleB
+    public class AchievementInnerJson
     {
         [JsonPropertyName("id")]
         public string TitleId { get; set; }

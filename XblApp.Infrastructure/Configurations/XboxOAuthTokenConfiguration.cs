@@ -4,17 +4,17 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.Database.Configurations
 {
-    internal class XboxOAuthTokenConfiguration : IEntityTypeConfiguration<XboxOAuthToken>
+    internal class XboxOAuthTokenConfiguration : IEntityTypeConfiguration<XboxAuthToken>
     {
-        public void Configure(EntityTypeBuilder<XboxOAuthToken> modelBuilder)
+        public void Configure(EntityTypeBuilder<XboxAuthToken> modelBuilder)
         {
             modelBuilder
                 .HasKey(x => x.UserId);
 
             modelBuilder
-                .HasOne(x => x.XboxLiveTokenLink)
+                .HasOne(x => x.XboxXauTokenLink)
                 .WithOne(x => x.XboxOAuthTokenLink)
-                .HasForeignKey<XboxLiveToken>(x => x.UserIdFK)
+                .HasForeignKey<XboxXauToken>(x => x.UserIdFK)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

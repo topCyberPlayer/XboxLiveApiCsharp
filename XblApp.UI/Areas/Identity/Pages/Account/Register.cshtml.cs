@@ -14,7 +14,9 @@ using System.Text.Encodings.Web;
 using XblApp.Database.Models;
 using XblApp.Database.Repositories;
 using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {
@@ -126,9 +128,9 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                     CreatedAt = DateTime.UtcNow,
                 };
 
-                List<Gamer> gamerData = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
+                GamerJson gamerJson = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
 
-                if (!gamerData.Any())
+                if (!gamerJson.ProfileUsers.Any())
                 {
                     ModelState.AddModelError("Input.Gamertag", "Такой игрок не существует.");
                     return Page();
@@ -140,8 +142,9 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    gamerData.ForEach(a => a.ApplicationUserId = user.Id);
-                    await _gamerRepository.SaveOrUpdateGamersAsync(gamerData);
+                    //gamerJson.ProfileUsers.ForEach(a => a.ApplicationUserId = user.Id);
+                    //todo Подумать как связать Пользователя и GamerProfile
+                    await _gamerRepository.SaveOrUpdateGamersAsync(gamerJson);
 
                     await _userManager.AddToRoleAsync(user, "gamerTeam");
 

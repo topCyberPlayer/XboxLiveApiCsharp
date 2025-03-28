@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using XblApp.Domain.Entities;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.Application.Test
 {
@@ -42,10 +42,10 @@ namespace XblApp.Application.Test
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
-            List<Gamer> result = await useCase.GetAndSaveGamerProfile(gamerId);
+            GamerJson result = await useCase.GetAndSaveGamerProfile(gamerId);
 
             // Assert
-            Assert.NotNull(result);
+            Assert.NotNull(result.ProfileUsers);
         }
 
         [Theory]
@@ -57,10 +57,10 @@ namespace XblApp.Application.Test
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
-            List<Game> result = await useCase.GetAndSaveGames(gamerId);
+            GameJson result = await useCase.GetAndSaveGames(gamerId);
 
             // Assert
-            Assert.NotNull(result);
+            Assert.NotNull(result.Titles);
         }
 
         [Theory]

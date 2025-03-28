@@ -1,6 +1,5 @@
-﻿using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces;
-using XblApp.DTO.JsonModels;
+﻿using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
@@ -21,29 +20,31 @@ namespace XblApp.XboxLiveService
 
         public GameService(IHttpClientFactory factory) : base(factory) { }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(string gamertag)
+        public async Task<GameJson> GetGamesForGamerProfileAsync(string gamertag)
         {
             string relativeUrl = $"/users/gt({gamertag})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl);
+            GameJson result = await GetGamesForGamerBaseAsync(relativeUrl);
+
+            return result;
         }
 
-        public async Task<List<Game>> GetGamesForGamerProfileAsync(long xuid)
+        public async Task<GameJson> GetGamesForGamerProfileAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/titles/titlehistory/decoration/{DefScopes}";
 
-            return await GetGamesForGamerBaseAsync(relativeUrl);
+            GameJson result = await GetGamesForGamerBaseAsync(relativeUrl);
+
+            return result;
         }
 
-        private async Task<List<Game>> GetGamesForGamerBaseAsync(string relativeUrl)
+        private async Task<GameJson> GetGamesForGamerBaseAsync(string relativeUrl)
         {
             HttpClient client = factory.CreateClient("GameService");
 
             GameJson result = await SendRequestAsync<GameJson>(client, relativeUrl);
 
-            return result.MapTo();
+            return result;
         }
-
-        
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// // 1-й токен
     /// </summary>
-    public partial class XboxOAuthToken 
+    public partial class XboxAuthToken 
     {
         /// <summary>
         /// Ключ
@@ -31,6 +31,6 @@
         /// <summary>
         /// Связь с 2-м токеном
         /// </summary>
-        public XboxLiveToken? XboxLiveTokenLink { get; set; }
+        public XboxXauToken? XboxXauTokenLink { get; set; }
     }
 }
