@@ -29,7 +29,7 @@ namespace XblApp.Application.Test
         }
 
         /// <summary>
-        /// Тест не проходит потому что при сохранении в БД не указывается ASPNETUserId
+        /// Проверяю загрузку GamerProfile из XboxLive и сохранение его в БД
         /// </summary>
         /// <param name="gamerId"></param>
         /// <returns></returns>
@@ -37,17 +37,25 @@ namespace XblApp.Application.Test
         [InlineData((long)EnumGamerProfiles.HnS_top)]
         public async Task GetAndSaveGamerProfile_Test(long gamerId)
         {
+            string applicationUserId = Guid.NewGuid().ToString();
+
             // Arrange
             IServiceScope scope = _factory.Services.CreateScope();
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
             GamerJson result = await useCase.GetAndSaveGamerProfile(gamerId);
+            result.ProfileUsers.FirstOrDefault().ApplicationUserId = applicationUserId;
 
             // Assert
             Assert.NotNull(result.ProfileUsers);
         }
 
+        /// <summary>
+        /// Проверяю загрузку всех игр связанных с GamerProfile
+        /// </summary>
+        /// <param name="gamerId"></param>
+        /// <returns></returns>
         [Theory]
         [InlineData((long)EnumGamerProfiles.HnS_top)]
         public async Task GetAndSaveGames_Test(long gamerId)
@@ -63,6 +71,12 @@ namespace XblApp.Application.Test
             Assert.NotNull(result.Titles);
         }
 
+        /// <summary>
+        /// Проверяю загрузку достижений для GamerProfile и игры
+        /// </summary>
+        /// <param name="gamerId"></param>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
         [Theory]
         [InlineData((long)EnumGamerProfiles.HnS_top, (long)EnumGames.Battlefiled1)]
         public async Task GetAndSaveAchievements_Test(long gamerId, long gameId)
@@ -73,6 +87,23 @@ namespace XblApp.Application.Test
 
             // Act
             await useCase.GetAndSaveAchievements(gamerId, gameId);
+        }
+
+        /// <summary>
+        /// Проверяю все 3 предыдущих пункта вместе: загрузка профиля, игр, достижений
+        /// </summary>
+        /// <param name="gamerId"></param>
+        /// <returns></returns>
+        [Theory]
+        [InlineData(1)]
+        public async Task UpdateProfile_Test(long gamerId)
+        {
+            // Arrange
+            IServiceScope scope = _factory.Services.CreateScope();
+            GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
+
+            // Act
+            await useCase.UpdateProfileAsync(gamerId);
         }
     }
 }

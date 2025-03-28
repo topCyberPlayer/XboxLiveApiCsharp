@@ -20,7 +20,7 @@ namespace XblApp.XboxLiveService.Tests
         /// <param name="gamertag"></param>
         /// <returns></returns>
         [Theory]
-        [InlineData("HnS l top l")]
+        [InlineData("DraftChimera239")]
         public async Task GetGamerProfileAsync_ShouldReturnValidProfile(string gamertag)
         {
             IServiceScope scope = _factory.Services.CreateScope();

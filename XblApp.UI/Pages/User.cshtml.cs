@@ -34,11 +34,10 @@ namespace XblApp.UI.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdateProfileAsync(long gamerId)
+        public async Task<IActionResult> OnPostUpdateProfileAsync(long gamerId, string gamertag)
         {
-            Domain.Entities.Gamer? gamer = await _gamerProfileUseCase.UpdateProfileAsync(gamerId);
-            Output = GamerDTO.CastToGamerDTO(gamer);
-            return Page();
+            await _gamerProfileUseCase.UpdateProfileAsync(gamerId);
+            return RedirectToPage("/Gamer/Index", new { gamertag = gamertag });
         }
     }
 }

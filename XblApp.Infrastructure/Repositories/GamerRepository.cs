@@ -58,6 +58,7 @@ namespace XblApp.Database.Repositories
                     // Если игрока нет – создаем нового
                     gamer = new Gamer
                     {
+                        ApplicationUserId = profile.ApplicationUserId,
                         GamerId = gamerId,
                         Gamertag = profile.Gamertag,
                         Gamerscore = profile.Gamerscore,

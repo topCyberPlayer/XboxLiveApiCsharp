@@ -142,8 +142,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    //gamerJson.ProfileUsers.ForEach(a => a.ApplicationUserId = user.Id);
-                    //todo Подумать как связать Пользователя и GamerProfile
+                    gamerJson.ProfileUsers.FirstOrDefault().ApplicationUserId = user.Id;
                     await _gamerRepository.SaveOrUpdateGamersAsync(gamerJson);
 
                     await _userManager.AddToRoleAsync(user, "gamerTeam");

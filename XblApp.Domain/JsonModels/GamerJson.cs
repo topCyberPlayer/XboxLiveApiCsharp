@@ -11,6 +11,11 @@ namespace XblApp.Domain.JsonModels
 
     public class ProfileUser
     {
+        /// <summary>
+        /// Кастомное поле. Заполняется вручную
+        /// </summary>
+        public string ApplicationUserId { get; set; }
+
         [JsonPropertyName("id")]
         public string ProfileId { get; set; }
 

@@ -80,28 +80,24 @@ namespace XblApp.Database.Repositories
 
         public async Task SaveOrUpdateGamesAsync(GameJson gameJson)
         {
+            var gamerId = long.Parse(gameJson.Xuid);
+
             foreach (var title in gameJson.Titles)
             {
-                if (!long.TryParse(title.TitleId, out long gameId))
-                {
-                    // Пропускаем, если ID некорректный
-                    continue;
-                }
-
-                // Ищем существующую игру в БД
-                var game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == gameId);
+                var game = await _context.Games
+                    .Include(g => g.GamerGameLinks) // Загружаем связи игры с игроками
+                    .FirstOrDefaultAsync(g => g.GameId == long.Parse(title.TitleId));
 
                 if (game == null)
                 {
-                    // Если игры нет – создаем новую
                     game = new Game
                     {
-                        GameId = gameId,
+                        GameId = long.Parse(title.TitleId),
                         GameName = title.Name,
                         TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
                         TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,
                         ReleaseDate = title.Detail?.ReleaseDate.HasValue == true
-                            ? DateOnly.FromDateTime(title.Detail.ReleaseDate.Value.Date)
+                            ? DateOnly.FromDateTime(title.Detail.ReleaseDate.Value)
                             : null,
                         Description = title.Detail?.Description
                     };
@@ -110,18 +106,43 @@ namespace XblApp.Database.Repositories
                 }
                 else
                 {
-                    // Если игра уже есть – обновляем данные
+                    // Обновляем данные об игре
                     game.GameName = title.Name;
-                    game.TotalAchievements = title.Achievement?.TotalAchievements ?? 0;
-                    game.TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0;
+                    game.TotalAchievements = title.Achievement?.TotalAchievements ?? game.TotalAchievements;
+                    game.TotalGamerscore = title.Achievement?.TotalGamerscore ?? game.TotalGamerscore;
                     game.ReleaseDate = title.Detail?.ReleaseDate.HasValue == true
-                        ? DateOnly.FromDateTime(title.Detail.ReleaseDate.Value.Date)
-                        : null;
-                    game.Description = title.Detail?.Description;
+                        ? DateOnly.FromDateTime(title.Detail.ReleaseDate.Value)
+                        : game.ReleaseDate;
+                    game.Description = title.Detail?.Description ?? game.Description;
+                }
+
+                // Проверяем, есть ли уже связь между игроком и этой игрой
+                var gamerGame = game.GamerGameLinks.FirstOrDefault(gg => gg.GamerId == gamerId);
+
+                if (gamerGame == null)
+                {
+                    gamerGame = new GamerGame
+                    {
+                        GamerId = gamerId,
+                        GameId = game.GameId,
+                        LastTimePlayed = title.TitleHistory?.LastTimePlayed ?? DateTimeOffset.UtcNow,
+                        CurrentAchievements = title.Achievement?.CurrentAchievements ?? 0,
+                        CurrentGamerscore = title.Achievement?.CurrentGamerscore ?? 0
+                    };
+
+                    game.GamerGameLinks.Add(gamerGame); // Добавляем связь в навигационное свойство
+                }
+                else
+                {
+                    // Обновляем статистику игрока по этой игре
+                    gamerGame.LastTimePlayed = title.TitleHistory?.LastTimePlayed ?? gamerGame.LastTimePlayed;
+                    gamerGame.CurrentAchievements = title.Achievement?.CurrentAchievements ?? gamerGame.CurrentAchievements;
+                    gamerGame.CurrentGamerscore = title.Achievement?.CurrentGamerscore ?? gamerGame.CurrentGamerscore;
                 }
             }
 
-            await _context.SaveChangesAsync(); // Сохраняем в БД
+            await _context.SaveChangesAsync();
         }
+
     }
 }

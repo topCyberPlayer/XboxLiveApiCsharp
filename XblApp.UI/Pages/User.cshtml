@@ -6,6 +6,7 @@
 <h2 class="text-center">Welcome to your Profile</h2>
 <form method="post" asp-page-handler="UpdateProfile" class="d-inline">
     <input type="hidden" name="gamerId" value="@Model.Output.GamerId" />
+    <input type="hidden" name="gamertag" value="@Model.Output.Gamertag" />
     <button type="submit" class="btn btn-primary ms-2">Update Profile</button>
 </form>
 <a class="btn btn-info"
@@ -32,5 +33,3 @@
 <div>
     Earned Achievements: @Model.Output.Achievements
 </div>
-
-

@@ -5,15 +5,25 @@
     /// </summary>
     public class Gamer
     {
-        public long GamerId { get; set; } //ID из Xbox Live API
+        public long GamerId { get; set; }
         public string? Gamertag { get; set; }
         public int Gamerscore { get; set; }
         public string? Bio { get; set; }
         public string? Location { get; set; }
+        
+        /// <summary>
+        /// Внешний ключ к IdentityUser
+        /// </summary>
+        public string? ApplicationUserId { get; set; }
 
-        public string? ApplicationUserId { get; set; } // Внешний ключ к IdentityUser
+        /// <summary>
+        /// Игры, в которые играет пользователь
+        /// </summary>
+        public ICollection<GamerGame> GamerGameLinks { get; set; } = [];
 
-        public ICollection<GamerGame> GamerGameLinks { get; set; } = []; // Игры, в которые играет пользователь
-        public ICollection<GamerAchievement> GamerAchievementLinks { get; set; } = []; // Связь с достижениями через промежуточную таблицу
+        /// <summary>
+        /// Связь с достижениями через промежуточную таблицу
+        /// </summary>
+        public ICollection<GamerAchievement> GamerAchievementLinks { get; set; } = [];
     }
 }

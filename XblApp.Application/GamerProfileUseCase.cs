@@ -46,15 +46,16 @@ namespace XblApp.Application
             await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
 
-        public async Task<Gamer?> UpdateProfileAsync(long gamerId)
+        public async Task UpdateProfileAsync(long gamerId)
         {
             GamerJson gamers = await GetAndSaveGamerProfile(gamerId);
 
             GameJson games = await GetAndSaveGames(gamerId);
 
-            await GetAchievementsParallels(gamerId, games);
-
-            return null; //todo Вернуть инфо из БД
+            foreach (var game in games.Titles)
+            {
+                //await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default);
+            }
         }
 
         public async Task<GamerJson> GetAndSaveGamerProfile(long gamerId)
@@ -71,25 +72,6 @@ namespace XblApp.Application
             await _gameRepository.SaveOrUpdateGamesAsync(games);
 
             return games;
-        }
-
-        public async Task GetAchievementsParallels(long gamerId, GameJson games)
-        {
-            SemaphoreSlim? semaphore = new(5); // Ограничиваем до 5 параллельных задач
-
-            await Task.WhenAll(games.Titles.Select(async game =>
-            {
-                await semaphore.WaitAsync();
-                try
-                {
-                    await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default); 
-                }
-                finally
-                {
-                    semaphore.Release();
-                }
-            }));
-
         }
 
         public async Task GetAndSaveAchievements(long gamerId, long gameId)
