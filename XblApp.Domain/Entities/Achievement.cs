@@ -3,8 +3,8 @@
     public class Achievement
     {
         public long AchievementId { get; set; }
-        public long? GameId { get; set; }
-        public string? Name { get; set; }
+        public long GameId { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
         public string? LockedDescription { get; set; }
         public int Gamerscore { get; set; }

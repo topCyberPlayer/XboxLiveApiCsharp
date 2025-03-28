@@ -7,10 +7,14 @@ using XblApp.DTO.JsonModels;
 
 namespace XblApp.Database.Test.UseInMemoryDatabase
 {
-    
-
     public class AchievementRepositoryTest
     {
+        private enum EnumGamerProfiles : long
+        {
+            HnS_top = 2533274912896954
+           ,
+        }
+
         private readonly DbContextOptions<XblAppDbContext> _options;
 
         public AchievementRepositoryTest()
@@ -26,19 +30,53 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         }
 
         /// <summary>
-        /// Проверка логику сохранения достижений из json-файла
+        /// Проверка логики сохранения достижений из json-файла
         /// </summary>
         /// <returns></returns>
         [Fact]
         public async Task SaveAchievementsAsync_ReadJson()
         {
-            List<Achievement> achievements = JsonLoader<AchievementJson, Achievement>.LoadJsonFile("../../../../", "Achievements.json").ToList();
+            AchievementJson? achievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
+            List<Achievement?> achievements = achievementJson.MapTo();
 
             using (var context = CreateContext())
             {
-                var achievementRepository = new AchievementRepository(context);
+                AchievementRepository? achievementRepository = new(context);
 
                 await achievementRepository.SaveOrUpdateAchievementsAsync(achievements);
+            }
+
+            using (var context = CreateContext())
+            {
+                AchievementRepository? achievementRepository = new(context);
+                List<Achievement?> result = await achievementRepository.GetAllAchievementsAsync();
+
+                Assert.NotNull(result);
+                Assert.NotEmpty(result);
+            }
+        }
+
+        [Theory]
+        [InlineData((long)EnumGamerProfiles.HnS_top)]
+        public async Task SaveGamerAchievementsAsync_ReadJson(long xuid)
+        {
+            AchievementJson gamerAchievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
+            List<GamerAchievement?> gamerAchievements = gamerAchievementJson.MapTo(xuid);
+
+            using (var context = CreateContext())
+            {
+                AchievementRepository? achievementRepository = new(context);
+
+                await achievementRepository.SaveOrUpdateGamerAchievementsAsync(gamerAchievements);
+            }
+
+            using (var context = CreateContext())
+            {
+                AchievementRepository? achievementRepository = new(context);
+                List<GamerAchievement> result = await achievementRepository.GetGamerAchievementsAsync(xuid);
+
+                Assert.NotNull(result);
+                Assert.NotEmpty(result);
             }
         }
     }

@@ -11,17 +11,22 @@ namespace XblApp.Database.Repositories
         {
         }
 
-        public Task<Achievement> GetAchievementsAsync(string gameName)
+        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(long xuid)
         {
-            throw new NotImplementedException();
+            return await _context.GamerAchievements.Where(x => x.GamerId == xuid).ToListAsync();
         }
 
-        public Task<List<Achievement>> GetAllAchievementsAsync()
+        public async Task<List<Achievement>> GetAchievementsAsync(string gameName)
         {
-            throw new NotImplementedException();
+            return await _context.Achievements.Where(x => x.Name == gameName).ToListAsync();
         }
 
-        public async Task SaveOrUpdateAchievementsAsync(List<Achievement> achievements)
+        public async Task<List<Achievement?>> GetAllAchievementsAsync()
+        {
+            return await _context.Achievements.ToListAsync();
+        }
+
+        public async Task SaveOrUpdateAchievementsAsync(List<Achievement?> achievements)
         {
             List<long> achievementIds = achievements.Select(a => a.AchievementId).ToList();
 
@@ -29,7 +34,7 @@ namespace XblApp.Database.Repositories
                 .Where(a => achievementIds.Contains(a.AchievementId))
                 .ToDictionaryAsync(a => a.AchievementId);
 
-            foreach (var achievement in achievements)
+            foreach (Achievement? achievement in achievements)
             {
                 if (existingAchievements.TryGetValue(achievement.AchievementId, out var existingAchievement))
                 {

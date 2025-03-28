@@ -3,7 +3,7 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class GameJson : IMappable<Game>
+    public class GameJson
     {
         [JsonPropertyName("xuid")]
         public string Xuid { get; set; }

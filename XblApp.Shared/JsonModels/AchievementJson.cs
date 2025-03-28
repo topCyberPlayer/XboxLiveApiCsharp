@@ -3,7 +3,7 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class AchievementJson : IAchievementMappable<Achievement, GamerAchievement>
+    public class AchievementJson
     {
         [JsonPropertyName("achievements")]
         public ICollection<TitleB> Titles { get; set; }
@@ -32,6 +32,7 @@ namespace XblApp.DTO.JsonModels
             return Titles.Select(t => new GamerAchievement
             {
                 AchievementId = long.TryParse(t.TitleId, out long outAchievementId) ? outAchievementId : -1,
+                GameId = t.TitleAssociations[0].Id,
                 GamerId = xuid,
                 IsUnlocked = t.ProgressState == "Achieved",
                 DateUnlocked = t.Progression.TimeUnlocked,
@@ -166,7 +167,7 @@ namespace XblApp.DTO.JsonModels
         public string Name { get; set; }
 
         [JsonPropertyName("id")]
-        public long? Id { get; set; }
+        public long Id { get; set; }
 
         [JsonPropertyName("version")]
         public string Version { get; set; }

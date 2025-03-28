@@ -3,7 +3,7 @@ using XblApp.Domain.Entities;
 
 namespace XblApp.DTO.JsonModels
 {
-    public class GamerJson : IMappable<Gamer>
+    public class GamerJson 
     {
         [JsonPropertyName("profileUsers")]
         public ICollection<ProfileUser> ProfileUsers { get; set; }

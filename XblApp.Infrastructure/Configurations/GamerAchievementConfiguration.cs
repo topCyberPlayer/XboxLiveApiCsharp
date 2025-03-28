@@ -8,23 +8,33 @@ namespace XblApp.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<GamerAchievement> builder)
         {
-            // Композитный первичный ключ (GamerId + AchievementId)
-            builder.HasKey(ga => new { ga.GamerId, ga.AchievementId });
+            // Композитный первичный ключ (GamerId + GameId + AchievementId)
+            builder.HasKey(ga => new { ga.GamerId, ga.GameId, ga.AchievementId });
 
             // Связь с Gamer (многие ко многим)
             builder.HasOne(ga => ga.GamerLink)
                 .WithMany(g => g.GamerAchievementLinks)
                 .HasForeignKey(ga => ga.GamerId)
-                .OnDelete(DeleteBehavior.Cascade); // Удаление достижений при удалении игрока
+                .OnDelete(DeleteBehavior.Cascade); // Если удалить игрока (Gamer), то все связанные GamerAchievement записи тоже будут удалены.
+
+            builder.HasOne(ga => ga.GameLink)
+                .WithMany(g => g.GamerAchievementLinks)
+                .HasForeignKey(ga => ga.GameId)
+                .OnDelete(DeleteBehavior.Cascade); // Если удалить игру (Game), то все связанные GamerAchievement записи также удалятся
 
             // Связь с Achievement (многие ко многим)
             builder.HasOne(ga => ga.AchievementLink)
                 .WithMany(a => a.GamerLinks)
                 .HasForeignKey(ga => ga.AchievementId)
-                .OnDelete(DeleteBehavior.Cascade); // Удаление связки при удалении достижения
+                .OnDelete(DeleteBehavior.Cascade); // Если удалить достижение (Achievement), то все связанные GamerAchievement записи также удалятся.
 
             // Дата получения достижения
-            builder.Property(ga => ga.DateUnlocked);
+            builder.Property(ga => ga.DateUnlocked)
+                .HasColumnType("datetime2");
+
+            // Флаг получения достижения
+            builder.Property(ga => ga.IsUnlocked)
+                .IsRequired();
         }
     }
 }

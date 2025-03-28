@@ -81,9 +81,9 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             // Arrange
             using (var context = CreateContext())
             {
-                var repository = new GameRepository(context);
+                GameRepository repository = new(context);
 
-                var games = new List<Game>
+                List<Game> games = new()
                 {
                     new Game
                     {
@@ -100,9 +100,9 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             // Act
             using (var context = CreateContext())
             {
-                var repository = new GameRepository(context);
+                GameRepository repository = new(context);
 
-                var games = new List<Game>
+                List<Game> games = new()
                 {
                     new Game
                     {
@@ -136,17 +136,22 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         public async Task SaveGameAsync_ShouldUpdateGame_WhenGameExists_ReadJson()
         {
             // Arrange
-            List<Gamer> gamers = JsonLoader<GamerJson, Gamer>.LoadJsonFile("../../../../", "GamerProfiles.json").ToList();
-            List<Game> games1 = JsonLoader<GameJson, Game>.LoadJsonFile("../../../../", "Games1.json").ToList();
-            List<Game> games2 = JsonLoader<GameJson, Game>.LoadJsonFile("../../../../", "Games2.json").ToList();
+            GamerJson gamerJson = JsonLoader<GamerJson>.LoadJsonFile("../../../../", "GamerProfiles.json");
+            List<Gamer?> gamers = gamerJson.MapTo();
+
+            GameJson gamesJson1 = JsonLoader<GameJson>.LoadJsonFile("../../../../", "Games1.json");
+            List<Game?> games1 = gamesJson1.MapTo();
+
+            GameJson gamesJson2 = JsonLoader<GameJson>.LoadJsonFile("../../../../", "Games2.json");
+            List<Game?> games2 = gamesJson2.MapTo();
 
             gamers[0].ApplicationUserId = "0";
             gamers[1].ApplicationUserId = "1";
 
             using (var context = CreateContext())
             {
-                var gamerRepository = new GamerRepository(context);
-                var gameRepository = new GameRepository(context);
+                GamerRepository gamerRepository = new(context);
+                GameRepository gameRepository = new(context);
 
                 await gamerRepository.SaveOrUpdateGamersAsync(gamers);
                 await gameRepository.SaveOrUpdateGamesAsync(games1);
@@ -156,14 +161,14 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             // Act
             using (var context = CreateContext())
             {
-                var repository = new GameRepository(context);
+                GameRepository repository = new(context);
 
                 // Assert
-                var result = await repository.GetAllGamesAndGamerGameAsync();
+                List<Game>? result = await repository.GetAllGamesAndGamerGameAsync();
 
-                var game = result.FirstOrDefault(g => g.GameName == "Sniper Elite 5");
+                Game? game = result.FirstOrDefault(g => g.GameName == "Sniper Elite 5");
 
-                Assert.NotNull(game.GameName);
+                Assert.NotNull(game?.GameName);
                 Assert.Equal(2, game.GamerGameLinks.Count); // Проверяем количество общих игроков у игры
             }
         }
