@@ -2,12 +2,7 @@
 
 namespace XblApp.DTO.JsonModels
 {
-    public interface ITokenJson
-    {
-
-    }
-
-    public class TokenOAuthJson : ITokenJson
+    public class TokenOAuthJson
     {
         [JsonPropertyName("user_id")]
         public string? UserId { get; set; }
@@ -43,7 +38,7 @@ namespace XblApp.DTO.JsonModels
         public string Token { get; set; }
     }
 
-    public class TokenXauJson : TokenBaseJson, ITokenJson
+    public class TokenXauJson : TokenBaseJson
     {
         [JsonPropertyName("DisplayClaims")]
         public XAUDisplayClaims DisplayClaims { get; set; }
@@ -51,7 +46,7 @@ namespace XblApp.DTO.JsonModels
         public string Uhs { get { return DisplayClaims.Xui[0]["uhs"]; } }
     }
 
-    public class TokenXstsJson : TokenBaseJson, ITokenJson
+    public class TokenXstsJson : TokenBaseJson
     {
         [JsonPropertyName("DisplayClaims")]
         public XSTSDisplayClaims DisplayClaims { get; set; }
@@ -61,7 +56,6 @@ namespace XblApp.DTO.JsonModels
         public string AgeGroup { get { return DisplayClaims.Xui[0]["agg"]; } }
         public string Privileges { get { return DisplayClaims.Xui[0]["prv"]; } }
         public string UserPrivileges { get { return DisplayClaims.Xui[0]["usr"]; } }
-        //public string AuthorizationHeaderValue { get { return $"XBL3.0 x={Userhash};{Token}"; } }
     }
 
     public class XAUDisplayClaims

@@ -20,7 +20,7 @@ namespace XblApp.Database.Configurations
             builder.HasOne(ga => ga.GameLink)
                 .WithMany(g => g.GamerAchievementLinks)
                 .HasForeignKey(ga => ga.GameId)
-                .OnDelete(DeleteBehavior.Cascade); // Если удалить игру (Game), то все связанные GamerAchievement записи также удалятся
+                .OnDelete(DeleteBehavior.Restrict); // Если удалить игру (Game), то все связанные GamerAchievement записи не удалятся
 
             // Связь с Achievement (многие ко многим)
             builder.HasOne(ga => ga.AchievementLink)

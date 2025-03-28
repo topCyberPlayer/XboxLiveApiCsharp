@@ -11,7 +11,6 @@
 
         public ICollection<Achievement> AchievementLinks { get; set; } = []; // Коллекция достижений для этой игры
         public ICollection<GamerGame> GamerGameLinks { get; set; } = []; // Игроки, играющие в эту игру (связь через промежуточную таблицу)
-
         public ICollection<GamerAchievement> GamerAchievementLinks { get; set; } = [];
     }
 }
