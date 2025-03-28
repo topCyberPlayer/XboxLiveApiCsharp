@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces;
 
@@ -20,24 +19,39 @@ namespace XblApp.Application.Test
                     //services.AddSingleton<IXboxLiveGameService, XboxLiveGameServiceMock>();
 
                     //или
+                    services.AddScoped<IXboxLiveGamerService, XboxLiveGamerServiceMock>();
                     services.AddScoped<IXboxLiveGameService, XboxLiveGameServiceMock>();
                 });
             });
         }
 
-        [Fact]
-        public async Task UpdateProfileAsync_ShouldUseMockGameService()
+        [Theory]
+        [InlineData(12345)]
+        public async Task UpdateProfileAsync_ShouldUseMockGameService(long xuid)
         {
             // Arrange
             IServiceScope scope = _factory.Services.CreateScope();
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
-            var result = await useCase.UpdateProfileAsync(12345);
+            var result = await useCase.UpdateProfileAsync(xuid);
 
             // Assert
             Assert.NotNull(result);
             //Assert.Equal("Mock Game", result.Games.First().Name);
+        }
+    }
+
+    public class XboxLiveGamerServiceMock : IXboxLiveGamerService
+    {
+        public Task<List<Gamer>> GetGamerProfileAsync(string gamertag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Gamer>> GetGamerProfileAsync(long xuid)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -50,15 +64,7 @@ namespace XblApp.Application.Test
 
         public Task<List<Game>> GetGamesForGamerProfileAsync(long xuid)
         {
-            List<Game> result = new List<Game>()
-            {
-                new Game()
-                {
-
-                }
-            };
-
-            return Task.FromResult(result);
+            throw new NotImplementedException();
         }
     }
 }
