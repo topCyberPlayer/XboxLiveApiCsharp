@@ -8,10 +8,11 @@ namespace XblApp.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Achievement> builder)
         {
-            // Указываем ключ и отключаем автоинкремент
-            builder.HasKey(a => a.AchievementId);
-            builder.Property(a => a.AchievementId)
-                .ValueGeneratedNever(); // Аналог DatabaseGeneratedOption.None
+            // Композитный первичный ключ (AchievementId + GameId)
+            builder.HasKey(a => new { a.AchievementId, a.GameId });
+
+            //builder.Property(a => a.AchievementId)
+            //    .ValueGeneratedNever(); // Аналог DatabaseGeneratedOption.None
 
             // Внешний ключ к Game
             builder.HasOne(a => a.GameLink)
@@ -38,7 +39,7 @@ namespace XblApp.Database.Configurations
                 .IsRequired();
 
             // Один ко многим: Achievement <-> GamerAchievement (многие ко многим через промежуточную таблицу)
-            builder.HasMany(a => a.GamerLinks)
+            builder.HasMany(a => a.GamerAchievementLinks)
                 .WithOne()
                 .HasForeignKey(ga => ga.AchievementId)
                 .OnDelete(DeleteBehavior.Cascade);

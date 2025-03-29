@@ -11,6 +11,6 @@
         public bool? IsSecret { get; set; }
 
         public Game? GameLink { get; set; }// Навигационное свойство для связи с игрой
-        public ICollection<GamerAchievement>? GamerLinks { get; set; }
+        public ICollection<GamerAchievement>? GamerAchievementLinks { get; set; }
     }
 }

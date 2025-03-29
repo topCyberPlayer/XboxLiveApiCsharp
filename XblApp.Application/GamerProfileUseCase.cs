@@ -54,7 +54,7 @@ namespace XblApp.Application
 
             foreach (var game in games.Titles)
             {
-                //await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default);
+                await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default);
             }
         }
 

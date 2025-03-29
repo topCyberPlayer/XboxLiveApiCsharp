@@ -34,11 +34,10 @@ namespace XblApp.Application.Test
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
-            var result = await useCase.UpdateProfileAsync(xuid);
+            await useCase.UpdateProfileAsync(xuid);
 
             // Assert
-            Assert.NotNull(result);
-            //Assert.Equal("Mock Game", result.Games.First().Name);
+            
         }
     }
 

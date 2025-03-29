@@ -24,8 +24,8 @@ namespace XblApp.Database.Configurations
 
             // Связь с Achievement (многие ко многим)
             builder.HasOne(ga => ga.AchievementLink)
-                .WithMany(a => a.GamerLinks)
-                .HasForeignKey(ga => ga.AchievementId)
+                .WithMany(a => a.GamerAchievementLinks)
+                .HasForeignKey(ga => new { ga.AchievementId, ga.GameId })
                 .OnDelete(DeleteBehavior.Cascade); // Если удалить достижение (Achievement), то все связанные GamerAchievement записи также удалятся.
 
             // Дата получения достижения
