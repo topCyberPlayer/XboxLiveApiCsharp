@@ -1,4 +1,5 @@
 ﻿@page "/gamer/{gamertag}/achievements"
+@using XblApp.DTO
 @model XblApp.Pages.Gamer.AchievementsModel
 @{
     ViewData["Title"] = $"Achievements for {Model.Output.Gamertag}";
@@ -14,13 +15,38 @@
         <table class="table table-striped recipe">
             <thead>
                 <tr>
+                    <th>Game</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Score</th>
+                    <th>Is unlocked</th>
                 </tr>
             </thead>
             <tbody>
-                
+                @foreach (var gameAchivos in Model.Output.GameAchievements)
+                {
+                    <tr>
+                        <td rowspan="@gameAchivos.Achievements.Count">@gameAchivos.GameName</td>
+                        @for (int i = 0; i < gameAchivos.Achievements.Count; i++)
+                        {
+                            var achievement = gameAchivos.Achievements[i];
+
+                                <td>@achievement.Name</td>
+                                <td>@achievement.Description</td>
+                                <td>@achievement.Score</td>
+                                <td>
+                                        @if (achievement.IsUnlocked)
+                                        {
+                                        <span class="badge bg-success">Unlocked</span>
+                                        }
+                                        else
+                                        {
+                                        <span class="badge bg-secondary">Locked</span>
+                                        }
+                                </td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

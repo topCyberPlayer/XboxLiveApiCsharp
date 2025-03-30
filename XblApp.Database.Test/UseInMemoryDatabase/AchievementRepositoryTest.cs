@@ -12,16 +12,32 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         private enum EnumGamerProfiles : long
         {
             HnS_top = 2533274912896954
-           ,
+           ,DraftChimera239 = 2535419791913541
         }
 
         private readonly DbContextOptions<XblAppDbContext> _options;
+        private readonly bool _useInMemory;
 
+        /// <summary>
+        /// Этот класс используется в основном для ЗАПИСИ во временную БД
+        /// </summary>
         public AchievementRepositoryTest()
         {
-            _options = new DbContextOptionsBuilder<XblAppDbContext>()
-                .UseInMemoryDatabase("TestDatabase")
-                .Options;
+            _useInMemory = false; // false - для работы с реальной БД
+
+            var optionsBuilder = new DbContextOptionsBuilder<XblAppDbContext>();
+
+            if (_useInMemory)
+            {
+                optionsBuilder.UseInMemoryDatabase("TestDatabase");
+            }
+            else
+            {
+                string connectionString = "Server=localhost;Database=RealXblAppDb;User Id=sa;Password=YourStrong!Pass;";
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+
+            _options = optionsBuilder.Options;
         }
 
         private XblAppDbContext CreateContext()

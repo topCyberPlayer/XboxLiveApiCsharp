@@ -45,6 +45,8 @@ namespace XblApp.Application
         public async Task<Gamer> GetGamesForGamerRepoAsync(string gamertag) =>
             await _gamerRepository.GetGamesForGamerAsync(gamertag);
 
+        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag) =>
+            await _achievementRepository.GetGamerAchievementsAsync(gamertag);
 
         public async Task UpdateProfileAsync(long gamerId)
         {

@@ -12,14 +12,20 @@ namespace XblApp.Database.Repositories
         {
         }
 
-        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(long xuid)
+        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag)
         {
-            return await _context.GamerAchievements.Where(x => x.GamerId == xuid).ToListAsync();
-        }
+            return await _context.GamerAchievements
+                .Include(a => a.GamerLink)
+                .Include(a => a.GameLink)
+                .Include(a => a.AchievementLink)
+                .Where(ga => ga.GamerLink.Gamertag == gamertag)
+                .ToListAsync();
+         }
 
         public async Task<List<Achievement>> GetAchievementsAsync(string gameName)
         {
-            return await _context.Achievements.Where(x => x.Name == gameName).ToListAsync();
+            return await _context.Achievements
+                .Where(x => x.GameLink.GameName == gameName).ToListAsync();
         }
 
         public async Task<List<Achievement?>> GetAllAchievementsAsync()
