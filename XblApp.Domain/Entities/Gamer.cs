@@ -5,6 +5,7 @@
     /// </summary>
     public class Gamer
     {
+        //todo GamerId должен стать Unique и заполняться БД, а в Xuid записывать, то что сейчас записывается в GamerId
         public long GamerId { get; set; }
         public string? Gamertag { get; set; }
         public int Gamerscore { get; set; }

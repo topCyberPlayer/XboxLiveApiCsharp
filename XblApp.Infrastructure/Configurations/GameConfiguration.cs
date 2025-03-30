@@ -28,13 +28,18 @@ namespace XblApp.Database.Configurations
 
             // Один ко многим: Game <-> Achievement
             builder.HasMany(g => g.AchievementLinks)
-                .WithOne()
-                .HasForeignKey(a => a.GameId)
+                .WithOne(gg => gg.GameLink)
+                .HasForeignKey(gg => gg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Один ко многим: Game <-> GamerGame (многие ко многим через промежуточную таблицу)
+            // Один ко многим: Game <-> GamerGame
             builder.HasMany(g => g.GamerGameLinks)
-                .WithOne()
+                .WithOne(gg => gg.GameLink)
+                .HasForeignKey(gg => gg.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(g => g.GamerAchievementLinks)
+                .WithOne(gg => gg.GameLink)
                 .HasForeignKey(gg => gg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

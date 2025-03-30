@@ -30,14 +30,14 @@ namespace XblApp.Database.Configurations
                 .HasMaxLength(100);
 
             // Один ко многим: Gamer <-> GamerGame
-            builder.HasMany(g => g.GamerGameLinks)
-                .WithOne()
-                .HasForeignKey(gg => gg.GamerId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(g => g.GamerGameLinks)//Говорит, что у Gamer может быть много записей в GamerGame
+                .WithOne(gg => gg.GamerLink)//Говорит, что у GamerGame есть только одна связь с Gamer
+                .HasForeignKey(gg => gg.GamerId)//Говорит, что внешний ключ для этой связи — GamerId в GamerGame
+                .OnDelete(DeleteBehavior.Cascade);//Если удалить Gamer, все его GamerGame связи тоже удаляются
 
             // Один ко многим: Gamer <-> GamerAchievement
             builder.HasMany(g => g.GamerAchievementLinks)
-                .WithOne()
+                .WithOne(gg => gg.GamerLink)
                 .HasForeignKey(ga => ga.GamerId)
                 .OnDelete(DeleteBehavior.Cascade);
 

@@ -72,8 +72,8 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         }
 
         [Theory]
-        [InlineData((long)EnumGamerProfiles.HnS_top)]
-        public async Task SaveGamerAchievementsAsync_ReadJson(long xuid)
+        [InlineData("DraftChimera239")]
+        public async Task SaveGamerAchievementsAsync_ReadJson(string gamertag)
         {
             AchievementJson gamerAchievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
 
@@ -87,7 +87,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             using (var context = CreateContext())
             {
                 AchievementRepository? achievementRepository = new(context);
-                List<GamerAchievement> result = await achievementRepository.GetGamerAchievementsAsync(xuid);
+                List<GamerAchievement> result = await achievementRepository.GetGamerAchievementsAsync(gamertag);
 
                 Assert.NotNull(result);
                 Assert.NotEmpty(result);

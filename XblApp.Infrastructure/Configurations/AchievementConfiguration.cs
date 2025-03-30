@@ -11,38 +11,32 @@ namespace XblApp.Database.Configurations
             // Композитный первичный ключ (AchievementId + GameId)
             builder.HasKey(a => new { a.AchievementId, a.GameId });
 
-            //builder.Property(a => a.AchievementId)
-            //    .ValueGeneratedNever(); // Аналог DatabaseGeneratedOption.None
-
-            // Внешний ключ к Game
-            builder.HasOne(a => a.GameLink)
-                .WithMany(g => g.AchievementLinks)
-                .HasForeignKey(a => a.GameId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             // Name (обязательное поле, не может быть пустым)
             builder.Property(a => a.Name)
                 .IsRequired()
                 .HasMaxLength(150); // Можно добавить ограничение длины
 
-            // Description (обязательное поле, не может быть пустым)
             builder.Property(a => a.Description)
                 .IsRequired()
                 .HasMaxLength(500);
 
-            // Gamerscore (обязательное поле)
             builder.Property(a => a.Gamerscore)
                 .IsRequired();
 
-            // IsSecret (обязательное поле)
             builder.Property(a => a.IsSecret)
                 .IsRequired();
 
-            // Один ко многим: Achievement <-> GamerAchievement (многие ко многим через промежуточную таблицу)
+            // Один ко многим: Achievement <-> GamerAchievement
             builder.HasMany(a => a.GamerAchievementLinks)
-                .WithOne()
-                .HasForeignKey(ga => ga.AchievementId)
+                .WithOne(gg => gg.AchievementLink)
+                .HasForeignKey(ga => new { ga.AchievementId, ga.GameId })
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Один к одному: Achievement <-> Game
+            builder.HasOne(a => a.GameLink)
+                .WithMany(g => g.AchievementLinks)
+                .HasForeignKey(a => a.GameId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
