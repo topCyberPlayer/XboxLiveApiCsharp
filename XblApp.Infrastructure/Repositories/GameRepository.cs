@@ -31,11 +31,13 @@ namespace XblApp.Database.Repositories
             .Include(x => x.GamerGameLinks)
             .ToListAsync();
 
-        public async Task<Game?> GetGameAndGamerGameAsync(string gameName) =>
+        public async Task<Game?> GetGameAndGamerGameAsync(long gameId) =>
             await _context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
-            .Where(g => g.GameName == gameName)
+            .Include(a => a.AchievementLinks)
+            .Include(a => a.GamerAchievementLinks)
+            .Where(g => g.GameId == gameId)
             .FirstOrDefaultAsync();
 
 

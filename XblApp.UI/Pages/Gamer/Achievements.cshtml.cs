@@ -8,7 +8,7 @@ namespace XblApp.Pages.Gamer
     public class AchievementsModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public GamerGameAchievementDTO Output { get; set; }
+        public GamerAchievementDTO Output { get; set; }
 
         private readonly GamerProfileUseCase _gamerProfileUseCase;
 
@@ -20,7 +20,7 @@ namespace XblApp.Pages.Gamer
         public async Task<IActionResult> OnGetAsync(string gamertag)
         {
             var result = await _gamerProfileUseCase.GetGamerAchievementsAsync(gamertag);
-            Output = GamerGameAchievementDTO.CastTo(result);
+            Output = GamerAchievementDTO.CastTo(result);
             return Page();
         }
 

@@ -2,15 +2,15 @@
 
 namespace XblApp.DTO
 {
-    public class GamerGameAchievementDTO
+    public class GamerAchievementDTO
     {
         public long GamerId { get; set; }
         public string? Gamertag { get; set; }
         public List<GameAchievementDTO2> GameAchievements { get; set; }
 
-        public static GamerGameAchievementDTO CastTo(List<GamerAchievement> gamerAchDb)
+        public static GamerAchievementDTO CastTo(List<GamerAchievement> gamerAchDb)
         {
-            GamerGameAchievementDTO gamerGameAchievement = new()
+            GamerAchievementDTO gamerGameAchievement = new()
             {
                 GamerId = gamerAchDb.FirstOrDefault().GamerId,
                 Gamertag = gamerAchDb.FirstOrDefault().GamerLink.Gamertag,
@@ -42,7 +42,7 @@ namespace XblApp.DTO
         public List<GamerAchievementInnerDTO> Achievements { get; set; }
     }
 
-    public class GamerAchievementInnerDTO : GameAchievementInnerDTO
+    public class GamerAchievementInnerDTO : AchievementInnerDTO
     {
         public bool IsUnlocked { get; set; }
     }

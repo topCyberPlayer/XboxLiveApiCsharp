@@ -13,7 +13,7 @@ namespace XblApp.DTO
         public int TotalGamerscore { get; set; }
 
         /// <summary>
-        /// Кол-во игроков играющие в данную игру
+        /// Кол-во игроков сыгравших в данную игру
         /// </summary>
         public int Gamers { get; set; }
 

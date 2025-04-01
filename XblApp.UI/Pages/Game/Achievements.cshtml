@@ -1,4 +1,35 @@
-﻿@page "/game/{gameName}/achievements"
+﻿@page "/game/{gameId}/achievements"
+@using XblApp.DTO
 @model XblApp.UI.Pages.Game.AchievementsModel
 @{
+    ViewData["Title"] = $"Achievements for {Model.Output?.GameName}";
 }
+
+<h2>@ViewData["Title"]</h2>
+
+<body>
+    <p>Total Achievements: @Model.Output.TotalAchievements</p>
+    <p>Total Gamerscore: @Model.Output.TotalGamerscore</p>
+    <p>Gamers played: @Model.Output.Gamers</p>
+    <div class="table-responsive">
+        <table class="table table-striped recipe">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>GS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AchievementInnerDTO achievement in Model.Output.Achievements)
+                {
+                    <tr>
+                        <td class="align-middle">@achievement.Name</td>
+                        <td class="align-middle">@achievement.Description</td>
+                        <td class="align-middle">@achievement.Score </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

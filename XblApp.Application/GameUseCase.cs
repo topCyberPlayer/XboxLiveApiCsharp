@@ -25,5 +25,12 @@ namespace XblApp.Application
 
             return games;
         }
+
+        public async Task<Game> GetGameAsync(long gameId)
+        {
+            Game? game = await _gameRepository.GetGameAndGamerGameAsync(gameId);
+
+            return game;
+        }
     }
 }

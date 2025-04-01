@@ -36,7 +36,7 @@ namespace XblApp.Database.Test.UseRealDatabase
 
             List<GamerAchievement> result = await achievementRepository.GetGamerAchievementsAsync(gamertag);
 
-            GamerGameAchievementDTO gamerGameAchievement = GamerGameAchievementDTO.CastTo(result);
+            GamerAchievementDTO gamerGameAchievement = GamerAchievementDTO.CastTo(result);
 
             //List<GamerGameAchievementDTO> a = result.Select(a => new GamerGameAchievementDTO()
             //{
