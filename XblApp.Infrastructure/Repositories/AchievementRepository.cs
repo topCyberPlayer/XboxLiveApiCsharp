@@ -40,16 +40,12 @@ namespace XblApp.Database.Repositories
             foreach (AchievementInnerJson achJson in achievementJson.Achievements)
             {
                 // Получаем идентификатор игры
-                var gameId = achJson.TitleAssociations.FirstOrDefault()?.Id ?? 0;
+                long gameId = achJson.TitleAssociations.FirstOrDefault()?.Id ?? 0;
                 if (gameId == 0) continue; // Пропускаем некорректные записи
 
                 // Проверяем, существует ли игра
-                var game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == gameId);
-                if (game == null)
-                {
-                    // Пропускаем, если игры нет
-                    continue;
-                }
+                Game? game = await _context.Games.FirstOrDefaultAsync(g => g.GameId == gameId);
+                if (game == null) continue;
 
                 // Проверяем, существует ли достижение в БД
                 Achievement? achievement = await _context.Achievements
@@ -74,8 +70,11 @@ namespace XblApp.Database.Repositories
                 }
 
                 // Проверяем, существует ли запись в GamerAchievement
-                var gamerAchievement = await _context.GamerAchievements
-                    .FirstOrDefaultAsync(ga => ga.GamerId == gamerId && ga.AchievementId == achievement.AchievementId);
+                GamerAchievement? gamerAchievement = await _context.GamerAchievements
+                    .FirstOrDefaultAsync(ga => 
+                    ga.GamerId == gamerId
+                    && ga.GameId == gameId
+                    && ga.AchievementId == achievement.AchievementId);
 
                 if (gamerAchievement == null)
                 {

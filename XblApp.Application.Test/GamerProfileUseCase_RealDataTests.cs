@@ -11,13 +11,15 @@ namespace XblApp.Application.Test
         private enum EnumGamerProfiles : long
         {
             HnS_top = 2533274912896954
-           ,
+           ,DraftChimera239 = 2535419791913541
         }
 
         private enum EnumGames : long
         {
             Battlefiled1 = 1386529057
-           ,
+           ,AC_Rev= 1431505017
+           ,Gears5 = 374923716
+           ,GOW_UE = 1475571605
         }
 
         public GamerProfileUseCase_RealDataTests(WebApplicationFactory<Program> factory)
@@ -78,7 +80,7 @@ namespace XblApp.Application.Test
         /// <param name="gameId"></param>
         /// <returns></returns>
         [Theory]
-        [InlineData((long)EnumGamerProfiles.HnS_top, (long)EnumGames.Battlefiled1)]
+        [InlineData((long)EnumGamerProfiles.DraftChimera239, (long)EnumGames.GOW_UE)]
         public async Task GetAndSaveAchievements_Test(long gamerId, long gameId)
         {
             // Arrange
@@ -95,7 +97,7 @@ namespace XblApp.Application.Test
         /// <param name="gamerId"></param>
         /// <returns></returns>
         [Theory]
-        [InlineData(1)]
+        [InlineData((long)EnumGamerProfiles.DraftChimera239)]
         public async Task UpdateProfile_Test(long gamerId)
         {
             // Arrange
