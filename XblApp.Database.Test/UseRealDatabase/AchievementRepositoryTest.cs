@@ -25,11 +25,11 @@ namespace XblApp.Database.Test.UseRealDatabase
 
         [Theory]
         [InlineData("DraftChimera239")]
-        public async Task SaveAchievementsAsync_ReadJson(string gamertag)
+        public async Task SaveAchievementsAsync(string gamertag)
         {
             // Arrange
             IServiceScope scope = _factory.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<XblAppDbContext>();
+            XblAppDbContext context = scope.ServiceProvider.GetRequiredService<XblAppDbContext>();
 
             // Используем тот же _context, что и в приложении
             AchievementRepository achievementRepository = new(context);

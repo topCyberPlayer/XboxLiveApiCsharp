@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
 using XblApp.Database.Seeding;
@@ -16,24 +17,28 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         }
 
         private readonly DbContextOptions<XblAppDbContext> _options;
-        private readonly bool _useInMemory;
 
         /// <summary>
-        /// Этот класс используется в основном для ЗАПИСИ во временную БД
+        /// Этот класс используется в основном для ЗАПИСИ во временную БД (или в реальную)
         /// </summary>
         public AchievementRepositoryTest()
         {
-            _useInMemory = false; // false - для работы с реальной БД
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            bool useInMemory = false; // false - для работы с реальной БД
 
             var optionsBuilder = new DbContextOptionsBuilder<XblAppDbContext>();
 
-            if (_useInMemory)
+            if (useInMemory)
             {
                 optionsBuilder.UseInMemoryDatabase("TestDatabase");
             }
             else
             {
-                string connectionString = "Server=localhost;Database=RealXblAppDb;User Id=sa;Password=YourStrong!Pass;";
+                string connectionString = config.GetConnectionString("MsSqlConnection");
                 optionsBuilder.UseSqlServer(connectionString);
             }
 
@@ -46,7 +51,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         }
 
         /// <summary>
-        /// Проверка логики сохранения достижений из json-файла
+        /// Проверка логики сохранения достижений из json-файла в таблицу Achievement
         /// </summary>
         /// <returns></returns>
         [Fact]
@@ -71,6 +76,11 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             }
         }
 
+        /// <summary>
+        /// Проверка логики сохранения достижений из json-файла в таблицу GamerAchievement
+        /// </summary>
+        /// <param name="gamertag"></param>
+        /// <returns></returns>
         [Theory]
         [InlineData("DraftChimera239")]
         public async Task SaveGamerAchievementsAsync_ReadJson(string gamertag)
