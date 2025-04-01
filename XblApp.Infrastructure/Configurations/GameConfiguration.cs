@@ -38,10 +38,11 @@ namespace XblApp.Database.Configurations
                 .HasForeignKey(gg => gg.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Один ко многим: Game <-> GamerAchievement
             builder.HasMany(g => g.GamerAchievementLinks)
                 .WithOne(gg => gg.GameLink)
                 .HasForeignKey(gg => gg.GameId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);//Удаление записей в GamerAchievement настроено в AchievementConfiguration
         }
     }
 }

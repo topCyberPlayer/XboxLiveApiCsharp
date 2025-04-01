@@ -31,12 +31,6 @@ namespace XblApp.Database.Configurations
                 .WithOne(gg => gg.AchievementLink)
                 .HasForeignKey(ga => new { ga.AchievementId, ga.GameId })
                 .OnDelete(DeleteBehavior.Cascade);
-
-            // Один к одному: Achievement <-> Game
-            builder.HasOne(a => a.GameLink)
-                .WithMany(g => g.AchievementLinks)
-                .HasForeignKey(a => a.GameId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
