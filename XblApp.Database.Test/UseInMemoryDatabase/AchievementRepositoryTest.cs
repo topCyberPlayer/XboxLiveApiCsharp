@@ -57,7 +57,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         [Fact]
         public async Task SaveAchievementsAsync_ReadJson()
         {
-            AchievementJson? achievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
+            AchievementX1Json? achievementJson = JsonLoader<AchievementX1Json>.LoadJsonFile("../../../../", "Achievements.json");
 
             using (var context = CreateContext())
             {
@@ -85,7 +85,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
         [InlineData("DraftChimera239")]
         public async Task SaveGamerAchievementsAsync_ReadJson(string gamertag)
         {
-            AchievementJson gamerAchievementJson = JsonLoader<AchievementJson>.LoadJsonFile("../../../../", "Achievements.json");
+            AchievementX1Json gamerAchievementJson = JsonLoader<AchievementX1Json>.LoadJsonFile("../../../../", "Achievements.json");
 
             using (var context = CreateContext())
             {

@@ -1,18 +1,16 @@
-﻿using System;
-using System.Text.Json.Serialization;
-using XblApp.Domain.Entities;
+﻿using System.Text.Json.Serialization;
 
 namespace XblApp.Domain.JsonModels
 {
-    public class AchievementJson
+    public class AchievementX1Json
     {
         [JsonPropertyName("achievements")]
         public ICollection<AchievementInnerJson> Achievements { get; set; }
         
         [JsonPropertyName("pagingInfo")]
-        public PagingInfo PagingInfos { get; set; }
+        public PagingInfo PagingInfo { get; set; }
 
-        public long Xuid { get; set; }
+        public long GamerId { get; set; }
     }
 
     public class AchievementInnerJson

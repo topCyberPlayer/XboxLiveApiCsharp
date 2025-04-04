@@ -22,7 +22,7 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            AchievementJson result = await service.GetAchievementsAsync(xuid);
+            AchievementX1Json result = await service.GetAchievementsX360Async(xuid);
 
             Assert.NotNull(result.Achievements);
             Assert.NotEmpty(result.Achievements);
@@ -42,7 +42,7 @@ namespace XblApp.XboxLiveService.Tests
             IServiceScope scope = _factory.Services.CreateScope();
             IXboxLiveAchievementService service = scope.ServiceProvider.GetRequiredService<IXboxLiveAchievementService>();
 
-            AchievementJson achievements = await service.GetAchievementsAsync(xuid, titleid);
+            AchievementX1Json achievements = await service.GetAchievementsX1Async(xuid, titleid);
 
             Assert.NotNull(achievements.Achievements);
             Assert.NotEmpty(achievements.Achievements);

@@ -11,15 +11,6 @@ namespace XblApp.Domain.JsonModels
         public PagingInfo PagingInfos { get; set; }
     }
 
-    public class PagingInfo
-    {
-        [JsonPropertyName("continuationToken")]
-        public string? ContinuationToken { get; set; }
-
-        [JsonPropertyName("totalRecords")]
-        public int TotalRecords { get; set; }
-    }
-
     public class TitleA
     {
         [JsonPropertyName("titleId")]

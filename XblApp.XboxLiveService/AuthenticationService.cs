@@ -9,21 +9,15 @@ using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
-    public class AuthenticationService : IXboxLiveAuthenticationService
+    public class AuthenticationService : BaseService, IXboxLiveAuthenticationService
     {
         private readonly AuthenticationConfig _config;
-        private readonly HttpClient _authClient;
-        private readonly HttpClient _userTokenClient;
-        private readonly HttpClient _xstsTokenClient;
 
         private static readonly string DefScopes = string.Join(" ", "Xboxlive.signin", "Xboxlive.offline_access");
 
-        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config)
+        public AuthenticationService(IHttpClientFactory factory, IOptions<AuthenticationConfig> config) : base(factory)
         {
             _config = config.Value;
-            _authClient = factory.CreateClient("AuthServiceAuthToken");
-            _userTokenClient = factory.CreateClient("AuthServiceUserToken");
-            _xstsTokenClient = factory.CreateClient("AuthServiceXstsToken");
         }
 
         public string GenerateAuthorizationUrl()
@@ -42,11 +36,6 @@ namespace XblApp.XboxLiveService
             return QueryHelpers.AddQueryString(baseAddress, queryParameters);
         }
 
-        public async Task<string> GetValidTokenAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<OAuthTokenJson> RequestOauth2Token(string authorizationCode)
         {
             Dictionary<string, string> data = new()
@@ -59,7 +48,7 @@ namespace XblApp.XboxLiveService
                 {"client_secret", _config.ClientSecret}
             };
 
-            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(_authClient, data);
+            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(data);
 
             return resultJson;
         }
@@ -78,7 +67,8 @@ namespace XblApp.XboxLiveService
                 }
             };
 
-            XauTokenJson result = await SendJsonRequestAsync<XauTokenJson>(_userTokenClient, data);
+            HttpClient userTokenClient = factory.CreateClient("AuthServiceUserToken");
+            XauTokenJson result = await SendRequestAsync<XauTokenJson>(userTokenClient, data);
 
             return result;
         }
@@ -96,7 +86,9 @@ namespace XblApp.XboxLiveService
                 }
             };
 
-            XstsTokenJson result = await SendJsonRequestAsync<XstsTokenJson>(_xstsTokenClient, data);
+            HttpClient xstsTokenClient = factory.CreateClient("AuthServiceXstsToken");
+
+            XstsTokenJson result = await SendRequestAsync<XstsTokenJson>(xstsTokenClient, data);
 
             return result;
         }
@@ -112,13 +104,15 @@ namespace XblApp.XboxLiveService
                 { "client_secret", _config.ClientSecret }
             };
 
-            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(_authClient, data);
+            OAuthTokenJson resultJson = await SendFormUrlEncodedRequestAsync<OAuthTokenJson>(data);
 
             return resultJson;
         }
 
-        private async Task<T> SendFormUrlEncodedRequestAsync<T>(HttpClient client, Dictionary<string, string> data)
+        private async Task<T> SendFormUrlEncodedRequestAsync<T>(Dictionary<string, string> data)
         {
+            HttpClient client = factory.CreateClient("AuthServiceAuthToken");
+
             using var response = await client.PostAsync(string.Empty, new FormUrlEncodedContent(data));
             response.EnsureSuccessStatusCode();
 
@@ -126,7 +120,7 @@ namespace XblApp.XboxLiveService
                 ?? throw new InvalidOperationException("Failed to deserialize response");
         }
 
-        private async Task<T> SendJsonRequestAsync<T>(HttpClient client, object data)
+        private async Task<T> SendRequestAsync<T>(HttpClient client, object data)
         {
             string jsonData = JsonSerializer.Serialize(data);
             StringContent content = new(jsonData, Encoding.UTF8, "application/json");
@@ -137,44 +131,6 @@ namespace XblApp.XboxLiveService
             return await response.Content.ReadFromJsonAsync<T>()
                 ?? throw new InvalidOperationException("Failed to deserialize response");
         }
-
-        private static XboxAuthToken MapToTokenOAuth(OAuthTokenJson json) =>
-            new()
-            {
-                UserId = json.UserId,
-                TokenType = json.TokenType,
-                ExpiresIn = json.ExpiresIn,
-                Scope = json.Scope,
-                AccessToken = json.AccessToken,
-                RefreshToken = json.RefreshToken,
-                AuthenticationToken = json.AuthenticationToken,
-                DateOfExpiry = DateTime.UtcNow.AddSeconds(json.ExpiresIn)
-            };
-
-        private static XboxXauToken MapToTokenXau(XauTokenJson json) =>
-            new()
-            {
-                Token = json.Token,
-                NotAfter = json.NotAfter,
-                UhsId = json.Uhs,
-                IssueInstant = json.IssueInstant
-            };
-
-        private static XboxXstsToken MapToTokenXsts(XstsTokenJson json) =>
-            new()
-            {
-                Gamertag = json.Gamertag,
-                Token = json.Token,
-                IssueInstant = json.IssueInstant,
-                AgeGroup = json.AgeGroup,
-                NotAfter = json.NotAfter,
-                Privileges = json.Privileges,
-                Userhash = json.Userhash,
-                UserPrivileges = json.UserPrivileges,
-                Xuid = json.Xuid
-            };
-
-        
     }
 
     public class AuthenticationConfig

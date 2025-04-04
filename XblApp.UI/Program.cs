@@ -7,7 +7,9 @@ using XblApp.Database.Repositories;
 using XblApp.Database.Seeding;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.JsonModels;
 using XblApp.XboxLiveService;
+using XblApp.XboxLiveService.AchievementServices;
 
 namespace XblApp
 {
@@ -43,7 +45,8 @@ namespace XblApp
             builder.Services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IXboxLiveGamerService, GamerService>();
             builder.Services.AddScoped<IXboxLiveGameService, GameService>();
-            builder.Services.AddScoped<IXboxLiveAchievementService, AchievementService>();
+            builder.Services.AddScoped<IXboxLiveAchievementService<AchievementX1Json>, AchievementX1Service>();
+            builder.Services.AddScoped<IXboxLiveAchievementService<AchievementX360Json>, AchievementX360Service>();
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();

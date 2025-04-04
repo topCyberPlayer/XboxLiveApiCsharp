@@ -33,9 +33,9 @@ namespace XblApp.Database.Repositories
             return await _context.Achievements.ToListAsync();
         }
 
-        public async Task SaveAchievementsAsync(AchievementJson achievementJson)
+        public async Task SaveAchievementsAsync(AchievementX1Json achievementJson)
         {
-            long gamerId = achievementJson.Xuid;
+            long gamerId = achievementJson.GamerId;
 
             foreach (AchievementInnerJson achJson in achievementJson.Achievements)
             {

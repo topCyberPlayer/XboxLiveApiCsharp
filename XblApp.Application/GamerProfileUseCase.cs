@@ -13,7 +13,8 @@ namespace XblApp.Application
         private readonly IXboxLiveGameService _gameService;
         private readonly IGameRepository _gameRepository;
 
-        private readonly IXboxLiveAchievementService _achievementService;
+        private readonly IXboxLiveAchievementService<AchievementX360Json> _achievementX360Service;
+        private readonly IXboxLiveAchievementService<AchievementX1Json> _achievementX1Service;
         private readonly IAchievementRepository _achievementRepository;
 
         public GamerProfileUseCase(
@@ -23,7 +24,8 @@ namespace XblApp.Application
             IGamerRepository gamerRepository,
             IXboxLiveGameService gameService,
             IGameRepository gameRepository,
-            IXboxLiveAchievementService achievementService,
+            IXboxLiveAchievementService<AchievementX360Json> achievementX360Service,
+            IXboxLiveAchievementService<AchievementX1Json> achievementX1Service,
             IAchievementRepository achievementRepository) : base(authService, authRepository)
         {
             _gamerService = gamerService;
@@ -32,7 +34,8 @@ namespace XblApp.Application
             _gameService = gameService;
             _gameRepository = gameRepository;
 
-            _achievementService = achievementService;
+            _achievementX360Service = achievementX360Service;
+            _achievementX1Service = achievementX1Service;
             _achievementRepository = achievementRepository;
         }
 
@@ -78,7 +81,8 @@ namespace XblApp.Application
 
         public async Task GetAndSaveAchievements(long gamerId, long gameId)
         {
-            AchievementJson achievements = await _achievementService.GetAchievementsAsync(gamerId, gameId);
+            //todo Добавить проверку к какому поколению принадлежит игра: x360 or x1
+            AchievementX1Json achievements = await _achievementX1Service.GetAchievementsAsync(gamerId, gameId);
             await _achievementRepository.SaveAchievementsAsync(achievements);
         }
     }

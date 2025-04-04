@@ -11,7 +11,7 @@ namespace XblApp.XboxLiveService
             this.factory = factory;
         }
 
-        public async Task<T> SendRequestAsync<T>(HttpClient client, string uri)
+        protected async Task<T> SendRequestAsync<T>(HttpClient client, string uri)
         {
             try
             {
