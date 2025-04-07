@@ -21,5 +21,6 @@ namespace XblApp.XboxLiveService.AchievementServices
         protected override void SetGamerId(AchievementX1Json json, long xuid) =>
             json.GamerId = xuid;
     }
-
+    //todo Для X360 загружаются только открытые достижения, как загрузить заблокированные?
+    //todo Для всех игр X1 в "Games.TotalAchievements = 0" всегда
 }
