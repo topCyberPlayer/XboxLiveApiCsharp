@@ -16,7 +16,7 @@ namespace XblApp.Domain.JsonModels
     public class AchievementInnerJson
     {
         [JsonPropertyName("id")]
-        public string TitleId { get; set; }
+        public string AchievementId { get; set; }
 
         [JsonPropertyName("serviceConfigId")]
         public string ServiceConfigId { get; set; }

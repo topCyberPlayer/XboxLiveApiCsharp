@@ -57,10 +57,7 @@ namespace XblApp.Application
 
             GameJson games = await GetAndSaveGames(gamerId);
 
-            foreach (var game in games.Titles)
-            {
-                await GetAndSaveAchievements(gamerId, long.TryParse(game.TitleId, out long gameId) ? gameId : default);
-            }
+            (AchievementX1Json achievementsX1, AchievementX360Json achievementsX360) = await GetAndSaveAchievements(gamerId);
         }
 
         public async Task<GamerJson> GetAndSaveGamerProfile(long gamerId)
@@ -79,11 +76,15 @@ namespace XblApp.Application
             return games;
         }
 
-        public async Task GetAndSaveAchievements(long gamerId, long gameId)
+        public async Task<(AchievementX1Json, AchievementX360Json)> GetAndSaveAchievements(long gamerId)
         {
-            //todo Добавить проверку к какому поколению принадлежит игра: x360 or x1
-            AchievementX1Json achievements = await _achievementX1Service.GetAchievementsAsync(gamerId, gameId);
-            await _achievementRepository.SaveAchievementsAsync(achievements);
+            AchievementX1Json achievementsX1 = await _achievementX1Service.GetAllAchievementsForGamerAsync(gamerId);
+            await _achievementRepository.SaveAchievementsAsync(achievementsX1);
+
+            AchievementX360Json achievementsX360 = await _achievementX360Service.GetAllAchievementsForGamerAsync(gamerId);
+            await _achievementRepository.SaveAchievementsAsync(achievementsX360);
+
+            return (achievementsX1, achievementsX360);
         }
     }
 }

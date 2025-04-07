@@ -19,51 +19,36 @@ namespace XblApp.Domain.JsonModels
     public class AchievementX360InnerJson
     {
         [JsonPropertyName("id")]
-        public int AchievementX360Id { get; set; }
+        public int AchievementId { get; set; }
 
         [JsonPropertyName("titleId")]
-        public int GameId { get; set; }
+        public long GameId { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("sequence")]
-        public int sequence { get; set; }
-
-        [JsonPropertyName("flags")]
-        public int flags { get; set; }
-
         [JsonPropertyName("unlockedOnline")]
-        public bool unlockedOnline { get; set; }
+        public bool UnlockedOnline { get; set; }
 
         [JsonPropertyName("unlocked")]
-        public bool unlocked { get; set; }
+        public bool Unlocked { get; set; }
 
         [JsonPropertyName("isSecret")]
-        public bool isSecret { get; set; }
-
-        [JsonPropertyName("platform")]
-        public int platform { get; set; }
+        public bool IsSecret { get; set; }
 
         [JsonPropertyName("gamerscore")]
-        public int gamerscore { get; set; }
-
-        [JsonPropertyName("imageId")]
-        public int imageId { get; set; }
+        public int Gamerscore { get; set; }
 
         [JsonPropertyName("description")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         [JsonPropertyName("lockedDescription")]
-        public string lockedDescription { get; set; }
-
-        [JsonPropertyName("type")]
-        public int type { get; set; }
+        public string LockedDescription { get; set; }
 
         [JsonPropertyName("isRevoked")]
-        public bool isRevoked { get; set; }
+        public bool IsRevoked { get; set; }
 
         [JsonPropertyName("timeUnlocked")]
-        public DateTime timeUnlocked { get; set; }
+        public DateTime TimeUnlocked { get; set; }
     }
 }

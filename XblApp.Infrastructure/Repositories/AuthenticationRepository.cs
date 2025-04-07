@@ -15,9 +15,9 @@ namespace XblApp.Database.Repositories
         public async Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?>
         GetAllDonorsAsync()
         {
-            var result = await (from oauth in _context.XboxOAuthTokens
-                                join live in _context.XboxLiveTokens on oauth.UserId equals live.UserIdFK
-                                join user in _context.XboxUserTokens on live.UhsId equals user.UhsIdFK
+            var result = await (from oauth in context.XboxOAuthTokens
+                                join live in context.XboxLiveTokens on oauth.UserId equals live.UserIdFK
+                                join user in context.XboxUserTokens on live.UhsId equals user.UhsIdFK
                                 select new
                                 {
                                     oauth.UserId,
@@ -35,33 +35,33 @@ namespace XblApp.Database.Repositories
 
         public string? GetAuthorizationHeaderValue()
         {
-            return _context.XboxUserTokens
+            return context.XboxUserTokens
                 .Select(x => $"x={x.Userhash};{x.Token}")
                 .FirstOrDefault();
         }
 
         public DateTime GetDateLiveTokenExpired()
         {
-            return _context.XboxLiveTokens
+            return context.XboxLiveTokens
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
 
         public DateTime GetDateUserTokenExpired()
         {
-            return _context.XboxUserTokens
+            return context.XboxUserTokens
                 .Select(a => a.NotAfter)
                 .FirstOrDefault();
         }
 
         public async Task<XboxAuthToken?> GetXboxAuthToken() =>
-            await _context.XboxOAuthTokens.FirstOrDefaultAsync();
+            await context.XboxOAuthTokens.FirstOrDefaultAsync();
 
 
         public async Task SaveOrUpdateTokensAsync(
             OAuthTokenJson authTokenJson, XauTokenJson xauTokenJson, XstsTokenJson xstsTokenJson)
         {
-            XboxAuthToken? existingAuthToken = await _context.XboxOAuthTokens
+            XboxAuthToken? existingAuthToken = await context.XboxOAuthTokens
                 .Include(x => x.XboxXauTokenLink)
                 .ThenInclude(x => x!.XboxXstsTokenLink)
                 .FirstOrDefaultAsync(x => x.UserId == authTokenJson.UserId);
@@ -98,7 +98,7 @@ namespace XblApp.Database.Repositories
                     }
                 };
                 
-                await _context.XboxOAuthTokens.AddAsync(authToken);
+                await context.XboxOAuthTokens.AddAsync(authToken);
             }
             else
             {
@@ -169,7 +169,7 @@ namespace XblApp.Database.Repositories
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 }

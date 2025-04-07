@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using XblApp.Database.Contexts;
+﻿using XblApp.Database.Contexts;
 
 namespace XblApp.Database.Repositories
 {
     public class BaseRepository
     {
-        internal readonly XblAppDbContext _context;
+        internal readonly XblAppDbContext context;
 
         public BaseRepository(XblAppDbContext context)
         {
-            _context = context;
+            this.context = context;
         }
     }
 }

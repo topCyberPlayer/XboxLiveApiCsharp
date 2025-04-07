@@ -80,15 +80,15 @@ namespace XblApp.Application.Test
         /// <param name="gameId"></param>
         /// <returns></returns>
         [Theory]
-        [InlineData((long)EnumGamerProfiles.DraftChimera239, (long)EnumGames.GOW_UE)]
-        public async Task GetAndSaveAchievements_Test(long gamerId, long gameId)
+        [InlineData((long)EnumGamerProfiles.DraftChimera239)]
+        public async Task GetAndSaveAchievements_Test(long gamerId)
         {
             // Arrange
             IServiceScope scope = _factory.Services.CreateScope();
             GamerProfileUseCase useCase = scope.ServiceProvider.GetRequiredService<GamerProfileUseCase>();
 
             // Act
-            await useCase.GetAndSaveAchievements(gamerId, gameId);
+            await useCase.GetAndSaveAchievements(gamerId);
         }
 
         /// <summary>

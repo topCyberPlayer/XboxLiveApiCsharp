@@ -19,13 +19,13 @@ namespace XblApp.XboxLiveService.AchievementServices
             this.factory = factory;
         }
 
-        public async Task<TAchivoJson> GetAchievementsAsync(long xuid)
+        public async Task<TAchivoJson> GetAllAchievementsForGamerAsync(long xuid)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
             return await GetAchievementBaseAsync(relativeUrl, xuid);
         }
 
-        public async Task<TAchivoJson> GetAchievementsAsync(long xuid, long titleId)
+        public async Task<TAchivoJson> GetAchievementsForOneGameAsync(long xuid, long titleId)
         {
             string relativeUrl = $"/users/xuid({xuid})/achievements";
 
@@ -56,12 +56,13 @@ namespace XblApp.XboxLiveService.AchievementServices
 
             do
             {
-                string requestUri = string.IsNullOrEmpty(continuationToken)
-                    ? baseUri
-                    : $"{baseUri}&continuationToken={continuationToken}";
+                string requestUri = string.IsNullOrEmpty(continuationToken) ? 
+                    baseUri : QueryHelpers.AddQueryString(baseUri, "continuationToken", continuationToken);
 
                 using HttpResponseMessage response = await client.GetAsync(requestUri);
                 response.EnsureSuccessStatusCode();
+
+                string content = await response.Content.ReadAsStringAsync();
 
                 var currentPage = await response.Content.ReadFromJsonAsync<TAchivoJson>()
                     ?? throw new InvalidOperationException($"Cannot deserialize response to {typeof(TAchivoJson).Name}");

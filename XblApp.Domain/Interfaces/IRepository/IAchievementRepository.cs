@@ -9,5 +9,6 @@ namespace XblApp.Domain.Interfaces.IRepository
         public Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag);
         public Task<List<Achievement>> GetAchievementsAsync(string gameName);
         public Task SaveAchievementsAsync(AchievementX1Json achievements);
+        public Task SaveAchievementsAsync(AchievementX360Json achievementsX360);
     }
 }

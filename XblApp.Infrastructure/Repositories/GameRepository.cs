@@ -12,7 +12,7 @@ namespace XblApp.Database.Repositories
 
         public async Task<List<(string, int, int, int)>> GetAllGamesAndGamerGameAsync2()
         {
-            var games = await _context.Games
+            var games = await context.Games
                 .Select(game => new ValueTuple<string, int, int, int>
                 (
                     game.GameName,
@@ -26,13 +26,13 @@ namespace XblApp.Database.Repositories
         }
 
         public async Task<List<Game>> GetAllGamesAndGamerGameAsync() =>
-            await _context.Games
+            await context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
             .ToListAsync();
 
         public async Task<Game?> GetGameAndGamerGameAsync(long gameId) =>
-            await _context.Games
+            await context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
             .Include(a => a.AchievementLinks)
@@ -86,7 +86,7 @@ namespace XblApp.Database.Repositories
 
             foreach (var title in gameJson.Titles)
             {
-                var game = await _context.Games
+                var game = await context.Games
                     .Include(g => g.GamerGameLinks) // Загружаем связи игры с игроками
                     .FirstOrDefaultAsync(g => g.GameId == long.Parse(title.TitleId));
 
@@ -104,7 +104,7 @@ namespace XblApp.Database.Repositories
                         Description = title.Detail?.Description
                     };
 
-                    _context.Games.Add(game);
+                    context.Games.Add(game);
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace XblApp.Database.Repositories
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
     }

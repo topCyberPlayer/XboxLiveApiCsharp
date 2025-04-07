@@ -11,14 +11,14 @@ namespace XblApp.Database.Repositories
         public GamerRepository(XblAppDbContext context) : base(context) { }
 
         public async Task<Gamer> GetGamerProfileAsync(long id) =>
-            await _context.Gamers
+            await context.Gamers
             .AsNoTracking()
             .Include(a => a.GamerGameLinks)
                 .ThenInclude(b => b.GameLink)
             .FirstAsync(x => x.GamerId == id);
 
         public async Task<Gamer?> GetGamerProfileAsync(string gamertag) =>
-            await _context.Gamers
+            await context.Gamers
                 .Where(x => x.Gamertag == gamertag)
                 .Include(a => a.GamerGameLinks)
                     .ThenInclude(b => b.GameLink)
@@ -26,14 +26,14 @@ namespace XblApp.Database.Repositories
                 .FirstOrDefaultAsync();
 
         public async Task<List<Gamer>> GetAllGamerProfilesAsync() =>
-            await _context.Gamers
+            await context.Gamers
                 .AsNoTracking()
                 .Include(a => a.GamerGameLinks)
                     .ThenInclude(b => b.GameLink)
                 .ToListAsync();
 
         public async Task<Gamer?> GetGamesForGamerAsync(string gamertag) =>
-            await _context.Gamers
+            await context.Gamers
                 .Where(x => x.Gamertag == gamertag)
                 .AsNoTracking()
                 .Include(a => a.GamerGameLinks)
@@ -51,7 +51,7 @@ namespace XblApp.Database.Repositories
                 }
 
                 // Ищем существующего игрока в БД
-                Gamer? gamer = await _context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerId);
+                Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerId);
 
                 if (gamer == null)
                 {
@@ -66,7 +66,7 @@ namespace XblApp.Database.Repositories
                         Location = profile.Location
                     };
 
-                    _context.Gamers.Add(gamer);
+                    context.Gamers.Add(gamer);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace XblApp.Database.Repositories
                 }
             }
 
-            await _context.SaveChangesAsync(); // Сохраняем в БД
+            await context.SaveChangesAsync(); // Сохраняем в БД
         }
 
     }
