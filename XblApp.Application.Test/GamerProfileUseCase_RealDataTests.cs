@@ -70,7 +70,7 @@ namespace XblApp.Application.Test
             GameJson result = await useCase.GetAndSaveGames(gamerId);
 
             // Assert
-            Assert.NotNull(result.Titles);
+            Assert.NotNull(result.Games);
         }
 
         /// <summary>

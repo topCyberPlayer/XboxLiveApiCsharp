@@ -84,17 +84,17 @@ namespace XblApp.Database.Repositories
         {
             var gamerId = long.Parse(gameJson.Xuid);
 
-            foreach (var title in gameJson.Titles)
+            foreach (var title in gameJson.Games)
             {
                 var game = await context.Games
                     .Include(g => g.GamerGameLinks) // Загружаем связи игры с игроками
-                    .FirstOrDefaultAsync(g => g.GameId == long.Parse(title.TitleId));
+                    .FirstOrDefaultAsync(g => g.GameId == long.Parse(title.GameId));
 
                 if (game == null)
                 {
                     game = new Game
                     {
-                        GameId = long.Parse(title.TitleId),
+                        GameId = long.Parse(title.GameId),
                         GameName = title.Name,
                         TotalAchievements = title.Achievement?.TotalAchievements ?? 0,
                         TotalGamerscore = title.Achievement?.TotalGamerscore ?? 0,

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using XblApp.Domain.Entities;
 
 namespace XblApp.Domain.JsonModels
 {
@@ -9,13 +8,13 @@ namespace XblApp.Domain.JsonModels
         public string Xuid { get; set; }
 
         [JsonPropertyName("titles")]
-        public ICollection<Title> Titles { get; set; }            
+        public ICollection<GameInnerJson> Games { get; set; }            
     }
 
-    public class Title
+    public class GameInnerJson
     {
         [JsonPropertyName("titleId")]
-        public string TitleId { get; set; }
+        public string GameId { get; set; }
 
         [JsonPropertyName("productId")]
         public string ProductId { get; set; }

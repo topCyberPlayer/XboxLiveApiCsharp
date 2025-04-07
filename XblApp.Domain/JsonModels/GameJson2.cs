@@ -5,13 +5,13 @@ namespace XblApp.Domain.JsonModels
     public class GameJson2
     {
         [JsonPropertyName("titles")]
-        public ICollection<TitleA> Titles { get; set; }
+        public ICollection<GameInnerJson2> Games { get; set; }
 
         [JsonPropertyName("pagingInfo")]
         public PagingInfo PagingInfos { get; set; }
     }
 
-    public class TitleA
+    public class GameInnerJson2
     {
         [JsonPropertyName("titleId")]
         public long TitleId { get; set; }

@@ -7,19 +7,19 @@ namespace XblApp.XboxLiveService.Tests
 {
     public class AchievementServiceTest : IClassFixture<WebApplicationFactory<Program>>
     {
-        private enum X1Games : long
+        public enum X1Games : long
         {
             GoW_UE = 1475571605,
             Gears5 = 374923716
         }
 
-        private enum X360Games : long
+        public enum X360Games : long
         {
             LaraCroft_GoL = 1480657497,
             AC_Rev = 1431505017
         }
 
-        private enum Gamers : long
+        public enum Gamers : long
         {
             DraftChimera239 = 2535419791913541
         }
