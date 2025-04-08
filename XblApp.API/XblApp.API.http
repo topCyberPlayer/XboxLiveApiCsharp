@@ -1,0 +1,6 @@
+@XblApp.API_HostAddress = http://localhost:5296
+
+GET {{XblApp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -37,9 +37,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Infrastructure", "4_Infra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataForTests", "DataForTests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
+		AchievementsX1.json = AchievementsX1.json
 		AchievementsX360.json = AchievementsX360.json
 		GamerProfiles.json = GamerProfiles.json
-		AchievementsX1.json = AchievementsX1.json
 		Games1.json = Games1.json
 		Games2.json = Games2.json
 	EndProjectSection
@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthTokens", "AuthTokens", 
 		XauToken.json = XauToken.json
 		XstsToken.json = XstsToken.json
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.API", "XblApp.API\XblApp.API.csproj", "{FC105851-9721-4FB4-8420-44A4542DBAA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{F290921A-72F8-47C4-9306-6939B2BEA2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F290921A-72F8-47C4-9306-6939B2BEA2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F290921A-72F8-47C4-9306-6939B2BEA2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC105851-9721-4FB4-8420-44A4542DBAA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC105851-9721-4FB4-8420-44A4542DBAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC105851-9721-4FB4-8420-44A4542DBAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC105851-9721-4FB4-8420-44A4542DBAA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{0EA4845B-BB0B-481A-98EB-D0884A20F962} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {9582B8F7-7DFE-4215-A3D7-DB8111D29FF2}
 		{0C877FD8-7B12-4116-B310-216C4D14951B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FC105851-9721-4FB4-8420-44A4542DBAA1} = {A57CFBC4-B7C0-44CD-8942-7691237C78A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C99C6295-7845-4FA6-BC67-9CEAB2C21C23}
