@@ -10,5 +10,6 @@ namespace XblApp.Domain.Interfaces.IRepository
         public Task<List<Gamer>> GetAllGamerProfilesAsync();
         public Task<Gamer> GetGamesForGamerAsync(string gamertag);
         public Task SaveOrUpdateGamersAsync(GamerJson gamers);
+        public Task<bool> IsGamertagLinkedToUserAsync(string gamertag);
     }
 }

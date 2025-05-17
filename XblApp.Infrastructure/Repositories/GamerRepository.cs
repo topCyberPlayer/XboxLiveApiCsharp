@@ -40,6 +40,10 @@ namespace XblApp.Database.Repositories
                     .ThenInclude(b => b.GameLink)
                 .FirstOrDefaultAsync();
 
+        public async Task<bool> IsGamertagLinkedToUserAsync(string gamertag) =>
+            await context.Gamers.AnyAsync(g => g.Gamertag == gamertag);
+        
+
         public async Task SaveOrUpdateGamersAsync(GamerJson gamerJson)
         {
             foreach (var profile in gamerJson.ProfileUsers)
@@ -80,6 +84,5 @@ namespace XblApp.Database.Repositories
 
             await context.SaveChangesAsync(); // Сохраняем в БД
         }
-
     }
 }

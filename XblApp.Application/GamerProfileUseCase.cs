@@ -1,4 +1,5 @@
 ﻿using XblApp.Domain.Entities;
+using XblApp.Domain.Interfaces;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
@@ -7,6 +8,8 @@ namespace XblApp.Application
 {
     public class GamerProfileUseCase : AuthenticationUseCase
     {
+        private readonly IRegisterUserService _registerUserService;
+        
         private readonly IXboxLiveGamerService _gamerService;
         private readonly IGamerRepository _gamerRepository;
 
@@ -18,6 +21,7 @@ namespace XblApp.Application
         private readonly IAchievementRepository _achievementRepository;
 
         public GamerProfileUseCase(
+            IRegisterUserService registerUserService,
             IXboxLiveAuthenticationService authService,
             IAuthenticationRepository authRepository,
             IXboxLiveGamerService gamerService,
@@ -28,6 +32,8 @@ namespace XblApp.Application
             IXboxLiveAchievementService<AchievementX1Json> achievementX1Service,
             IAchievementRepository achievementRepository) : base(authService, authRepository)
         {
+            _registerUserService = registerUserService;
+
             _gamerService = gamerService;
             _gamerRepository = gamerRepository;
 
@@ -50,6 +56,11 @@ namespace XblApp.Application
 
         public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag) =>
             await _achievementRepository.GetGamerAchievementsAsync(gamertag);
+
+        public async Task RegisterUser(string gamertag, string email, string password)
+        {
+            var registerResut = await _registerUserService.CreateUserAsync(gamertag, email, password);
+        }
 
         public async Task UpdateProfileAsync(long gamerId)
         {

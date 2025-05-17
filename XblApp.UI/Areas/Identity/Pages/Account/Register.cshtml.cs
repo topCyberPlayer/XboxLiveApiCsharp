@@ -12,11 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using XblApp.Database.Models;
-using XblApp.Database.Repositories;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.JsonModels;
+using XblApp.Domain.Interfaces;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {
@@ -28,8 +24,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IXboxLiveGamerService _xblGamerService;
-        private readonly IGamerRepository _gamerRepository;
+        private readonly IRegisterUserService _registerUserService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -37,8 +32,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IXboxLiveGamerService xblGamerService,
-            IGamerRepository gamerRepository)
+            IRegisterUserService registerUserService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,8 +40,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _xblGamerService = xblGamerService;
-            _gamerRepository = gamerRepository;
+            _registerUserService = registerUserService;
         }
 
         /// <summary>
@@ -121,39 +114,19 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new()
-                {
-                    UserName = Input.Gamertag,
-                    Email = Input.Email,
-                    CreatedAt = DateTime.UtcNow,
-                };
+                var registerResult = await _registerUserService.CreateUserAsync(Input.Gamertag, Input.Email, Input.Password);
 
-                GamerJson gamerJson = await _xblGamerService.GetGamerProfileAsync(Input.Gamertag);
-
-                if (!gamerJson.ProfileUsers.Any())
-                {
-                    ModelState.AddModelError("Input.Gamertag", "Такой игрок не существует.");
-                    return Page();
-                }
-
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                
-                if (result.Succeeded)
+                if (registerResult.Success)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    gamerJson.ProfileUsers.FirstOrDefault().ApplicationUserId = user.Id;
-                    await _gamerRepository.SaveOrUpdateGamersAsync(gamerJson);
-
-                    await _userManager.AddToRoleAsync(user, "gamerTeam");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
+                    ApplicationUser user = await _userManager.FindByIdAsync(registerResult.UserId);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = registerResult.UserId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -169,9 +142,9 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                foreach (var error in registerResult.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, error);
                 }
             }
 
