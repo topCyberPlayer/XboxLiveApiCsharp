@@ -125,16 +125,21 @@ namespace XblApp
                 var services = scope.ServiceProvider;
                 var context = scope.ServiceProvider.GetRequiredService<XblAppDbContext>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var config = services.GetRequiredService<IConfiguration>();
+                bool usingNoSqlDb = config.GetValue<bool>("Database:useNoSqlDb");//по умолчанию: false
 
                 try
                 {
-                    bool arePendingMigrations = context.Database.GetPendingMigrations().Any();
+                    if (!usingNoSqlDb)
+                    {
+                        bool arePendingMigrations = context.Database.GetPendingMigrations().Any();
 
-                    if (arePendingMigrations)
-                        await context.Database.MigrateAsync();
+                        if (arePendingMigrations)
+                            await context.Database.MigrateAsync();
 
-                    await context.SeedDbDefaultUserAsync(userManager);
-                    //await context.SeedDbGamersAndGamesAsync();
+                        await context.SeedDbDefaultUserAsync(userManager);
+                        //await context.SeedDbGamersAndGamesAsync();
+                    }
                 }
                 catch (Exception)
                 {

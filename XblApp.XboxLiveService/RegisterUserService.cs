@@ -44,10 +44,9 @@ namespace XblApp.XboxLiveService
 
             resultGamer.ProfileUsers.First().ApplicationUserId = user.Id;
             await _gamerRepository.SaveOrUpdateGamersAsync(resultGamer);
-            await _userManager.AddToRoleAsync(user, "gamerTeam");
-            string userId = await _userManager.GetUserIdAsync(user);
+            //await _userManager.AddToRoleAsync(user, "gamerTeam");
 
-            return (true, userId, []);
+            return (true, user.Id, []);
         }
     }
 }

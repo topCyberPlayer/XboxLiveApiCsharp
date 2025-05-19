@@ -44,7 +44,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
             //gamers[0].ApplicationUserId = "0";
             //gamers[1].ApplicationUserId = "1";
 
-            using (var context = CreateContext())
+            using (XblAppDbContext context = CreateContext())
             {
                 GamerRepository gamerRepository = new(context);
                 GameRepository gameRepository = new(context);

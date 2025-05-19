@@ -5,50 +5,96 @@ namespace XblApp.Domain.JsonModels
     public class GamerJson 
     {
         [JsonPropertyName("profileUsers")]
-        public ICollection<ProfileUser> ProfileUsers { get; set; }
+        public ICollection<ProfileUser> ProfileUsers { get; set; } = [];
     }
 
     public class ProfileUser
     {
+        public ProfileUser(string applicationUserId, string gamertag, int gamerscore)
+        {
+            ApplicationUserId = applicationUserId;
+            Gamertag = gamertag;
+            Gamerscore = gamerscore;
+        }
+
         /// <summary>
         /// Кастомное поле. Заполняется вручную
         /// </summary>
-        public string ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; } = null!;
 
         [JsonPropertyName("id")]
-        public string ProfileId { get; set; }
+        public long GamerId { get; set; }
 
         [JsonPropertyName("hostId")]
-        public string HostId { get; set; }
+        public long HostId { get; set; }
 
         [JsonPropertyName("settings")]
-        public List<Setting>? Settings { get; set; }
+        public List<Setting>? Settings { get; set; } = [];
 
         [JsonPropertyName("isSponsoredUser")]
         public bool IsSponsoredUser { get; set; }
 
-        public string? Gamertag { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.GAMERTAG)?.Value; } }
+        public string Gamertag
+        {
+            get => GetSetting(ProfileSettings.GAMERTAG);
+            set => SetSetting(ProfileSettings.GAMERTAG, value);
+        }
 
-        public int Gamerscore { get { return int.Parse(Settings?.FirstOrDefault(s => s?.Id == ProfileSettings.GAMERSCORE)?.Value); } }
+        public int Gamerscore
+        {
+            get => int.TryParse(GetSetting(ProfileSettings.GAMERSCORE), out var score) ? score : 0;
+            set => SetSetting(ProfileSettings.GAMERSCORE, value.ToString());
+        }
 
-        public string? Location { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.LOCATION)?.Value; } }
+        public string? Location
+        {
+            get => GetSetting(ProfileSettings.LOCATION);
+            set => SetSetting(ProfileSettings.LOCATION, value);
+        }
 
-        public string? Bio { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.BIOGRAPHY)?.Value; } }
+        public string? Bio
+        {
+            get => GetSetting(ProfileSettings.BIOGRAPHY);
+            set => SetSetting(ProfileSettings.BIOGRAPHY, value);
+        }
 
-        public int TenureLevel { get { return int.Parse(Settings?.FirstOrDefault(s => s.Id == ProfileSettings.TENURE_LEVEL)?.Value); } }
+        public int TenureLevel
+        {
+            get => int.TryParse(GetSetting(ProfileSettings.TENURE_LEVEL), out var score) ? score : 0;
+            set => SetSetting(ProfileSettings.TENURE_LEVEL, value.ToString());
+        }
 
-        public string? XboxOneRep { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.XBOX_ONE_REP)?.Value; } }
+        public string? XboxOneRep
+        {
+            get => GetSetting(ProfileSettings.XBOX_ONE_REP);
+            set => SetSetting(ProfileSettings.XBOX_ONE_REP, value);
+        }
 
-        public string? RealName { get { return Settings?.FirstOrDefault(s => s.Id == ProfileSettings.REAL_NAME)?.Value; } }
+        public string? RealName
+        {
+            get => GetSetting(ProfileSettings.REAL_NAME);
+            set => SetSetting(ProfileSettings.REAL_NAME, value);
+        }
+
+        private string? GetSetting(string key) => Settings.FirstOrDefault(s => s.Id == key)?.Value;
+
+        private void SetSetting(string key, string? value)
+        {
+            var setting = Settings.FirstOrDefault(s => s.Id == key);
+            if (setting != null)
+                setting.Value = value ?? string.Empty;
+            else if (value != null)
+                Settings.Add(new Setting { Id = key, Value = value });
+        }
     }
 
     public class Setting
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [JsonPropertyName("value")]
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     public static class ProfileSettings

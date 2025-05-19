@@ -48,14 +48,8 @@ namespace XblApp.Database.Repositories
         {
             foreach (var profile in gamerJson.ProfileUsers)
             {
-                if (!long.TryParse(profile.ProfileId, out long gamerId))
-                {
-                    // Пропускаем, если ID некорректный
-                    continue;
-                }
-
                 // Ищем существующего игрока в БД
-                Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerId);
+                Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == profile.GamerId);
 
                 if (gamer == null)
                 {
@@ -63,7 +57,7 @@ namespace XblApp.Database.Repositories
                     gamer = new Gamer
                     {
                         ApplicationUserId = profile.ApplicationUserId,
-                        GamerId = gamerId,
+                        GamerId = profile.GamerId,
                         Gamertag = profile.Gamertag,
                         Gamerscore = profile.Gamerscore,
                         Bio = profile.Bio,
