@@ -1,3 +1,4 @@
+using XblApp.DependencyInjection;
 
 namespace XblApp.API
 {
@@ -9,11 +10,13 @@ namespace XblApp.API
 
             // Add services to the container.
             builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.RegisterApplicationServices();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,6 +27,8 @@ namespace XblApp.API
             }
 
             app.UseAuthorization();
+            
+            app.MapControllers();
 
             var summaries = new[]
             {
@@ -48,4 +53,19 @@ namespace XblApp.API
             app.Run();
         }
     }
+    public static partial class ServiceInitializer
+    {
+        public static WebApplicationBuilder RegisterApplicationServices(this WebApplicationBuilder builder)
+        {
+            builder.Services
+            .AddInfrastructure(builder.Configuration)
+            .AddApplicationDatabase(builder.Configuration)
+            .AddApplicationIdentity();
+
+            builder.Services.AddHttpContextAccessor();
+
+            return builder;
+        }
+    }
+
 }

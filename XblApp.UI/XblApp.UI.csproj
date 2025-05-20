@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\XblApp.DependencyInjection\appsettings.Development.json" Link="appsettings.Development.json" />
+    <Content Include="..\XblApp.DependencyInjection\appsettings.Docker.json" Link="appsettings.Docker.json" />
+    <Content Include="..\XblApp.DependencyInjection\appsettings.json" Link="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.13" />
@@ -24,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
+    <ProjectReference Include="..\XblApp.DependencyInjection\XblApp.DependencyInjection.csproj" />
     <ProjectReference Include="..\XblApp.Domain\XblApp.Domain.csproj" />
     <ProjectReference Include="..\XblApp.Infrastructure\XblApp.Database.csproj" />
     <ProjectReference Include="..\XblApp.XboxLiveService\XblApp.XboxLiveService.csproj" />

@@ -7,8 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\XblApp.DependencyInjection\appsettings.Development.json" Link="appsettings.Development.json" />
+    <Content Include="..\XblApp.DependencyInjection\appsettings.json" Link="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.14" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
+    <ProjectReference Include="..\XblApp.DependencyInjection\XblApp.DependencyInjection.csproj" />
+    <ProjectReference Include="..\XblApp.Shared\XblApp.DTO.csproj" />
   </ItemGroup>
 
 </Project>
