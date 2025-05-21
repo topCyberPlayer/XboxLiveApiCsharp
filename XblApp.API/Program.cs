@@ -1,3 +1,4 @@
+using XblApp.API.Endpoints;
 using XblApp.DependencyInjection;
 
 namespace XblApp.API
@@ -27,6 +28,7 @@ namespace XblApp.API
             }
 
             app.UseAuthorization();
+            app.MapUsersEndpoints();
             
             app.MapControllers();
 
