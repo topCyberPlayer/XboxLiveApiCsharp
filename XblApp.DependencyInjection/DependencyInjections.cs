@@ -29,7 +29,7 @@ namespace XblApp.DependencyInjection
             services.AddScoped<IAchievementRepository, AchievementRepository>();
 
             services.AddScoped<TokenHandler>();
-            services.AddScoped<IRegisterUserService, RegisterUserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
             services.AddScoped<IXboxLiveGamerService, GamerService>();
             services.AddScoped<IXboxLiveGameService, GameService>();

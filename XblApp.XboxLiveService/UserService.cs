@@ -7,13 +7,13 @@ using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {
-    public class RegisterUserService : IRegisterUserService
+    public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IXboxLiveGamerService _gamerService;
         private readonly IGamerRepository _gamerRepository;
 
-        public RegisterUserService(
+        public UserService(
             UserManager<ApplicationUser> userManager, 
             IXboxLiveGamerService gamerService,
             IGamerRepository gamerRepository)
@@ -47,6 +47,11 @@ namespace XblApp.XboxLiveService
             //await _userManager.AddToRoleAsync(user, "gamerTeam");
 
             return (true, user.Id, []);
+        }
+
+        public Task<string> LoginUserAsync(string gamertag, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace XblApp.XboxLiveService.Tests
         public async Task CreateUserAsync_ShouldOk(string gamertag, string email, string password)
         {
             IServiceScope scope = _factory.Services.CreateScope();
-            IRegisterUserService service = scope.ServiceProvider.GetRequiredService<IRegisterUserService>();
+            IUserService service = scope.ServiceProvider.GetRequiredService<IUserService>();
 
             (bool Success, string UserId, IEnumerable<string> Errors) result = await service.CreateUserAsync(gamertag, email, password);
 
@@ -58,7 +58,7 @@ namespace XblApp.XboxLiveService.Tests
         public async Task CreateUserAsync_ShouldError_EmailRegisteredYet(string gamertag, string email, string password)
         {
             IServiceScope scope = _factory.Services.CreateScope();
-            IRegisterUserService service = scope.ServiceProvider.GetRequiredService<IRegisterUserService>();
+            IUserService service = scope.ServiceProvider.GetRequiredService<IUserService>();
 
             (bool Success, string UserId, IEnumerable<string> Errors) result = await service.CreateUserAsync(gamertag, email, password);
             (bool Success, string UserId, IEnumerable<string> Errors) result2 = await service.CreateUserAsync(gamertag, email, password);
@@ -71,7 +71,7 @@ namespace XblApp.XboxLiveService.Tests
         public async Task CreateUserAsync_ShouldError_GamertagRegisteredYet(string gamertag, string email, string password)
         {
             IServiceScope scope = _factory.Services.CreateScope();
-            IRegisterUserService service = scope.ServiceProvider.GetRequiredService<IRegisterUserService>();
+            IUserService service = scope.ServiceProvider.GetRequiredService<IUserService>();
 
             (bool Success, string UserId, IEnumerable<string> Errors) result = await service.CreateUserAsync(gamertag, email, password);
             (bool Success, string UserId, IEnumerable<string> Errors) result2 = await service.CreateUserAsync(gamertag, email, password);
@@ -84,7 +84,7 @@ namespace XblApp.XboxLiveService.Tests
         public async Task CreateUserAsync_ShouldError_WeakPassword(string gamertag, string email, string password)
         {
             IServiceScope scope = _factory.Services.CreateScope();
-            IRegisterUserService service = scope.ServiceProvider.GetRequiredService<IRegisterUserService>();
+            IUserService service = scope.ServiceProvider.GetRequiredService<IUserService>();
 
             (bool Success, string UserId, IEnumerable<string> Errors) result = await service.CreateUserAsync(gamertag, email, password);
 
