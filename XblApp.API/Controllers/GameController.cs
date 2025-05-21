@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using XblApp.Application;
+using XblApp.Application.XboxLiveUseCases;
 using XblApp.Domain.Entities;
 using XblApp.DTO;
 
@@ -16,7 +16,7 @@ namespace XblApp.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GameDTO>>> Get()
         {
-            List<Game> result = await useCase.GetAllGamesAsync();
+            List<Game> result = await useCase.GetGamesAsync();
 
             if (result is null || result.Count == 0)
                 return NotFound("Игры не найдены");

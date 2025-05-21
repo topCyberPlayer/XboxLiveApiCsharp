@@ -25,7 +25,7 @@ namespace XblApp.Database.Repositories
             return games;
         }
 
-        public async Task<List<Game>> GetAllGamesAndGamerGameAsync() =>
+        public async Task<List<Game>> GetGamesAndGamerGameAsync() =>
             await context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)

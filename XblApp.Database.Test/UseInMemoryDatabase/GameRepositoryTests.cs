@@ -60,7 +60,7 @@ namespace XblApp.Database.Test.UseInMemoryDatabase
                 GameRepository repository = new(context);
 
                 // Assert
-                List<Game>? result = await repository.GetAllGamesAndGamerGameAsync();
+                List<Game>? result = await repository.GetGamesAndGamerGameAsync();
 
                 Game? game = result.FirstOrDefault(g => g.GameName == "Sniper Elite 5");
 

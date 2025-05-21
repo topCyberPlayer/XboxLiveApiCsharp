@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using XblApp.Application;
+using XblApp.Application.XboxLiveUseCases;
 using XblApp.Domain.Entities;
 using XblApp.DTO;
 
@@ -22,7 +22,6 @@ namespace XblApp.API.Controllers
             return Ok(result2);
         }
 
-        [HttpGet]
         [HttpGet("{gamertag}")]
         public async Task<ActionResult<GamerDTO>> GetGamerProfiles(string gamertag)
         {

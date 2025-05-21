@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using XblApp.Application;
+using XblApp.Application.XboxLiveUseCases;
 using XblApp.Database.Contexts;
 using XblApp.Database.Models;
 using XblApp.Database.Repositories;
@@ -11,7 +11,8 @@ using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 using XblApp.XboxLiveService;
-using XblApp.XboxLiveService.AchievementServices;
+using XblApp.XboxLiveService.XboxLiveServices;
+using XblApp.XboxLiveService.XboxLiveServices.AchievementServices;
 
 namespace XblApp.DependencyInjection
 {

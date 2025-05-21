@@ -1,7 +1,7 @@
 ﻿using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 
-namespace XblApp.XboxLiveService.AchievementServices
+namespace XblApp.XboxLiveService.XboxLiveServices.AchievementServices
 {
     public class AchievementX360Service
     : BaseAchievementService<AchievementX360Json, AchievementX360InnerJson>,

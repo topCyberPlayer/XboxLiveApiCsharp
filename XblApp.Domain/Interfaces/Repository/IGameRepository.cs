@@ -6,7 +6,9 @@ namespace XblApp.Domain.Interfaces.IRepository
     public interface IGameRepository
     {
         public Task<Game> GetGameAndGamerGameAsync(long gameId);
-        public Task<List<Game>> GetAllGamesAndGamerGameAsync();
+        
+        public Task<List<Game>> GetGamesAndGamerGameAsync();
+        
         /// <summary>
         /// Сохранение происходит в 2 таблицы: Game и GamerGame
         /// </summary>

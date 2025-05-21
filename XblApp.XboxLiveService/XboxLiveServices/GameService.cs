@@ -1,7 +1,7 @@
 ﻿using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 
-namespace XblApp.XboxLiveService
+namespace XblApp.XboxLiveService.XboxLiveServices
 {
     public class GameService : BaseService, IXboxLiveGameService
     {

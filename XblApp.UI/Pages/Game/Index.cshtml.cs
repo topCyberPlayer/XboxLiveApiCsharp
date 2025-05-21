@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Application;
+using XblApp.Application.XboxLiveUseCases;
 using XblApp.DTO;
 
 namespace XblApp.Pages.Game
@@ -18,8 +18,8 @@ namespace XblApp.Pages.Game
 
         public async Task<IActionResult> OnGet()
         {
-            List<Domain.Entities.Game> games = await _gameUseCase.GetAllGamesAsync();
-            Output = GameDTO.CastToGameDTO(games);
+            List<Domain.Entities.Game> games = await _gameUseCase.GetGamesAsync();
+            Output = GameDTO.CastToGameDTO(games).ToList();
             return Page();
         }
     }

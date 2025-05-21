@@ -7,7 +7,7 @@ using XblApp.Domain.Entities;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 
-namespace XblApp.XboxLiveService
+namespace XblApp.XboxLiveService.XboxLiveServices
 {
     public class AuthenticationService : BaseService, IXboxLiveAuthenticationService
     {
