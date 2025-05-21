@@ -19,18 +19,9 @@ namespace XblApp.Application
         /// Отобразить все игры: Название, Достижения, Геймерскор, Кол-во игроков
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Game>> GetAllGamesAsync()
-        {
-            List<Game> games = await _gameRepository.GetAllGamesAndGamerGameAsync();
+        public async Task<List<Game>> GetAllGamesAsync() => await _gameRepository.GetAllGamesAndGamerGameAsync();
+        
+        public async Task<Game> GetGameAsync(long gameId) => await _gameRepository.GetGameAndGamerGameAsync(gameId);
 
-            return games;
-        }
-
-        public async Task<Game> GetGameAsync(long gameId)
-        {
-            Game? game = await _gameRepository.GetGameAndGamerGameAsync(gameId);
-
-            return game;
-        }
     }
 }

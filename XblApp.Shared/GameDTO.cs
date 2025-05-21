@@ -17,14 +17,19 @@ namespace XblApp.DTO
         /// </summary>
         public int Gamers { get; set; }
 
-        public static List<GameDTO> CastToGameDTO(List<Game> gamers) =>
-            gamers.Select(game => new GameDTO
-            {
-                GameId = game.GameId,
-                GameName = game.GameName,
-                Gamers = game.GamerGameLinks.Count,
-                TotalAchievements = game.TotalAchievements,
-                TotalGamerscore = game.TotalGamerscore,
-            }).ToList();
+        public static IEnumerable<GameDTO> CastToGameDTO(List<Game> gamers) =>
+            gamers.Select(MapToGameDTO);
+
+        public static GameDTO? CastToGameDTO(Game game) =>
+            game is null ? null : MapToGameDTO(game);
+
+        private static GameDTO MapToGameDTO(Game game) => new()
+        {
+            GameId = game.GameId,
+            GameName = game.GameName,
+            Gamers = game.GamerGameLinks.Count,
+            TotalAchievements = game.TotalAchievements,
+            TotalGamerscore = game.TotalGamerscore,
+        };
     }
 }

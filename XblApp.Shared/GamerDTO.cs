@@ -20,10 +20,10 @@ namespace XblApp.DTO
         /// </summary>
         public int Games { get; set; }
 
-        public static List<GamerDTO> CastToToGamerDTO(List<Gamer> gamers) =>
-            gamers.Select(MapToGamerDTO).ToList();
+        public static IEnumerable<GamerDTO> CastToGamerDTO(List<Gamer> gamers) =>
+            gamers.Select(MapToGamerDTO);
 
-        public static GamerDTO CastToGamerDTO(Gamer? gamer) =>
+        public static GamerDTO? CastToGamerDTO(Gamer? gamer) =>
             gamer is null ? null : MapToGamerDTO(gamer);
 
         private static GamerDTO MapToGamerDTO(Gamer gamer) => new()
