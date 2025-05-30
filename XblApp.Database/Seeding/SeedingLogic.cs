@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using XblApp.Database.Contexts;
 using XblApp.Database.Models;
-using XblApp.Domain.Entities;
 
 namespace XblApp.Database.Seeding
 {
