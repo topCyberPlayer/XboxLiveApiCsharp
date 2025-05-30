@@ -9,13 +9,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Сначала копируем файл решения и все .csproj файлы, чтобы оптимизировать кэширование
-COPY ["XboxLiveApiCsharp.sln", "./"]
-COPY ["XblApp.UI/XblApp.UI.csproj", "XblApp.UI/"]
-COPY ["XblApp.Application/XblApp.Application.csproj", "XblApp.Application/"]
-COPY ["XblApp.Infrastructure/XblApp.Infrastructure.csproj", "XblApp.Infrastructure/"]
-COPY ["XblApp.Domain/XblApp.Domain.csproj", "XblApp.Domain/"]
-COPY ["XblApp.Shared/XblApp.Shared.csproj", "XblApp.Shared/"]
+# Копируем всё сразу
+COPY . .
 # Восстанавливаем зависимости
 RUN dotnet restore "XboxLiveApiCsharp.sln"
 # Копируем остальные исходники
