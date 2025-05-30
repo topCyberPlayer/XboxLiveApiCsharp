@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
-using XblApp.Database.Seeding;
 using XblApp.Domain.Entities;
 using XblApp.Domain.JsonModels;
 

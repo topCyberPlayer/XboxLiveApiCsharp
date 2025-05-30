@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
-using XblApp.Database.Seeding;
-using XblApp.Domain.Entities;
 using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Test.UseInMemoryDatabase

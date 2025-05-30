@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace XblApp.Database.Seeding
+namespace XblApp.Database.Test
 {
     public static class JsonLoader<TJson>
     {
@@ -8,8 +8,8 @@ namespace XblApp.Database.Seeding
         {
             string filePath = GetJsonFilePath(fileDir, fileSearchString);
             string jsonContent = File.ReadAllText(filePath);
-            
-            TJson jsonDecoded = JsonSerializer.Deserialize<TJson>(jsonContent);
+
+            TJson? jsonDecoded = JsonSerializer.Deserialize<TJson>(jsonContent);
 
             return jsonDecoded;
         }

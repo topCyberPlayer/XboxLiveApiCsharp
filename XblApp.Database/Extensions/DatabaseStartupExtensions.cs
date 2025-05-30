@@ -1,11 +1,39 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using XblApp.Database.Contexts;
 using XblApp.Database.Models;
 
-namespace XblApp.Database.Seeding
+namespace XblApp.Database.Extensions
 {
-    public static class SeedingLogic
+    public static class DatabaseStartupExtensions
     {
+        public static async Task<WebApplication> SetupApplicationDatabaseAsync(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            IServiceProvider services = scope.ServiceProvider;
+
+            XblAppDbContext context = services.GetRequiredService<XblAppDbContext>();
+            UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+            try
+            {
+                if (context.Database.GetPendingMigrations().Any()) { }
+                    await context.Database.MigrateAsync();
+
+                //await context.SeedDbDefaultUserAsync(userManager);
+                //await context.SeedDbGamersAndGamesAsync();
+            }
+            catch (Exception ex)
+            {
+                // логгирование
+                throw;
+            }
+
+            return app;
+        }
+
         public static async Task SeedDbDefaultUserAsync(this XblAppDbContext context, UserManager<ApplicationUser> userManager)
         {
             if (!context.Users.Any())
@@ -19,7 +47,7 @@ namespace XblApp.Database.Seeding
 
                 string? password = "Biba#Boba34";
 
-                var result = await userManager.CreateAsync(user, password);
+                IdentityResult result = await userManager.CreateAsync(user, password);
                 if (!result.Succeeded)
                     throw new Exception(result.Errors.First().Description);
 
@@ -41,4 +69,5 @@ namespace XblApp.Database.Seeding
             }
         }
     }
+
 }
