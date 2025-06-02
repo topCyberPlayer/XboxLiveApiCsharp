@@ -25,18 +25,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        @* @if (User.Identity.IsAuthenticated == true)
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Game/Index">Games</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated == true && User.IsInRole("adminTeam"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Auth/XblLogin">Xbl Login</a>
                             </li>
-                        } *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Game/Index">Games</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Donor">Admin Page</a>
-                        </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
