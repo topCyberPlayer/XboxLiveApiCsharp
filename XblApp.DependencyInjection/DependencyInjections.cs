@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -78,6 +79,21 @@ namespace XblApp.DependencyInjection
             return services;
         }
     }
+
+    public static class ConfigurationExtensions
+    {
+        public static WebApplicationBuilder ConfigureAppConfiguration(this WebApplicationBuilder builder)
+        {
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            return builder;
+        }
+    }
+
 
     public static class HttpClientExtensions
     {

@@ -8,30 +8,18 @@ namespace XblApp
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            builder.Configuration
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-            .AddEnvironmentVariables(); // ← важно для docker-compose
-
-            builder.Services
-            .AddInfrastructure(builder.Configuration)
-            .AddApplicationDatabase(builder.Configuration)
-            .AddApplicationIdentity();
-
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-            });
-
-            builder.Services.AddRazorPages(); // специфично для Razor
+            builder.ConfigureAppConfiguration();
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApplicationDatabase(builder.Configuration);
+            builder.Services.AddApplicationIdentity();
+            builder.Services.ConfigureCookieAuthentication();
+            builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
-            WebApplication? app = builder.Build();
 
+            WebApplication? app = builder.Build();
             await app.SetupApplicationDatabaseAsync();
             app.ConfigureMiddleware();
+            
             app.MapRazorPages();
 
             app.Run();
@@ -65,5 +53,19 @@ namespace XblApp
         }
     }
 
-    
+    public static class CookieAuthenticationExtensions
+    {
+        public static IServiceCollection ConfigureCookieAuthentication(this IServiceCollection services)
+        {
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
+
+            return services;
+        }
+    }
+
+
 }
