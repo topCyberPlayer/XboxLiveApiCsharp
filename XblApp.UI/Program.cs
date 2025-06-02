@@ -20,6 +20,12 @@ namespace XblApp
             .AddApplicationDatabase(builder.Configuration)
             .AddApplicationIdentity();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
+
             builder.Services.AddRazorPages(); // специфично для Razor
             builder.Services.AddHttpContextAccessor();
             WebApplication? app = builder.Build();
