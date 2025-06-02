@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ namespace XblApp.DependencyInjection
         {
             services.Configure<AuthenticationConfig>(configuration.GetSection("Authentication:Microsoft"));
             services.AddHttpClientsFromConfig(configuration);
+
+            services.AddSingleton<IEmailSender, XboxLiveService.NoOpEmailSender>();
 
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IGamerRepository, GamerRepository>();
