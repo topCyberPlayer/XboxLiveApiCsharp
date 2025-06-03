@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace XblApp.XboxLiveService
 {
-    public class NoOpEmailSender : IEmailSender
+    public class EmailSenderService : IEmailSender
     {
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
