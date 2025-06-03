@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 
-namespace XblApp.XboxLiveService.XboxLiveServices
+namespace XblApp.XboxLiveService
 {
     public abstract class BaseService
     {

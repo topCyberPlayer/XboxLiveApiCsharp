@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Json;
 
-namespace XblApp.XboxLiveService.XboxLiveServices.AchievementServices
+namespace XblApp.XboxLiveService.AchievementServices
 {
     public abstract class BaseAchievementService<TAchivoJson, KAchivosInnerJson>
     where TAchivoJson : class, new()

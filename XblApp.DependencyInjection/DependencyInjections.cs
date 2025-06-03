@@ -13,8 +13,7 @@ using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 using XblApp.XboxLiveService;
-using XblApp.XboxLiveService.XboxLiveServices;
-using XblApp.XboxLiveService.XboxLiveServices.AchievementServices;
+using XblApp.XboxLiveService.AchievementServices;
 
 namespace XblApp.DependencyInjection
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 
-namespace XblApp.XboxLiveService.XboxLiveServices
+namespace XblApp.XboxLiveService
 {
     public class GamerService : BaseService, IXboxLiveGamerService
     {

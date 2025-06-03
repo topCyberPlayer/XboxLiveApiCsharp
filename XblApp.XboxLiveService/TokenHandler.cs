@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using XblApp.Application.XboxLiveUseCases;
 
-namespace XblApp.XboxLiveService.XboxLiveServices
+namespace XblApp.XboxLiveService
 {
     public class TokenHandler : DelegatingHandler
     {
