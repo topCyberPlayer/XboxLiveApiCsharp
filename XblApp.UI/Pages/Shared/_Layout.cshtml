@@ -28,10 +28,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Game/Index">Games</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated == true && User.IsInRole("adminTeam"))
+                        @if (User.IsInRole("adminTeam"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Auth/XblLogin">Xbl Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Donor">Admin Page</a>
                             </li>
                         }
                     </ul>
