@@ -1,40 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using XblApp.Database.Contexts;
 using XblApp.Domain.Interfaces;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService.Tests
 {
-    public class RegisterUserServiceTest : IClassFixture<WebApplicationFactory<Program>>
+    public class UserServiceTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
 
-        public RegisterUserServiceTest(WebApplicationFactory<Program> factory)
+        public UserServiceTest(WebApplicationFactory<Program> factory)
         {
             _factory = factory.WithWebHostBuilder(builder =>
             {
-                builder.ConfigureAppConfiguration((_, config) =>
-                {
-                    config.AddInMemoryCollection(new Dictionary<string, string>
-                    {
-                        ["Database:useNoSqlDb"] = "true"
-                    });
-                });
-
                 builder.ConfigureServices(services =>
                 {
                     services.AddScoped<IXboxLiveGamerService, XboxLiveGamerServiceMock>();
-
-                    services.RemoveAll(typeof(DbContextOptions<XblAppDbContext>));
-                    services.AddDbContext<XblAppDbContext>(options =>
-                    {
-                        options.UseInMemoryDatabase("TestDatabase");
-                    });
                 });
             });
         }

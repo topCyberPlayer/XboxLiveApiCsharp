@@ -64,6 +64,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Presentation", "5_Present
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.InternalService", "XblApp.InternalService\XblApp.InternalService.csproj", "{22CB7909-04A4-4D41-854F-20656E2C5D19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.InternalService.Test", "XblApp.InternalService.Test\XblApp.InternalService.Test.csproj", "{7684CB56-F25B-4DD8-8E67-ACBA5F22E089}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{22CB7909-04A4-4D41-854F-20656E2C5D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22CB7909-04A4-4D41-854F-20656E2C5D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22CB7909-04A4-4D41-854F-20656E2C5D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7684CB56-F25B-4DD8-8E67-ACBA5F22E089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7684CB56-F25B-4DD8-8E67-ACBA5F22E089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7684CB56-F25B-4DD8-8E67-ACBA5F22E089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7684CB56-F25B-4DD8-8E67-ACBA5F22E089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +145,7 @@ Global
 		{8339787D-8564-499B-1C21-DB636C151380} = {126EC8D9-DEED-44BA-8171-D06DFCF925A5}
 		{41F0D27D-2C55-637F-0F3D-3ECFD3C960A9} = {A57CFBC4-B7C0-44CD-8942-7691237C78A4}
 		{22CB7909-04A4-4D41-854F-20656E2C5D19} = {A57CFBC4-B7C0-44CD-8942-7691237C78A4}
+		{7684CB56-F25B-4DD8-8E67-ACBA5F22E089} = {0EA4845B-BB0B-481A-98EB-D0884A20F962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C99C6295-7845-4FA6-BC67-9CEAB2C21C23}
