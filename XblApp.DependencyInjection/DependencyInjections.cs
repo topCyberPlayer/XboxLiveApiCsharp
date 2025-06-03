@@ -24,7 +24,7 @@ namespace XblApp.DependencyInjection
             services.Configure<AuthenticationConfig>(configuration.GetSection("Authentication:Microsoft"));
             services.AddHttpClientsFromConfig(configuration);
 
-            services.AddSingleton<IEmailSender, XboxLiveService.NoOpEmailSender>();
+            services.AddSingleton<IEmailSender, EmailSenderService>();
 
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IGamerRepository, GamerRepository>();

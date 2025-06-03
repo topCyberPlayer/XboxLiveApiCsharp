@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\XblApp.Database\XblApp.Database.csproj" />
     <ProjectReference Include="..\XblApp.Domain\XblApp.Domain.csproj" />
+    <ProjectReference Include="..\XblApp.InternalService\XblApp.InternalService.csproj" />
     <ProjectReference Include="..\XblApp.XboxLiveService\XblApp.XboxLiveService.csproj" />
   </ItemGroup>
 
