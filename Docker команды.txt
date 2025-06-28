@@ -6,4 +6,6 @@ docker run -d -p 5000:80 --name <имя_контейнера> <имя_образ
 docker run -d -p 5005:8085 --name xbox-web-container xbox-web-app
 ----------------------------------------------------------------------------------------------------
 Если есть docker-compose.yml:
-docker-compose up --build -d
+В Докер открываем терминал (правый нижний угол) -> запускается Powershell
+В Powershell меняем директорию на нужную: cd C:\Users\ton4i\source\repos\XboxLiveApiCsharp
+Запускаем команду: docker-compose up --build -d
