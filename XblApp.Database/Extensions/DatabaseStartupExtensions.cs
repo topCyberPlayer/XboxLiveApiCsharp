@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using XblApp.Database.Contexts;
 using XblApp.Database.Models;
+using XblApp.Domain.Entities;
 
 namespace XblApp.Database.Extensions
 {
@@ -19,10 +20,10 @@ namespace XblApp.Database.Extensions
 
             try
             {
-                if (context.Database.GetPendingMigrations().Any()) { }
+                if (context.Database.GetPendingMigrations().Any())
                     await context.Database.MigrateAsync();
 
-                //await context.SeedDbDefaultUserAsync(userManager);
+                await context.SeedDbDefaultUserAsync(userManager);
                 //await context.SeedDbGamersAndGamesAsync();
             }
             catch (Exception ex)
@@ -59,13 +60,30 @@ namespace XblApp.Database.Extensions
         {
             if (!context.Games.Any() && !context.Gamers.Any())
             {
-                //List<Game> games = GameJsonLoader.LoadGames("Seeding\\seedData", "Games.json").ToList();
-                //await context.Games.AddRangeAsync(games);
+                Gamer gamer1 = new()
+                {
 
-                //List<Gamer> gamers = GamerJsonLoader.LoadGamers("Seeding\\seedData", "Gamers.json").ToList();
-                //await context.Gamers.AddRangeAsync(gamers);
+                };
 
-                //await context.SaveChangesAsync();
+                Gamer gamer2 = new()
+                {
+
+                };
+
+                List<Game> games = new List<Game>()
+                {
+                    new Game()
+                    {
+                        
+                    },
+                    new Game()
+                    {
+                        
+                    }
+                };
+                await context.Games.AddRangeAsync(games);
+
+                await context.SaveChangesAsync();
             }
         }
     }
