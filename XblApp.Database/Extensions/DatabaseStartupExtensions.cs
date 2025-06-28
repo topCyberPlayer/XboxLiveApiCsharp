@@ -20,10 +20,10 @@ namespace XblApp.Database.Extensions
 
             try
             {
-                if (context.Database.GetPendingMigrations().Any())
-                    await context.Database.MigrateAsync();
+                //if (context.Database.GetPendingMigrations().Any())
+                //    await context.Database.MigrateAsync();
 
-                await context.SeedDbDefaultUserAsync(userManager);
+                //await context.SeedDbDefaultUserAsync(userManager);
                 //await context.SeedDbGamersAndGamesAsync();
             }
             catch (Exception ex)

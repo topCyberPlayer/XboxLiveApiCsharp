@@ -29,8 +29,8 @@ namespace XblApp.API
             }
 
             app.UseAuthorization();
-            app.MapUsersEndpoints();
-            await app.SetupApplicationDatabaseAsync();
+            //app.MapUsersEndpoints();
+            //await app.SetupApplicationDatabaseAsync();
             app.MapControllers();
 
             app.Run();
