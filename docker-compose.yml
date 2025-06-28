@@ -1,12 +1,11 @@
 services:
   xblapp.ui:
-    image: xbl-service-image:latest
     build:
       context: .
       dockerfile: XblApp.UI\Dockerfile
     ports:
-    - "5000:80"
-    container_name: xbox-web-container
+    - "5001:80"
+    container_name: xblapp-ui
     environment:
     - ASPNETCORE_ENVIRONMENT=Docker
     - ASPNETCORE_URLS=http://+:80
@@ -17,6 +16,23 @@ services:
     - sqlserver
     volumes:
     - dataprotection:/root/.aspnet/DataProtection-Keys
+
+
+  xblapp.api:
+    build:
+      context: .
+      dockerfile: XblApp.API\Dockerfile
+    ports:
+    - "5002:80"
+    container_name: xblapp-api
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Docker
+    - ASPNETCORE_URLS=http://+:80
+    networks:
+    - productnetwork
+    #restart: on-failure 
+    depends_on:
+    - sqlserver
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
