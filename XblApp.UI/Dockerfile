@@ -1,30 +1,36 @@
-# Используем базовый образ для ASP.NET Core
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Используем SDK образ для сборки проекта
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+
+# This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Копируем всё сразу
-COPY . .
-# Восстанавливаем зависимости
-RUN dotnet restore "XboxLiveApiCsharp.sln"
-# Копируем остальные исходники
-COPY . .
-# Сборка всех проектов
-WORKDIR "/src/XblApp.UI"
-RUN dotnet build "XblApp.UI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY ["XblApp.UI/XblApp.UI.csproj", "XblApp.UI/"]
+COPY ["XblApp.Application/XblApp.Application.csproj", "XblApp.Application/"]
+COPY ["XblApp.Domain/XblApp.Domain.csproj", "XblApp.Domain/"]
+COPY ["XblApp.DependencyInjection/XblApp.DependencyInjection.csproj", "XblApp.DependencyInjection/"]
+COPY ["XblApp.Database/XblApp.Database.csproj", "XblApp.Database/"]
+COPY ["XblApp.DTO/XblApp.DTO.csproj", "XblApp.DTO/"]
+COPY ["XblApp.InternalService/XblApp.InternalService.csproj", "XblApp.InternalService/"]
+COPY ["XblApp.XboxLiveService/XblApp.XboxLiveService.csproj", "XblApp.XboxLiveService/"]
+RUN dotnet restore "./XblApp.UI/XblApp.UI.csproj"
 
-# Публикация
+COPY . .
+
+WORKDIR "/src/XblApp.UI"
+RUN dotnet build "./XblApp.UI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "XblApp.UI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./XblApp.UI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Финальный образ
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
