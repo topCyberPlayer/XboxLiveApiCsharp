@@ -4,11 +4,10 @@ services:
       context: .
       dockerfile: XblApp.UI\Dockerfile
     ports:
-    - "5001:80"
+    - "5001:8080"
     container_name: xblapp-ui
     environment:
     - ASPNETCORE_ENVIRONMENT=Docker
-    - ASPNETCORE_URLS=http://+:80
     networks:
     - productnetwork
     #restart: on-failure 
@@ -23,11 +22,10 @@ services:
       context: .
       dockerfile: XblApp.API\Dockerfile
     ports:
-    - "5002:80"
+    - "5002:8080"
     container_name: xblapp-api
     environment:
     - ASPNETCORE_ENVIRONMENT=Docker
-    - ASPNETCORE_URLS=http://+:80
     networks:
     - productnetwork
     #restart: on-failure 
@@ -50,5 +48,5 @@ networks:
     productnetwork:
   
 volumes:
-  sqlvolume:  
+  sqlvolume:    
   dataprotection:
