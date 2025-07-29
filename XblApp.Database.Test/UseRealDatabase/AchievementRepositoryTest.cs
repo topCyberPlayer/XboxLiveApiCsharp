@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
+using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
-using XblApp.DTO;
 
 namespace XblApp.Database.Test.UseRealDatabase
 {

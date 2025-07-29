@@ -1,6 +1,6 @@
 ﻿using XblApp.Domain.Entities;
 
-namespace XblApp.DTO
+namespace XblApp.Domain.DTO
 {
     /// <summary>
     /// Представление для игры вне зависимости от игрока

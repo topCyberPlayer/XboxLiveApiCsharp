@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XblApp.Application.XboxLiveUseCases;
+using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
-using XblApp.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

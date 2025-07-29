@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XblApp.Application.XboxLiveUseCases;
+using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
-using XblApp.DTO;
 
 namespace XblApp.API.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using XblApp.Domain.Entities;
 
-namespace XblApp.DTO
+namespace XblApp.Domain.DTO
 {
     public class AchievementDTO : GameDTO
     {

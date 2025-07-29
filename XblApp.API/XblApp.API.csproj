@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
     <ProjectReference Include="..\XblApp.DependencyInjection\XblApp.DependencyInjection.csproj" />
-    <ProjectReference Include="..\XblApp.DTO\XblApp.DTO.csproj" />
   </ItemGroup>
 
 </Project>
