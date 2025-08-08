@@ -1,3 +1,4 @@
+using XblApp.Application;
 using XblApp.DependencyInjection;
 
 namespace XblApp.API
@@ -20,6 +21,8 @@ namespace XblApp.API
             .AddInfrastructureServices(builder.Configuration)
             .AddApplicationDatabase(builder.Configuration)
             .AddApplicationIdentity();
+
+            builder.AddApplicationUseCases();
             builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
