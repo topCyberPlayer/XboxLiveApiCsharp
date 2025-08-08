@@ -9,7 +9,7 @@ namespace XblApp
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.ConfigureAppConfiguration();
-            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationDatabase(builder.Configuration);
             builder.Services.AddApplicationIdentity();
             builder.Services.ConfigureCookieAuthentication();

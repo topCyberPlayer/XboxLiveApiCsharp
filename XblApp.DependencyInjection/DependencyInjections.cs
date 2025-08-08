@@ -19,7 +19,7 @@ namespace XblApp.DependencyInjection
 {
     public static partial class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AuthenticationConfig>(configuration.GetSection("Authentication:Microsoft"));
             services.AddHttpClientsFromConfig(configuration);

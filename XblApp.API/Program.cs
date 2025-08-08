@@ -1,12 +1,10 @@
-using XblApp.API.Endpoints;
 using XblApp.DependencyInjection;
-using XblApp.Database.Extensions;
 
 namespace XblApp.API
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +16,12 @@ namespace XblApp.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.RegisterApplicationServices();
+            builder.Services
+            .AddInfrastructureServices(builder.Configuration)
+            .AddApplicationDatabase(builder.Configuration)
+            .AddApplicationIdentity();
+            builder.Services.AddHttpContextAccessor();
+
             var app = builder.Build();
 
             app.UseSwagger();
@@ -32,19 +35,4 @@ namespace XblApp.API
             app.Run();
         }
     }
-    public static partial class ServiceInitializer
-    {
-        public static WebApplicationBuilder RegisterApplicationServices(this WebApplicationBuilder builder)
-        {
-            builder.Services
-            .AddInfrastructure(builder.Configuration)
-            .AddApplicationDatabase(builder.Configuration)
-            .AddApplicationIdentity();
-
-            builder.Services.AddHttpContextAccessor();
-
-            return builder;
-        }
-    }
-
 }
