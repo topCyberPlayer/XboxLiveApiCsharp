@@ -39,12 +39,15 @@ namespace XblApp.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHealthChecks();
 
             WebApplication? app = builder.Build();
 
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseAuthorization();
+
+            app.MapHealthChecks("/isAlive");
             app.MapControllers();
 
             app.Run();
