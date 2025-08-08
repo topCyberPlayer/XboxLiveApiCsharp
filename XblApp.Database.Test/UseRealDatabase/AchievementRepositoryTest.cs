@@ -4,6 +4,7 @@ using XblApp.Database.Contexts;
 using XblApp.Database.Repositories;
 using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
+using XblApp.UI;
 
 namespace XblApp.Database.Test.UseRealDatabase
 {

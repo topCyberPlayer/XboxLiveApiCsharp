@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XblApp.Application.XboxLiveUseCases;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.UI;
 
 namespace XblApp.Application.Test
 {

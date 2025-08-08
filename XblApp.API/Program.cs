@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using XblApp.Application;
-using XblApp.DependencyInjection;
+using XblApp.Database;
+using XblApp.Database.Contexts;
+using XblApp.Database.Models;
+using XblApp.InternalService;
+using XblApp.XboxLiveService;
 
 namespace XblApp.API
 {
@@ -8,31 +13,38 @@ namespace XblApp.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
-            // Add services to the container.
-            builder.Services.AddAuthorization();
-            builder.Services.AddControllers();
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.AddApplicationServices();
+            builder.AddInfrastructureRepositoryServices();
+            builder.AddInfrastructureInternalServices();
+            builder.AddInfrastructureXblServices();
 
             builder.Services
-            .AddInfrastructureServices(builder.Configuration)
-            .AddApplicationDatabase(builder.Configuration)
-            .AddApplicationIdentity();
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<XblAppDbContext>()
+                .AddDefaultTokenProviders();
 
-            builder.AddApplicationUseCases();
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
 
-            var app = builder.Build();
+            WebApplication? app = builder.Build();
 
             app.UseSwagger();
             app.UseSwaggerUI();
-
             app.UseAuthorization();
-            //app.MapUsersEndpoints();
-            //await app.SetupApplicationDatabaseAsync();
             app.MapControllers();
 
             app.Run();

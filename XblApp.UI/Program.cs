@@ -1,27 +1,47 @@
-using XblApp.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using XblApp.Application;
+using XblApp.Database;
+using XblApp.Database.Contexts;
 using XblApp.Database.Extensions;
+using XblApp.Database.Models;
+using XblApp.InternalService;
+using XblApp.XboxLiveService;
 
-namespace XblApp
+namespace XblApp.UI
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.ConfigureAppConfiguration();
-            builder.Services.AddInfrastructureServices(builder.Configuration);
-            builder.Services.AddApplicationDatabase(builder.Configuration);
-            builder.Services.AddApplicationIdentity();
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            builder.AddApplicationServices();
+            builder.AddInfrastructureRepositoryServices();
+            builder.AddInfrastructureInternalServices();
+            builder.AddInfrastructureXblServices();
+
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<XblAppDbContext>()
+                .AddDefaultTokenProviders();
+
             builder.Services.ConfigureCookieAuthentication();
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
             WebApplication? app = builder.Build();
-            await app.SetupApplicationDatabaseAsync();
-            app.ConfigureMiddleware();
             
+            app.ConfigureMiddleware();
             app.MapRazorPages();
-
             app.Run();
         }
     }

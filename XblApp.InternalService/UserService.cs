@@ -5,7 +5,7 @@ using XblApp.Domain.Interfaces;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
 
-namespace XblApp.XboxLiveService
+namespace XblApp.InternalService
 {
     public class UserService : IUserService
     {

@@ -7,7 +7,7 @@ namespace XblApp.Application
 {
     public static class DependencyInjection
     {
-        public static void AddApplicationUseCases(this IHostApplicationBuilder builder)
+        public static void AddApplicationServices(this IHostApplicationBuilder builder)
         {
             builder.Services.AddScoped<UserUseCase>();
             builder.Services.AddScoped<AuthenticationUseCase>();
