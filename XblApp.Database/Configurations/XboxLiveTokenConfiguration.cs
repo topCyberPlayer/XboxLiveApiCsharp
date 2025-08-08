@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using XblApp.Domain.Entities;
+using XblApp.Domain.Entities.XblAuth;
 
 namespace XblApp.Database.Configurations
 {

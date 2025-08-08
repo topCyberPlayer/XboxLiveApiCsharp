@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Configurations;
 using XblApp.Database.Models;
 using XblApp.Domain.Entities;
+using XblApp.Domain.Entities.XblAuth;
 
 namespace XblApp.Database.Contexts
 {

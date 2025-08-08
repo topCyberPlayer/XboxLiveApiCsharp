@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using XblApp.Database.Contexts;
-using XblApp.Domain.Entities;
+using XblApp.Domain.Entities.JsonModels;
+using XblApp.Domain.Entities.XblAuth;
 using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Domain.JsonModels;
 
 namespace XblApp.Database.Repositories
 {

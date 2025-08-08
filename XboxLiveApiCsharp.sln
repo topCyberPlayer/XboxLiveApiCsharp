@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Domain", "1_Domain", "{EF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Domain", "XblApp.Domain\XblApp.Domain.csproj", "{88B53746-194E-4324-A080-96AE0C870025}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Use_Cases", "2_Use_Cases", "{5C5CBEE3-AD91-4D8C-9140-0C729D1F06BF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Application", "2_Application", "{5C5CBEE3-AD91-4D8C-9140-0C729D1F06BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.Application", "XblApp.Application\XblApp.Application.csproj", "{79A0669A-21E5-4C88-AEA5-6E52D47219C7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Infrastructure", "4_Infrastructure", "{A57CFBC4-B7C0-44CD-8942-7691237C78A4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Infrastructure", "3_Infrastructure", "{A57CFBC4-B7C0-44CD-8942-7691237C78A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XblApp.UI", "XblApp.UI\XblApp.UI.csproj", "{6DE479C1-FD8B-4BC4-8D1A-75ABDBD4147B}"
 EndProject
@@ -56,7 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.Database", "XblApp.Database\XblApp.Database.csproj", "{41F0D27D-2C55-637F-0F3D-3ECFD3C960A9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Presentation", "5_Presentation", "{B7B8A544-330C-4646-80E4-D6151C9123CE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Presentation", "4_Presentation", "{B7B8A544-330C-4646-80E4-D6151C9123CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.InternalService", "XblApp.InternalService\XblApp.InternalService.csproj", "{22CB7909-04A4-4D41-854F-20656E2C5D19}"
 EndProject

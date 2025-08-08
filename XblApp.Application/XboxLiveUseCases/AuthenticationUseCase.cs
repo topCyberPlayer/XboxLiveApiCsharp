@@ -1,7 +1,7 @@
-﻿using XblApp.Domain.Entities;
+﻿using XblApp.Domain.Entities.JsonModels;
+using XblApp.Domain.Entities.XblAuth;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.JsonModels;
 
 namespace XblApp.Application.XboxLiveUseCases
 {

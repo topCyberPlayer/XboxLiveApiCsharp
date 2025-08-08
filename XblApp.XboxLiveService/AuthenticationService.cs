@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using XblApp.Domain.Entities;
+using XblApp.Domain.Entities.JsonModels;
+using XblApp.Domain.Entities.XblAuth;
 using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.JsonModels;
 
 namespace XblApp.XboxLiveService
 {

@@ -1,5 +1,5 @@
-﻿using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.JsonModels;
+﻿using XblApp.Domain.Entities.JsonModels;
+using XblApp.Domain.Interfaces.IXboxLiveService;
 
 namespace XblApp.XboxLiveService
 {

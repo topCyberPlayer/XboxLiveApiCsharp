@@ -8,10 +8,10 @@ using XblApp.Application.XboxLiveUseCases;
 using XblApp.Database.Contexts;
 using XblApp.Database.Models;
 using XblApp.Database.Repositories;
+using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.JsonModels;
 using XblApp.XboxLiveService;
 using XblApp.XboxLiveService.AchievementServices;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using XblApp.Application.XboxLiveUseCases;
-using XblApp.Domain.JsonModels;
+using XblApp.Domain.Entities.JsonModels;
 
 namespace XblApp.Application.Test
 {

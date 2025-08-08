@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Entities
+﻿namespace XblApp.Domain.Entities.XblAuth
 {
     /// <summary>
     /// 2-й токен. Живет 4 дня
