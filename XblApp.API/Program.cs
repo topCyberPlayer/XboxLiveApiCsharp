@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using XblApp.Application;
-using XblApp.Database;
-using XblApp.Database.Contexts;
-using XblApp.Database.Models;
+using XblApp.Infrastructure;
+using XblApp.Infrastructure.Contexts;
+using XblApp.Infrastructure.Models;
 using XblApp.InternalService;
 using XblApp.XboxLiveService;
 

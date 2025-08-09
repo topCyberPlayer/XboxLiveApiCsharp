@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XblApp.Database\XblApp.Database.csproj" />
+    <ProjectReference Include="..\XblApp.Infrastructure\XblApp.Infrastructure.csproj" />
     <ProjectReference Include="..\XblApp.UI\XblApp.UI.csproj" />
   </ItemGroup>
 

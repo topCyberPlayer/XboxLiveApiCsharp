@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using XblApp.Application;
-using XblApp.Database;
-using XblApp.Database.Contexts;
-using XblApp.Database.Extensions;
-using XblApp.Database.Models;
+using XblApp.Infrastructure;
+using XblApp.Infrastructure.Contexts;
+using XblApp.Infrastructure.Models;
 using XblApp.InternalService;
 using XblApp.XboxLiveService;
 
@@ -11,7 +10,7 @@ namespace XblApp.UI
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Configuration
@@ -39,7 +38,7 @@ namespace XblApp.UI
             builder.Services.AddHttpContextAccessor();
 
             WebApplication? app = builder.Build();
-            
+
             app.ConfigureMiddleware();
             app.MapRazorPages();
             app.Run();

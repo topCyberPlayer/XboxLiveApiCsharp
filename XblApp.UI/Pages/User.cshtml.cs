@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using XblApp.Application.XboxLiveUseCases;
-using XblApp.Database.Models;
+using XblApp.Infrastructure.Models;
 using XblApp.Domain.DTO;
 
 namespace XblApp.UI.Pages

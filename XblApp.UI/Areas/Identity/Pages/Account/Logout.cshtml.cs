@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using XblApp.Database.Models;
+using XblApp.Infrastructure.Models;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {

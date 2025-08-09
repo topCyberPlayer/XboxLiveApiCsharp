@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using XblApp.Database.Models;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Infrastructure.Models;
 
 namespace XblApp.InternalService
 {

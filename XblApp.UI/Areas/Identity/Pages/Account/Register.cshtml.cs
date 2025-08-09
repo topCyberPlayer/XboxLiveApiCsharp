@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using XblApp.Database.Models;
+using XblApp.Infrastructure.Models;
 using XblApp.Domain.Interfaces;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
