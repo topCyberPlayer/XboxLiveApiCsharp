@@ -4,9 +4,9 @@ namespace XblApp.Infrastructure.Repositories
 {
     public class BaseRepository
     {
-        internal readonly XblAppDbContext context;
+        internal readonly ApplicationDbContext context;
 
-        public BaseRepository(XblAppDbContext context)
+        public BaseRepository(ApplicationDbContext context)
         {
             this.context = context;
         }

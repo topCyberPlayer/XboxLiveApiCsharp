@@ -8,7 +8,7 @@ namespace XblApp.Infrastructure.Repositories
 {
     public class GamerRepository : BaseRepository, IGamerRepository
     {
-        public GamerRepository(XblAppDbContext context) : base(context) { }
+        public GamerRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<Gamer> GetGamerProfileAsync(long id) =>
             await context.Gamers

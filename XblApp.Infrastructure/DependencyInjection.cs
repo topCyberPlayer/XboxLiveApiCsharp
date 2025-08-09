@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XblApp.Infrastructure.Contexts;
-using XblApp.Infrastructure.Repositories;
 using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Infrastructure.Contexts;
+using XblApp.Infrastructure.Models;
+using XblApp.Infrastructure.Repositories;
 
 namespace XblApp.Infrastructure
 {
@@ -12,12 +14,21 @@ namespace XblApp.Infrastructure
     {
         public static void AddInfrastructureRepositoryServices(this IHostApplicationBuilder builder)
         {
-            string? connectionString = builder.Configuration.GetConnectionString("MsSqlConnection");
+            string? connectionString = builder.Configuration.GetConnectionString("SqlConnection");
 
-            builder.Services.AddDbContext<XblAppDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(connectionString);
             });
+
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();

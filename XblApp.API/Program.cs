@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using XblApp.Application;
 using XblApp.Infrastructure;
-using XblApp.Infrastructure.Contexts;
-using XblApp.Infrastructure.Models;
 using XblApp.InternalService;
 using XblApp.XboxLiveService;
 
@@ -24,15 +21,6 @@ namespace XblApp.API
             builder.AddInfrastructureRepositoryServices();
             builder.AddInfrastructureInternalServices();
             builder.AddInfrastructureXblServices();
-
-            builder.Services
-                .AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.User.RequireUniqueEmail = true;
-                })
-                .AddEntityFrameworkStores<XblAppDbContext>()
-                .AddDefaultTokenProviders();
 
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();

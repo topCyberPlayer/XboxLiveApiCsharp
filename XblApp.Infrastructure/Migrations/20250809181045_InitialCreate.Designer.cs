@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using XblApp.Infrastructure.Contexts;
 
 #nullable disable
 
 namespace XblApp.Infrastructure.Migrations
 {
-    [DbContext(typeof(XblAppDbContext))]
-    [Migration("20250225091424_RebuildXboxTokens")]
-    partial class RebuildXboxTokens
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20250809181045_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,54 +21,53 @@ namespace XblApp.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = "c7e1ddaf-ff12-48e9-b8fb-b2c08a47158e",
+                            Id = "3fc2f4d6-667a-4641-9076-d623d2b39b0e",
                             Name = "adminTeam",
-                            NormalizedName = "adminteam"
+                            NormalizedName = "ADMINTEAM"
                         },
                         new
                         {
-                            Id = "2df76980-9583-4b62-b381-00ea350c5787",
+                            Id = "218be8dd-1635-48f7-8c89-237d710d21d1",
                             Name = "gamerTeam",
-                            NormalizedName = "gamerteam"
+                            NormalizedName = "GAMERTEAM"
                         },
                         new
                         {
-                            Id = "7fda2af7-a5c2-48a1-8d82-8fa3804a9efa",
+                            Id = "e861ffaf-8411-43b4-b60d-ec8a9fb4b3e0",
                             Name = "moderatorTeam",
-                            NormalizedName = "moderatorteam"
+                            NormalizedName = "MODERATORTEAM"
                         });
                 });
 
@@ -76,19 +75,19 @@ namespace XblApp.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -101,19 +100,19 @@ namespace XblApp.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -125,19 +124,17 @@ namespace XblApp.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -149,10 +146,10 @@ namespace XblApp.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -164,90 +161,20 @@ namespace XblApp.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("XblApp.Database.Models.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
@@ -255,29 +182,30 @@ namespace XblApp.Infrastructure.Migrations
                     b.Property<long>("AchievementId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("DateUnlock")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<long>("GameId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("Gamerscore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("IsSecret")
-                        .HasColumnType("bit");
+                    b.Property<bool?>("IsSecret")
+                        .IsRequired()
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LockedDescription")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("character varying(150)");
 
-                    b.HasKey("AchievementId");
+                    b.HasKey("AchievementId", "GameId");
 
                     b.HasIndex("GameId");
 
@@ -289,16 +217,22 @@ namespace XblApp.Infrastructure.Migrations
                     b.Property<long>("GameId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<string>("GameName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateOnly?>("ReleaseDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("TotalAchievements")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("TotalGamerscore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("GameId");
 
@@ -312,23 +246,23 @@ namespace XblApp.Infrastructure.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Bio")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("Gamerscore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Gamertag")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Location")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("GamerId");
 
@@ -343,17 +277,25 @@ namespace XblApp.Infrastructure.Migrations
                     b.Property<long>("GamerId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("AchievementId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DateUnlocked")
+                    b.Property<DateTime?>("DateUnlocked")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("GamerId", "AchievementId");
+                    b.Property<bool>("IsUnlocked")
+                        .HasColumnType("boolean");
 
-                    b.HasIndex("AchievementId");
+                    b.HasKey("GamerId", "GameId", "AchievementId");
 
-                    b.ToTable("GamerAchievement");
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("AchievementId", "GameId");
+
+                    b.ToTable("GamerAchievements");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
@@ -365,10 +307,13 @@ namespace XblApp.Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("CurrentAchievements")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("CurrentGamerscore")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("LastTimePlayed")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("GamerId", "GameId");
 
@@ -377,105 +322,172 @@ namespace XblApp.Infrastructure.Migrations
                     b.ToTable("GamerGame");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxLiveToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxAuthToken", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AccessToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AuthenticationToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateOfExpiry")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateOfIssue")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ExpiresIn")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Scope")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TokenType")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("XboxOAuthTokens");
+                });
+
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxXauToken", b =>
                 {
                     b.Property<string>("UhsId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("IssueInstant")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("NotAfter")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserIdFK")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UhsId");
 
                     b.HasIndex("UserIdFK")
                         .IsUnique();
 
-                    b.ToTable("XauTokens");
+                    b.ToTable("XboxLiveTokens");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxOAuthToken", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccessToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AuthenticationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateOfExpiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfIssue")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ExpiresIn")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Scope")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TokenType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("OAuthTokens");
-                });
-
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxUserToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxXstsToken", b =>
                 {
                     b.Property<string>("Xuid")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("AgeGroup")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Gamertag")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("IssueInstant")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("NotAfter")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Privileges")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UhsIdFK")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserPrivileges")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Userhash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Xuid");
 
                     b.HasIndex("UhsIdFK")
                         .IsUnique();
 
-                    b.ToTable("XstsTokens");
+                    b.ToTable("XboxUserTokens");
+                });
+
+            modelBuilder.Entity("XblApp.Infrastructure.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -489,7 +501,7 @@ namespace XblApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                    b.HasOne("XblApp.Infrastructure.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -498,7 +510,7 @@ namespace XblApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                    b.HasOne("XblApp.Infrastructure.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -513,7 +525,7 @@ namespace XblApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                    b.HasOne("XblApp.Infrastructure.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -522,7 +534,7 @@ namespace XblApp.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                    b.HasOne("XblApp.Infrastructure.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -542,7 +554,7 @@ namespace XblApp.Infrastructure.Migrations
 
             modelBuilder.Entity("XblApp.Domain.Entities.Gamer", b =>
                 {
-                    b.HasOne("XblApp.Database.Models.ApplicationUser", null)
+                    b.HasOne("XblApp.Infrastructure.Models.ApplicationUser", null)
                         .WithOne()
                         .HasForeignKey("XblApp.Domain.Entities.Gamer", "ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -551,19 +563,27 @@ namespace XblApp.Infrastructure.Migrations
 
             modelBuilder.Entity("XblApp.Domain.Entities.GamerAchievement", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.Achievement", "AchievementLink")
-                        .WithMany("GamerLinks")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("XblApp.Domain.Entities.Game", "GameLink")
+                        .WithMany("GamerAchievementLinks")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("XblApp.Domain.Entities.Gamer", "GamerLink")
-                        .WithMany("AchievementLinks")
+                        .WithMany("GamerAchievementLinks")
                         .HasForeignKey("GamerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("XblApp.Domain.Entities.Achievement", "AchievementLink")
+                        .WithMany("GamerAchievementLinks")
+                        .HasForeignKey("AchievementId", "GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AchievementLink");
+
+                    b.Navigation("GameLink");
 
                     b.Navigation("GamerLink");
                 });
@@ -571,13 +591,13 @@ namespace XblApp.Infrastructure.Migrations
             modelBuilder.Entity("XblApp.Domain.Entities.GamerGame", b =>
                 {
                     b.HasOne("XblApp.Domain.Entities.Game", "GameLink")
-                        .WithMany("GamerLinks")
+                        .WithMany("GamerGameLinks")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("XblApp.Domain.Entities.Gamer", "GamerLink")
-                        .WithMany("GameLinks")
+                        .WithMany("GamerGameLinks")
                         .HasForeignKey("GamerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -587,55 +607,57 @@ namespace XblApp.Infrastructure.Migrations
                     b.Navigation("GamerLink");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxLiveToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxXauToken", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.XboxOAuthToken", "XboxOAuthTokenLink")
-                        .WithOne("XboxLiveTokenLink")
-                        .HasForeignKey("XblApp.Domain.Entities.XboxLiveToken", "UserIdFK")
+                    b.HasOne("XblApp.Domain.Entities.XblAuth.XboxAuthToken", "XboxOAuthTokenLink")
+                        .WithOne("XboxXauTokenLink")
+                        .HasForeignKey("XblApp.Domain.Entities.XblAuth.XboxXauToken", "UserIdFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("XboxOAuthTokenLink");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxUserToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxXstsToken", b =>
                 {
-                    b.HasOne("XblApp.Domain.Entities.XboxLiveToken", "XboxLiveToken")
-                        .WithOne("UserTokenLink")
-                        .HasForeignKey("XblApp.Domain.Entities.XboxUserToken", "UhsIdFK")
+                    b.HasOne("XblApp.Domain.Entities.XblAuth.XboxXauToken", "XboxXauTokenLink")
+                        .WithOne("XboxXstsTokenLink")
+                        .HasForeignKey("XblApp.Domain.Entities.XblAuth.XboxXstsToken", "UhsIdFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("XboxLiveToken");
+                    b.Navigation("XboxXauTokenLink");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Achievement", b =>
                 {
-                    b.Navigation("GamerLinks");
+                    b.Navigation("GamerAchievementLinks");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Game", b =>
                 {
                     b.Navigation("AchievementLinks");
 
-                    b.Navigation("GamerLinks");
+                    b.Navigation("GamerAchievementLinks");
+
+                    b.Navigation("GamerGameLinks");
                 });
 
             modelBuilder.Entity("XblApp.Domain.Entities.Gamer", b =>
                 {
-                    b.Navigation("AchievementLinks");
+                    b.Navigation("GamerAchievementLinks");
 
-                    b.Navigation("GameLinks");
+                    b.Navigation("GamerGameLinks");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxLiveToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxAuthToken", b =>
                 {
-                    b.Navigation("UserTokenLink");
+                    b.Navigation("XboxXauTokenLink");
                 });
 
-            modelBuilder.Entity("XblApp.Domain.Entities.XboxOAuthToken", b =>
+            modelBuilder.Entity("XblApp.Domain.Entities.XblAuth.XboxXauToken", b =>
                 {
-                    b.Navigation("XboxLiveTokenLink");
+                    b.Navigation("XboxXstsTokenLink");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ namespace XblApp.Infrastructure.Repositories
 {
     public class AchievementRepository : BaseRepository, IAchievementRepository
     {
-        public AchievementRepository(XblAppDbContext context) : base(context)
+        public AchievementRepository(ApplicationDbContext context) : base(context)
         {
         }
 

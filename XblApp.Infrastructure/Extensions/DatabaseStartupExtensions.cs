@@ -15,7 +15,7 @@ namespace XblApp.Infrastructure.Extensions
             using var scope = app.Services.CreateScope();
             IServiceProvider services = scope.ServiceProvider;
 
-            XblAppDbContext context = services.GetRequiredService<XblAppDbContext>();
+            ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
             UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             try
@@ -35,7 +35,7 @@ namespace XblApp.Infrastructure.Extensions
             return app;
         }
 
-        public static async Task SeedDbDefaultUserAsync(this XblAppDbContext context, UserManager<ApplicationUser> userManager)
+        public static async Task SeedDbDefaultUserAsync(this ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             if (!context.Users.Any())
             {
@@ -56,7 +56,7 @@ namespace XblApp.Infrastructure.Extensions
             }
         }
 
-        public static async Task SeedDbGamersAndGamesAsync(this XblAppDbContext context)
+        public static async Task SeedDbGamersAndGamesAsync(this ApplicationDbContext context)
         {
             if (!context.Games.Any() && !context.Gamers.Any())
             {

@@ -8,7 +8,7 @@ namespace XblApp.Infrastructure.Repositories
 {
     public class GameRepository : BaseRepository, IGameRepository
     {
-        public GameRepository(XblAppDbContext context) : base(context) { }
+        public GameRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<List<(string, int, int, int)>> GetAllGamesAndGamerGameAsync2()
         {

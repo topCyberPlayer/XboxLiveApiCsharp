@@ -8,7 +8,7 @@ namespace XblApp.Infrastructure.Repositories
 {
     public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {
-        public AuthenticationRepository(XblAppDbContext context) : base(context)
+        public AuthenticationRepository(ApplicationDbContext context) : base(context)
         {
         }
 

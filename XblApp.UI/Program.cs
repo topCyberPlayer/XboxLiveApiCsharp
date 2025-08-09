@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using XblApp.Application;
 using XblApp.Infrastructure;
-using XblApp.Infrastructure.Contexts;
-using XblApp.Infrastructure.Models;
 using XblApp.InternalService;
 using XblApp.XboxLiveService;
 
@@ -24,31 +21,12 @@ namespace XblApp.UI
             builder.AddInfrastructureInternalServices();
             builder.AddInfrastructureXblServices();
 
-            builder.Services
-                .AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.User.RequireUniqueEmail = true;
-                })
-                .AddEntityFrameworkStores<XblAppDbContext>()
-                .AddDefaultTokenProviders();
-
             builder.Services.ConfigureCookieAuthentication();
             builder.Services.AddRazorPages();
             builder.Services.AddHttpContextAccessor();
 
             WebApplication? app = builder.Build();
 
-            app.ConfigureMiddleware();
-            app.MapRazorPages();
-            app.Run();
-        }
-    }
-
-    public static partial class MiddlewareInitializer
-    {
-        public static WebApplication ConfigureMiddleware(this WebApplication app)
-        {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -61,12 +39,21 @@ namespace XblApp.UI
                 app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            
+            app.MapRazorPages();
+            
+            app.Run();
+        }
+    }
+
+    public static partial class MiddlewareInitializer
+    {
+        public static WebApplication ConfigureMiddleware(this WebApplication app)
+        {
+            
 
             return app;
         }
