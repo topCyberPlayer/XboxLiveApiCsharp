@@ -2,6 +2,7 @@
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
+using XblApp.Domain.Interfaces.Repository;
 
 namespace XblApp.Application.XboxLiveUseCases
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XblApp.Application.XboxLiveUseCases;
 using XblApp.Domain.DTO;
-using XblApp.Domain.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,28 +13,18 @@ namespace XblApp.API.Controllers
 
         // GET: api/<GameController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetAllGames()
         {
-            List<Game> result = await useCase.GetGamesAsync();
-
-            if (result is null || result.Count == 0)
-                return NotFound("Игры не найдены");
-
-            List<GameDTO> result2 = GameDTO.CastToGameDTO(result).ToList();
-            return Ok(result2);
+            IEnumerable<GameDTO> result = await useCase.GetGamesAsync();
+            return Ok(result);
         }
 
         // GET api/<GameController>/5
-        [HttpGet("{gameId}")]
-        public async Task<ActionResult<GameDTO>> Get(long gameId)
+        [HttpGet("{gameId:long}")]
+        public async Task<ActionResult<GameDTO>> GetGameById(long gameId)
         {
-            Game result = await useCase.GetGameAsync(gameId);
-
-            if (result is null)
-                return NotFound("Игра не найдена");
-
-            GameDTO? result2 = GameDTO.CastToGameDTO(result);
-            return Ok(result2);
+            GameDTO result = await useCase.GetGameAsync(gameId);
+            return Ok(result);
         }
 
         // POST api/<GameController>

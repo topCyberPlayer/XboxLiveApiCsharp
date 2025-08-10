@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.Repository;
 using XblApp.Infrastructure.Contexts;
 using XblApp.Infrastructure.Models;
 using XblApp.Infrastructure.Repositories;

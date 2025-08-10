@@ -1,43 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using XblApp.Infrastructure.Contexts;
+using System.Linq.Expressions;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Domain.Interfaces.Repository;
+using XblApp.Infrastructure.Contexts;
 
 namespace XblApp.Infrastructure.Repositories
 {
-    public class GameRepository : BaseRepository, IGameRepository
+    public class GameRepository(ApplicationDbContext context) : BaseRepository(context), IGameRepository
     {
-        public GameRepository(ApplicationDbContext context) : base(context) { }
-
-        public async Task<List<(string, int, int, int)>> GetAllGamesAndGamerGameAsync2()
-        {
-            var games = await context.Games
-                .Select(game => new ValueTuple<string, int, int, int>
-                (
-                    game.GameName,
-                    game.TotalAchievements,
-                    game.TotalGamerscore,
-                    game.GamerGameLinks.Count // Количество игроков, связанных с игрой
-                ))
-                .ToListAsync();
-
-            return games;
-        }
-
-        public async Task<List<Game>> GetGamesAndGamerGameAsync() =>
+        public async Task<IEnumerable<TKey>> GetInclude_GamerGameLinks_Async<TKey>(
+            Expression<Func<Game, TKey>> selectExpression) =>
             await context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
+            .Select(selectExpression)
             .ToListAsync();
 
-        public async Task<Game?> GetGameAndGamerGameAsync(long gameId) =>
+        public async Task<TKey?> GetInclude_GamerGame_Achievement_GamerAchievement_Async<TKey>(
+            Expression<Func<Game, TKey>> selectExpression,
+            Expression<Func<Game, bool>> filterExpression) =>
             await context.Games
             .AsNoTracking()
             .Include(x => x.GamerGameLinks)
             .Include(a => a.AchievementLinks)
             .Include(a => a.GamerAchievementLinks)
-            .Where(g => g.GameId == gameId)
+            .Where(filterExpression)
+            .Select(selectExpression)
             .FirstOrDefaultAsync();
 
 

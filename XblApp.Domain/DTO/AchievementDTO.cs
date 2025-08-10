@@ -17,7 +17,7 @@ namespace XblApp.Domain.DTO
                 GameName = gameDb.GameName,
                 TotalGamerscore = gameDb.TotalGamerscore,
                 TotalAchievements = gameDb.TotalAchievements,
-                Gamers = gameDb.GamerGameLinks.Count(),
+                TotalGamers = gameDb.GamerGameLinks.Count(),
                 Achievements = gameDb.AchievementLinks.Select(x => new AchievementInnerDTO()
                 {
                     Name = x.Name,
