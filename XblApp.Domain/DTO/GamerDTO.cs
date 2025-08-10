@@ -1,6 +1,4 @@
-﻿using XblApp.Domain.Entities;
-
-namespace XblApp.Domain.DTO
+﻿namespace XblApp.Domain.DTO
 {
     public class GamerDTO
     {
@@ -9,32 +7,30 @@ namespace XblApp.Domain.DTO
         public int Gamerscore { get; set; }
         public string? Bio { get; set; }
         public string? Location { get; set; }
-
         /// <summary>
         /// Сумма всех достижений в каждой игре
         /// </summary>
-        public int Achievements { get; set; }
-
+        public int TotalAchievementsInGame { get; set; }
         /// <summary>
         /// Сумма всех игр
         /// </summary>
-        public int Games { get; set; }
+        public int TotalGames { get; set; }
 
-        public static IEnumerable<GamerDTO> CastToGamerDTO(List<Gamer> gamers) =>
-            gamers.Select(MapToGamerDTO);
+        //public static IEnumerable<GamerDTO> CastToGamerDTO(List<Gamer> gamers) =>
+        //    gamers.Select(MapToGamerDTO);
 
-        public static GamerDTO? CastToGamerDTO(Gamer? gamer) =>
-            gamer is null ? null : MapToGamerDTO(gamer);
+        //public static GamerDTO? CastToGamerDTO(Gamer? gamer) =>
+        //    gamer is null ? null : MapToGamerDTO(gamer);
 
-        private static GamerDTO MapToGamerDTO(Gamer gamer) => new()
-        {
-            GamerId = gamer.GamerId,
-            Gamertag = gamer.Gamertag,
-            Gamerscore = gamer.Gamerscore,
-            Bio = gamer.Bio,
-            Location = gamer.Location,
-            Games = gamer.GamerGameLinks.Count,
-            Achievements = gamer.GamerGameLinks.Sum(x => x.CurrentAchievements)
-        };
+        //private static GamerDTO MapToGamerDTO(Gamer gamer) => new()
+        //{
+        //    GamerId = gamer.GamerId,
+        //    Gamertag = gamer.Gamertag,
+        //    Gamerscore = gamer.Gamerscore,
+        //    Bio = gamer.Bio,
+        //    Location = gamer.Location,
+        //    Games = gamer.GamerGameLinks.Count,
+        //    Achievements = gamer.GamerGameLinks.Sum(x => x.CurrentAchievements)
+        //};
     }
 }

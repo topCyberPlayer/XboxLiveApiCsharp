@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using XblApp.Infrastructure.Contexts;
+using System.Linq.Expressions;
+using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Infrastructure.Contexts;
 
 namespace XblApp.Infrastructure.Repositories
 {
@@ -25,12 +27,14 @@ namespace XblApp.Infrastructure.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-        public async Task<List<Gamer>> GetAllGamerProfilesAsync() =>
+        public async Task<IEnumerable<TKey>> GetInclude_GamerGame_Game_Async<TKey>(
+            Expression<Func<Gamer, TKey>> selectExpression) =>
             await context.Gamers
-                .AsNoTracking()
-                .Include(a => a.GamerGameLinks)
-                    .ThenInclude(b => b.GameLink)
-                .ToListAsync();
+            .AsNoTracking()
+            .Include(a => a.GamerGameLinks)
+                .ThenInclude(b => b.GameLink)
+            .Select(selectExpression)
+            .ToListAsync();
 
         public async Task<Gamer?> GetGamesForGamerAsync(string gamertag) =>
             await context.Gamers
@@ -53,7 +57,6 @@ namespace XblApp.Infrastructure.Repositories
 
                 if (gamer == null)
                 {
-                    // Если игрока нет – создаем нового
                     gamer = new Gamer
                     {
                         ApplicationUserId = profile.ApplicationUserId,
@@ -68,7 +71,6 @@ namespace XblApp.Infrastructure.Repositories
                 }
                 else
                 {
-                    // Если игрок уже есть – обновляем данные
                     gamer.Gamertag = profile.Gamertag;
                     gamer.Gamerscore = profile.Gamerscore;
                     gamer.Bio = profile.Bio;

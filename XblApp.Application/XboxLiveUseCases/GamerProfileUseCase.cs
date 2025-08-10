@@ -1,4 +1,5 @@
-﻿using XblApp.Domain.Entities;
+﻿using XblApp.Domain.DTO;
+using XblApp.Domain.Entities;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.IXboxLiveService;
@@ -6,43 +7,40 @@ using XblApp.Domain.Interfaces.Repository;
 
 namespace XblApp.Application.XboxLiveUseCases
 {
-    public class GamerProfileUseCase
+    public class GamerProfileUseCase(
+        IXboxLiveGamerService gamerService,
+        IGamerRepository gamerRepository,
+        IXboxLiveGameService gameService,
+        IGameRepository gameRepository,
+        IXboxLiveAchievementService<AchievementX360Json> achievementX360Service,
+        IXboxLiveAchievementService<AchievementX1Json> achievementX1Service,
+        IAchievementRepository achievementRepository)
     {
-        private readonly IXboxLiveGamerService _gamerService;
-        private readonly IGamerRepository _gamerRepository;
+        private readonly IXboxLiveGamerService _gamerService = gamerService;
+        private readonly IGamerRepository _gamerRepository = gamerRepository;
 
-        private readonly IXboxLiveGameService _gameService;
-        private readonly IGameRepository _gameRepository;
+        private readonly IXboxLiveGameService _gameService = gameService;
+        private readonly IGameRepository _gameRepository = gameRepository;
 
-        private readonly IXboxLiveAchievementService<AchievementX360Json> _achievementX360Service;
-        private readonly IXboxLiveAchievementService<AchievementX1Json> _achievementX1Service;
-        private readonly IAchievementRepository _achievementRepository;
-
-        public GamerProfileUseCase(
-            IXboxLiveGamerService gamerService,
-            IGamerRepository gamerRepository,
-            IXboxLiveGameService gameService,
-            IGameRepository gameRepository,
-            IXboxLiveAchievementService<AchievementX360Json> achievementX360Service,
-            IXboxLiveAchievementService<AchievementX1Json> achievementX1Service,
-            IAchievementRepository achievementRepository)
-        {
-            _gamerService = gamerService;
-            _gamerRepository = gamerRepository;
-
-            _gameService = gameService;
-            _gameRepository = gameRepository;
-
-            _achievementX360Service = achievementX360Service;
-            _achievementX1Service = achievementX1Service;
-            _achievementRepository = achievementRepository;
-        }
+        private readonly IXboxLiveAchievementService<AchievementX360Json> _achievementX360Service = achievementX360Service;
+        private readonly IXboxLiveAchievementService<AchievementX1Json> _achievementX1Service = achievementX1Service;
+        private readonly IAchievementRepository _achievementRepository = achievementRepository;
 
         public async Task<Gamer> GetGamerProfileRepoAsync(string gamertag) =>
             await _gamerRepository.GetGamerProfileAsync(gamertag);
 
-        public async Task<List<Gamer>> GetAllGamerProfilesRepoAsync() =>
-            await _gamerRepository.GetAllGamerProfilesAsync();
+        public async Task<IEnumerable<GamerDTO>> GetAllGamerProfilesRepoAsync() =>
+            await _gamerRepository.GetInclude_GamerGame_Game_Async(
+                a => new GamerDTO()
+                {
+                    GamerId = a.GamerId,
+                    Gamertag = a.Gamertag,
+                    Gamerscore = a.Gamerscore,
+                    Bio = a.Bio,
+                    Location = a.Location,
+                    TotalGames = a.GamerGameLinks.Count,
+                    TotalAchievementsInGame = a.GamerGameLinks.Sum(x => x.CurrentAchievements)
+                });
 
         public async Task<Gamer> GetGamesForGamerRepoAsync(string gamertag) =>
             await _gamerRepository.GetGamesForGamerAsync(gamertag);
