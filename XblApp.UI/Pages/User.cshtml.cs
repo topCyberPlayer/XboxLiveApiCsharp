@@ -28,8 +28,7 @@ namespace XblApp.UI.Pages
         {
             appUser = await _userManager.GetUserAsync(User);
 
-            Domain.Entities.Gamer? gamer = await _gamerProfileUseCase.GetGamerProfileRepoAsync(appUser.UserName);
-            Output = GamerDTO.CastToGamerDTO(gamer);
+            GamerDTO? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(appUser.UserName);
 
             return Page();
         }

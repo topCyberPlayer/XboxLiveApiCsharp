@@ -1,36 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using XblApp.Infrastructure.Contexts;
+using System.Linq.Expressions;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IRepository;
+using XblApp.Infrastructure.Contexts;
 
 namespace XblApp.Infrastructure.Repositories
 {
-    public class AchievementRepository : BaseRepository, IAchievementRepository
+    public class AchievementRepository(ApplicationDbContext context) : BaseRepository(context), IAchievementRepository
     {
-        public AchievementRepository(ApplicationDbContext context) : base(context)
-        {
-        }
 
-        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag)
-        {
-            return await context.GamerAchievements
-                .Include(a => a.GamerLink)
-                .Include(a => a.GameLink)
-                .Include(a => a.AchievementLink)
-                .Where(ga => ga.GamerLink.Gamertag == gamertag)
-                .ToListAsync();
-         }
-
-        public async Task<List<Achievement>> GetAchievementsAsync(string gameName)
+        public async Task<IEnumerable<TKey?>> GetAllAchievementsAsync<TKey>(
+            Expression<Func<Achievement, TKey>> selectExpression)
         {
             return await context.Achievements
-                .Where(x => x.GameLink.GameName == gameName).ToListAsync();
+                .Select(selectExpression)
+                .ToListAsync();
         }
 
-        public async Task<List<Achievement?>> GetAllAchievementsAsync()
+        public async Task<IEnumerable<TKey?>> GetAchievementsAsync<TKey>(
+            Expression<Func<Achievement, bool>> filterExpression,
+            Expression<Func<Achievement, TKey>> selectExpression)
         {
-            return await context.Achievements.ToListAsync();
+            return await context.Achievements
+                .Where(filterExpression)
+                .Select(selectExpression)
+                .ToListAsync();
         }
 
         public async Task SaveAchievementsAsync(AchievementX360Json achievementJson)

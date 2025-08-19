@@ -22,11 +22,8 @@ namespace XblApp.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            List<Domain.Entities.Gamer> gamers = await _getGamerProfileUseCase.GetAllGamerProfilesRepoAsync();
-            GamerOutput = GamerDTO.CastToGamerDTO(gamers).ToList();
-
-            List<Domain.Entities.Game> games = await _getGameUseCase.GetGamesAsync();
-            GameOutput = GameDTO.CastToGameDTO(games).ToList();
+            IEnumerable<GamerDTO> gamers = await _getGamerProfileUseCase.GetAllGamerProfilesAsync();
+            IEnumerable<GameDTO> games = await _getGameUseCase.GetGamesAsync();
 
             return Page();
         }

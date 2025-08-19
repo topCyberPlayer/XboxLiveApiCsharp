@@ -19,8 +19,7 @@ namespace XblApp.Pages.Gamer
 
         public async Task<IActionResult> OnGet(string gamertag)
         {
-            Domain.Entities.Gamer? gamer = await _gamerProfileUseCase.GetGamerProfileRepoAsync(gamertag);
-            Output = GamerDTO.CastToGamerDTO(gamer);
+            GamerDTO? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
             return Page();
         }
 

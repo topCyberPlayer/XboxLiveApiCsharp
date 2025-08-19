@@ -1,4 +1,5 @@
-﻿using XblApp.Domain.DTO;
+﻿using System.Linq.Expressions;
+using XblApp.Domain.DTO;
 using XblApp.Domain.Entities;
 using XblApp.Domain.Entities.JsonModels;
 using XblApp.Domain.Interfaces.IRepository;
@@ -26,10 +27,23 @@ namespace XblApp.Application.XboxLiveUseCases
         private readonly IXboxLiveAchievementService<AchievementX1Json> _achievementX1Service = achievementX1Service;
         private readonly IAchievementRepository _achievementRepository = achievementRepository;
 
-        public async Task<Gamer> GetGamerProfileRepoAsync(string gamertag) =>
-            await _gamerRepository.GetGamerProfileAsync(gamertag);
+        public async Task<GamerDTO> GetGamerProfileAsync(string gamertag)
+        {
+            return await _gamerRepository.GetInclude_GamerGame_Game_Async(
+                x => x.Gamertag == gamertag,
+                a => new GamerDTO()
+                {
+                    GamerId = a.GamerId,
+                    Gamertag = a.Gamertag,
+                    Gamerscore = a.Gamerscore,
+                    Bio = a.Bio,
+                    Location = a.Location,
+                    TotalGames = a.GamerGameLinks.Count,
+                    TotalAchievementsInGame = a.GamerGameLinks.Sum(x => x.CurrentAchievements)
+                });
+        }
 
-        public async Task<IEnumerable<GamerDTO>> GetAllGamerProfilesRepoAsync() =>
+        public async Task<IEnumerable<GamerDTO>> GetAllGamerProfilesAsync() =>
             await _gamerRepository.GetInclude_GamerGame_Game_Async(
                 a => new GamerDTO()
                 {
@@ -42,13 +56,31 @@ namespace XblApp.Application.XboxLiveUseCases
                     TotalAchievementsInGame = a.GamerGameLinks.Sum(x => x.CurrentAchievements)
                 });
 
-        public async Task<Gamer> GetGamesForGamerRepoAsync(string gamertag) =>
-            await _gamerRepository.GetGamesForGamerAsync(gamertag);
+        public async Task<GamerGameDTO> GetGamesForGamerAsync(string gamertag)
+        {
+            return await _gamerRepository.GetInclude_GamerGame_Game_Async(
+                a => a.Gamertag == gamertag,
+                b => new GamerGameDTO()
+                {
+                    GamerId = b.GamerId,
+                    Gamertag = b.Gamertag,
+                    Games = b.GamerGameLinks.Select(gg => new GameInnerDTO
+                    {
+                        GameId = gg.GameId,
+                        GameName = gg.GameLink.GameName,
+                        TotalAchievements = gg.GameLink.TotalAchievements,
+                        TotalGamerscore = gg.GameLink.TotalGamerscore,
+                        CurrentAchievements = gg.CurrentAchievements,
+                        CurrentGamerscore = gg.CurrentGamerscore,
+                        LastTimePlayed = gg.LastTimePlayed
+                    }).ToList()
+                });
+        }
 
-        public async Task<List<GamerAchievement>> GetGamerAchievementsAsync(string gamertag) =>
-            await _achievementRepository.GetGamerAchievementsAsync(gamertag);
-
-       
+        public async Task<IEnumerable<GamerAchievementDTO>> GetGamerAchievementsAsync(string gamertag)
+        {
+            return new GamerAchievementDTO[] { new GamerAchievementDTO() { GamerId = 1, Gamertag = "Booba" } };
+        }
 
         public async Task UpdateProfileAsync(long gamerId)
         {

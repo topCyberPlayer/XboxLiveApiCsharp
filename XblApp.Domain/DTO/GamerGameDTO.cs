@@ -1,29 +1,10 @@
-﻿using XblApp.Domain.Entities;
-
-namespace XblApp.Domain.DTO
+﻿namespace XblApp.Domain.DTO
 {
     public class GamerGameDTO
     {
         public long GamerId { get; set; }
         public string? Gamertag { get; set; }
-        public List<GameInnerDTO> Games { get; set; }
-
-        public static GamerGameDTO CastToGamerGameDTO(Gamer gamer) =>
-            new GamerGameDTO()
-            {
-                GamerId = gamer.GamerId,
-                Gamertag = gamer.Gamertag,
-                Games = gamer.GamerGameLinks.Select(gg => new GameInnerDTO
-                {
-                    GameId = gg.GameId,
-                    GameName = gg.GameLink.GameName,
-                    TotalAchievements = gg.GameLink.TotalAchievements,
-                    TotalGamerscore = gg.GameLink.TotalGamerscore,
-                    CurrentAchievements = gg.CurrentAchievements,
-                    CurrentGamerscore = gg.CurrentGamerscore,
-                    LastTimePlayed = gg.LastTimePlayed
-                }).ToList()
-            };
+        public IEnumerable<GameInnerDTO> Games { get; set; }
     }
 
     public class GameInnerDTO

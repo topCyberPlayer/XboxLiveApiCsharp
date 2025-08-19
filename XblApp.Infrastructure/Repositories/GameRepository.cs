@@ -29,46 +29,6 @@ namespace XblApp.Infrastructure.Repositories
             .Select(selectExpression)
             .FirstOrDefaultAsync();
 
-
-        //public async Task SaveOrUpdateGamesAsync(GameJson games)
-        //{
-        //    foreach (Game game in games)
-        //    {
-        //        Game? existingGame = await _context.Games
-        //            .Include(g => g.GamerGameLinks)
-        //            .FirstOrDefaultAsync(g => g.GameId == game.GameId);
-
-        //        if (existingGame == null)
-        //        {
-        //            _context.Games.Add(game);
-        //        }
-        //        else
-        //        {
-        //            //Иногда от Xbox Live приходит TotalAchievements равный 0.
-        //            game.TotalAchievements = Math.Max(existingGame.TotalAchievements, game.TotalAchievements);
-        //            _context.Entry(existingGame).CurrentValues.SetValues(game);
-
-        //            // Обновляем связи GamerGame (чтобы не перезаписывать всю коллекцию)
-        //            foreach (var newGamerGame in game.GamerGameLinks)
-        //            {
-        //                var existingGamerGame = existingGame.GamerGameLinks
-        //                    .FirstOrDefault(gg => gg.GamerId == newGamerGame.GamerId);
-
-        //                if (existingGamerGame != null)
-        //                {
-        //                    _context.Entry(existingGamerGame).CurrentValues.SetValues(newGamerGame);
-        //                }
-        //                else
-        //                {
-        //                    existingGame.GamerGameLinks.Add(newGamerGame);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //}
-
         public async Task SaveOrUpdateGamesAsync(GameJson gameJson)
         {
             var gamerId = long.Parse(gameJson.Xuid);

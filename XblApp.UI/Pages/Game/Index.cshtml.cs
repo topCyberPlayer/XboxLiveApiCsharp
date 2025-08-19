@@ -18,8 +18,7 @@ namespace XblApp.Pages.Game
 
         public async Task<IActionResult> OnGet()
         {
-            List<Domain.Entities.Game> games = await _gameUseCase.GetGamesAsync();
-            Output = GameDTO.CastToGameDTO(games).ToList();
+            IEnumerable<GameDTO> games = await _gameUseCase.GetGamesAsync();
             return Page();
         }
     }

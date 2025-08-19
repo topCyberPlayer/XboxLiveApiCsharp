@@ -19,8 +19,7 @@ namespace XblApp.UI.Pages.Game
 
         public async Task<IActionResult> OnGet(long gameId)
         {
-            Domain.Entities.Game game = await _gameUseCase.GetGameAsync(gameId);
-            Output = AchievementDTO.CastTo(game);
+            GameDTO game = await _gameUseCase.GetGameAsync(gameId);
             return Page();
         }
     }
