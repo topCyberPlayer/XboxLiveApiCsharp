@@ -14,15 +14,15 @@ namespace XblApp.API.Endpoints
             return app;
         }
 
-        private static async Task<IResult> Register(RegisterUserRequest request, UserUseCase useCase)
+        private static async Task<IResult> Register(RegisterUserRequest request, RegisterUserUseCase useCase)
         {
             await useCase.RegisterUser(request.Gamertag, request.Email, request.Email);
             return Results.Ok();
         }
 
-        private static async Task<IResult> Login(LoginUserRequest request, UserUseCase useCase)
+        private static async Task<IResult> Login(LoginUserRequest request, LoginUserUseCase useCase)
         {
-            await useCase.Login(request.Gamertag, request.Password);
+            await useCase.Handle(request.Gamertag, request.Password);
             return Results.Ok();
         }
     }

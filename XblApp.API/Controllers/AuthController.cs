@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using XblApp.Domain.DTO;
-using XblApp.Infrastructure.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using XblApp.Application.InnerUseCases;
+using XblApp.Domain.Interfaces;
+using XblApp.Domain.Requests;
+using XblApp.Domain.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,34 +10,35 @@ namespace XblApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : ControllerBase
+    public class AuthController() : ControllerBase
     {
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest model, 
+                                                  [FromServices] RegisterUserUseCase registerUserUseCase)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            ApplicationUser user = new()
-            {
-                UserName = model.Gamertag,
-                Email = model.Email,
-            };
+            RegisterUserResult result = await registerUserUseCase.RegisterUser(model.Gamertag, model.Email, model.Password);
 
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded) return BadRequest(result);
+            if (!result.Success) return BadRequest(result);
 
             return Ok(new { Message = "Пользователь успешно зарегистрирован" });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest model, 
+                                               [FromServices] LoginUserUseCase loginUserUseCase,
+                                               [FromServices] IJwtTokenGenerator tokenGenerator)
         {
-            var result = await signInManager.PasswordSignInAsync(model.Gamertag, model.Password, false, false);
-            
-            if (!result.Succeeded) return Unauthorized("Не удалось авторизоваться");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return Ok(new { Message = "Авторизация успешна"});
+            LoginUserResult result = await loginUserUseCase.Handle(model.Gamertag, model.Password);
+
+            if (!result.Success) return Unauthorized(result.Error);
+
+            string token = tokenGenerator.GenerateToken(result.UserId, result.Email, result.Roles);
+
+            return Ok(new { Token = token});
         }
     }
 }
