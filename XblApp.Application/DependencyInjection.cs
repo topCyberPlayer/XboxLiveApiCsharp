@@ -9,7 +9,9 @@ namespace XblApp.Application
     {
         public static void AddApplicationServices(this IHostApplicationBuilder builder)
         {
+            builder.Services.AddScoped<LoginUserUseCase>();
             builder.Services.AddScoped<RegisterUserUseCase>();
+
             builder.Services.AddScoped<AuthenticationUseCase>();
             builder.Services.AddScoped<GamerProfileUseCase>();
             builder.Services.AddScoped<GameUseCase>();

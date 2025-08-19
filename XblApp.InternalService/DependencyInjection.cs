@@ -8,7 +8,7 @@ namespace XblApp.InternalService
     {
         public static void AddInfrastructureInternalServices(this IHostApplicationBuilder builder)
         {
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             //builder.Services.AddSingleton<IEmailSender, EmailSenderService>();
         }
     }

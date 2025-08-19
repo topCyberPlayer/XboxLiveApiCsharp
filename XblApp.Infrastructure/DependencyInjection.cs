@@ -39,6 +39,7 @@ namespace XblApp.Infrastructure
             builder.Services.AddScoped<IGamerRepository, GamerRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }
