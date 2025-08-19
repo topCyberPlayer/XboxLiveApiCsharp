@@ -13,27 +13,27 @@ namespace XblApp.Infrastructure.Contexts
     /// <summary>
     /// Нужен чтобы Миграцию можно было сделать
     /// </summary>
-    public class XblAppDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-    {
-        public ApplicationDbContext CreateDbContext(string[] args)
-        {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "XblApp.API");
-            //todo Попытаться сделать миграцию классическим способом - connectionString указывалась в DependencyInjection
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true)
-                .Build();
+    //public class XblAppDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    //{
+    //    public ApplicationDbContext CreateDbContext(string[] args)
+    //    {
+    //        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+    //        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "XblApp.API");
+    //        //todo Попытаться сделать миграцию классическим способом - connectionString указывалась в DependencyInjection
+    //        var configuration = new ConfigurationBuilder()
+    //            .SetBasePath(basePath)
+    //            .AddJsonFile("appsettings.json", optional: false)
+    //            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+    //            .Build();
 
-            var connectionString = configuration.GetConnectionString("SqlConnection");
+    //        var connectionString = configuration.GetConnectionString("SqlConnection");
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseNpgsql(connectionString);
+    //        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+    //        optionsBuilder.UseNpgsql(connectionString);
 
-            return new ApplicationDbContext(optionsBuilder.Options);
-        }
-    }
+    //        return new ApplicationDbContext(optionsBuilder.Options);
+    //    }
+    //}
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
