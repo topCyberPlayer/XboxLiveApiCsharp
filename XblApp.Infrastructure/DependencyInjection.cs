@@ -7,6 +7,7 @@ using XblApp.Domain.Interfaces.IRepository;
 using XblApp.Domain.Interfaces.Repository;
 using XblApp.Infrastructure.Contexts;
 using XblApp.Infrastructure.Models;
+using XblApp.Infrastructure.Options;
 using XblApp.Infrastructure.Repositories;
 
 namespace XblApp.Infrastructure
@@ -30,6 +31,8 @@ namespace XblApp.Infrastructure
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
