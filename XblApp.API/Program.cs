@@ -1,3 +1,4 @@
+using XblApp.API.Middlewares;
 using XblApp.Application;
 using XblApp.Infrastructure;
 using XblApp.InternalService;
@@ -32,7 +33,7 @@ namespace XblApp.API
             builder.Services.AddHealthChecks();
 
             WebApplication? app = builder.Build();
-
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseAuthorization();
