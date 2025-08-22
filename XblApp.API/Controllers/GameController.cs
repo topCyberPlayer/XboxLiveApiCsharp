@@ -13,7 +13,7 @@ namespace XblApp.API.Controllers
 
         // GET: api/<GameController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GameDTO>>> GetAllGames()
+        public async Task<ActionResult<IEnumerable<GameDTO>>> Get()
         {
             IEnumerable<GameDTO> result = await useCase.GetGamesAsync();
             return Ok(result);
@@ -21,7 +21,7 @@ namespace XblApp.API.Controllers
 
         // GET api/<GameController>/5
         [HttpGet("{gameId:long}")]
-        public async Task<ActionResult<GameDTO>> GetGameById(long gameId)
+        public async Task<ActionResult<GameDTO>> GetById(long gameId)
         {
             GameDTO result = await useCase.GetGameAsync(gameId);
             return Ok(result);
