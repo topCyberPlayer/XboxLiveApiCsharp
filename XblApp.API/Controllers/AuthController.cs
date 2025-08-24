@@ -26,7 +26,7 @@ namespace XblApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model,
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest model,
                                                [FromServices] LoginUserUseCase loginUserUseCase)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
