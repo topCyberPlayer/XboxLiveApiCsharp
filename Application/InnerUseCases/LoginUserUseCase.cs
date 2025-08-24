@@ -1,29 +1,25 @@
-﻿using XblApp.Domain.Interfaces.Repository;
+﻿using XblApp.Domain;
+using XblApp.Domain.Interfaces;
+using XblApp.Domain.Interfaces.Repository;
 using XblApp.Domain.Responses;
 
 namespace Application.InnerUseCases
 {
-    public class LoginUserUseCase(IUserRepository userRepository)
+    public class LoginUserUseCase(IUserRepository userRepository, ITokenService tokenService)
     {
-        public async Task<LoginUserResult> Handle(string gamertag, string password)
+        public async Task<LoginUserResult> LoginUser(string gamertag, string password)
         {
-            var user = await userRepository.FindByGamertagAsync(gamertag);
+            UserInfo user = await userRepository.FindByGamertagAsync(gamertag);
             if (user == null)
-                return new LoginUserResult { Success = false, Error = "Invalid credentials" };
+                throw new UnauthorizedAccessException("Неверный gamertag иил пароль");
 
-            var valid = await userRepository.CheckPasswordAsync(user, password);
+            bool valid = await userRepository.CheckPasswordAsync(user, password);
             if (!valid)
-                return new LoginUserResult { Success = false, Error = "Invalid credentials" };
+                throw new UnauthorizedAccessException("Неверный gamertag иил пароль");
 
             var roles = await userRepository.GetRolesAsync(user);
 
-            return new LoginUserResult
-            {
-                Success = true,
-                UserId = user.Id,
-                Email = user.Email,
-                Roles = roles
-            };
+            return tokenService.GenerateToken(user.Id, user.Email, roles);
         }
     }
 }

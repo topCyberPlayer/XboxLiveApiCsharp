@@ -22,7 +22,7 @@ namespace XblApp.API.Endpoints
 
         private static async Task<IResult> Login(LoginUserRequest request, LoginUserUseCase useCase)
         {
-            await useCase.Handle(request.Gamertag, request.Password);
+            await useCase.LoginUser(request.Gamertag, request.Password);
             return Results.Ok();
         }
     }

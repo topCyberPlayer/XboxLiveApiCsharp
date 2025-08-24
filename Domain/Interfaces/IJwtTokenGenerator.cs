@@ -1,8 +1,10 @@
 ﻿
+using XblApp.Domain.Responses;
+
 namespace XblApp.Domain.Interfaces
 {
-    public interface IJwtTokenGenerator
+    public interface ITokenService
     {
-        string GenerateToken(string? userId, string? email, IList<string>? roles);
+        LoginUserResult GenerateToken(string? userId, string? email, IList<string>? roles);
     }
 }

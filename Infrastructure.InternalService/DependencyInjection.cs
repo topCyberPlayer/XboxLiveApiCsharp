@@ -11,7 +11,7 @@ namespace XblApp.InternalService
         {
             builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
-            builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
             //builder.Services.AddSingleton<IEmailSender, EmailSenderService>();
         }
     }

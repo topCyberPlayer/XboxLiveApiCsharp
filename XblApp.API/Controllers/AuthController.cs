@@ -27,18 +27,13 @@ namespace XblApp.API.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest model,
-                                               [FromServices] LoginUserUseCase loginUserUseCase,
-                                               [FromServices] IJwtTokenGenerator tokenGenerator)
+                                               [FromServices] LoginUserUseCase loginUserUseCase)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            LoginUserResult result = await loginUserUseCase.Handle(model.Gamertag, model.Password);
+            LoginUserResult result = await loginUserUseCase.LoginUser(model.Gamertag, model.Password);
 
-            if (!result.Success) return Unauthorized(result.Error);
-
-            string token = tokenGenerator.GenerateToken(result.UserId, result.Email, result.Roles);
-
-            return Ok(new { Token = token });
+            return Ok(result);
         }
     }
 }

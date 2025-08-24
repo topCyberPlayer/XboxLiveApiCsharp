@@ -2,10 +2,8 @@
 {
     public class LoginUserResult
     {
-        public bool Success { get; init; }
-        public string? Error { get; init; }
-        public string? UserId { get; init; }
-        public string? Email { get; init; }
-        public IList<string>? Roles { get; init; }
+        public required string AccessToken { get; set; }
+
+        public required string RefreshToken { get; set; }
     }
 }

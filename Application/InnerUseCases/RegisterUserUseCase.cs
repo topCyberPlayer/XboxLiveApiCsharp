@@ -8,7 +8,7 @@ namespace Application.InnerUseCases
 {
     public class RegisterUserUseCase(
         IUserRepository userRepository,
-        IXboxLiveGamerService gamerService,
+        IXboxLiveGamerService xblGamerService,
         IGamerRepository gamerRepository)
     {
         public async Task<RegisterUserResult> RegisterUser(string gamertag, string email, string password)
@@ -19,7 +19,7 @@ namespace Application.InnerUseCases
             if (await gamerRepository.IsGamertagLinkedToUserAsync(gamertag))
                 return new RegisterUserResult { Success = false, Error = "This Gamertag is already linked" };
 
-            GamerJson resultGamer = await gamerService.GetGamerProfileAsync(gamertag);
+            GamerJson resultGamer = await xblGamerService.GetGamerProfileAsync(gamertag);
             if (!resultGamer.ProfileUsers.Any())
                 return new RegisterUserResult { Success = false, Error = "Gamer not found on Xbox Live" };
 
