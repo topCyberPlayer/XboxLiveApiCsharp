@@ -1,39 +1,52 @@
-﻿using XblApp.Domain.Exceptions;
+﻿using System.Net;
+using System.Net.Mime;
+using System.Text.Json;
+using XblApp.API.Extensions;
+using XblApp.Domain.Exceptions;
 
 namespace XblApp.API.Middlewares
 {
     public class ExceptionHandlingMiddleware(
         RequestDelegate next,
-        IWebHostEnvironment env,
-        ILogger<ExceptionHandlingMiddleware> logger)
+        IWebHostEnvironment env)
     {
+        private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
                 await next(context);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                await WriteExceptionAsync(ex, HttpStatusCode.Unauthorized, context);
+            }
+            catch (NotFoundException ex)
+            {
+                await WriteExceptionAsync(ex, HttpStatusCode.NotFound, context);
+            }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Unhandled exception");
-
-                context.Response.ContentType = "application/json";
-
-                // Подбор статуса по типу исключения
-                context.Response.StatusCode = ex switch
-                {
-                    NotFoundException => StatusCodes.Status404NotFound,
-                    BadRequestException => StatusCodes.Status400BadRequest,
-                    BusinessRuleException => StatusCodes.Status422UnprocessableEntity,
-                    _ => StatusCodes.Status500InternalServerError
-                };
-
-                var response = env.IsDevelopment() ?
-                    new { error = ex.Message, stackTrace = ex.StackTrace } :
-                    new { error = "Внутренняя ошибка сервера. Keep calm", stackTrace = string.Empty };
-
-                await context.Response.WriteAsJsonAsync(response);
+                await WriteExceptionAsync(ex, HttpStatusCode.InternalServerError, context);
             }
+        }
+
+        private Task WriteExceptionAsync(Exception ex, HttpStatusCode status, HttpContext context)
+        {
+            var response = env.IsDevelopment() ?
+                new ErrorResponse { Description = ex.Message, Message = ex.StackTrace } :
+                new ErrorResponse { Description = "Внутренняя ошибка сервера. Keep calm", Message = string.Empty };
+
+            return WriteResponseAsync(response, status, context);
+        }
+
+        private Task WriteResponseAsync(ErrorResponse response, HttpStatusCode status, HttpContext context)
+        {
+            context.Response.StatusCode = (int)status;
+            context.Response.ContentType = MediaTypeNames.Application.Json;
+
+            return context.Response.WriteAsync(JsonSerializer.Serialize(response, SerializerOptions));
         }
     }
 
