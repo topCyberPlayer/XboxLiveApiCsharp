@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using XblApp.Application.InnerUseCases;
+﻿using Application.InnerUseCases;
+using Microsoft.AspNetCore.Mvc;
 using XblApp.Domain.Interfaces;
 using XblApp.Domain.Requests;
 using XblApp.Domain.Responses;
@@ -13,7 +13,7 @@ namespace XblApp.API.Controllers
     public class AuthController() : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequest model, 
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest model,
                                                   [FromServices] RegisterUserUseCase registerUserUseCase)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -26,7 +26,7 @@ namespace XblApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model, 
+        public async Task<IActionResult> Login([FromBody] LoginRequest model,
                                                [FromServices] LoginUserUseCase loginUserUseCase,
                                                [FromServices] IJwtTokenGenerator tokenGenerator)
         {
@@ -38,7 +38,7 @@ namespace XblApp.API.Controllers
 
             string token = tokenGenerator.GenerateToken(result.UserId, result.Email, result.Roles);
 
-            return Ok(new { Token = token});
+            return Ok(new { Token = token });
         }
     }
 }

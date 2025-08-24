@@ -42,9 +42,9 @@ namespace XblApp.UI
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
-            
+
             app.MapRazorPages();
-            
+
             app.Run();
         }
     }
@@ -53,7 +53,7 @@ namespace XblApp.UI
     {
         public static WebApplication ConfigureMiddleware(this WebApplication app)
         {
-            
+
 
             return app;
         }

@@ -1,6 +1,6 @@
+using Application.XboxLiveUseCases;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Application.XboxLiveUseCases;
 using XblApp.Domain.DTO;
 
 namespace XblApp.UI.Pages.Game
@@ -8,7 +8,7 @@ namespace XblApp.UI.Pages.Game
     public class AchievementsModel : PageModel
     {
         private readonly GameUseCase _gameUseCase;
-        
+
         [BindProperty(SupportsGet = true)]
         public AchievementDTO Output { get; set; }
 

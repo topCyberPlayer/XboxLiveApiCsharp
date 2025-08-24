@@ -29,9 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XblApp.Application\XblApp.Application.csproj" />
-    <ProjectReference Include="..\XblApp.InternalService\XblApp.InternalService.csproj" />
-    <ProjectReference Include="..\XblApp.XboxLiveService\XblApp.XboxLiveService.csproj" />
+    <ProjectReference Include="..\Infrastructure.InternalService\Infrastructure.InternalService.csproj" />
+    <ProjectReference Include="..\Infrastructure.XboxLiveService\Infrastructure.XboxLiveService.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

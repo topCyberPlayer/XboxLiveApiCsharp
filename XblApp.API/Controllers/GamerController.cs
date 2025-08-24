@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using XblApp.Application.XboxLiveUseCases;
+﻿using Application.XboxLiveUseCases;
+using Microsoft.AspNetCore.Mvc;
 using XblApp.Domain.DTO;
 
 namespace XblApp.API.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class GamerController(GamerProfileUseCase useCase) : ControllerBase

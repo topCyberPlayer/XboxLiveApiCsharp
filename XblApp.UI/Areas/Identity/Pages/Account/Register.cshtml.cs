@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Application.InnerUseCases;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -11,8 +12,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
+using XblApp.Domain.Responses;
 using XblApp.Infrastructure.Models;
-using XblApp.Domain.Interfaces;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {
@@ -24,7 +25,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IUserService _registerUserService;
+        private readonly RegisterUserUseCase _registerUserService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -32,7 +33,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IUserService registerUserService)
+            RegisterUserUseCase registerUserService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -114,7 +115,7 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var registerResult = await _registerUserService.CreateUserAsync(Input.Gamertag, Input.Email, Input.Password);
+                RegisterUserResult registerResult = await _registerUserService.RegisterUser(Input.Gamertag, Input.Email, Input.Password);
 
                 if (registerResult.Success)
                 {
@@ -142,10 +143,12 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in registerResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
+
+                ModelState.AddModelError(string.Empty, registerResult.Error);
+                //foreach (var error in registerResult.Errors)
+                //{
+                //    ModelState.AddModelError(string.Empty, error);
+                //}
             }
 
             // If we got this far, something failed, redisplay form

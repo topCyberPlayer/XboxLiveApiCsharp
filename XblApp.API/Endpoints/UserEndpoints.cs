@@ -1,5 +1,5 @@
-﻿using XblApp.API.Contracts.Users;
-using XblApp.Application.InnerUseCases;
+﻿using Application.InnerUseCases;
+using XblApp.API.Contracts.Users;
 
 namespace XblApp.API.Endpoints
 {
@@ -8,7 +8,7 @@ namespace XblApp.API.Endpoints
         public static IEndpointRouteBuilder MapUsersEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapPost("register", Register);
-            
+
             app.MapPost("login", Login);
 
             return app;
