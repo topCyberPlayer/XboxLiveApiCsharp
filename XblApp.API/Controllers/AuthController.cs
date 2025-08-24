@@ -1,6 +1,5 @@
 ﻿using Application.InnerUseCases;
 using Microsoft.AspNetCore.Mvc;
-using XblApp.Domain.Interfaces;
 using XblApp.Domain.Requests;
 using XblApp.Domain.Responses;
 
@@ -13,27 +12,16 @@ namespace XblApp.API.Controllers
     public class AuthController() : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequest model,
+        public async Task Register([FromBody] RegisterUserRequest model,
                                                   [FromServices] RegisterUserUseCase registerUserUseCase)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            RegisterUserResult result = await registerUserUseCase.RegisterUser(model.Gamertag, model.Email, model.Password);
-
-            if (!result.Success) return BadRequest(result);
-
-            return Ok(new { Message = "Пользователь успешно зарегистрирован" });
+            await registerUserUseCase.RegisterUser(model.Gamertag, model.Email, model.Password);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequest model,
-                                               [FromServices] LoginUserUseCase loginUserUseCase)
+        public Task Login([FromBody] LoginUserRequest model, [FromServices] LoginUserUseCase loginUserUseCase)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            TokenDTO result = await loginUserUseCase.LoginUser(model.Gamertag, model.Password);
-
-            return Ok(result);
+            return loginUserUseCase.LoginUser(model.Gamertag, model.Password);
         }
 
         [HttpPost("refresh")]
