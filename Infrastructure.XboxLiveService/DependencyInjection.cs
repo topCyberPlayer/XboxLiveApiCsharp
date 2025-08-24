@@ -11,8 +11,7 @@ namespace XblApp.XboxLiveService
     {
         public static void AddInfrastructureXblServices(this IHostApplicationBuilder builder)
         {
-            IConfigurationSection a = builder.Configuration.GetSection("Authentication:Microsoft");
-            builder.Services.Configure<AuthenticationConfig>(a);
+            builder.AddAuthenticationFromConfig();
             builder.AddHttpClientsFromConfig();
 
             builder.Services.AddScoped<IXboxLiveAuthenticationService, AuthenticationService>();
@@ -26,9 +25,38 @@ namespace XblApp.XboxLiveService
 
     public static class HttpClientExtensions
     {
+        public static void AddAuthenticationFromConfig(this IHostApplicationBuilder builder)
+        {
+            builder.Services.Configure<AuthenticationConfig>(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"]
+                    ?? throw new ArgumentNullException("В secret.json не заполнен Microsoft:ClientId");
+
+                options.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"]
+                    ?? throw new ArgumentNullException("В secret.json не заполнен Microsoft:ClientSecret");
+
+                options.RedirectUri = builder.Configuration.GetConnectionString("RedirectUrl")
+                    ?? throw new ArgumentNullException("В appsettings.json не заполнен RedirectUrl");
+            });
+
+
+            //AuthenticationConfig authConfig = new()
+            //{
+            //    ClientId = builder.Configuration["Authentication:Microsoft:ClientId"] ?? throw new ArgumentNullException("В secret.json не заполнен Microsoft:ClientId"),
+            //    ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"] ?? throw new ArgumentNullException("В secret.json не заполнен Microsoft:ClientSecret"),
+            //    //RedirectUri = builder.Configuration["ConnectionStrings:RedirectUrl"] или
+            //    RedirectUri = builder.Configuration.GetConnectionString("RedirectUrl") ?? throw new ArgumentNullException("В appsettings.json не заполнен RedirectUrl")
+            //};
+
+            //builder.Services.AddSingleton(authConfig);
+        }
+
         public static void AddHttpClientsFromConfig(this IHostApplicationBuilder builder)
         {
-            var authConfigs = builder.Configuration.GetSection("XboxAuthenticationServices").Get<Dictionary<string, HttpClientConfig>>();
+            Dictionary<string, HttpClientConfig> authConfigs = builder.Configuration
+                .GetSection("XboxAuthenticationServices")
+                .Get<Dictionary<string, HttpClientConfig>>()
+                ?? throw new ArgumentNullException("В appsettings.json не заполнен раздел XboxAuthenticationServices");
 
             foreach (var authConfig in authConfigs)
             {
@@ -43,7 +71,10 @@ namespace XblApp.XboxLiveService
                 });
             }
 
-            var xboxConfigs = builder.Configuration.GetSection("XboxServices").Get<Dictionary<string, HttpClientConfig>>();
+            Dictionary<string, HttpClientConfig> xboxConfigs = builder.Configuration
+                .GetSection("XboxServices")
+                .Get<Dictionary<string, HttpClientConfig>>()
+                ?? throw new ArgumentNullException("в appsettings.json не заполнен раздел XboxServices");
 
             foreach (var xboxConfig in xboxConfigs)
             {
@@ -62,7 +93,14 @@ namespace XblApp.XboxLiveService
 
     public class HttpClientConfig
     {
-        public string BaseAddress { get; set; }
+        public required string BaseAddress { get; set; }
         public Dictionary<string, string> Headers { get; set; } = [];
+    }
+
+    public class AuthenticationConfig
+    {
+        public required string ClientId { get; set; }
+        public required string? ClientSecret { get; set; }
+        public required string RedirectUri { get; set; }
     }
 }

@@ -133,10 +133,5 @@ namespace XblApp.XboxLiveService
         }
     }
 
-    public class AuthenticationConfig
-    {
-        public string? ClientId { get; set; }
-        public string? ClientSecret { get; set; }
-        public string? RedirectUri { get; set; }
-    }
+    
 }
