@@ -31,9 +31,15 @@ namespace XblApp.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            LoginUserResult result = await loginUserUseCase.LoginUser(model.Gamertag, model.Password);
+            TokenDTO result = await loginUserUseCase.LoginUser(model.Gamertag, model.Password);
 
             return Ok(result);
+        }
+
+        [HttpPost("refresh")]
+        public Task<TokenDTO> RefreshToken(TokenDTO dto, [FromServices] LoginUserUseCase loginUserUseCase)
+        {
+            return loginUserUseCase.RefreshTokenAsync(dto);
         }
     }
 }

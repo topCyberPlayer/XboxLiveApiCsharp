@@ -14,7 +14,7 @@ namespace XblApp.InternalService
     {
         private readonly JwtOptions _options = options.Value;
 
-        public LoginUserResult GenerateToken(string? userId, string? email, IList<string>? roles)
+        public TokenDTO GenerateToken(string? userId, string? email, IList<string>? roles)
         {
             List<Claim> claims = new()
             {
@@ -39,7 +39,7 @@ namespace XblApp.InternalService
             string? accessToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
             string? refreshToken = CreateRefreshToken();
 
-            return new LoginUserResult
+            return new TokenDTO
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
@@ -52,6 +52,33 @@ namespace XblApp.InternalService
             using var randomNumberGenerator = RandomNumberGenerator.Create();
             randomNumberGenerator.GetBytes(randomNumbers);
             return Convert.ToBase64String(randomNumbers);
+        }
+
+        public (bool isValid, string gamertag) ValidateToken(string accessToken)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key!));
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                var principal = tokenHandler.ValidateToken(accessToken,
+                new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = true,
+                    ValidIssuer = _options.Issuer,
+                    ValidateLifetime = false,
+                    ValidateAudience = false,
+                }, out SecurityToken validatedToken);
+                
+                return (validatedToken is JwtSecurityToken jwtToken && jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512),
+                    principal?.Identity?.Name ?? string.Empty);
+            }
+            catch (SecurityTokenException)
+            {
+                return (false, string.Empty);
+            }
         }
     }
 }

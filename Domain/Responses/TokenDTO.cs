@@ -1,6 +1,6 @@
 ﻿namespace XblApp.Domain.Responses
 {
-    public class LoginUserResult
+    public class TokenDTO
     {
         public required string AccessToken { get; set; }
 
