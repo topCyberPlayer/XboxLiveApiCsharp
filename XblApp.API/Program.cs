@@ -1,7 +1,7 @@
 using XblApp.API.Middlewares;
 using Application;
 using Infrastructure;
-using XboxLiveService;
+using Infrastructure.XboxLiveService;
 using Infrastructure.InternalService;
 
 namespace XblApp.API
