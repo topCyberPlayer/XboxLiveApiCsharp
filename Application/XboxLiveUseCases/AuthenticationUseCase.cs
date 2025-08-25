@@ -6,20 +6,14 @@ using Domain.Interfaces.XboxLiveService;
 
 namespace Application.XboxLiveUseCases
 {
-    public class AuthenticationUseCase
+    public class AuthenticationUseCase(
+        IXboxLiveAuthenticationService authService,
+        IAuthenticationRepository authRepository)
     {
-        internal readonly IXboxLiveAuthenticationService _authService;
-        internal readonly IAuthenticationRepository _authRepository;
+        internal readonly IXboxLiveAuthenticationService _authService = authService;
+        internal readonly IAuthenticationRepository _authRepository = authRepository;
 
         private OAuthTokenJson? _authToken;
-
-        public AuthenticationUseCase(
-            IXboxLiveAuthenticationService authService,
-            IAuthenticationRepository authRepository)
-        {
-            _authService = authService;
-            _authRepository = authRepository;
-        }
 
         public async Task<IEnumerable<DonorDTO>?> GetAllDonors() =>
             await _authRepository.GetAllDonorsAsync(o => new DonorDTO
@@ -39,12 +33,12 @@ namespace Application.XboxLiveUseCases
         /// </summary>
         /// <param name="authorizationCode"></param>
         /// <returns></returns>
-        public async Task RequestTokens(string authorizationCode)
+        public async Task RequestTokensAsync(string authorizationCode)
         {
             _authToken = await _authService.RequestOauth2Token(authorizationCode)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 
-            await BaseTokens();
+            await ExchangeTokensAsync();
         }
 
         /// <summary>
@@ -54,29 +48,31 @@ namespace Application.XboxLiveUseCases
         /// <exception cref="InvalidOperationException"></exception>
         public async ValueTask<string> GetValidAuthHeaderAsync()
         {
-            bool isExpired = IsDateUserTokenExperid();
-
-            if (!isExpired)
+            if (!IsUserTokenExpired())
                 return _authRepository.GetAuthorizationHeaderValue();
 
             XboxAuthToken expiredTokenOAuth = await _authRepository.GetXboxAuthToken();
-
+            
             if (expiredTokenOAuth is null)
             {
-                string authorizationUrl = GenerateAuthorizationUrl();
-
-                //todo Этот веб адрес(authorizationUrl) надо переадрисовать или выбросить исключение
+                throw new InvalidOperationException(
+                    $"No stored OAuth token found. User interaction required. Go to: {GenerateAuthorizationUrl()}");
             }
 
             _authToken = await _authService.RefreshOauth2Token(expiredTokenOAuth)
                 ?? throw new InvalidOperationException("Failed to retrieve OAuth token.");
 
-            await BaseTokens();
+            await ExchangeTokensAsync();
 
             return _authRepository.GetAuthorizationHeaderValue();
         }
 
-        private async Task BaseTokens()
+        /// <summary>
+        /// Обменивает OAuth-токен на XAU и XSTS и сохраняет в репозиторий.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private async Task ExchangeTokensAsync()
         {
             XauTokenJson xauToken = await _authService.RequestXauToken(_authToken)
                 ?? throw new InvalidOperationException("Failed to retrieve XAU token.");
@@ -87,8 +83,10 @@ namespace Application.XboxLiveUseCases
             await _authRepository.SaveOrUpdateTokensAsync(_authToken, xauToken, xstsToken);
         }
 
-        private bool IsDateUserTokenExperid() => DateTime.UtcNow > _authRepository.GetDateUserTokenExpired();
+        private bool IsUserTokenExpired() => 
+            DateTime.UtcNow > _authRepository.GetDateUserTokenExpired();
 
-        private bool IsDateLiveTokenExperid() => DateTime.Now > _authRepository.GetDateLiveTokenExpired();
+        private bool IsLiveTokenExpired() => 
+            DateTime.Now > _authRepository.GetDateLiveTokenExpired();
     }
 }

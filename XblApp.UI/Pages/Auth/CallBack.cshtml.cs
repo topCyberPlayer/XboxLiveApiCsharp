@@ -23,7 +23,7 @@ namespace XblApp.UI.Pages.Auth
 
             try
             {
-                await _authServ.RequestTokens(code);
+                await _authServ.RequestTokensAsync(code);
 
                 return RedirectToPage("/Admin/Donor");
             }
