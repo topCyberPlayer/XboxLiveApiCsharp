@@ -2,7 +2,7 @@
 using System.Net.Mime;
 using System.Text.Json;
 using XblApp.API.Extensions;
-using XblApp.Domain.Exceptions;
+using Domain.Exceptions;
 
 namespace XblApp.API.Middlewares
 {

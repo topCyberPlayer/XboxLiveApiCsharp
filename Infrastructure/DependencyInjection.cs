@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Domain.Interfaces.Repository;
-using XblApp.Infrastructure.Contexts;
-using XblApp.Infrastructure.Models;
-using XblApp.Infrastructure.Repositories;
+using Domain.Interfaces.IRepository;
+using Domain.Interfaces.Repository;
+using Infrastructure.Contexts;
+using Infrastructure.Models;
+using Infrastructure.Repositories;
 
-namespace XblApp.Infrastructure
+namespace Infrastructure
 {
     public static partial class DependencyInjection
     {

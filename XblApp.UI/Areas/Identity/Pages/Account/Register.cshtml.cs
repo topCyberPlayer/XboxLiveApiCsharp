@@ -3,6 +3,8 @@
 #nullable disable
 
 using Application.InnerUseCases;
+using Domain.DTO;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,8 +14,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using XblApp.Domain.Responses;
-using XblApp.Infrastructure.Models;
 
 namespace XblApp.UI.Areas.Identity.Pages.Account
 {

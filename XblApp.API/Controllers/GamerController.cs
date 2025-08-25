@@ -1,6 +1,6 @@
 ﻿using Application.XboxLiveUseCases;
 using Microsoft.AspNetCore.Mvc;
-using XblApp.Domain.DTO;
+using Domain.DTO;
 
 namespace XblApp.API.Controllers
 {

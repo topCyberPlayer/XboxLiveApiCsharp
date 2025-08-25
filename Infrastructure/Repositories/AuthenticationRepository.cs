@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Entities.XblAuth;
-using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Infrastructure.Contexts;
+using Domain.Entities.JsonModels;
+using Domain.Entities.XblAuth;
+using Domain.Interfaces.IRepository;
+using Infrastructure.Contexts;
 
-namespace XblApp.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {

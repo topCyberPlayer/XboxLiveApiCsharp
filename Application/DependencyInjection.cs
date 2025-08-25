@@ -3,7 +3,7 @@ using Application.XboxLiveUseCases;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace XblApp.Application
+namespace Application
 {
     public static class DependencyInjection
     {

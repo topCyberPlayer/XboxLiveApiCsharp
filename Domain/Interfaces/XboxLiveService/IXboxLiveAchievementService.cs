@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Interfaces.IXboxLiveService
+﻿namespace Domain.Interfaces.XboxLiveService
 {
     public interface IXboxLiveAchievementService<T> where T : class
     {

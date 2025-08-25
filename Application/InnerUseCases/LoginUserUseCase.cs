@@ -1,7 +1,7 @@
-﻿using XblApp.Domain;
-using XblApp.Domain.Interfaces;
-using XblApp.Domain.Interfaces.Repository;
-using XblApp.Domain.Responses;
+﻿using Domain.DTO;
+using Domain.Interfaces;
+using XblApp.Domain;
+using Domain.Interfaces.Repository;
 
 namespace Application.InnerUseCases
 {

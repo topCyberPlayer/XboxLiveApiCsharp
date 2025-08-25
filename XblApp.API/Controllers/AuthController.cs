@@ -1,7 +1,7 @@
 ﻿using Application.InnerUseCases;
+using Domain.DTO;
+using Domain.Requests;
 using Microsoft.AspNetCore.Mvc;
-using XblApp.Domain.Requests;
-using XblApp.Domain.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

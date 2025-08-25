@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Interfaces.Repository;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 using XblApp.Domain;
-using XblApp.Domain.Interfaces.Repository;
-using XblApp.Infrastructure.Models;
 
-namespace XblApp.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class UserRepository(UserManager<ApplicationUser> userManager) : IUserRepository
     {

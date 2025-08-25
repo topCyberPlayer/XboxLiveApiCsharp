@@ -1,6 +1,4 @@
 ﻿@page "/game/{gameId}/achievements"
-@using XblApp.Domain.DTO
-@using XblApp.Domain.DTO
 @model XblApp.UI.Pages.Game.AchievementsModel
 @{
     ViewData["Title"] = $"Achievements for {Model.Output?.GameName}";
@@ -22,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (AchievementInnerDTO achievement in Model.Output.Achievements)
+                @foreach (var achievement in Model.Output.Achievements)
                 {
                     <tr>
                         <td class="align-middle">@achievement.Name</td>

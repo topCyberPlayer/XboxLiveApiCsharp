@@ -1,8 +1,8 @@
-﻿using XblApp.Domain.DTO;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.Domain.Interfaces.Repository;
+﻿using Domain.DTO;
+using Domain.Entities.JsonModels;
+using Domain.Interfaces.IRepository;
+using Domain.Interfaces.Repository;
+using Domain.Interfaces.XboxLiveService;
 
 namespace Application.XboxLiveUseCases
 {
@@ -75,9 +75,41 @@ namespace Application.XboxLiveUseCases
                 });
         }
 
-        public async Task<IEnumerable<GamerAchievementDTO>> GetGamerAchievementsAsync(string gamertag)
+        /// <summary>
+        /// Отобразить все достижения во всех играх игрока
+        /// </summary>
+        /// <param name="gamertag"></param>
+        /// <returns></returns>
+        public async Task<GamerAchievementDTO> GetGamerAchievementsAsync(string gamertag)
         {
-            return new GamerAchievementDTO[] { new GamerAchievementDTO() { GamerId = 1, Gamertag = "Booba" } };
+            return await _gamerRepository.GetInclude_GamerAchievement_Achievement_Async(
+                a => a.Gamertag == gamertag,
+                b => new GamerAchievementDTO()
+                {
+                    GamerId = b.GamerId,
+                    Gamertag = b.Gamertag,
+                    GameAchievements = new List<GameAchievementInnerDTO>()
+                    {
+                        
+                    }
+                    //GameAchievements = b.Select(a => new GameAchievementDTO2()
+                    //{
+                    //    GameId = a.GameLink.GameId,
+                    //    GameName = a.GameLink.GameName,
+                    //    Achievements = new List<GamerAchievementInnerDTO>()
+                    //    {
+                    //        new GamerAchievementInnerDTO()
+                    //        {
+                    //            Name = a.AchievementLink.Name,
+                    //            Score = a.AchievementLink.Gamerscore,
+                    //            Description = a.AchievementLink.Description,
+                    //            IsUnlocked = a.IsUnlocked
+                    //        }
+                    //    }
+                    //}).ToList()
+                });
+
+            //return new GamerAchievementDTO {  };
         }
 
         public async Task UpdateProfileAsync(long gamerId)

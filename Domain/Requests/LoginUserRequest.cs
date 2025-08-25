@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Requests
+﻿namespace Domain.Requests
 {
     public class LoginUserRequest
     {

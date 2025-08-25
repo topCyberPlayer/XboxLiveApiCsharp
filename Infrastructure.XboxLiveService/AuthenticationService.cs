@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿using Domain.Entities.JsonModels;
+using Domain.Entities.XblAuth;
+using Domain.Interfaces.XboxLiveService;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Entities.XblAuth;
-using XblApp.Domain.Interfaces.IXboxLiveService;
 
-namespace XblApp.XboxLiveService
+namespace Infrastructure.XboxLiveService
 {
     public class AuthenticationService : BaseService, IXboxLiveAuthenticationService
     {

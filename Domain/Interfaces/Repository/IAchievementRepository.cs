@@ -1,8 +1,8 @@
-﻿using System.Linq.Expressions;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Entities.JsonModels;
+﻿using Domain.Entities;
+using Domain.Entities.JsonModels;
+using System.Linq.Expressions;
 
-namespace XblApp.Domain.Interfaces.IRepository
+namespace Domain.Interfaces.IRepository
 {
     public interface IAchievementRepository
     {

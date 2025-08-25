@@ -2,7 +2,7 @@ using Application.XboxLiveUseCases;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace XblApp.Pages.Auth
+namespace XblApp.UI.Pages.Auth
 {
     public class CallBackModel : PageModel
     {

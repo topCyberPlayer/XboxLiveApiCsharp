@@ -1,5 +1,4 @@
-﻿
-namespace XblApp.Infrastructure.Options
+﻿namespace Infrastructure.InternalService.Options
 {
     public class JwtOptions
     {

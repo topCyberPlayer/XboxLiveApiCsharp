@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Responses
+﻿namespace Domain.DTO
 {
     public class TokenDTO
     {

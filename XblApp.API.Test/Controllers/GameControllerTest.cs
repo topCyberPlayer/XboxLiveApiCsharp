@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Text.Json;
-using XblApp.Domain.DTO;
-using XblApp.Infrastructure.Contexts;
+using Domain.DTO;
+using Infrastructure.Contexts;
 
 namespace XblApp.API.Test.Controllers
 {

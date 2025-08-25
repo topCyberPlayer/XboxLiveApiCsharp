@@ -1,7 +1,7 @@
 using Application.XboxLiveUseCases;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Domain.DTO;
+using Domain.DTO;
 
 namespace XblApp.Pages.Gamer
 {

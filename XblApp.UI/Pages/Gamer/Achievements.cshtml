@@ -1,7 +1,7 @@
 ﻿@page "/gamer/{gamertag}/achievements"
-@using XblApp.Domain.DTO
-@using XblApp.Pages.Gamer
-@model XblApp.Pages.Gamer.AchievementsModel
+@using Pages.Gamer
+@using XblApp.UI.Pages.Gamer
+@model XblApp.UI.Pages.Gamer.AchievementsModel
 @{
     ViewData["Title"] = $"Achievements for {Model.Output.Gamertag}";
 }
@@ -26,7 +26,7 @@
             <tbody>
                 @foreach (var gameAchivos in Model.Output.GameAchievements)
                 {
-                    <tr>
+                    @* <tr>
                         <td rowspan="@gameAchivos.Achievements.Count">@gameAchivos.GameName</td>
                         @for (int i = 0; i < gameAchivos.Achievements.Count; i++)
                         {
@@ -46,7 +46,7 @@
                                         }
                                 </td>
                         }
-                    </tr>
+                    </tr> *@
                 }
             </tbody>
         </table>

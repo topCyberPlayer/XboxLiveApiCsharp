@@ -1,7 +1,7 @@
-using XblApp.Application;
-using XblApp.Infrastructure;
-using XblApp.InternalService;
-using XblApp.XboxLiveService;
+using Application;
+using Infrastructure;
+using Infrastructure.InternalService;
+using Infrastructure.XboxLiveService;
 
 namespace XblApp.UI
 {

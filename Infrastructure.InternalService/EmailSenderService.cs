@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace XblApp.InternalService
+namespace Infrastructure.InternalService
 {
     public class EmailSenderService : IEmailSender
     {

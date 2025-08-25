@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XblApp.Domain.Entities.JsonModels
+namespace Domain.Entities.JsonModels
 {
     public class GamerJson
     {

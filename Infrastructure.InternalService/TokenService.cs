@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Domain.DTO;
+using Domain.Interfaces;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using XblApp.Domain.Interfaces;
-using XblApp.Domain.Responses;
-using XblApp.Infrastructure.Options;
+using Infrastructure.InternalService.Options;
 
-namespace XblApp.InternalService
+namespace Infrastructure.InternalService
 {
     internal class TokenService(IOptions<JwtOptions> options) : ITokenService
     {

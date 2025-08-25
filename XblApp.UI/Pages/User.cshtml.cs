@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Domain.DTO;
-using XblApp.Infrastructure.Models;
+using Domain.DTO;
+using Infrastructure.Models;
 
 namespace XblApp.UI.Pages
 {

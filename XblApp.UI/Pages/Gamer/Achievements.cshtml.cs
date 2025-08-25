@@ -1,18 +1,18 @@
 using Application.XboxLiveUseCases;
+using Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Domain.DTO;
 
-namespace XblApp.Pages.Gamer
+namespace XblApp.UI.Pages.Gamer
 {
     public class AchievementsModel(GamerProfileUseCase gamerProfileUseCase) : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public GamerAchievementDTO Output { get; set; }
+        public required GamerAchievementDTO Output { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string gamertag)
         {
-            IEnumerable<GamerAchievementDTO> result = await gamerProfileUseCase.GetGamerAchievementsAsync(gamertag);
+            Output = await gamerProfileUseCase.GetGamerAchievementsAsync(gamertag);
             return Page();
         }
     }

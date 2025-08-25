@@ -1,5 +1,5 @@
-﻿using XblApp.Domain.DTO;
-using XblApp.Domain.Interfaces.Repository;
+﻿using Domain.DTO;
+using Domain.Interfaces.Repository;
 
 namespace Application.XboxLiveUseCases
 {
@@ -32,5 +32,22 @@ namespace Application.XboxLiveUseCases
                 },
                 b => b.GameId == gameId);
 
+        public async Task<AchievementDTO> GetGameWithAchievementsAsync(long gameId) =>
+            await gameRepository.GetInclude_GamerGame_Achievement_GamerAchievement_Async(
+                a => new AchievementDTO()
+                {
+                    GameId = a.GameId,
+                    GameName = a.GameName,
+                    TotalGamerscore = a.TotalGamerscore,
+                    TotalAchievements = a.TotalAchievements,
+                    TotalGamers = a.GamerGameLinks.Count(),
+                    Achievements = a.AchievementLinks.Select(x => new AchievementInnerDTO()
+                    {
+                        Name = x.Name,
+                        Description = x.Description,
+                        Score = x.Gamerscore,
+                    }).ToList()
+                },
+                b => b.GameId == gameId);
     }
 }

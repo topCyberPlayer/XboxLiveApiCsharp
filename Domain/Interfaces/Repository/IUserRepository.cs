@@ -1,4 +1,6 @@
-﻿namespace XblApp.Domain.Interfaces.Repository
+﻿using XblApp.Domain;
+
+namespace Domain.Interfaces.Repository
 {
     public interface IUserRepository
     {

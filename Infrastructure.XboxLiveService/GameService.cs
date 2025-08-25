@@ -1,7 +1,8 @@
-﻿using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IXboxLiveService;
+﻿using Domain.Interfaces.XboxLiveService;
+using Domain.Entities.JsonModels;
+using Infrastructure.XboxLiveService;
 
-namespace XblApp.XboxLiveService
+namespace Infrastructure.XboxLiveService
 {
     public class GameService : BaseService, IXboxLiveGameService
     {

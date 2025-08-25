@@ -1,14 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Domain.Entities.JsonModels;
+using Domain.Interfaces.Repository;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IRepository;
-using XblApp.Infrastructure.Contexts;
 
-namespace XblApp.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class GamerRepository(ApplicationDbContext context) : BaseRepository(context), IGamerRepository
     {
+        public async Task<TKey> GetInclude_GamerAchievement_Achievement_Async<TKey>(
+            Expression<Func<Gamer, bool>> filterExpression, 
+            Expression<Func<Gamer, TKey>> selectExpression) =>
+            await context.Gamers
+                .AsNoTracking()
+                .Where(filterExpression)
+                .Include(a => a.GamerAchievementLinks)
+                    .ThenInclude(b => b.AchievementLink)
+                .Select(selectExpression)
+                .FirstOrDefaultAsync();
+
+
+
         public async Task<IEnumerable<TKey>> GetInclude_GamerGame_Game_Async<TKey>(
             Expression<Func<Gamer, TKey>> selectExpression) =>
             await context.Gamers

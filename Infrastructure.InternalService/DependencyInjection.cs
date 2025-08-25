@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XblApp.Domain.Interfaces;
-using XblApp.Infrastructure.Options;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Infrastructure.InternalService.Options;
 
-namespace XblApp.InternalService
+namespace Infrastructure.InternalService
 {
     public static partial class DependencyInjection
     {
@@ -14,7 +15,7 @@ namespace XblApp.InternalService
             builder.Services.Configure<JwtOptions>(result);
 
             builder.Services.AddScoped<ITokenService, TokenService>();
-            //builder.Services.AddSingleton<IEmailSender, EmailSenderService>();
+            builder.Services.AddSingleton<IEmailSender, EmailSenderService>();
         }
     }
 }

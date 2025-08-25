@@ -1,24 +1,17 @@
 using Application.XboxLiveUseCases;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using XblApp.Domain.DTO;
+using Domain.DTO;
 
-namespace XblApp.Pages.Game
+namespace XblApp.UI.Pages.Game
 {
-    public class IndexModel : PageModel
+    public class IndexModel(GameUseCase gameUseCase) : PageModel
     {
-        public List<GameDTO> Output { get; set; }
-
-        private readonly GameUseCase _gameUseCase;
-
-        public IndexModel(GameUseCase gameUseCase)
-        {
-            _gameUseCase = gameUseCase;
-        }
+        public required IEnumerable<GameDTO> Output { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
-            IEnumerable<GameDTO> games = await _gameUseCase.GetGamesAsync();
+            Output = await gameUseCase.GetGamesAsync();
             return Page();
         }
     }

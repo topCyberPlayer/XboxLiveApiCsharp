@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.DTO
+﻿namespace Domain.DTO
 {
     public class GamerGameDTO
     {

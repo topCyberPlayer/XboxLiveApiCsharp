@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.DTO
+﻿namespace Domain.DTO
 {
     /// <summary>
     /// Представление для игры вне зависимости от игрока

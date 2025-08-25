@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities;
+using Domain.Entities.XblAuth;
+using Infrastructure.Configurations;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Entities.XblAuth;
-using XblApp.Infrastructure.Configurations;
-using XblApp.Infrastructure.Models;
 
-namespace XblApp.Infrastructure.Contexts
+namespace Infrastructure.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

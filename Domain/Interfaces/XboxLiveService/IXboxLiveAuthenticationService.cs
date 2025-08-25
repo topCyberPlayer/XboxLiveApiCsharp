@@ -1,7 +1,7 @@
-﻿using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Entities.XblAuth;
+﻿using Domain.Entities.JsonModels;
+using Domain.Entities.XblAuth;
 
-namespace XblApp.Domain.Interfaces.IXboxLiveService
+namespace Domain.Interfaces.XboxLiveService
 {
     public interface IXboxLiveAuthenticationService
     {

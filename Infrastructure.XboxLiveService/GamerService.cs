@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IXboxLiveService;
+using Domain.Entities.JsonModels;
+using Domain.Interfaces.XboxLiveService;
+using Infrastructure.XboxLiveService;
 
-namespace XblApp.XboxLiveService
+namespace Infrastructure.XboxLiveService
 {
     public class GamerService : BaseService, IXboxLiveGamerService
     {

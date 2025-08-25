@@ -1,6 +1,6 @@
-﻿using XblApp.Infrastructure.Contexts;
+﻿using Infrastructure.Contexts;
 
-namespace XblApp.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class BaseRepository
     {

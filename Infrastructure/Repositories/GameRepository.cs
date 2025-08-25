@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Domain.Entities.JsonModels;
+using Domain.Interfaces.Repository;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using XblApp.Domain.Entities;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.Repository;
-using XblApp.Infrastructure.Contexts;
 
-namespace XblApp.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class GameRepository(ApplicationDbContext context) : BaseRepository(context), IGameRepository
     {

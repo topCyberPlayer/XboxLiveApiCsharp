@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Exceptions
+﻿namespace Domain.Exceptions
 {
     // Когда данные есть, но нарушена бизнес-логика
     public class BusinessRuleException : Exception

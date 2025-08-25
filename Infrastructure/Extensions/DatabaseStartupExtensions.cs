@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Domain.Entities;
+using Infrastructure.Contexts;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using XblApp.Domain.Entities;
-using XblApp.Infrastructure.Contexts;
-using XblApp.Infrastructure.Models;
 
-namespace XblApp.Infrastructure.Extensions
+namespace Infrastructure.Extensions
 {
     public static class DatabaseStartupExtensions
     {

@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Entities.JsonModels;
+using Domain.Interfaces.XboxLiveService;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XblApp.Domain.Entities.JsonModels;
-using XblApp.Domain.Interfaces.IXboxLiveService;
-using XblApp.XboxLiveService.AchievementServices;
+using XboxLiveService.AchievementServices;
 
-namespace XblApp.XboxLiveService
+namespace Infrastructure.XboxLiveService
 {
     public static partial class DependencyInjection
     {

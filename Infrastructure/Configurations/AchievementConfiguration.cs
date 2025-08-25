@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using XblApp.Domain.Entities;
 
-namespace XblApp.Infrastructure.Configurations
+namespace Infrastructure.Configurations
 {
     public class AchievementConfiguration : IEntityTypeConfiguration<Achievement>
     {

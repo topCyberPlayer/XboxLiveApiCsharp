@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Entities
+﻿namespace Domain.Entities
 {
     public class GamerAchievement
     {

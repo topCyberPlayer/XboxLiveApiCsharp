@@ -1,5 +1,4 @@
 ﻿@page "/gamer/{gamertag}/games"
-@using XblApp.Domain.DTO
 @using XblApp.Pages.Gamer
 
 @model XblApp.Pages.Gamer.GamesModel
@@ -25,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (GameInnerDTO game in Model.Output.Games)
+                @foreach (var game in Model.Output.Games)
                 {
                     <tr>
                         <td class="align-middle">@game.GameName</td>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using XblApp.Infrastructure.Contexts;
+using Infrastructure.Contexts;
 
 namespace XblApp.API.Test
 {

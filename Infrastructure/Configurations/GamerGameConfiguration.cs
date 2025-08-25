@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using XblApp.Domain.Entities;
+using Domain.Entities;
 
-namespace XblApp.Infrastructure.Configurations
+namespace Infrastructure.Configurations
 {
     public class GamerGameConfiguration : IEntityTypeConfiguration<GamerGame>
     {

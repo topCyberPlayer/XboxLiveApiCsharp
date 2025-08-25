@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Entities.XblAuth
+﻿namespace Domain.Entities.XblAuth
 {
     /// <summary>
     /// Живет 16 часов

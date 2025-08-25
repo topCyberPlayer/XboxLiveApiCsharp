@@ -1,7 +1,6 @@
-﻿
-using XblApp.Domain.Responses;
+﻿using Domain.DTO;
 
-namespace XblApp.Domain.Interfaces
+namespace Domain.Interfaces
 {
     public interface ITokenService
     {

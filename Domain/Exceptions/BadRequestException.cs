@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Exceptions
+﻿namespace Domain.Exceptions
 {
     // Когда пользователь передал некорректные данные
     public class BadRequestException : Exception

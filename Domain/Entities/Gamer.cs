@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain.Entities
+﻿namespace Domain.Entities
 {
     /// <summary>
     /// Все аннотации описаны в классе GamerConfiguration через Fluent API

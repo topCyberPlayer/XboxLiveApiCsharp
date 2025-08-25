@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using XblApp.Domain.Entities.XblAuth;
+using Domain.Entities.XblAuth;
 
-namespace XblApp.Infrastructure.Configurations
+namespace Infrastructure.Configurations
 {
     public class XboxLiveTokenConfiguration : IEntityTypeConfiguration<XboxXauToken>
     {
