@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.Entities.JsonModels;
+﻿using Domain.Entities.JsonModels;
 using Domain.Entities.XblAuth;
 using Domain.Interfaces.IRepository;
 using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories
 {
@@ -12,25 +13,11 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?>
-        GetAllDonorsAsync()
+        public async Task<IEnumerable<TKey>?> GetAllDonorsAsync<TKey>(Expression<Func<XboxAuthToken, TKey>> expressionSelect)
         {
-            var result = await (from oauth in context.XboxOAuthTokens
-                                join live in context.XboxLiveTokens on oauth.UserId equals live.UserIdFK
-                                join user in context.XboxUserTokens on live.UhsId equals user.UhsIdFK
-                                select new
-                                {
-                                    oauth.UserId,
-                                    XboxLiveNotAfter = live.NotAfter,
-                                    XboxUserNotAfter = user.NotAfter,
-                                    user.Xuid,
-                                    user.Gamertag
-                                })
-                                .ToListAsync();
-
-            return result
-                .Select(r => (r.UserId, r.XboxLiveNotAfter, r.XboxUserNotAfter, r.Xuid, r.Gamertag))
-                .ToList();
+            return await context.XboxOAuthTokens
+                .Select(expressionSelect)
+                .ToListAsync();
         }
 
         public string? GetAuthorizationHeaderValue()

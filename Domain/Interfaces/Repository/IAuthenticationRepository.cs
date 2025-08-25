@@ -1,5 +1,7 @@
-﻿using Domain.Entities.JsonModels;
+﻿using Domain.DTO;
+using Domain.Entities.JsonModels;
 using Domain.Entities.XblAuth;
+using System.Linq.Expressions;
 
 namespace Domain.Interfaces.IRepository
 {
@@ -18,6 +20,6 @@ namespace Domain.Interfaces.IRepository
         /// <returns></returns>
         public DateTime GetDateLiveTokenExpired();
         public string? GetAuthorizationHeaderValue();
-        public Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?> GetAllDonorsAsync();
+        public Task<IEnumerable<TKey>?> GetAllDonorsAsync<TKey>(Expression<Func<XboxAuthToken, TKey>> expressionSelect);
     }
 }

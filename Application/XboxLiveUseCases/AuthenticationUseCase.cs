@@ -1,4 +1,5 @@
-﻿using Domain.Entities.JsonModels;
+﻿using Domain.DTO;
+using Domain.Entities.JsonModels;
 using Domain.Entities.XblAuth;
 using Domain.Interfaces.IRepository;
 using Domain.Interfaces.XboxLiveService;
@@ -20,10 +21,18 @@ namespace Application.XboxLiveUseCases
             _authRepository = authRepository;
         }
 
-        public async Task<List<(string UserId, DateTime XboxLiveNotAfter, DateTime XboxUserNotAfter, string Xuid, string Gamertag)>?> GetAllDonors() =>
-            await _authRepository.GetAllDonorsAsync();
+        public async Task<IEnumerable<DonorDTO>?> GetAllDonors() =>
+            await _authRepository.GetAllDonorsAsync(o => new DonorDTO
+            {
+                UserId = o.UserId,
+                XboxLiveNotAfter = o.XboxXauTokenLink!.NotAfter,
+                XboxUserNotAfter = o.XboxXauTokenLink!.XboxXstsTokenLink!.NotAfter,
+                Xuid = o.XboxXauTokenLink!.XboxXstsTokenLink!.Xuid,
+                Gamertag = o.XboxXauTokenLink!.XboxXstsTokenLink!.Gamertag
+            });
 
-        public string GenerateAuthorizationUrl() => _authService.GenerateAuthorizationUrl();
+        public string GenerateAuthorizationUrl() => 
+            _authService.GenerateAuthorizationUrl();
 
         /// <summary>
         /// Использовать когда TokenOAuth вообще нет
