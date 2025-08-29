@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Infrastructure.Contexts;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

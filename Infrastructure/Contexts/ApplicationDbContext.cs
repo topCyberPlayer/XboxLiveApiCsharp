@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.XblAuth;
 using Infrastructure.Configurations;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

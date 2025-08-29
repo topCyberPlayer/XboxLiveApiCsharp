@@ -6,8 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Domain.Interfaces.IRepository;
 using Domain.Interfaces.Repository;
 using Infrastructure.Contexts;
-using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Domain.Entities;
 
 namespace Infrastructure
 {

@@ -4,7 +4,7 @@
 
 using Application.InnerUseCases;
 using Domain.DTO;
-using Infrastructure.Models;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

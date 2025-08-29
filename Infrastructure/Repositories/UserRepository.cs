@@ -1,5 +1,5 @@
-﻿using Domain.Interfaces.Repository;
-using Infrastructure.Models;
+﻿using Domain.Entities;
+using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Identity;
 using XblApp.Domain;
 

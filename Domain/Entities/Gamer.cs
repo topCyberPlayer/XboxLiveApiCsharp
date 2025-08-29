@@ -5,17 +5,14 @@
     /// </summary>
     public class Gamer
     {
-        //todo GamerId должен стать Unique и заполняться БД, а в Xuid записывать, то что сейчас записывается в GamerId
         public required long GamerId { get; set; }
         public required string Gamertag { get; set; }
         public int Gamerscore { get; set; }
         public string? Bio { get; set; }
         public string? Location { get; set; }
 
-        /// <summary>
-        /// Внешний ключ к IdentityUser
-        /// </summary>
         public string? ApplicationUserId { get; set; }
+        public ApplicationUser User { get; set; } = null!;
 
         /// <summary>
         /// Игры, в которые играет пользователь
