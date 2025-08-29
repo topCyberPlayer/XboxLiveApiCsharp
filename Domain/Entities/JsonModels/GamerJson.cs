@@ -10,7 +10,7 @@ namespace Domain.Entities.JsonModels
 
     public class ProfileUser
     {
-        public ProfileUser(string applicationUserId, string gamertag, int gamerscore)
+        public ProfileUser(long applicationUserId, string gamertag, int gamerscore)
         {
             ApplicationUserId = applicationUserId;
             Gamertag = gamertag;
@@ -20,7 +20,7 @@ namespace Domain.Entities.JsonModels
         /// <summary>
         /// Кастомное поле. Заполняется вручную
         /// </summary>
-        public string ApplicationUserId { get; set; } = null!;
+        public long ApplicationUserId { get; set; }
 
         [JsonPropertyName("id")]
         public long GamerId { get; set; }

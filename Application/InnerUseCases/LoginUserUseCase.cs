@@ -1,7 +1,7 @@
 ﻿using Domain.DTO;
 using Domain.Interfaces;
-using XblApp.Domain;
 using Domain.Interfaces.Repository;
+using Domain;
 
 namespace Application.InnerUseCases
 {
@@ -19,7 +19,7 @@ namespace Application.InnerUseCases
 
             IList<string>? roles = await userRepository.GetRolesAsync(user);
 
-            return tokenService.GenerateToken(user.Id, user.Email, roles);
+            return tokenService.GenerateToken(user.Id.ToString(), user.Email, roles);
         }
 
         public async Task<TokenDTO> RefreshTokenAsync(TokenDTO dto)
@@ -35,7 +35,7 @@ namespace Application.InnerUseCases
 
             IList<string>? roles = await userRepository.GetRolesAsync(user);
 
-            return tokenService.GenerateToken(user.Id, user.Email, roles);
+            return tokenService.GenerateToken(user.Id.ToString(), user.Email, roles);
         }
     }
 }

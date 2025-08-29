@@ -23,7 +23,7 @@ namespace Infrastructure
             });
 
             builder.Services
-                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                .AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.User.RequireUniqueEmail = true;

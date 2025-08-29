@@ -1,8 +1,8 @@
-﻿namespace XblApp.Domain
+﻿namespace Domain
 {
     public class UserInfo
     {
-        public string Id { get; init; } = null!;
+        public long Id { get; init; }
         public string Email { get; init; } = null!;
     }
 }

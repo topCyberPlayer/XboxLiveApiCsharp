@@ -1,12 +1,13 @@
 ﻿using Domain.Entities;
 using Domain.Entities.XblAuth;
 using Infrastructure.Configurations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public DbSet<Gamer> Gamers { get; set; }
         public DbSet<Game> Games { get; set; }

@@ -1,19 +1,19 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Identity;
-using XblApp.Domain;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository(UserManager<ApplicationUser> userManager) : IUserRepository
     {
-        public async Task<(bool Success, string Error, string UserId)> CreateUserAsync(string gamertag, string email, string password)
+        public async Task<(bool Success, string Error, long UserId)> CreateUserAsync(string gamertag, string email, string password)
         {
             ApplicationUser user = new() { UserName = gamertag, Email = email };
             IdentityResult? result = await userManager.CreateAsync(user, password);
 
             if (!result.Succeeded)
-                return (false, string.Join(",", result.Errors.Select(e => e.Description)), null);
+                return (false, string.Join(",", result.Errors.Select(e => e.Description)), default);
 
             return (true, null, user.Id);
         }
@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> CheckPasswordAsync(UserInfo userInfo, string password)
         {
-            var user = await userManager.FindByIdAsync(userInfo.Id);
+            var user = await userManager.FindByIdAsync(userInfo.Id.ToString());
             if (user == null) return false;
 
             return await userManager.CheckPasswordAsync(user, password);
@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
 
         public async Task<IList<string>> GetRolesAsync(UserInfo userInfo)
         {
-            var user = await userManager.FindByIdAsync(userInfo.Id);
+            var user = await userManager.FindByIdAsync(userInfo.Id.ToString());
             if (user == null) return new List<string>();
 
             return await userManager.GetRolesAsync(user);

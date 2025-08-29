@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<int>
     {
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
