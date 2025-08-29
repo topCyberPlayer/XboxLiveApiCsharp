@@ -1,7 +1,7 @@
 ﻿namespace Domain.Entities.XblAuth
 {
     /// <summary>
-    /// Живет 16 часов
+    /// Живет 16 часов. Предоставляет расширенную информацию о пользователе Xbox Live.
     /// </summary>
     public partial class XboxXstsToken
     {

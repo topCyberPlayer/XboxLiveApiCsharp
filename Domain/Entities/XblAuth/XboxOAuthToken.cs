@@ -1,7 +1,7 @@
 ﻿namespace Domain.Entities.XblAuth
 {
     /// <summary>
-    /// // 1-й токен
+    /// // 1-й токен. Этот файл содержит стандартные OAuth-токены, используемые для авторизации в Microsoft Identity Platform
     /// </summary>
     public partial class XboxAuthToken
     {

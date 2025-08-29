@@ -1,7 +1,7 @@
 ﻿namespace Domain.Entities.XblAuth
 {
     /// <summary>
-    /// 2-й токен. Живет 4 дня
+    /// 2-й токен. Живет 4 дня. Этот токен необходим для работы с Xbox Live API
     /// </summary>
     public partial class XboxXauToken
     {
