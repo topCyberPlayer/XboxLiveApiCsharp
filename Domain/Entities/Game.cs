@@ -2,8 +2,8 @@
 {
     public class Game
     {
-        public long GameId { get; set; }
-        public string? GameName { get; set; }
+        public required long GameId { get; set; }
+        public required string? GameName { get; set; }
         public int TotalAchievements { get; set; }
         public int TotalGamerscore { get; set; }
         public DateOnly? ReleaseDate { get; set; }
