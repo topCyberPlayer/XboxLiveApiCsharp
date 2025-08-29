@@ -1,14 +1,15 @@
-using XblApp.API.Middlewares;
 using Application;
 using Infrastructure;
-using Infrastructure.XboxLiveService;
 using Infrastructure.InternalService;
+using Infrastructure.Seed;
+using Infrastructure.XboxLiveService;
+using XblApp.API.Middlewares;
 
 namespace XblApp.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,8 @@ namespace XblApp.API
 
             app.MapHealthChecks("/isAlive");
             app.MapControllers();
+
+            await app.InitializeInfrastructureIdentityAsync();
 
             app.Run();
         }

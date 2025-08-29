@@ -4,6 +4,7 @@ namespace Domain.Requests
 {
     public class AchievementRequest
     {
+        [Required] public required long AchievementId { get; set; }
         [Required] public required string Name { get; set; }
         [Required] public required string Description { get; set; }
         [Required] public required int Gamerscore { get; set; }

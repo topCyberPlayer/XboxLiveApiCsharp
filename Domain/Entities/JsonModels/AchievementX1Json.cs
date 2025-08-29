@@ -40,7 +40,7 @@ namespace Domain.Entities.JsonModels
         public string Platform { get; set; }
 
         [JsonPropertyName("isSecret")]
-        public bool? IsSecret { get; set; }
+        public bool IsSecret { get; set; }
 
         [JsonPropertyName("description")]
         public string Description { get; set; }

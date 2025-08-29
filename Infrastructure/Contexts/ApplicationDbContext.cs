@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.XblAuth;
 using Infrastructure.Configurations;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,29 +30,6 @@ namespace Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new XboxOAuthTokenConfiguration());
             modelBuilder.ApplyConfiguration(new XboxLiveTokenConfiguration());
             modelBuilder.ApplyConfiguration(new XboxUserTokenConfiguration());
-
-            IdentityRole? adminTeam = new()
-            {
-                Id = "role-adminTeam",
-                Name = "adminTeam",
-                NormalizedName = "ADMINTEAM"
-            };
-
-            IdentityRole gamerTeam = new()
-            {
-                Id = "role-gamerTeam",
-                Name = "gamerTeam",
-                NormalizedName = "GAMERTEAM"
-            };
-
-            IdentityRole moderatorTeam = new()
-            {
-                Id = "role-moderatorTeam",
-                Name = "moderatorTeam",
-                NormalizedName = "MODERATORTEAM"
-            };
-
-            modelBuilder.Entity<IdentityRole>().HasData(adminTeam, gamerTeam, moderatorTeam);
         }
     }
 }

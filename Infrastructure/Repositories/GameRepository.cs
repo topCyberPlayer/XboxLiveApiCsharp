@@ -34,6 +34,7 @@ namespace Infrastructure.Repositories
         {
             Game game = new()
             {
+                GameId = request.GameId,
                 GameName = request.GameName,
                 TotalAchievements = request.TotalAchievements,
                 TotalGamerscore = request.TotalGamerscore,
@@ -41,6 +42,7 @@ namespace Infrastructure.Repositories
                 Description = request.Description,
                 AchievementLinks = request.Achievements.Select(a => new Achievement
                 {
+                    AchievementId = a.AchievementId,
                     Name = a.Name,
                     Description = a.Description,
                     Gamerscore = a.Gamerscore,

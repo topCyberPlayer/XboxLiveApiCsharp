@@ -1,13 +1,14 @@
 using Application;
 using Infrastructure;
 using Infrastructure.InternalService;
+using Infrastructure.Seed;
 using Infrastructure.XboxLiveService;
 
 namespace XblApp.UI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Configuration
@@ -45,17 +46,9 @@ namespace XblApp.UI
 
             app.MapRazorPages();
 
+            await app.InitializeInfrastructureIdentityAsync();
+
             app.Run();
-        }
-    }
-
-    public static partial class MiddlewareInitializer
-    {
-        public static WebApplication ConfigureMiddleware(this WebApplication app)
-        {
-
-
-            return app;
         }
     }
 
