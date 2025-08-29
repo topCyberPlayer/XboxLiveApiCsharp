@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories
 {
     public class UserRepository(UserManager<ApplicationUser> userManager) : IUserRepository
     {
-        public async Task<(bool Success, string Error, long UserId)> CreateUserAsync(string gamertag, string email, string password)
+        public async Task<(bool Success, string Error, int UserId)> CreateUserAsync(string gamertag, string email, string password)
         {
             ApplicationUser user = new() { UserName = gamertag, Email = email };
             IdentityResult? result = await userManager.CreateAsync(user, password);

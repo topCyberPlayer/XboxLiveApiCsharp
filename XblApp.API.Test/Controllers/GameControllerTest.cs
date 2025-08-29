@@ -1,6 +1,5 @@
 ﻿using Domain.DTO;
 using Domain.Requests;
-using Humanizer;
 using Infrastructure.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;

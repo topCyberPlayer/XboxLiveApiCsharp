@@ -11,7 +11,7 @@
         public string? Bio { get; set; }
         public string? Location { get; set; }
 
-        public long ApplicationUserId { get; set; }
+        public int ApplicationUserId { get; set; }
         public ApplicationUser User { get; set; } = null!;
 
         /// <summary>
