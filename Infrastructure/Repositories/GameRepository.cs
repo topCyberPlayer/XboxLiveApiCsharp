@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.JsonModels;
 using Domain.Interfaces.Repository;
+using Domain.Requests;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -28,6 +29,28 @@ namespace Infrastructure.Repositories
             .Where(filterExpression)
             .Select(selectExpression)
             .FirstOrDefaultAsync();
+
+        public async Task SaveOrUpdateGamesAsync(GameRequest request)
+        {
+            Game game = new()
+            {
+                GameName = request.GameName,
+                TotalAchievements = request.TotalAchievements,
+                TotalGamerscore = request.TotalGamerscore,
+                ReleaseDate = request.ReleaseDate,
+                Description = request.Description,
+                AchievementLinks = request.Achievements.Select(a => new Achievement
+                {
+                    Name = a.Name,
+                    Description = a.Description,
+                    Gamerscore = a.Gamerscore,
+                    IsSecret = a.IsSecret,
+                }).ToList()
+            };
+
+            await context.Games.AddAsync(game);
+            await context.SaveChangesAsync();
+        }
 
         public async Task SaveOrUpdateGamesAsync(GameJson gameJson)
         {

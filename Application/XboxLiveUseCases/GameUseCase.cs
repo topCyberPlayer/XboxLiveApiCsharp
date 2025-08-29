@@ -1,5 +1,6 @@
 ﻿using Domain.DTO;
 using Domain.Interfaces.Repository;
+using Domain.Requests;
 
 namespace Application.XboxLiveUseCases
 {
@@ -49,5 +50,10 @@ namespace Application.XboxLiveUseCases
                     }).ToList()
                 },
                 b => b.GameId == gameId);
+
+        public async Task AddGameAsync(GameRequest request)
+        {
+            await gameRepository.SaveOrUpdateGamesAsync(request);
+        }
     }
 }
