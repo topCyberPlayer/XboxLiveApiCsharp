@@ -44,7 +44,7 @@ namespace Infrastructure.Seed
                 Gamer gamer = new()
                 {
                     GamerId = 1,
-                    ApplicationUserId = user.Id,
+                    User = user,
                     Gamertag = defaultUserGamertag,
                 };
 

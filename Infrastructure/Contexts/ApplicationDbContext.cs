@@ -31,6 +31,7 @@ namespace Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new XboxOAuthTokenConfiguration());
             modelBuilder.ApplyConfiguration(new XboxLiveTokenConfiguration());
             modelBuilder.ApplyConfiguration(new XboxUserTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
         }
     }
 }
