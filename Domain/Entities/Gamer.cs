@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.JsonModels;
+
+namespace Domain.Entities
 {
     /// <summary>
     /// Все аннотации описаны в классе GamerConfiguration через Fluent API
@@ -7,7 +9,7 @@
     {
         public required long GamerId { get; set; }
         public required string Gamertag { get; set; }
-        public int Gamerscore { get; set; }
+        public required int Gamerscore { get; set; }
         public string? Bio { get; set; }
         public string? Location { get; set; }
 

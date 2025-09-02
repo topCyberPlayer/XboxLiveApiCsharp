@@ -16,13 +16,13 @@ namespace Infrastructure.Seed
 
             ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            RoleManager<IdentityRole<int>> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+            RoleManager<IdentityRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             foreach (RoleType role in Enum.GetValues<RoleType>())
             {
                 if (!await roleManager.RoleExistsAsync(role.ToString()))
                 {
-                    await roleManager.CreateAsync(new IdentityRole<int>(role.ToString()));
+                    await roleManager.CreateAsync(new IdentityRole(role.ToString()));
                 }
             }
 
@@ -38,20 +38,34 @@ namespace Infrastructure.Seed
                     Email = defaultUserEmail,
                 };
 
-                await userManager.CreateAsync(user, defaultUserPassword);
-                await userManager.AddToRoleAsync(user, RoleType.Admin.ToString());
+                IdentityResult createResult = await userManager.CreateAsync(user, defaultUserPassword);
 
-                Gamer gamer = new()
+                if (createResult.Succeeded)
                 {
-                    GamerId = 1,
-                    ApplicationUserId = user.Id,
-                    Gamertag = defaultUserGamertag,
-                };
+                    IdentityResult roleResult = await userManager.AddToRoleAsync(user, RoleType.Admin.ToString());
 
-                await context.Gamers.AddRangeAsync(gamer);
-                await context.SaveChangesAsync();
+                    if (!roleResult.Succeeded)
+                    {
+                        throw new Exception($"Не удалось добавить пользователя в роль: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+                    }
+
+                    Gamer gamer = new()
+                    {
+                        GamerId = 1,
+                        Gamertag = defaultUserGamertag,
+                        Gamerscore = 250,
+                        ApplicationUserId = user.Id,
+                        User = user,
+                    };
+
+                    await context.Gamers.AddRangeAsync(gamer);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception($"Не удалось создать пользователя: {string.Join(", ", createResult.Errors.Select(e => e.Description))}");
+                }
             }
         }
     }
-
 }
