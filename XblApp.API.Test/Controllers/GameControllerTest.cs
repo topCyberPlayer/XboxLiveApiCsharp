@@ -84,6 +84,7 @@ namespace XblApp.API.Test.Controllers
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 GameRequest game = new()
                 {
+                    GameId = 1,
                     GameName = "Test Game",
                     TotalAchievements = 10,
                     TotalGamerscore = 100,
@@ -93,6 +94,7 @@ namespace XblApp.API.Test.Controllers
                     {
                         new AchievementRequest
                         {
+                            AchievementId = 991,
                             Name = "First Achievement",
                             Description = "Unlock the first achievement.",
                             Gamerscore = 10,
@@ -100,6 +102,7 @@ namespace XblApp.API.Test.Controllers
                         },
                         new AchievementRequest
                         {
+                            AchievementId = 992,
                             Name = "Secret Achievement",
                             Description = "Unlock the secret achievement.",
                             Gamerscore = 20,
