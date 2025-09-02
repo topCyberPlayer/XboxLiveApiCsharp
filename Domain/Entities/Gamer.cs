@@ -14,7 +14,7 @@ namespace Domain.Entities
         public string? Location { get; set; }
 
         public string? ApplicationUserId { get; set; }
-        public ApplicationUser User { get; set; } = null!;
+        public ApplicationUser ApplicationUserLink { get; set; } = null!;
 
         /// <summary>
         /// Игры, в которые играет пользователь

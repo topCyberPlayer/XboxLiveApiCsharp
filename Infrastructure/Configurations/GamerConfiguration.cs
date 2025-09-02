@@ -8,8 +8,10 @@ namespace Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Gamer> builder)
         {
-            // Указываем ключ и отключаем автоинкремент
+            // Указываем ключ 
             builder.HasKey(g => g.GamerId);
+
+            //Отключаем автоинкремент
             builder.Property(g => g.GamerId)
                 .ValueGeneratedNever(); // Аналог DatabaseGeneratedOption.None
 
@@ -41,8 +43,8 @@ namespace Infrastructure.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Связь 1 к 1 с ApplicationUser
-            builder.HasOne<ApplicationUser>()
-                .WithOne(g => g.Gamer)
+            builder.HasOne(a => a.ApplicationUserLink)
+                    .WithOne(u => u.Gamer)
                 .HasForeignKey<Gamer>(g => g.ApplicationUserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);

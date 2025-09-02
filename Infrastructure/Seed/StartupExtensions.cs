@@ -54,8 +54,7 @@ namespace Infrastructure.Seed
                         GamerId = 1,
                         Gamertag = defaultUserGamertag,
                         Gamerscore = 250,
-                        ApplicationUserId = user.Id,
-                        User = user,
+                        ApplicationUserLink = user,
                     };
 
                     await context.Gamers.AddRangeAsync(gamer);
