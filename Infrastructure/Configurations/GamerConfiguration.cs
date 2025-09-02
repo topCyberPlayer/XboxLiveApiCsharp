@@ -42,7 +42,7 @@ namespace Infrastructure.Configurations
 
             // Связь 1 к 1 с ApplicationUser
             builder.HasOne<ApplicationUser>()
-                .WithOne()
+                .WithOne(g => g.Gamer)
                 .HasForeignKey<Gamer>(g => g.ApplicationUserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
