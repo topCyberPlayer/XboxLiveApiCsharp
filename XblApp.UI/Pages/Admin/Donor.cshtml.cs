@@ -1,12 +1,13 @@
 using Application.XboxLiveUseCases;
 using Domain.DTO;
+using Infrastructure.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace XblApp.UI.Pages.Admin
 {
-    [Authorize(Roles = "adminTeam")]
+    [Authorize(Roles = nameof(RoleType.Admin))]
     public class DonorModel(AuthenticationUseCase authUseCase) : PageModel
     {
         public IEnumerable<DonorDTO>? Output { get; set; }
