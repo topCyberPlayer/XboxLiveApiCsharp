@@ -112,19 +112,19 @@ namespace Application.XboxLiveUseCases
             //return new GamerAchievementDTO {  };
         }
 
-        public async Task UpdateProfileAsync(long gamerId)
+        public async Task UpdateProfileAsync(long gamerId, string userId)
         {
-            GamerJson gamers = await GetAndSaveGamerProfile(gamerId);
+            GamerJson gamers = await GetAndSaveGamerProfile(gamerId, userId);
 
             GameJson games = await GetAndSaveGames(gamerId);
 
             (AchievementX1Json achievementsX1, AchievementX360Json achievementsX360) = await GetAndSaveAchievements(gamerId);
         }
 
-        public async Task<GamerJson> GetAndSaveGamerProfile(long gamerId)
+        public async Task<GamerJson> GetAndSaveGamerProfile(long gamerId, string userId)
         {
             GamerJson gamers = await _gamerService.GetGamerProfileAsync(gamerId);
-            await _gamerRepository.SaveOrUpdateGamersAsync(gamers);
+            await _gamerRepository.SaveOrUpdateGamersAsync(gamers, userId );
 
             return gamers;
         }

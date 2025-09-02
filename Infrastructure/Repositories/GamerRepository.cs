@@ -46,34 +46,33 @@ namespace Infrastructure.Repositories
             await context.Gamers.AnyAsync(g => g.Gamertag == gamertag);
 
 
-        public async Task SaveOrUpdateGamersAsync(GamerJson gamerJson)
+        public async Task SaveOrUpdateGamersAsync(GamerJson gamerJsonColl, string applicationUserId)
         {
-            foreach (var profile in gamerJson.ProfileUsers)
+            ProfileUser? gamerJson = gamerJsonColl.ProfileUsers.FirstOrDefault();
+            
+            // Ищем существующего игрока в БД
+            Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerJson.GamerId);
+
+            if (gamer == null)
             {
-                // Ищем существующего игрока в БД
-                Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == profile.GamerId);
-
-                if (gamer == null)
+                gamer = new Gamer
                 {
-                    gamer = new Gamer
-                    {
-                        ApplicationUserId = profile.ApplicationUserId,
-                        GamerId = profile.GamerId,
-                        Gamertag = profile.Gamertag,
-                        Gamerscore = profile.Gamerscore,
-                        Bio = profile.Bio,
-                        Location = profile.Location
-                    };
+                    ApplicationUserId = applicationUserId,
+                    GamerId = gamerJson.GamerId,
+                    Gamertag = gamerJson.Gamertag,
+                    Gamerscore = gamerJson.Gamerscore,
+                    Bio = gamerJson.Bio,
+                    Location = gamerJson.Location
+                };
 
-                    context.Gamers.Add(gamer);
-                }
-                else
-                {
-                    gamer.Gamertag = profile.Gamertag;
-                    gamer.Gamerscore = profile.Gamerscore;
-                    gamer.Bio = profile.Bio;
-                    gamer.Location = profile.Location;
-                }
+                context.Gamers.Add(gamer);
+            }
+            else
+            {
+                gamer.Gamertag = gamerJson.Gamertag;
+                gamer.Gamerscore = gamerJson.Gamerscore;
+                gamer.Bio = gamerJson.Bio;
+                gamer.Location = gamerJson.Location;
             }
 
             await context.SaveChangesAsync(); // Сохраняем в БД

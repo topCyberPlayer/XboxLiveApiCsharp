@@ -30,13 +30,13 @@ namespace Application.InnerUseCases
             if (!resultGamer.ProfileUsers.Any())
                 return new RegisterUserResult (success: false, error: "Gamer not found on Xbox Live", null);
 
-            var createResult = await userRepository.CreateUserAsync(gamertag, email, password);
+            var createResult = await userRepository.CreateUserAsync(resultGamer.ProfileUsers.FirstOrDefault().Gamertag, email, password);
             if (!createResult.Success)
                 return new RegisterUserResult (success: false, error: createResult.Error, null );
 
             var roleResult = await userRepository.AddRoleToUserAsync(createResult.UserId);
 
-            await gamerRepository.SaveOrUpdateGamersAsync(resultGamer);
+            await gamerRepository.SaveOrUpdateGamersAsync(resultGamer, createResult.UserId);
 
             return new RegisterUserResult (success: true,  error: null, userId: createResult.UserId);
         }

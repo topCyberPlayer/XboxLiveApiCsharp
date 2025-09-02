@@ -17,7 +17,7 @@ namespace Domain.Interfaces.Repository
             Expression<Func<Gamer, bool>> filterExpression,
             Expression<Func<Gamer, TKey>> selectExpression);
 
-        Task SaveOrUpdateGamersAsync(GamerJson gamers);
+        Task SaveOrUpdateGamersAsync(GamerJson gamers, string applicationUserId);
 
         Task SaveOrUpdateGamersAsync(Gamer gamer, string applicationUserId);
 

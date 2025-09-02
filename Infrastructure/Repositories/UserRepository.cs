@@ -11,7 +11,7 @@ namespace Infrastructure.Repositories
         public async Task<(bool Success, string Error, string UserId)> CreateUserAsync(string gamertag, string email, string password)
         {
             ApplicationUser user = new() { UserName = gamertag, Email = email };
-            IdentityResult? createResult = await userManager.CreateAsync(user, password);
+            IdentityResult? createResult = await userManager.CreateAsync(user, password);//todo вынести в RegisterUserCase
 
             if (!createResult.Succeeded)
                 return (false, string.Join(",", createResult.Errors.Select(e => e.Description)), null);

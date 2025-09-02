@@ -2,7 +2,7 @@
 
 namespace Infrastructure.InternalService
 {
-    public class EmailSenderService : IEmailSender
+    public class NullEmailSenderService : IEmailSender
     {
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {

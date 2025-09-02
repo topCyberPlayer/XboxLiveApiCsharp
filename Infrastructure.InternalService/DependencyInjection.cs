@@ -15,7 +15,7 @@ namespace Infrastructure.InternalService
             builder.Services.Configure<JwtOptions>(result);
 
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddSingleton<IEmailSender, EmailSenderService>();
+            builder.Services.AddSingleton<IEmailSender, NullEmailSenderService>();
         }
     }
 }

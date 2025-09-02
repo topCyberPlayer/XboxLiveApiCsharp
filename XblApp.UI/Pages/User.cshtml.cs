@@ -1,10 +1,11 @@
 using Application.XboxLiveUseCases;
+using Domain.DTO;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Domain.DTO;
-using Domain.Entities;
+using System.Security.Claims;
 
 namespace XblApp.UI.Pages
 {
@@ -35,7 +36,8 @@ namespace XblApp.UI.Pages
 
         public async Task<IActionResult> OnPostUpdateProfileAsync(long gamerId, string gamertag)
         {
-            await _gamerProfileUseCase.UpdateProfileAsync(gamerId);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _gamerProfileUseCase.UpdateProfileAsync(gamerId, userId);
             return RedirectToPage("/Gamer/Index", new { gamertag = gamertag });
         }
     }

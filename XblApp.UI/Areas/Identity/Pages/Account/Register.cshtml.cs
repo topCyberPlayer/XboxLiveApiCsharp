@@ -130,8 +130,9 @@ namespace XblApp.UI.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = registerResult.UserId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //todo Этот код не работает, потому что (предположительно) надо создать страницу (через scafolding): Areas/Identity/Pages/Account/ConfirmEmail.cshtml
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
