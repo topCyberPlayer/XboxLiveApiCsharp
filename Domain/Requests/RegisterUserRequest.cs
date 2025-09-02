@@ -1,4 +1,6 @@
-﻿namespace Domain.Requests
+﻿using Domain.Enums;
+
+namespace Domain.Requests
 {
     public class RegisterUserRequest
     {

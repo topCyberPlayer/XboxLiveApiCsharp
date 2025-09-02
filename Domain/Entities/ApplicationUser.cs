@@ -6,6 +6,6 @@ namespace Domain.Entities
     {
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Gamer Gamer { get; set; } = null!;
+        public Gamer GamerLink { get; set; } = null!;
     }
 }

@@ -13,7 +13,7 @@ namespace Domain.Entities
         public string? Bio { get; set; }
         public string? Location { get; set; }
 
-        public string? ApplicationUserId { get; set; }
+        public required string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUserLink { get; set; } = null!;
 
         /// <summary>

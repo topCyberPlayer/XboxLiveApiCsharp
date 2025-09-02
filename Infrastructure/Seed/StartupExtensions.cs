@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Infrastructure.Contexts;
-using Infrastructure.Enums;
+using Domain.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +54,7 @@ namespace Infrastructure.Seed
                         GamerId = 1,
                         Gamertag = defaultUserGamertag,
                         Gamerscore = 250,
-                        ApplicationUserLink = user,
+                        ApplicationUserId = user.Id
                     };
 
                     await context.Gamers.AddRangeAsync(gamer);

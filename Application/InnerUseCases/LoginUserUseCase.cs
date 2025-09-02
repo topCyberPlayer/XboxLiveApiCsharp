@@ -9,17 +9,17 @@ namespace Application.InnerUseCases
     {
         public async Task<TokenDTO> LoginUser(string gamertag, string password)
         {
-            UserInfo user = await userRepository.FindByGamertagAsync(gamertag);
-            if (user == null)
-                throw new UnauthorizedAccessException("Неверный gamertag иил пароль");
+            UserInfo userInfo = await userRepository.FindByGamertagAsync(gamertag);
+            if (userInfo is null)
+                throw new UnauthorizedAccessException($"Пользователь с gamertag: {gamertag} не существует");
 
-            bool valid = await userRepository.CheckPasswordAsync(user, password);
-            if (!valid)
-                throw new UnauthorizedAccessException("Неверный gamertag иил пароль");
+            bool isPasswordValid = await userRepository.CheckPasswordAsync(userInfo.Id, password);
+            if (!isPasswordValid)
+                throw new UnauthorizedAccessException("Неверный пароль");
 
-            IList<string>? roles = await userRepository.GetRolesAsync(user);
+            IList<string>? roles = await userRepository.GetRolesAsync(userInfo.Id);
 
-            return tokenService.GenerateToken(user.Id, user.Email, roles);
+            return tokenService.GenerateToken(userInfo.Id, userInfo.Email, roles);
         }
 
         public async Task<TokenDTO> RefreshTokenAsync(TokenDTO dto)
@@ -33,7 +33,7 @@ namespace Application.InnerUseCases
             if (user == null)
                 throw new UnauthorizedAccessException("Пользователь не найден");
 
-            IList<string>? roles = await userRepository.GetRolesAsync(user);
+            IList<string>? roles = await userRepository.GetRolesAsync(user.Id);
 
             return tokenService.GenerateToken(user.Id, user.Email, roles);
         }

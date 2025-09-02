@@ -2,8 +2,15 @@
 {
     public class RegisterUserResult
     {
-        public string? UserId { get; set; }
-        public bool Success { get; init; }
-        public string? Error { get; init; }
+        public RegisterUserResult(bool success, string? error, string? userId)
+        {
+            this.Success = success;
+            this.Error = error;
+            this.UserId = userId;
+        }
+
+        public string? UserId { get; private set; }
+        public bool Success { get; private init; }
+        public string? Error { get; private init; }
     }
 }

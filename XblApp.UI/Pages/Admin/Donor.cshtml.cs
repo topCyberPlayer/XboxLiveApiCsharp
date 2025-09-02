@@ -1,6 +1,6 @@
 using Application.XboxLiveUseCases;
 using Domain.DTO;
-using Infrastructure.Enums;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

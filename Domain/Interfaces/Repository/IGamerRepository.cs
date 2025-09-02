@@ -19,6 +19,8 @@ namespace Domain.Interfaces.Repository
 
         Task SaveOrUpdateGamersAsync(GamerJson gamers);
 
+        Task SaveOrUpdateGamersAsync(Gamer gamer, string applicationUserId);
+
         Task<bool> IsGamertagLinkedToUserAsync(string gamertag);
     }
 }

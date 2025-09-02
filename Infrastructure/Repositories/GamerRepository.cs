@@ -78,5 +78,34 @@ namespace Infrastructure.Repositories
 
             await context.SaveChangesAsync(); // Сохраняем в БД
         }
+
+        public async Task SaveOrUpdateGamersAsync(Gamer gamerOutter, string applicationUserId)
+        {
+            Gamer? gamer = await context.Gamers.FirstOrDefaultAsync(g => g.GamerId == gamerOutter.GamerId);
+
+            if (gamer == null)
+            {
+                gamer = new Gamer
+                {
+                    ApplicationUserId = applicationUserId,
+                    GamerId = gamerOutter.GamerId,
+                    Gamertag = gamerOutter.Gamertag,
+                    Gamerscore = gamerOutter.Gamerscore,
+                    Bio = gamerOutter.Bio,
+                    Location = gamerOutter.Location
+                };
+
+                context.Gamers.Add(gamer);
+            }
+            else
+            {
+                gamer.Gamertag = gamerOutter.Gamertag;
+                gamer.Gamerscore = gamerOutter.Gamerscore;
+                gamer.Bio = gamerOutter.Bio;
+                gamer.Location = gamerOutter.Location;
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }
