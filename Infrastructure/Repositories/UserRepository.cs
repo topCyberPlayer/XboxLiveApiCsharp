@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Identity;
-using XblApp.Domain;
 
 namespace Infrastructure.Repositories
 {

@@ -1,6 +1,4 @@
-﻿using XblApp.Domain;
-
-namespace Domain.Interfaces.Repository
+﻿namespace Domain.Interfaces.Repository
 {
     public interface IUserRepository
     {

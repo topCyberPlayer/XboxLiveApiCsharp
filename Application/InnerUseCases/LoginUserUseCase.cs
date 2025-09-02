@@ -1,7 +1,7 @@
 ﻿using Domain.DTO;
 using Domain.Interfaces;
-using XblApp.Domain;
 using Domain.Interfaces.Repository;
+using Domain;
 
 namespace Application.InnerUseCases
 {

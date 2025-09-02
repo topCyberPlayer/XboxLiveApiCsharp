@@ -1,4 +1,4 @@
-﻿namespace XblApp.Domain
+﻿namespace Domain
 {
     public class UserInfo
     {
