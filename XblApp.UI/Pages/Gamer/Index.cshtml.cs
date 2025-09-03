@@ -19,7 +19,7 @@ namespace XblApp.UI.Pages.Gamer
 
         public async Task<IActionResult> OnGet(string gamertag)
         {
-            GamerDTO? gamer = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
+            Output = await _gamerProfileUseCase.GetGamerProfileAsync(gamertag);
             return Page();
         }
 
