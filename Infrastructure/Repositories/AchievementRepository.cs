@@ -38,6 +38,10 @@ namespace Infrastructure.Repositories
                 long gameId = achJson.GameId;
                 if (gameId == 0) continue; // Пропускаем некорректные записи
 
+                // Проверяем, существует ли игра
+                bool isExist = await context.Games.AnyAsync(g => g.GameId == gameId);
+                if (!isExist) continue;
+
                 // Проверяем, существует ли достижение в БД
                 Achievement? achievementDb = await context.Achievements
                     .FirstOrDefaultAsync(a => a.AchievementId == achJson.AchievementId && a.GameId == achJson.GameId);
@@ -101,8 +105,8 @@ namespace Infrastructure.Repositories
                 if (gameId == 0) continue; // Пропускаем некорректные записи
 
                 // Проверяем, существует ли игра
-                //Game? game = await context.Games.FirstOrDefaultAsync(g => g.GameId == gameId);
-                //if (game == null) continue;
+                bool isExist = await context.Games.AnyAsync(g => g.GameId == gameId);
+                if (!isExist) continue;//Исключительная ситуация. Обычно перед сохранением достижения, игра уже находится в БД.
 
                 long achievementId = long.Parse(achJson.AchievementId);
 
@@ -112,6 +116,13 @@ namespace Infrastructure.Repositories
 
                 if (achievementDb == null)
                 {
+                    int gamerscore = default;
+                    if (achJson.AchievementType == "Persistent")
+                    {
+                        if(int.TryParse(achJson.Rewards.FirstOrDefault()?.Value, out int gs))
+                            gamerscore = gs;
+                    }
+
                     // Если нет, создаем новое достижение
                     achievementDb = new Achievement
                     {
@@ -120,12 +131,11 @@ namespace Infrastructure.Repositories
                         Name = achJson.Name,
                         Description = achJson.Description,
                         LockedDescription = achJson.LockedDescription,
-                        Gamerscore = achJson.Rewards.FirstOrDefault()?.Value is string value ? int.Parse(value) : 0,
+                        Gamerscore = gamerscore,
                         IsSecret = achJson.IsSecret
                     };
 
                     context.Achievements.Add(achievementDb);
-                    //await context.SaveChangesAsync(); // Сохраняем, чтобы получить ID
                 }
 
                 // Проверяем, существует ли запись в GamerAchievement
@@ -157,7 +167,7 @@ namespace Infrastructure.Repositories
                 }
             }
 
-            await context.SaveChangesAsync(); // Финальное сохранение всех изменений
+            await context.SaveChangesAsync();
         }
     }
 }
