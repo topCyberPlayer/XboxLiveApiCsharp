@@ -29,7 +29,7 @@ namespace XblApp.UI.Pages
         {
             //Это асинхронный метод, т.к. требует похода в базу.
             //В результате ты получаешь полный объект ApplicationUser из Identity со всеми его полями (Email, UserName, твои кастомные свойства и т.д.).
-            appUser = await _userManager.GetUserAsync(User);
+            appUser = await _userManager.GetUserAsync(User);//todo объединить запросы  к таблицами aspnetUser и Gamer в один запрос.
 
             Output = await _gamerProfileUseCase.GetGamerProfileAsync(appUser.UserName);
 

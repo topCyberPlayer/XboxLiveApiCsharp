@@ -90,26 +90,9 @@ namespace Application.XboxLiveUseCases
                     Gamertag = b.Gamertag,
                     GameAchievements = new List<GameAchievementInnerDTO>()
                     {
-                        
+                        //todo написать код для вывовода всех достижений игрока
                     }
-                    //GameAchievements = b.Select(a => new GameAchievementDTO2()
-                    //{
-                    //    GameId = a.GameLink.GameId,
-                    //    GameName = a.GameLink.GameName,
-                    //    Achievements = new List<GamerAchievementInnerDTO>()
-                    //    {
-                    //        new GamerAchievementInnerDTO()
-                    //        {
-                    //            Name = a.AchievementLink.Name,
-                    //            Score = a.AchievementLink.Gamerscore,
-                    //            Description = a.AchievementLink.Description,
-                    //            IsUnlocked = a.IsUnlocked
-                    //        }
-                    //    }
-                    //}).ToList()
                 });
-
-            //return new GamerAchievementDTO {  };
         }
 
         public async Task UpdateProfileAsync(long gamerId, string userId)
