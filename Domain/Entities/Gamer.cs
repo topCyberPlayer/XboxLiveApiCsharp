@@ -25,5 +25,10 @@ namespace Domain.Entities
         /// Связь с достижениями через промежуточную таблицу
         /// </summary>
         public ICollection<GamerAchievement> GamerAchievementLinks { get; set; } = [];
+
+        /// <summary>
+        /// Связь с решениями. Игрок может предлагать несколько решений для получения достижения
+        /// </summary>
+        public ICollection<Solution> SolutionLinks { get; set; } = [];
     }
 }
