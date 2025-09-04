@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.XboxLiveServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.EventSourcingDemo", "XblApp.EventSourcingDemo\XblApp.EventSourcingDemo.csproj", "{845D5AD8-6A81-485E-B1D3-97862CAD6C2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XblApp.EventSourcingDemoMininmalAPI", "XblApp.EventSourcingDemoMininmalAPI\XblApp.EventSourcingDemoMininmalAPI.csproj", "{E50D6DF4-6B23-4C47-B682-12A39E0DBD43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{845D5AD8-6A81-485E-B1D3-97862CAD6C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{845D5AD8-6A81-485E-B1D3-97862CAD6C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{845D5AD8-6A81-485E-B1D3-97862CAD6C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E50D6DF4-6B23-4C47-B682-12A39E0DBD43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E50D6DF4-6B23-4C47-B682-12A39E0DBD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E50D6DF4-6B23-4C47-B682-12A39E0DBD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E50D6DF4-6B23-4C47-B682-12A39E0DBD43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{30DEE27F-7413-3B1A-8F9A-311B123C89DB} = {A57CFBC4-B7C0-44CD-8942-7691237C78A4}
 		{506ECA0D-693F-B91E-8B60-85842E53C3AB} = {A57CFBC4-B7C0-44CD-8942-7691237C78A4}
 		{845D5AD8-6A81-485E-B1D3-97862CAD6C2A} = {B7B8A544-330C-4646-80E4-D6151C9123CE}
+		{E50D6DF4-6B23-4C47-B682-12A39E0DBD43} = {B7B8A544-330C-4646-80E4-D6151C9123CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C99C6295-7845-4FA6-BC67-9CEAB2C21C23}
