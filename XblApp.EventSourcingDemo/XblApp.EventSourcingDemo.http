@@ -1,0 +1,6 @@
+@XblApp.EventSourcingDemo_HostAddress = http://localhost:5121
+
+GET {{XblApp.EventSourcingDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
