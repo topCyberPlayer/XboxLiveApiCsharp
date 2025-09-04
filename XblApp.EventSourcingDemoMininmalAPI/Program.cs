@@ -1,4 +1,7 @@
 
+using XblApp.EventSourcingDemoMininmalAPI.Entities;
+using XblApp.EventSourcingDemoMininmalAPI.Events;
+
 namespace XblApp.EventSourcingDemoMininmalAPI
 {
     public class Program
@@ -41,6 +44,14 @@ namespace XblApp.EventSourcingDemoMininmalAPI
                 return forecast;
             })
             .WithName("GetWeatherForecast");
+
+            app.MapPost("/gamers", async (CreateGamerRequest request, DomainEventDispatcher dispatcher) =>
+            {
+                Gamer gamer = new(request.Gamertag);
+
+                await dispatcher.DispatchAsync(gamer.DomainEvents);
+                gamer.ClearDomainEvents();
+            });
 
             app.Run();
         }
